@@ -1,0 +1,37 @@
+//
+// Created by Alvaro Diaz on 16-07-16.
+//
+
+#ifndef QCACTACT_H
+#define QCACTACT_H
+
+
+#include "QCYearFraction.h"
+
+/*!
+ * @brief La clase QCAct360 implementa el método Act/Act.
+ * Hereda de la clase abstracta QCYearFraction
+ */
+
+class QCActAct : public QCYearFraction
+{
+public:
+    /*!
+     * La función yf devuelve la fracción de año entre dos fechas en convención Act/Act.
+     * @param [in] firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
+     * @param [in] secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
+     * @return un double con la fracción de año calculada
+     */
+    double yf(const QCDate& firstDate, const QCDate& secondDate);
+
+    /*!
+     * La función countDays devuelve el número de días entre firstDate y secondDate en Act/Act.
+     * Si se desea un número positivo firstDate debe ser menor que secondDate
+     * @param [in] firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
+     * @param [in] secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
+     * @return un long con el número de días calculados
+     */
+    long countDays(const QCDate& firstDate, const QCDate& secondDate);
+};
+
+#endif //QCACTACT_H
