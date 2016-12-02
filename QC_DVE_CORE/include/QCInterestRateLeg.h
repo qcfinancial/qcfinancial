@@ -7,7 +7,8 @@ class QCInterestRateLeg
 {
 public:
 	QCInterestRateLeg(QCIntrstRtPrdsShrdPntr periods, int lastPeriod);
-
+	int size();
+	QCInterestRatePeriod getPeriodAt(unsigned int n);
 	~QCInterestRateLeg();
 
 protected:

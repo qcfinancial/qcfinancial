@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "QCDefinitions.h"
 #include "QCDate.h"
 #include "QCTest.h"
 #include "QCInterestRate.h"
@@ -8,6 +9,7 @@
 #include "QCLinearWf.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace std;
 
 namespace UnitTests_QC_DVE_CORE
 {		
@@ -31,11 +33,13 @@ namespace UnitTests_QC_DVE_CORE
 		{
 			QCAct360 act360;
 			QCLinearWf lin;
+			QCWlthFctrShrdPtr linPtr = make_shared<QCWealthFactor>(lin);
 			double rate = .01;
-			QCInterestRate ir { rate, act360, lin };
+			QCInterestRate ir { rate, act360, linPtr };
 			QCDate stDt { 1, 1, 2016 };
-			QCDate endDt { 13, 2, 2016 };
-			Assert::AreEqual(.00119444, ir.wf(stDt, endDt), 0.00000005, L"Test Failed", LINE_INFO());
+			QCDate endDt { 26, 12, 2016 };
+			cout << ir.wf(stDt, endDt) << endl;
+			Assert::AreEqual(1.01, ir.wf(stDt, endDt), 0.00000005, L"Test Failed", LINE_INFO());
 		}
 
 	};

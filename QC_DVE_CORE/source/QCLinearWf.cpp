@@ -1,6 +1,5 @@
 #include "QCLinearWf.h"
 
-
 QCLinearWf::QCLinearWf()
 {
 }

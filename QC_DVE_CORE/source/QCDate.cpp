@@ -28,7 +28,7 @@ QCDate::QCDate(const QCDate& otherDate)
 
 QCDate::QCDate(int d, int m, int y)
 {
-    if (validate(d, m, y))
+    if (_validate(d, m, y))
     {
         _day = d;
         _month = m;
@@ -80,7 +80,7 @@ void QCDate::setDateFromExcelSerial(long excelSerial)
     return;
 }
 
-bool QCDate::validate(int d, int m, int y)
+bool QCDate::_validate(int d, int m, int y)
 {
     if ((d < 1) || (d > 31))
     {
@@ -126,7 +126,7 @@ bool QCDate::validate(int d, int m, int y)
 
 void QCDate::setDay(int d)
 {
-    if (validate(d, _month, _year))
+    if (_validate(d, _month, _year))
     {
         _day = d;
         return;
@@ -139,7 +139,7 @@ void QCDate::setDay(int d)
 
 void QCDate::setMonth(int m)
 {
-    if (validate(_day, m, _year))
+    if (_validate(_day, m, _year))
     {
         _month = m;
         return;
@@ -152,7 +152,7 @@ void QCDate::setMonth(int m)
 
 void QCDate::setYear(int y)
 {
-    if (validate(_day, _month, y))
+    if (_validate(_day, _month, y))
     {
         _year = y;
         return;
@@ -226,7 +226,6 @@ QCDate QCDate::addMonths(int nMonths) const
 {
     //Equivalent to Excel Function EDATE()
     //adds nMonths (number of months) to this for positive/negative values of nMonths
-
 
     int dm[13];
 
@@ -330,7 +329,7 @@ void QCDate::operator=(const QCDate& otherDate)
 
 void QCDate::setDayMonthYear(int d, int m, int y)
 {
-    if (validate(d, m, y))
+    if (_validate(d, m, y))
     {
         _day = d;
         _month = m;

@@ -7,10 +7,13 @@
 #include <tuple>
 #include <map>
 
-class QCDate;
+#include "QCDate.h"
+class QCWealthFactor;
 class QCInterestRateLeg;
 //class QCInterestRatePayoff
 class QCZeroCouponCurve;
+class QCInterestRate;
+class QCYearFraction;
 
 using namespace std;
 
@@ -31,15 +34,16 @@ enum InterestRatePeriodElement
 
 /*!
 * Representa las componentes esenciales de un periodo de un
-* instrumento de tasa de interes
+* instrumento de tasa de interes. El orden es: disposicion, esDispFlujo,
+* amortizacion, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago.
 */
-typedef tuple<double, QCDate, QCDate, QCDate> QCInterestRatePeriod;
+typedef tuple<double, bool, double, bool, double,
+	QCDate, QCDate, QCDate> QCInterestRatePeriod;
 
 /*!
-* Vector de QCInterestRatePeriod. Objeto base de un QCInteterestRateLeg.
+* Vector de QCInterestRatePeriod. Objeto base de un QCInterestRateLeg.
 */
-typedef tuple<double, bool, double, bool, double, 
-	          QCDate, QCDate, QCDate> QCInterestRatePeriods;
+typedef vector<QCInterestRatePeriod> QCInterestRatePeriods;
 
 /*!
 * Shared pointer de QCInterestRatePeriods
@@ -54,11 +58,26 @@ typedef shared_ptr<QCZeroCouponCurve> QCZrCpnCrvShrdPtr;
 /*!
 * Shared pointer de QCInterestRateLeg
 */
-typedef  QCInterestRateLeg QCIntrstRtLgShrdPtr;
+typedef  shared_ptr<QCInterestRateLeg> QCIntrstRtLgShrdPtr;
 
 /*!
 * Shared pointer de map<QCDate, double>
 */
 typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
+
+/*!
+* Shared pointer de QCWealthFactor
+*/
+typedef shared_ptr<QCWealthFactor> QCWlthFctrShrdPtr;
+
+/*!
+* Shared pointer de QCWealthFactor
+*/
+typedef shared_ptr<QCYearFraction> QCYrFrctnShrdPtr;
+
+/*!
+* Shared pointer de QCInterestRate
+*/
+typedef shared_ptr<QCInterestRate> QCIntrstRtShrdPtr;
 
 #endif //QCDEFINITIONS_H

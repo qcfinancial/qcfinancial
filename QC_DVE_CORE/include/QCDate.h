@@ -201,7 +201,7 @@ class QCDate
         int _day;
         int _month;
         int _year;
-        bool validate(int d, int m, int y);
+        bool _validate(int d, int m, int y);
 };
 
 #endif //QCDATE_H

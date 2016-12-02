@@ -5,7 +5,7 @@ class QCWealthFactor
 {
 public:
 	QCWealthFactor();
-	virtual double wf(double rate, double yf) { return 0.0; };
+	virtual double wf(double rate, double yf);
 	virtual ~QCWealthFactor();
 };
 

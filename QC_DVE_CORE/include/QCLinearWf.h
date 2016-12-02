@@ -9,7 +9,7 @@ class QCLinearWf :
 public:
 	QCLinearWf();
 	virtual double wf(double rate, double yf) override;
-	virtual ~QCLinearWf();
+	~QCLinearWf();
 };
 
 #endif //QCLINEARWF_H
