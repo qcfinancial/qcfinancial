@@ -11,7 +11,8 @@ public:
 	QCFixedRatePayoff(QCIntrstRtShrdPtr fixedRate,
 		QCIntrstRtLgShrdPtr irLeg,
 		QCZrCpnCrvShrdPtr discountCurve,
-		QCDate valueDate);
+		QCDate valueDate,
+		QCTimeSeriesShrdPtr fixingData);
 
 	virtual ~QCFixedRatePayoff();
 

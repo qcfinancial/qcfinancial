@@ -24,6 +24,14 @@ public:
      */
     double yf(const QCDate& firstDate, const QCDate& secondDate);
 
+	/*!
+	* La función yf devuelve un proxy de la fracción de año cuando el argumento es un
+	* numero de dias.
+	* @param days
+	* @return un double con la fracción de año calculada
+	*/
+	virtual double yf(long days);
+
     /*!
      * La función countDays devuelve el número de días entre firstDate y secondDate en Act/Act.
      * Si se desea un número positivo firstDate debe ser menor que secondDate

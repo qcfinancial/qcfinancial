@@ -41,7 +41,15 @@ double //Devuelve el factor de capitalizacion de una tasa entre 2 fechas
 				 );
 
 CellMatrix cashFlow(CellMatrix tablaDesarrollo,
-	double tasa, string yf, string wf);
+	double tasa, int fecha, string yf, string wf);
+
+double pv(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curva	//Curva cero cupon (rango con tenors y tasas)
+	, double tasa		//valor de la tasa fija de la pata
+	, int fecha			//fecha de valorizacion
+	, string yf			//nombre de la fraccion de agno de la tasa fija
+	, string wf			//nombre del tipo de factor de capitalizacion
+	);
 
 
 #endif

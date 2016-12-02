@@ -10,6 +10,11 @@ double QC30360::yf(const QCDate &firstDate, const QCDate &secondDate)
     return this->countDays(firstDate, secondDate) / _basis;
 }
 
+double QC30360::yf(long days)
+{
+	return days / _basis;
+}
+
 long QC30360::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
     int firstDay = firstDate.day();

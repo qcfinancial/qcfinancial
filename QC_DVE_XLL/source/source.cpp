@@ -17,6 +17,8 @@
 #include "QCInterestRate.h"
 #include "QCInterestRateLeg.h"
 #include "QCFixedRatePayoff.h"
+#include "QCInterpolator.h"
+#include "QCLinearInterpolator.h"
 
 using namespace std;
 
@@ -126,7 +128,7 @@ double qcWealthFactor(double rate, int stDt, int endDt, string yf, string wf)
 
 }
 
-CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, string yf, string wf)
+CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, int fecha, string yf, string wf)
 {
 	QCInterestRatePeriods periods;
 	int filas = tablaDesarrollo.RowsInStructure();
@@ -145,16 +147,116 @@ CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, string yf, string w
 		));
 	}
 
-	QCInterestRateLeg irLeg{ make_shared<QCInterestRatePeriods>(periods), 9 };
-	QCIntrstRtLgShrdPtr irLegPtr = make_shared<QCInterestRateLeg>(irLeg);
-	QCLinearWf wf;
-	QCAct360 act360;
-	QCWlthFctrShrdPtr wfPtr = make_shared<QCWealthFactor>(wf);
-	QCYrFrctnShrdPtr act360Ptr = make_shared<QCYearFraction>(act360);
-	QCInterestRate intRt{ .01, act360Ptr, wfPtr };
-	QCIntrstRtShrdPtr intRtPtr = make_shared<QCInterestRate>(intRt);
-	QCDate valueDate{ 1, 12, 2016 };
-	QCFixedRatePayoff fxdRtPoff{ intRtPtr, irLegPtr, 0, valueDate };
+	/*QCInterestRate, QCInterestRateLeg, QCDate, QCZeroCouponCurve y QCTimeSeriesShrdPointer*/
+	
+	//Construimos un shared pointer de QCInterestRateLeg
+	QCIntrstRtPrdsShrdPntr periodsPtr = make_shared<QCInterestRatePeriods>(periods);
+	QCInterestRateLeg intLeg{ periodsPtr, filas - 1 };
+	QCIntrstRtLgShrdPtr intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
 
-	fxdRtPoff.
+	//Contruimos shared_ptr de QCYearFraction. Por ahora solo QCAct360
+	shared_ptr<QCYearFraction> act360Ptr(new QCAct360);
+	//QCAct360 act360;
+	//QCYrFrctnShrdPtr act360Ptr = make_shared<QCYearFraction>(act360);
+
+	//Construimos un shared pointer de QCWealthFactor. Por ahora solo lineal.
+	shared_ptr<QCWealthFactor> linPtr(new QCLinearWf);
+	//QCLinearWf lin;
+	//QCWlthFctrShrdPtr linPtr = make_shared<QCWealthFactor>(lin);
+
+	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
+	QCInterestRate intRate{ tasa, act360Ptr, linPtr };
+	QCIntrstRtShrdPtr intRatePtr = make_shared<QCInterestRate>(intRate);
+
+	//Vamos a construir los shared_ptr de QCZeroCouponCurve y QCTimeSeries y los dejamos nulos
+	QCZrCpnCrvShrdPtr crvPtr;
+	QCTimeSeriesShrdPtr timeSrsPtr;
+
+	//Construimos el objeto QCDate con la fecha de valorizacion
+	QCDate valDate{ fecha }; //constructor que toma un Excel serial
+	
+	//Finalmente contruimos el payoff
+	QCFixedRatePayoff fxRtPff{ intRatePtr, intLegPtr, crvPtr, valDate, timeSrsPtr };
+	QCIntrstRtPffShrdPtr fxRtPffPtr = make_shared<QCFixedRatePayoff>(fxRtPff);
+
+	CellMatrix result(50,3);
+
+	fxRtPffPtr->payoff();
+	for (int i = 0; i < fxRtPffPtr->payoffSize(); ++i)
+	{
+		//En cada elemento de payoff viene fecha, label, monto
+		QCDate fechaTemp = get<0>(fxRtPffPtr->getCashflowAt(i));
+		int label = get<1>(fxRtPffPtr->getCashflowAt(i));
+		double monto = get<2>(fxRtPffPtr->getCashflowAt(i));
+
+		result(i, 0) = fechaTemp.excelSerial();
+		result(i, 1) = label;
+		result(i, 2) = monto;
+	}
+
+	return result;
+}
+
+double pv(CellMatrix tablaDesarrollo, CellMatrix curva, double tasa, int fecha, string yf, string wf)
+{
+	QCInterestRatePeriods periods;
+	int filas = tablaDesarrollo.RowsInStructure();
+
+	for (int i = 0; i < filas; ++i)
+	{
+		periods.push_back(
+			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
+			(bool)tablaDesarrollo(i, 1).NumericValue(),
+			tablaDesarrollo(i, 2).NumericValue(),
+			(bool)tablaDesarrollo(i, 3).NumericValue(),
+			tablaDesarrollo(i, 4).NumericValue(),
+			QCDate{ (long)tablaDesarrollo(i, 5).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 6).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 7).NumericValue() }
+		));
+	}
+
+	/*QCInterestRate, QCInterestRateLeg, QCDate, QCZeroCouponCurve y QCTimeSeriesShrdPointer*/
+
+	//Construimos un shared pointer de QCInterestRateLeg
+	QCIntrstRtPrdsShrdPntr periodsPtr = make_shared<QCInterestRatePeriods>(periods);
+	QCInterestRateLeg intLeg{ periodsPtr, filas - 1 };
+	QCIntrstRtLgShrdPtr intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
+
+	//Contruimos shared_ptr de QCYearFraction. Por ahora solo QCAct360
+	shared_ptr<QCYearFraction> act360Ptr(new QCAct360);
+
+	//Construimos un shared pointer de QCWealthFactor. Por ahora solo lineal.
+	shared_ptr<QCWealthFactor> linPtr(new QCLinearWf);
+
+	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
+	QCInterestRate intRate{ tasa, act360Ptr, linPtr };
+	QCIntrstRtShrdPtr intRatePtr = make_shared<QCInterestRate>(intRate);
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve
+	int puntosCurva = curva.RowsInStructure();
+	vector<double> tenors;
+	tenors.resize(puntosCurva);
+	vector<double> rates;
+	rates.resize(puntosCurva);
+	for (int i = 0; i < puntosCurva; ++i)
+	{
+		tenors.at(i) = curva(i, 0).NumericValue();
+		rates.at(i) = curva(i, 1).NumericValue();
+	}
+	shared_ptr<QCCurve> crvPtr(new QCCurve{ tenors, rates });
+	shared_ptr<QCInterpolator> interpol(new QCLinearInterpolator{ crvPtr });
+	QCZrCpnCrvShrdPtr zrCrvPtr(new QCZeroCouponCurve{ interpol, act360Ptr, linPtr });
+
+	//El shared_ptr de QCTimeSeries lo dejamos nulo
+	QCTimeSeriesShrdPtr timeSrsPtr;
+
+	//Construimos el objeto QCDate con la fecha de valorizacion
+	QCDate valDate{ fecha }; //constructor que toma un Excel serial
+
+	//Finalmente contruimos el payoff
+	QCFixedRatePayoff fxRtPff{ intRatePtr, intLegPtr, zrCrvPtr, valDate, timeSrsPtr };
+	QCIntrstRtPffShrdPtr fxRtPffPtr = make_shared<QCFixedRatePayoff>(fxRtPff);
+
+	return fxRtPffPtr->presentValue();
 }

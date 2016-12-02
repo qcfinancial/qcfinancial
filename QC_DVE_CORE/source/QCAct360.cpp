@@ -11,6 +11,11 @@ double QCAct360::yf(const QCDate &firstDate, const QCDate &secondDate)
     return days / _basis;
 }
 
+double QCAct360::yf(long days)
+{
+	return days / _basis;
+}
+
 long QCAct360::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
     return firstDate.dayDiff(secondDate);

@@ -285,6 +285,7 @@ cashFlowArgs[]=
 {
 { "tablaDesarrollo","too lazy to comment this one ","XLF_OPER"},
 { "tasa","too lazy to comment this one ","B"},
+{ "fecha","too lazy to comment this one ","B"},
 { "yf","too lazy to comment this one ","XLF_OPER"},
 { "wf","too lazy to comment this one ","XLF_OPER"}
 };
@@ -294,7 +295,7 @@ registercashFlow("xlcashFlow",
 "too lazy to comment this function ",
 LibraryName,
 cashFlowArgs,
-4
+5
 ,false
 ,false
 ,""
@@ -313,6 +314,7 @@ LPXLFOPER EXCEL_EXPORT
 xlcashFlow(
 LPXLFOPER tablaDesarrolloa,
 double tasa,
+double fechaa,
 LPXLFOPER yfa,
 LPXLFOPER wfa)
 {
@@ -326,6 +328,9 @@ XlfOper tablaDesarrollob(
 CellMatrix tablaDesarrollo(
 	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
 
+
+int fecha(
+	static_cast<int>(fechaa));
 
 XlfOper yfb(
 	(yfa));
@@ -341,6 +346,96 @@ CellMatrix result(
 	cashFlow(
 		tablaDesarrollo,
 		tasa,
+		fecha,
+		yf,
+		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvArgs[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "curva","Curva cero cupon (rango con tenors y tasas) ","XLF_OPER"},
+{ "tasa","valor de la tasa fija de la pata ","B"},
+{ "fecha","fecha de valorizacion ","B"},
+{ "yf","nombre de la fraccion de agno de la tasa fija ","XLF_OPER"},
+{ "wf","nombre del tipo de factor de capitalizacion ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpv("xlpv",
+"pv",
+"too lazy to comment this function ",
+LibraryName,
+pvArgs,
+6
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpv(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER curvaa,
+double tasa,
+double fechaa,
+LPXLFOPER yfa,
+LPXLFOPER wfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+
+int fecha(
+	static_cast<int>(fechaa));
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+double result(
+	pv(
+		tablaDesarrollo,
+		curva,
+		tasa,
+		fecha,
 		yf,
 		wf)
 	);

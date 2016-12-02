@@ -1,16 +1,18 @@
 #include "QCInterpolator.h"
 #include <exception>
 
+QCInterpolator::QCInterpolator(shared_ptr<QCCurve> curve) : _curve(curve)
+{}
+
 QCInterpolator::~QCInterpolator(void)
-{
-}
+{}
 
 long QCInterpolator::index(double arg)
 {
 	vector<double> data;
-	for (long i = 0; i < _curva->getLength(); ++i)
+	for (long i = 0; i < _curve->getLength(); ++i)
 	{
-		data.push_back(_curva->getValuesAt(i).first);
+		data.push_back(_curve->getValuesAt(i).first);
 	}
 
 	long inf = 0;

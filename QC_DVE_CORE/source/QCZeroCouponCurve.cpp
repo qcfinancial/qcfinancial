@@ -1,6 +1,11 @@
 #include "QCZeroCouponCurve.h"
 #include <math.h>
 
+QCZeroCouponCurve::QCZeroCouponCurve(shared_ptr<QCInterpolator> curva,
+	shared_ptr<QCYearFraction> yf, shared_ptr<QCWealthFactor> wf) : _curva(curva),
+	_yf(yf), _wf(wf)
+{}
+
 double QCZeroCouponCurve::getRateAt(double t)
 {
 	return _curva->interpolateAt(t);
@@ -24,7 +29,10 @@ double QCZeroCouponCurve::getDiscountFactorAt(double t)
 {
 	//Esta funcion necesita mas trabajo para poder especificar
 	//un factor de capitalizacion arbitrario.
-	return exp(-t * _curva->interpolateAt(t));
+	double rate = _curva->interpolateAt(t);
+	double yf = _yf->yf(t);
+	return 1.0 / _wf->wf(rate, yf);
+	//return exp(-t * _curva->interpolateAt(t));
 }
 
 QCZeroCouponCurve::~QCZeroCouponCurve(void)

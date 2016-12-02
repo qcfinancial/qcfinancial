@@ -43,6 +43,11 @@ double QCActAct::yf(const QCDate &firstDate, const QCDate &secondDate)
     return double(a_o1) + a_o2;
 }
 
+double QCActAct::yf(long days)
+{
+	return days / 365.0;
+}
+
 long QCActAct::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
     return firstDate.dayDiff(secondDate);

@@ -33,6 +33,14 @@ public:
      */
     long countDays(const QCDate& firstDate, const QCDate& secondDate);
 
+	/*!
+	* La función yf devuelve un proxy de la fracción de año cuando el argumento es un
+	* numero de dias.
+	* @param days
+	* @return un double con la fracción de año calculada
+	*/
+	virtual double yf(long days);
+
 private:
     const double _basis = 360.0;
 };

@@ -18,7 +18,7 @@ public:
 	long getLength();
 
 	//Destructor
-	virtual ~QCCurve(void);
+	~QCCurve(void);
 
 protected:
 	vector<pair<double, double>> _values;	//En esta variable se guardan los datos de la curva

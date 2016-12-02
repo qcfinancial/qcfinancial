@@ -10,7 +10,7 @@
 #include "QCDate.h"
 class QCWealthFactor;
 class QCInterestRateLeg;
-//class QCInterestRatePayoff
+class QCInterestRatePayoff;
 class QCZeroCouponCurve;
 class QCInterestRate;
 class QCYearFraction;
@@ -61,6 +61,11 @@ typedef shared_ptr<QCZeroCouponCurve> QCZrCpnCrvShrdPtr;
 typedef  shared_ptr<QCInterestRateLeg> QCIntrstRtLgShrdPtr;
 
 /*!
+* Shared pointer de QCInterestRatePayoff
+*/
+typedef  shared_ptr<QCInterestRatePayoff> QCIntrstRtPffShrdPtr;
+
+/*!
 * Shared pointer de map<QCDate, double>
 */
 typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
@@ -71,7 +76,7 @@ typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
 typedef shared_ptr<QCWealthFactor> QCWlthFctrShrdPtr;
 
 /*!
-* Shared pointer de QCWealthFactor
+* Shared pointer de QCYearFraction
 */
 typedef shared_ptr<QCYearFraction> QCYrFrctnShrdPtr;
 

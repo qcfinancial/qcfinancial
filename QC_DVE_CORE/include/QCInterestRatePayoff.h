@@ -11,8 +11,6 @@
 #include "QCZeroCouponCurve.h"
 #include "QCInterestRate.h"
 
-//Tengo que terminar de organizar bien el metodo _setAllRates
-
 enum QCCashFlowLabel
 {
 	qcAccretion,
@@ -23,31 +21,30 @@ enum QCCashFlowLabel
 class QCInterestRatePayoff
 {
 public:
-	const vector<QCDate>& getDatesForPastFixings();
-	void setRatesForPastFixings(QCTimeSeriesShrdPtr dateRates);
 	void payoff();
+	int payoffSize();
 	double presentValue();
-	tuple<QCDate, QCCashFlowLabel, double> getCashFlowAt(unsigned int n);
+	tuple<QCDate, QCCashFlowLabel, double> getCashflowAt(unsigned int n);
 	virtual ~QCInterestRatePayoff();
 
 protected:
 	QCInterestRatePayoff(
 		QCIntrstRtShrdPtr rate,
-		QCIntrstRtLgShrdPtr _irLeg,
+		QCIntrstRtLgShrdPtr irLeg,
 		QCDate valueDate,
-		QCZrCpnCrvShrdPtr discountCurve);
+		QCZrCpnCrvShrdPtr discountCurve,
+		QCTimeSeriesShrdPtr fixingData);
 	QCIntrstRtShrdPtr _rate;
 	QCIntrstRtLgShrdPtr _irLeg;
 	QCDate _valueDate;
 	QCZrCpnCrvShrdPtr _discountCurve;
+	QCTimeSeriesShrdPtr _fixingData;
 	
-	virtual void _setAllRates();
-	vector<double> _allRates;
-
-	QCTimeSeriesShrdPtr _pastFixings;
-	vector<QCDate> _datesPastFixings;
 	int _currentPeriod;
 	vector<tuple<QCDate, QCCashFlowLabel, double>> _payoffs;
+
+	virtual void _setAllRates();
+	vector<double> _allRates;
 };
 
 #endif //QCINTERESTRATEPAYOFF_H

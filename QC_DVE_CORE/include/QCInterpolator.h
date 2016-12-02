@@ -4,11 +4,13 @@
 #include "QCCurve.h"
 #include <memory>
 
+//Esta es una clase base abstracta.
+
 class QCInterpolator
 {
 public:
 	//Constructors
-	QCInterpolator(shared_ptr<QCCurve> curva) : _curva(curva) {};
+	QCInterpolator(shared_ptr<QCCurve> curve);
 	
 	//Other
 	virtual double interpolateAt(double value) = 0;
@@ -19,7 +21,7 @@ public:
 	virtual ~QCInterpolator(void);
 
 protected:
-	shared_ptr<QCCurve> _curva;
+	shared_ptr<QCCurve> _curve;
 	long index(double arg);	//Se va usar en cualquier implementacion especifica
 
 private:

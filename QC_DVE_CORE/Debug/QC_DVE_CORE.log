@@ -1,12 +1,9 @@
-﻿Build started 01/12/2016 22:41:12.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Build target(s)).
+﻿Build started 02/12/2016 17:17:00.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCFixedRatePayoff.cpp source\QCInterestRatePayoff.cpp
-         QCInterestRatePayoff.cpp
-         Generating Code...
-         Compiling...
-         QCFixedRatePayoff.cpp
-         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCouponCurve.cpp
+         QCZeroCouponCurve.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qczerocouponcurve.cpp(33): warning C4244: 'argument' : conversion from 'double' to 'long', possible loss of data
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib" /NOLOGO Debug\QC30360.obj
          Debug\QCAct360.obj
@@ -23,6 +20,7 @@
          Debug\QCInterestRateLeg.obj
          Debug\QCInterestRatePayoff.obj
          Debug\QCInterpolator.obj
+         Debug\QCLinearInterpolator.obj
          Debug\QCLinearWf.obj
          Debug\QCPastLibor3MUSD.obj
          Debug\QCTest.obj
@@ -33,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.20
+Time Elapsed 00:00:01.29

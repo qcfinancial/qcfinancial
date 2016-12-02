@@ -4,42 +4,28 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 	QCIntrstRtShrdPtr rate,
 	QCIntrstRtLgShrdPtr irLeg,
 	QCDate valueDate,
-	QCZrCpnCrvShrdPtr discountCurve) :
+	QCZrCpnCrvShrdPtr discountCurve,
+	QCTimeSeriesShrdPtr fixingData) :
 	_rate(rate),
 	_irLeg(irLeg),
 	_valueDate(valueDate),
-	_discountCurve(discountCurve)
+	_discountCurve(discountCurve),
+	_fixingData(fixingData)
 {
-	_payoffs.resize(_irLeg->size() * 3); //Por cada periodo hay 3 posibles flujos
-	//En este loop se determina cual es la fecha de inicio del cupon
-	//corriente y que indice tiene ese periodo
+	//Determinar _currentPeriod
 	for (int i = 0; i < _irLeg->size(); ++i)
 	{
-		if (get<intRtPrdElmntStartDate>(_irLeg->getPeriodAt(i)) >= _valueDate)
+		if (_valueDate <= get<intRtPrdElmntStartDate>(_irLeg->getPeriodAt(i)))
 		{
-			_datesPastFixings.push_back(
-				get<intRtPrdElmntStartDate>(_irLeg->getPeriodAt(i)));
 			_currentPeriod = i;
 			return;
 		}
 	}
+	_currentPeriod = _irLeg->size(); //Despues se controla al calcular pv si _currentPeriod tiene sentido
 }
 
-const vector<QCDate>& QCInterestRatePayoff::getDatesForPastFixings()
-{
-	return _datesPastFixings;
-}
-
-void QCInterestRatePayoff::setRatesForPastFixings(QCTimeSeriesShrdPtr dateRates)
-{
-	for (auto const& x : *_pastFixings)
-	{
-		(*_pastFixings)[x.first] = x.second;
-	}
-}
-
-void QCInterestRatePayoff::_setAllRates()
-{}
+//Esta se implementa en las subclases
+void QCInterestRatePayoff::_setAllRates() {}
 
 void QCInterestRatePayoff::payoff()
 {
@@ -71,15 +57,29 @@ void QCInterestRatePayoff::payoff()
 	}
 }
 
-tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashFlowAt(unsigned int n)
+int QCInterestRatePayoff::payoffSize()
+{
+	return _payoffs.size();
+}
+
+tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsigned int n)
 {
 	return _payoffs.at(n);
 }
 
 double QCInterestRatePayoff::presentValue()
 {
-	return 0.0;
+	payoff();
+	double pv{ 0.0 };
+	for (const auto& cshflw : _payoffs)
+	{
+		long d = _valueDate.dayDiff(get<0>(cshflw));
+		double flujo = get<2>(cshflw);
+		double df = _discountCurve->getDiscountFactorAt(d);
+		pv += flujo * df;
+	}
+
+	return pv;
 }
 
-QCInterestRatePayoff::~QCInterestRatePayoff()
-{}
+QCInterestRatePayoff::~QCInterestRatePayoff() {}

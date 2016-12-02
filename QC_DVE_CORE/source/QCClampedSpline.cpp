@@ -4,23 +4,23 @@
 double QCClampedSpline::interpolateAt(double value)
 {
 	long i = index(value);
-	long temp = _curva->getLength();
-	double t = value - _curva->getValuesAt(i).first;
-	double a = _curva->getValuesAt(i).second;
+	long temp = _curve->getLength();
+	double t = value - _curve->getValuesAt(i).first;
+	double a = _curve->getValuesAt(i).second;
 	return a + _b[i] * t + _c[i] * pow(t, 2.0) + _d[i] * pow(t, 3.0);
 }
 
 double QCClampedSpline::derivativeAt(double value)
 {
 	long i = index(value);
-	double t = value - _curva->getValuesAt(i).first;
+	double t = value - _curve->getValuesAt(i).first;
 	return _b[i] + 2.0 * _c[i] * t + 3.0 * _d[i] * pow(t, 2.0);
 }
 
 double QCClampedSpline::secondDerivativeAt(double value)
 {
 	long i = index(value);
-	double t = value - _curva->getValuesAt(i).first;
+	double t = value - _curve->getValuesAt(i).first;
 	return 2.0 * _c[i] + 6.0 * _d[i] * t;
 }
 
@@ -28,10 +28,10 @@ void QCClampedSpline::setCoefficients(void)
 {	
 	//Se define x e y
 	vector<double> x, y;
-	for (long i = 0; i < _curva->getLength(); ++i)
+	for (long i = 0; i < _curve->getLength(); ++i)
 	{
-		x.push_back(_curva->getValuesAt(i).first);
-		y.push_back(_curva->getValuesAt(i).second);
+		x.push_back(_curve->getValuesAt(i).first);
+		y.push_back(_curve->getValuesAt(i).second);
 	}
 	const signed long n = x.size() - 1;
 	double fp1,fpn ;
