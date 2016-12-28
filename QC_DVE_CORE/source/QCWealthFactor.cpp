@@ -4,9 +4,9 @@ QCWealthFactor::QCWealthFactor()
 {
 }
 
-double QCWealthFactor::wf(double rate, double yf)
+double QCWealthFactor::dwf()
 {
-	return 0.0;
+	return _dwf;
 }
 
 QCWealthFactor::~QCWealthFactor()

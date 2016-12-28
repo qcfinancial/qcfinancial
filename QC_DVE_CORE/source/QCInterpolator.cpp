@@ -1,13 +1,25 @@
 #include "QCInterpolator.h"
+#include "QCDate.h"
+
 #include <exception>
 
-QCInterpolator::QCInterpolator(shared_ptr<QCCurve> curve) : _curve(curve)
+QCInterpolator::QCInterpolator(shared_ptr<QCCurve<long>> curve) : _curve(curve)
 {}
 
 QCInterpolator::~QCInterpolator(void)
 {}
 
-long QCInterpolator::index(double arg)
+long QCInterpolator::getLength()
+{
+	return _curve->getLength();
+}
+
+double QCInterpolator::rateDerivativeAt(unsigned int rateIndex)
+{
+	return _derivatives.at(rateIndex);
+}
+
+long QCInterpolator::index(long arg)
 {
 	vector<double> data;
 	for (long i = 0; i < _curve->getLength(); ++i)

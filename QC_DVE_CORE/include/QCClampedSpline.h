@@ -8,15 +8,15 @@ class QCClampedSpline : public QCInterpolator
 {
 public:
 	//Constructors
-	QCClampedSpline(shared_ptr<QCCurve> curva) : QCInterpolator(curva)
+	QCClampedSpline(shared_ptr<QCCurve<long>> curva) : QCInterpolator(curva)
 	{
 		setCoefficients();
 	};
 
 	//Methods
-	double interpolateAt(double value);
-	double derivativeAt(double value);
-	double secondDerivativeAt(double value);
+	double interpolateAt(long value) override;
+	double derivativeAt(long value) override;
+	double secondDerivativeAt(long value) override;
 
 	//Destructor
 	~QCClampedSpline(void);

@@ -3,7 +3,7 @@
 
 QCFixedRatePayoff::QCFixedRatePayoff(
 	QCIntrstRtShrdPtr fixedRate,
-	QCIntrstRtLgShrdPtr irLeg,
+	shared_ptr<QCInterestRateLeg> irLeg,
 	QCZrCpnCrvShrdPtr discountCurve,
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fixingData) :

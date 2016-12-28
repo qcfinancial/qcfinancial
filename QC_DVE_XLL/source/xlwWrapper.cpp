@@ -362,7 +362,7 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
-pvArgs[]=
+pvFixed1Args[]=
 {
 { "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
 { "curva","Curva cero cupon (rango con tenors y tasas) ","XLF_OPER"},
@@ -372,11 +372,11 @@ pvArgs[]=
 { "wf","nombre del tipo de factor de capitalizacion ","XLF_OPER"}
 };
   XLRegistration::XLFunctionRegistrationHelper
-registerpv("xlpv",
-"pv",
+registerpvFixed1("xlpvFixed1",
+"pvFixed1",
 "too lazy to comment this function ",
 LibraryName,
-pvArgs,
+pvFixed1Args,
 6
 ,false
 ,false
@@ -393,7 +393,7 @@ pvArgs,
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
-xlpv(
+xlpvFixed1(
 LPXLFOPER tablaDesarrolloa,
 LPXLFOPER curvaa,
 double tasa,
@@ -431,13 +431,663 @@ string wf(
 	wfb.AsString("wf"));
 
 double result(
-	pv(
+	pvFixed1(
 		tablaDesarrollo,
 		curva,
 		tasa,
 		fecha,
 		yf,
 		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvFloat1Args[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "curvaProy","Curva de proyeccion ","XLF_OPER"},
+{ "curvaDesc","Curva de descuento ","XLF_OPER"},
+{ "pastFixings","Fixings anteriores ","XLF_OPER"},
+{ "addSpread","Spread aditivo ","B"},
+{ "multSpread","Spread multiplicativo ","B"},
+{ "fecha","Fecha de valorizacion ","B"},
+{ "yf","Yf de la tasa flotante ","XLF_OPER"},
+{ "wf","Wf de la tasa flotante ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvFloat1("xlpvFloat1",
+"pvFloat1",
+"too lazy to comment this function ",
+LibraryName,
+pvFloat1Args,
+9
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvFloat1(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER curvaProya,
+LPXLFOPER curvaDesca,
+LPXLFOPER pastFixingsa,
+double addSpread,
+double multSpread,
+double fechaa,
+LPXLFOPER yfa,
+LPXLFOPER wfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper curvaProyb(
+	(curvaProya));
+CellMatrix curvaProy(
+	curvaProyb.AsCellMatrix("curvaProy"));
+
+XlfOper curvaDescb(
+	(curvaDesca));
+CellMatrix curvaDesc(
+	curvaDescb.AsCellMatrix("curvaDesc"));
+
+XlfOper pastFixingsb(
+	(pastFixingsa));
+CellMatrix pastFixings(
+	pastFixingsb.AsCellMatrix("pastFixings"));
+
+
+
+int fecha(
+	static_cast<int>(fechaa));
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+double result(
+	pvFloat1(
+		tablaDesarrollo,
+		curvaProy,
+		curvaDesc,
+		pastFixings,
+		addSpread,
+		multSpread,
+		fecha,
+		yf,
+		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClp1Args[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "curvaProy","Curva de proyeccion ","XLF_OPER"},
+{ "curvaDesc","Curva de descuento ","XLF_OPER"},
+{ "pastFixings","Fixings pasados de ICP ","XLF_OPER"},
+{ "addSpread","Spread aditivo ","B"},
+{ "multSpread","Spread multiplicativo ","B"},
+{ "fecha","Fecha de valorizacion ","B"},
+{ "yf","Fraccion de a o de la tasa flotante ","XLF_OPER"},
+{ "wf","Factor de capitalizacion de la tasa flotante ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClp1("xlpvIcpClp1",
+"pvIcpClp1",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClp1Args,
+9
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClp1(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER curvaProya,
+LPXLFOPER curvaDesca,
+LPXLFOPER pastFixingsa,
+double addSpread,
+double multSpread,
+double fechaa,
+LPXLFOPER yfa,
+LPXLFOPER wfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper curvaProyb(
+	(curvaProya));
+CellMatrix curvaProy(
+	curvaProyb.AsCellMatrix("curvaProy"));
+
+XlfOper curvaDescb(
+	(curvaDesca));
+CellMatrix curvaDesc(
+	curvaDescb.AsCellMatrix("curvaDesc"));
+
+XlfOper pastFixingsb(
+	(pastFixingsa));
+CellMatrix pastFixings(
+	pastFixingsb.AsCellMatrix("pastFixings"));
+
+
+
+int fecha(
+	static_cast<int>(fechaa));
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+double result(
+	pvIcpClp1(
+		tablaDesarrollo,
+		curvaProy,
+		curvaDesc,
+		pastFixings,
+		addSpread,
+		multSpread,
+		fecha,
+		yf,
+		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClpArgs[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "curvaProy","Curva de proyeccion ","XLF_OPER"},
+{ "curvaDesc","Curva de descuento ","XLF_OPER"},
+{ "pastFixings","Fixings pasados de ICP ","XLF_OPER"},
+{ "addSpread","Spread aditivo ","B"},
+{ "multSpread","Spread multiplicativo ","B"},
+{ "fecha","Fecha de valorizacion ","B"},
+{ "yf","Fraccion de a o de la tasa flotante ","XLF_OPER"},
+{ "wf","Factor de capitalizacion de la tasa flotante ","XLF_OPER"},
+{ "curveYf","Fraccion de agno de la curva ","XLF_OPER"},
+{ "curveWf","Factor de capitalizacion de la curva ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClp("xlpvIcpClp",
+"pvIcpClp",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClpArgs,
+11
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClp(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER curvaProya,
+LPXLFOPER curvaDesca,
+LPXLFOPER pastFixingsa,
+double addSpread,
+double multSpread,
+double fechaa,
+LPXLFOPER yfa,
+LPXLFOPER wfa,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper curvaProyb(
+	(curvaProya));
+CellMatrix curvaProy(
+	curvaProyb.AsCellMatrix("curvaProy"));
+
+XlfOper curvaDescb(
+	(curvaDesca));
+CellMatrix curvaDesc(
+	curvaDescb.AsCellMatrix("curvaDesc"));
+
+XlfOper pastFixingsb(
+	(pastFixingsa));
+CellMatrix pastFixings(
+	pastFixingsb.AsCellMatrix("pastFixings"));
+
+
+
+int fecha(
+	static_cast<int>(fechaa));
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+double result(
+	pvIcpClp(
+		tablaDesarrollo,
+		curvaProy,
+		curvaDesc,
+		pastFixings,
+		addSpread,
+		multSpread,
+		fecha,
+		yf,
+		wf,
+		curveYf,
+		curveWf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClfArgs[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "curvaProy","Curva de proyeccion ","XLF_OPER"},
+{ "curvaDesc","Curva de descuento ","XLF_OPER"},
+{ "pastFixings","Fixings pasados de ICP ","XLF_OPER"},
+{ "ufFixings","Fixings pasado de UF ","XLF_OPER"},
+{ "addSpread","Spread aditivo ","B"},
+{ "multSpread","Spread multiplicativo ","B"},
+{ "fecha","Fecha de valorizacion ","B"},
+{ "yf","Fraccion de a o de la tasa flotante ","XLF_OPER"},
+{ "wf","Factor de capitalizacion de la tasa flotante ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClf("xlpvIcpClf",
+"pvIcpClf",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClfArgs,
+10
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClf(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER curvaProya,
+LPXLFOPER curvaDesca,
+LPXLFOPER pastFixingsa,
+LPXLFOPER ufFixingsa,
+double addSpread,
+double multSpread,
+double fechaa,
+LPXLFOPER yfa,
+LPXLFOPER wfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper curvaProyb(
+	(curvaProya));
+CellMatrix curvaProy(
+	curvaProyb.AsCellMatrix("curvaProy"));
+
+XlfOper curvaDescb(
+	(curvaDesca));
+CellMatrix curvaDesc(
+	curvaDescb.AsCellMatrix("curvaDesc"));
+
+XlfOper pastFixingsb(
+	(pastFixingsa));
+CellMatrix pastFixings(
+	pastFixingsb.AsCellMatrix("pastFixings"));
+
+XlfOper ufFixingsb(
+	(ufFixingsa));
+CellMatrix ufFixings(
+	ufFixingsb.AsCellMatrix("ufFixings"));
+
+
+
+int fecha(
+	static_cast<int>(fechaa));
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+double result(
+	pvIcpClf(
+		tablaDesarrollo,
+		curvaProy,
+		curvaDesc,
+		pastFixings,
+		ufFixings,
+		addSpread,
+		multSpread,
+		fecha,
+		yf,
+		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvFixedLegsArgs[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvFixedLegs("xlpvFixedLegs",
+"pvFixedLegs",
+"too lazy to comment this function ",
+LibraryName,
+pvFixedLegsArgs,
+6
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvFixedLegs(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+CellMatrix result(
+	pvFixedLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClpLegsArgs[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "fixings","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClpLegs("xlpvIcpClpLegs",
+"pvIcpClpLegs",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClpLegsArgs,
+7
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClpLegs(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER fixingsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper fixingsb(
+	(fixingsa));
+CellMatrix fixings(
+	fixingsb.AsCellMatrix("fixings"));
+
+CellMatrix result(
+	pvIcpClpLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		fixings)
 	);
 return XlfOper(result);
 EXCEL_END

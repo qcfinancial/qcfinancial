@@ -7,7 +7,13 @@ QCContinousWf::QCContinousWf()
 
 double QCContinousWf::wf(double rate, double yf)
 {
+	_dwf = yf * exp(rate * yf);
 	return exp(rate * yf);
+}
+
+double QCContinousWf::rate(double wf, double yf)
+{
+	return log(wf) / yf;
 }
 
 QCContinousWf::~QCContinousWf()

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include<vector>
 
 using namespace std;
 
@@ -30,8 +31,21 @@ class QCDate
             qcThursday = 4,
             qcFriday = 5,
             qcSaturday = 6,
-			qcSunday = 7
+			qcSunday = 0
         };
+
+		/*!
+		* QCWeekDay es un enum que sirve para identificar los días de la semana.
+		*/
+		enum QCBusDayAdjRules
+		{
+			qcNo = 0,
+			qcFollow = 1,
+			qcModFollow = 2,
+			qcPrev = 3,
+			qcModPrev = 4
+		};
+
         /*!
          * Constructor por default
          * @return un objecto QCDate inicializado al 12 de enero de 1969
@@ -166,6 +180,7 @@ class QCDate
 
         /*!
          * Calcula el número de días reales entre otherDate y sí misma
+		 * Sera > 0 si otherDate es mayor que sí misma.
          * @param otherDate
          * @return (long) número de días calculados
          */
@@ -178,7 +193,25 @@ class QCDate
          */
         QCDate addDays(long nDays) const;
 
-        /*!
+		/*!
+		* Calcula la siguiente fecha que es dia habil considerando el vector de
+		* fechas que son feriado y la regla (FOLLOW, MODFOLLOW). Si la fecha es habil
+		* entonces se retorna a si misma.
+		* @param calendar (vector<QCDate>&) vector con los feriados
+		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate businessDay(vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
+
+		/*!
+		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
+		* @param calendar (vector<QCDate>&) vector con los feriados
+		* @param nDays (int) numero de dias habiles
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate shift(vector<QCDate>& calendar, int nDays) const;
+
+		/*!
          * Calcula la fecha que resulta de sumar un número de meses a si misma
          * @param nMonths número de meses a sumar
          * @return (QCDate) fecha resultante

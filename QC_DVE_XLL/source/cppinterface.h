@@ -43,7 +43,7 @@ double //Devuelve el factor de capitalizacion de una tasa entre 2 fechas
 CellMatrix cashFlow(CellMatrix tablaDesarrollo,
 	double tasa, int fecha, string yf, string wf);
 
-double pv(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+double pvFixed1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	, CellMatrix curva	//Curva cero cupon (rango con tenors y tasas)
 	, double tasa		//valor de la tasa fija de la pata
 	, int fecha			//fecha de valorizacion
@@ -51,5 +51,92 @@ double pv(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	, string wf			//nombre del tipo de factor de capitalizacion
 	);
 
+/*double pvFixed(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curva		//Curve cero cupon de descuento
+	, double tasa			//valor de la tasa fija de la pata
+	, int fecha				//fecha de valorizacion
+	, string yf				//nombre de la fraccion de agno de la tasa fija
+	, string wf				//nombre del tipo de factor de capitalizacion
+	, string curveYf		//fraccion de las tasas de la curva
+	, string curveWf		//factor de capitalizacion de la curva
+	);*/
+
+double pvFloat1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curvaProy		//Curva de proyeccion
+	, CellMatrix curvaDesc		//Curva de descuento
+	, CellMatrix pastFixings	//Fixings anteriores
+	, double addSpread			//Spread aditivo
+	, double multSpread			//Spread multiplicativo
+	, int fecha					//Fecha de valorizacion
+	, string yf					//Yf de la tasa flotante
+	, string wf					//Wf de la tasa flotante
+	);
+
+/*double //Valor presente de una pata a tasa flotante
+pvFloat(CellMatrix schedule		//Tabla de desarrollo de la pata
+	, CellMatrix projCurve		//Curva de proyeccion
+	, string projYf				//Nombre de la fraccion de agno de la curva de proyeccion
+	, string projWf				//Nombre del factor de capitalizacion de la curva de proyeccion
+	, CellMatrix discCurve		//Curva de descuento
+	, string discYf				//Nombre de la fraccion de agno de la curva de descuento
+	, string discWf				//Nombre del factor de capitalizacion de la curva de descuento
+	, CellMatrix pastFixings	//Fixings anteriores
+	, double addSpread			//Spread aditivo
+	, double multSpread			//Spread multiplicativo
+	, int valueDate				//Fecha de valorizacion
+	, string floatRateYf		//Yf de la tasa flotante
+	, string floatRateWf		//Wf de la tasa flotante
+	);*/
+
+double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curvaProy		//Curva de proyeccion
+	, CellMatrix curvaDesc		//Curva de descuento
+	, CellMatrix pastFixings	//Fixings pasados de ICP
+	, double addSpread			//Spread aditivo
+	, double multSpread			//Spread multiplicativo
+	, int fecha					//Fecha de valorizacion
+	, string yf					//Fraccion de año de la tasa flotante
+	, string wf					//Factor de capitalizacion de la tasa flotante
+	);
+
+double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curvaProy		//Curva de proyeccion
+	, CellMatrix curvaDesc		//Curva de descuento
+	, CellMatrix pastFixings	//Fixings pasados de ICP
+	, double addSpread			//Spread aditivo
+	, double multSpread			//Spread multiplicativo
+	, int fecha					//Fecha de valorizacion
+	, string yf					//Fraccion de año de la tasa flotante
+	, string wf					//Factor de capitalizacion de la tasa flotante
+	, string curveYf			//Fraccion de agno de la curva
+	, string curveWf			//Factor de capitalizacion de la curva
+	);
+
+double pvIcpClf(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix curvaProy		//Curva de proyeccion
+	, CellMatrix curvaDesc		//Curva de descuento
+	, CellMatrix pastFixings	//Fixings pasados de ICP
+	, CellMatrix ufFixings		//Fixings pasado de UF
+	, double addSpread			//Spread aditivo
+	, double multSpread			//Spread multiplicativo
+	, int fecha					//Fecha de valorizacion
+	, string yf					//Fraccion de año de la tasa flotante
+	, string wf					//Factor de capitalizacion de la tasa flotante
+	);
+
+CellMatrix pvFixedLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort);
+
+CellMatrix pvIcpClpLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix fixings);
 
 #endif

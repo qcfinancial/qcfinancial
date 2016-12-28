@@ -1,7 +1,7 @@
 #include "QCClampedSpline.h"
 #include <math.h>
 
-double QCClampedSpline::interpolateAt(double value)
+double QCClampedSpline::interpolateAt(long value)
 {
 	long i = index(value);
 	long temp = _curve->getLength();
@@ -10,14 +10,14 @@ double QCClampedSpline::interpolateAt(double value)
 	return a + _b[i] * t + _c[i] * pow(t, 2.0) + _d[i] * pow(t, 3.0);
 }
 
-double QCClampedSpline::derivativeAt(double value)
+double QCClampedSpline::derivativeAt(long value)
 {
 	long i = index(value);
 	double t = value - _curve->getValuesAt(i).first;
 	return _b[i] + 2.0 * _c[i] * t + 3.0 * _d[i] * pow(t, 2.0);
 }
 
-double QCClampedSpline::secondDerivativeAt(double value)
+double QCClampedSpline::secondDerivativeAt(long value)
 {
 	long i = index(value);
 	double t = value - _curve->getValuesAt(i).first;

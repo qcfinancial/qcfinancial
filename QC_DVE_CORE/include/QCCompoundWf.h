@@ -8,6 +8,7 @@ class QCCompoundWf :
 public:
 	QCCompoundWf();
 	virtual double wf(double rate, double yf) override;
+	virtual double rate(double wf, double yf) override;
 	virtual ~QCCompoundWf();
 };
 

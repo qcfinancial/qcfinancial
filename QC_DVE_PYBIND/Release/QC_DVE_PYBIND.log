@@ -1,0 +1,18 @@
+﻿Build started 15/12/2016 14:56:20.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
+     1>main.cpp(182): warning C4101: 'label' : unreferenced local variable
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.pyd" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.lib" /MACHINE:X86 /SAFESEH /DLL Release\QCDate.obj
+         Release\main.obj
+            Creating library \\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.lib and object \\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.exp
+         Generating code
+         Finished generating code
+         QC_DVE_PYBIND.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\Release\QC_DVE_PYBIND.pyd
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.79

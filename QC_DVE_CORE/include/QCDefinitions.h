@@ -6,49 +6,32 @@
 #include <utility>
 #include <tuple>
 #include <map>
-
 #include "QCDate.h"
+
 class QCWealthFactor;
-class QCInterestRateLeg;
 class QCInterestRatePayoff;
 class QCZeroCouponCurve;
+class QCDiscountFactorCurve;
 class QCInterestRate;
+class QCInterestRateCurve;
 class QCYearFraction;
 
 using namespace std;
 
 /*!
-* Enumera las componentes de un QCInterestRatePeriod
+* Enumera las alternativas al dar de alta una curva cero cupon
 */
-enum InterestRatePeriodElement
+enum QCZCCRepresentation
 {
-	intRtPrdElmntInitialAccrtn, /*!< Disposicion inicial del periodo */
-	intRtPrdElmntAcctrnIsCshflw,/*!< Indica si la disposicion inicial es flujo */
-	intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
-	inRtPrdElmntAmrtztnIsCshflw,/*!< Indica si la amortizacion final es flujo */
-	intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
-	intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
-	intRtPrdElmntEndDate,		/*!< Fecha final del periodo */
-	intRtPrdElmntSettlmntDate	/*!< Fecha de pago del flujo */
+	qcZCCInterestRate,			/*!< ZCC se representa con tasas */
+	qcZCCDiscountFactor,		/*!< ZCC se representa con df */
+	qcZCCWealthFactor			/*!< ZCC se representa con wf */
 };
 
 /*!
-* Representa las componentes esenciales de un periodo de un
-* instrumento de tasa de interes. El orden es: disposicion, esDispFlujo,
-* amortizacion, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago.
+* Shared pointer de QCInterestRateCurve
 */
-typedef tuple<double, bool, double, bool, double,
-	QCDate, QCDate, QCDate> QCInterestRatePeriod;
-
-/*!
-* Vector de QCInterestRatePeriod. Objeto base de un QCInterestRateLeg.
-*/
-typedef vector<QCInterestRatePeriod> QCInterestRatePeriods;
-
-/*!
-* Shared pointer de QCInterestRatePeriods
-*/
-typedef shared_ptr<QCInterestRatePeriods> QCIntrstRtPrdsShrdPntr;
+typedef shared_ptr<QCInterestRateCurve> QCIntRtCrvShrdPtr;
 
 /*!
 * Shared pointer de QCZeroCouponCurve
@@ -56,9 +39,9 @@ typedef shared_ptr<QCInterestRatePeriods> QCIntrstRtPrdsShrdPntr;
 typedef shared_ptr<QCZeroCouponCurve> QCZrCpnCrvShrdPtr;
 
 /*!
-* Shared pointer de QCInterestRateLeg
+* Shared pointer de QCDiscountFactorCurve
 */
-typedef  shared_ptr<QCInterestRateLeg> QCIntrstRtLgShrdPtr;
+typedef shared_ptr<QCDiscountFactorCurve> QCDiscFctrCrvShrdPtr;
 
 /*!
 * Shared pointer de QCInterestRatePayoff
@@ -85,4 +68,9 @@ typedef shared_ptr<QCYearFraction> QCYrFrctnShrdPtr;
 */
 typedef shared_ptr<QCInterestRate> QCIntrstRtShrdPtr;
 
+/*!
+* Representa en una tupla los elementos de una pata fija que
+* permiten construir el QCInterestRateLeg asociado
+*/
+typedef tuple<QCInterestRate> QCFixedLegTuple;
 #endif //QCDEFINITIONS_H

@@ -2,12 +2,12 @@
 #include <exception>
 #include <algorithm>
 
-QCCurve::QCCurve(vector<double>& abscissa, vector<double>& ordinate)
+template<class T> QCCurve<T>::QCCurve(vector<T> &abscissa, vector<double>& ordinate)
 {		
 	//Se verifica si el numero de abscissa y ordinate coinciden
 	if (abscissa.size() != ordinate.size())
 	{
-		string msg = "Error contsructing curve: ";
+		string msg = "Error constructing curve: ";
 		msg += "number of abscissa is different from number of ordinate.";
 		throw invalid_argument(msg);
 	}
@@ -36,23 +36,23 @@ QCCurve::QCCurve(vector<double>& abscissa, vector<double>& ordinate)
 	}
 	else
 	{
-			_values.push_back(make_pair(0.0, 0.0));
+			throw runtime_error("El vector de abscissa no contiene datos.");
 	}
 
 	//Ordenar las abscissa respetando el mapeo con la ordenada
 	sort(_values.begin(), _values.end());
 }
 
-QCCurve::~QCCurve(void)
+template<class T> QCCurve<T>::~QCCurve(void)
 {
 }
 
-pair<double, double> QCCurve::getValuesAt(long position)
+template<class T> pair<T, double> QCCurve<T>::getValuesAt(long position)
 {
 	return _values[position];
 }
 
-long QCCurve::getLength()
+template<class T> long QCCurve<T>::getLength()
 {
 	return _values.size();
 }

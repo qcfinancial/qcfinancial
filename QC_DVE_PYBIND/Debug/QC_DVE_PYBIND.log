@@ -1,0 +1,20 @@
+﻿Build started 28/12/2016 12:00:45.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QCDate.cpp main.cpp
+         main.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(182): warning C4101: 'label' : unreferenced local variable
+         QCDate.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.pyd" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.lib" /MACHINE:X86 /DLL Debug\QCDate.obj
+         Debug\main.obj
+     1>main.obj : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in QCDate.obj
+     1>main.obj : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MDd_DynamicDebug' in QCDate.obj
+            Creating library \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.lib and object \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.exp
+     1>\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_PYBIND.pyd : fatal error LNK1319: 2 mismatches detected
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:02.35

@@ -8,6 +8,7 @@ class QCContinousWf :
 public:
 	QCContinousWf();
 	virtual double wf(double rate, double yf) override;
+	virtual double rate(double wf, double yf) override;
 	~QCContinousWf();
 };
 

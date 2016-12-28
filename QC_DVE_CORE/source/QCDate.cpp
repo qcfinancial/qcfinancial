@@ -5,6 +5,7 @@
 #include "QCDate.h"
 #include <sstream>
 #include <exception>
+#include <algorithm>
 
 //
 //  QCDate.cpp
@@ -222,6 +223,84 @@ std::string QCDate::description()
     return ss.str();
 }
 
+QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
+{
+	//Solo esta implementado el caso FOLLOW
+	QCDate result{ _day, _month, _year };
+	switch (rule)
+	{
+	case QCDate::qcNo:
+		break;
+
+	case QCDate::qcFollow:
+		if (result.weekDay() == 6)
+		{
+			result = result.addDays(2);
+		}
+		if (result.weekDay() == 0)
+		{
+			result = result.addDays(1);
+		}
+		while (binary_search(calendar.begin(), calendar.end(), result))
+		{
+			result = result.addDays(1);
+		}
+		break;
+
+	case QCDate::qcModFollow:
+		if (result.weekDay() == 6)
+		{
+			int month = result.month();
+			result = result.addDays(2);
+			if (result.month() != month)
+				result = result.addDays(-3);
+		}
+		if (result.weekDay() == 0)
+		{
+			int month = result.month();
+			result = result.addDays(1);
+			if (result.month() != month)
+				result = result.addDays(-2);
+		}
+		while (binary_search(calendar.begin(), calendar.end(), result))
+		{
+			result = result.addDays(-1);
+		}
+		break;
+
+	case QCDate::qcPrev:
+		break;
+
+	case QCDate::qcModPrev:
+		break;
+
+	default:
+		break;
+	}
+
+	return result;
+}
+
+QCDate QCDate::shift(vector<QCDate>& calendar, int nDays) const
+{
+	QCDate result{ _day, _month, _year };
+	if (nDays > 0)
+	{
+		for (int i = 1; i < nDays + 1; ++i)
+		{
+			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
+		}
+	}
+	else
+	{
+		for (int i = 1; i < -nDays + 1; ++i)
+		{
+			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
+		}
+	}
+	return result;
+}
+
 QCDate QCDate::addMonths(int nMonths) const
 {
     //Equivalent to Excel Function EDATE()
@@ -253,14 +332,17 @@ QCDate QCDate::addMonths(int nMonths) const
         eom = true;  //Detect if the date corresponds to the end of a month
     }
 
+	//Aqui hay que arreglar la addMonths
     nMonths += m;
 
-    m = nMonths - 12 * (nMonths / 12);
+	auto aux = (int)floor(nMonths / 12.0);
+    m = nMonths - 12 * aux;
 
     if (m == 0)
         m = 12;
 
-    y = y + (nMonths - 1) / 12;
+	aux = (int)floor((nMonths - 1) / 12.0);
+    y = y + aux;
 
     if (y < 0)
         y = 1900;

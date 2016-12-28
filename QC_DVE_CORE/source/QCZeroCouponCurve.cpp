@@ -1,40 +1,44 @@
 #include "QCZeroCouponCurve.h"
-#include <math.h>
 
-QCZeroCouponCurve::QCZeroCouponCurve(shared_ptr<QCInterpolator> curva,
-	shared_ptr<QCYearFraction> yf, shared_ptr<QCWealthFactor> wf) : _curva(curva),
-	_yf(yf), _wf(wf)
-{}
 
-double QCZeroCouponCurve::getRateAt(double t)
+//Constructor
+QCZeroCouponCurve::QCZeroCouponCurve(shared_ptr<QCInterpolator> curve,
+	QCInterestRate intRate) : QCInterestRateCurve(curve, intRate)
 {
-	return _curva->interpolateAt(t);
+	_dfDerivatives.resize(_curve->getLength());
 }
 
-double QCZeroCouponCurve::getInstantForwardRateAt(double t)
+double QCZeroCouponCurve::getRateAt(long d)
 {
-	double rt = _curva->interpolateAt(t);
-	double drt = _curva->derivativeAt(t);
-	return rt + t * drt;
+	return 0.0;
 }
 
-double QCZeroCouponCurve::getDerivInstantForwardRateAt(double t)
+double QCZeroCouponCurve::getDiscountFactorAt(long d)
 {
-	double drt = _curva->derivativeAt(t);
-	double d2rt = _curva->secondDerivativeAt(t);
-	return 2.0 * drt + t * d2rt;
+	return 0.0;
 }
 
-double QCZeroCouponCurve::getDiscountFactorAt(double t)
+double QCZeroCouponCurve::getDiscountFactorFwd(long d1, long d2)
 {
-	//Esta funcion necesita mas trabajo para poder especificar
-	//un factor de capitalizacion arbitrario.
-	double rate = _curva->interpolateAt(t);
-	double yf = _yf->yf(t);
-	return 1.0 / _wf->wf(rate, yf);
-	//return exp(-t * _curva->interpolateAt(t));
+	return 0.0;
 }
 
+double QCZeroCouponCurve::getInstantForwardRateAt(long d)
+{
+	return 0.0;
+}
+
+double QCZeroCouponCurve::getDerivInstantForwardRateAt(long d)
+{
+	return 0.0;
+}
+
+double QCZeroCouponCurve::dfDerivativeAt(unsigned int index)
+{
+	return _dfDerivatives.at(index);
+}
+
+//Destructor
 QCZeroCouponCurve::~QCZeroCouponCurve(void)
 {
 }

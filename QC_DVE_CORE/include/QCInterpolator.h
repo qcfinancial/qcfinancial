@@ -10,22 +10,22 @@ class QCInterpolator
 {
 public:
 	//Constructors
-	QCInterpolator(shared_ptr<QCCurve> curve);
+	QCInterpolator(shared_ptr<QCCurve<long>> curve);
 	
 	//Other
-	virtual double interpolateAt(double value) = 0;
-	virtual double derivativeAt(double value) = 0;
-	virtual double secondDerivativeAt(double value) = 0;
+	virtual double interpolateAt(long value) { return 0.0; }
+	virtual double derivativeAt(long value) { return 0.0; }
+	virtual double secondDerivativeAt(long value) { return 0.0; }
+	double rateDerivativeAt(unsigned int rateIndex);
+	long getLength();
 
 	//Destructors
 	virtual ~QCInterpolator(void);
 
 protected:
-	shared_ptr<QCCurve> _curve;
-	long index(double arg);	//Se va usar en cualquier implementacion especifica
-
-private:
-
+	shared_ptr<QCCurve<long>> _curve;
+	long index(long arg);	//Se va usar en cualquier implementacion especifica
+	vector<double> _derivatives;
 };
 
 #endif //QCINTERPOLATOR_H

@@ -1,32 +1,42 @@
+/** class QCInterestRateCurve
+* @brief Clase base (abstracta) para todas las curvas de tasas de interes que son curvas cero cupon.
+* @details Esta clase solo define metodos adicionales (obtener una tasas dado un plazo) que todas
+* sus clases derivadas deben override.
+*/
+
 #ifndef QCZEROCOUPONCURVE_H
 #define QCZEROCOUPONCURVE_H
 
+#include "QCInterestRateCurve.h"
+#include "QCInterestRate.h"
+#include "QCDefinitions.h"
 #include "QCInterpolator.h"
 #include "QCWealthFactor.h"
 #include "QCYearFraction.h"
 
-class QCZeroCouponCurve
+class QCZeroCouponCurve : public QCInterestRateCurve
 {
 public:
 	//Constructor
-	QCZeroCouponCurve(shared_ptr<QCInterpolator> curva,
-		shared_ptr<QCYearFraction> yf, shared_ptr<QCWealthFactor> wf);
+	QCZeroCouponCurve(shared_ptr<QCInterpolator> curve,
+		QCInterestRate intRate);
 
 	//Methods
-	double getRateAt(double t);
-	double getInstantForwardRateAt(double t);
-	double getDerivInstantForwardRateAt(double t);
-	double getDiscountFactorAt(double t);
+	virtual double getRateAt(long d);
+	virtual double getDiscountFactorAt(long d);
+	virtual double getDiscountFactorFwd(long d1, long d2);
+	virtual double getInstantForwardRateAt(long d);
+	virtual double getDerivInstantForwardRateAt(long d);
+	virtual double dfDerivativeAt(unsigned int index);
 
 	//Destructor
-	~QCZeroCouponCurve(void);
+	virtual ~QCZeroCouponCurve(void);
 
-private:
-	shared_ptr<QCInterpolator> _curva;
-	shared_ptr<QCYearFraction> _yf;
-	shared_ptr<QCWealthFactor> _wf;
+protected:
+	vector<double> _dfDerivatives;	//Derivadas del factor de descuento interpolado
+									//respecto a las tasas de la curva.
+
 };
-
 
 #endif //QCZEROCOUPONCURVE_H
 

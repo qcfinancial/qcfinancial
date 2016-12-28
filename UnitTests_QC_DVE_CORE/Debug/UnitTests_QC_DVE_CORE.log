@@ -1,28 +1,14 @@
-﻿Build started 01/12/2016 5:59:40.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\UnitTests_QC_DVE_CORE\UnitTests_QC_DVE_CORE.vcxproj" on node 2 (Rebuild target(s)).
+﻿Build started 23/12/2016 18:45:13.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\UnitTests_QC_DVE_CORE\UnitTests_QC_DVE_CORE.vcxproj" on node 3 (Rebuild target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\UnitTests_QC_DVE_CORE.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /FC /errorReport:prompt stdafx.cpp
          stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\UnitTests_QC_DVE_CORE.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /FC /errorReport:prompt unittest1.cpp
          unittest1.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.dll" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\UnitTest\lib" QC_DVE_CORE.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.lib" /MACHINE:X86 /DLL Debug\stdafx.obj
-         Debug\unittest1.obj
-         \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib
-         QC_DVE_CORE.lib(QCDate.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
-     1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
-     1>stdafx.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-     1>QC_DVE_CORE.lib(QCDate.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in stdafx.obj
-     1>QC_DVE_CORE.lib(QCDate.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MDd_DynamicDebug' in stdafx.obj
-     1>QC_DVE_CORE.lib(QCInterestRate.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in stdafx.obj
-     1>QC_DVE_CORE.lib(QCInterestRate.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MDd_DynamicDebug' in stdafx.obj
-     1>QC_DVE_CORE.lib(QCAct360.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in stdafx.obj
-     1>QC_DVE_CORE.lib(QCAct360.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MDd_DynamicDebug' in stdafx.obj
-            Creating library \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.lib and object \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.exp
-     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\UnitTests_QC_DVE_CORE.dll : fatal error LNK1319: 6 mismatches detected
+     1>\\psf\home\documents\qcode\qcdvaluationengine\unittests_qc_dve_core\unittest1.cpp(38): error C2440: 'initializing' : cannot convert from 'initializer-list' to 'QCInterestRate'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
      1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\UnitTests_QC_DVE_CORE\UnitTests_QC_DVE_CORE.vcxproj" (Rebuild target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:01.48
+Time Elapsed 00:00:01.60

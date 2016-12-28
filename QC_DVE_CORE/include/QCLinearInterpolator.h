@@ -7,16 +7,14 @@ class QCLinearInterpolator :
 	public QCInterpolator
 {
 public:
-	QCLinearInterpolator(shared_ptr<QCCurve> curve);
+	QCLinearInterpolator(shared_ptr<QCCurve<long>> curve);
 
-	virtual double interpolateAt(double value);
-	virtual double derivativeAt(double value);
-	virtual double secondDerivativeAt(double value);
+	virtual double interpolateAt(long value) override;
+	virtual double derivativeAt(long value) override;
+	virtual double secondDerivativeAt(long value) override;
 
-	virtual ~QCLinearInterpolator();
+	virtual ~QCLinearInterpolator() override;
 
-private:
-	vector<double> _derivatives;
 };
 
 #endif //QCLINEARINTERPOLATOR_H

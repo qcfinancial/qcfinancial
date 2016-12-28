@@ -7,17 +7,23 @@ class QCFloatingRatePayoff :
 {
 public:
 	QCFloatingRatePayoff(QCIntrstRtShrdPtr floatingRate,
-		QCIntrstRtLgShrdPtr irLeg,
-		QCZrCpnCrvShrdPtr projectingCurve,
+		double additiveSpread,
+		double multipSpread,
+		shared_ptr<QCInterestRateLeg> irLeg,
+		QCIntRtCrvShrdPtr projectingCurve,
 		QCZrCpnCrvShrdPtr discountCurve,
 		QCDate valueDate,
-		QCTimeSeriesShrdPtr fixingData);
-
+		QCTimeSeriesShrdPtr fixingData
+		);
+	double getForwardRateAt(int n);
 	virtual ~QCFloatingRatePayoff();
 
 protected:
 	virtual void _setAllRates() override;
-	QCZrCpnCrvShrdPtr _projectingCurve;
+	QCIntRtCrvShrdPtr _projectingCurve;
+	double _additiveSpread;
+	double _multipSpread;
+	vector<double> _forwardRates; //Aqui se guardan todas las fijaciones libres de spreads
 };
 
 #endif //QCFLOATINGRATEPAYOFF_H

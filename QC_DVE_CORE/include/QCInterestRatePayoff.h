@@ -24,18 +24,20 @@ public:
 	void payoff();
 	int payoffSize();
 	double presentValue();
+	double getPvRateDerivativeAt(unsigned int index);
 	tuple<QCDate, QCCashFlowLabel, double> getCashflowAt(unsigned int n);
 	virtual ~QCInterestRatePayoff();
 
 protected:
 	QCInterestRatePayoff(
 		QCIntrstRtShrdPtr rate,
-		QCIntrstRtLgShrdPtr irLeg,
+		shared_ptr<QCInterestRateLeg> irLeg,
 		QCDate valueDate,
 		QCZrCpnCrvShrdPtr discountCurve,
 		QCTimeSeriesShrdPtr fixingData);
+	
 	QCIntrstRtShrdPtr _rate;
-	QCIntrstRtLgShrdPtr _irLeg;
+	shared_ptr<QCInterestRateLeg> _irLeg;
 	QCDate _valueDate;
 	QCZrCpnCrvShrdPtr _discountCurve;
 	QCTimeSeriesShrdPtr _fixingData;
@@ -45,6 +47,8 @@ protected:
 
 	virtual void _setAllRates();
 	vector<double> _allRates;
+
+	vector<double> _pvRateDerivatives;
 };
 
 #endif //QCINTERESTRATEPAYOFF_H
