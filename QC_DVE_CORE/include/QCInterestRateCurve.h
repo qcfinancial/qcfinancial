@@ -27,8 +27,11 @@ public:
 	{
 	}
 	virtual double getRateAt(long d) = 0;
+	virtual double getDiscountFactorAt(long d) = 0;
 	virtual double getForwardRate(long d1, long d2) = 0;
 	virtual double getForwardWf(long d1, long d2) = 0;
+	virtual double dfDerivativeAt(unsigned int index) = 0;
+
 
 	virtual ~QCInterestRateCurve(){}
 
@@ -37,6 +40,8 @@ public:
 protected:
 	shared_ptr<QCInterpolator> _curve;
 	QCInterestRate _intRate;
+	vector<double> _dfDerivatives;	//Derivadas del factor de descuento interpolado
+									//respecto a las tasas de la curva.
 };
 
 #endif //QCINTERESTRATECURVE_H

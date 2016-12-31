@@ -139,4 +139,13 @@ CellMatrix pvIcpClpLegs(double valueDate,
 	CellMatrix customAmort,
 	CellMatrix fixings);
 
+CellMatrix pvIcpClfLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix icpFixings,
+	CellMatrix ufFixings);
+
 #endif

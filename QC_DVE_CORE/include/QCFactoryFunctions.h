@@ -1,5 +1,5 @@
-#ifndef QCYEARFRACTIONFACTORY_H
-#define QCYEARFRACTIONFACTORY_H
+#ifndef QCFACTORYFUNCTIONS_H
+#define QCFACTORYFUNCTIONS_H
 
 #include <memory>
 #include <string>
@@ -27,7 +27,7 @@ namespace QCFactoryFunctions
 	QCZrCpnCrvShrdPtr zrCpnCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
 		const string& interpolator, const string& yf, const string& wf, const string& typeCurve);
 
-	shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(
+	shared_ptr<QCInterestRateCurve> intRtCrvShrdPtr(
 		vector<long>& tenors, vector<double>& rates,
 		const string& interpolator, const string& wf, const string& yf,
 		QCInterestRateCurve::QCTypeInterestRateCurve typeCurve);
@@ -41,26 +41,44 @@ namespace QCFactoryFunctions
 		QCDate endDate,					//end date
 		vector<QCDate> calendar,		//settlement calendar
 		int settlementLag,				//settlement lag
-		string stubPeriod,				//stub period
+		QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
 		string periodicity,				//periodicity
 		QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
-		string amortization,			//amortization
+		QCInterestRateLeg::QCAmortization amortization,	//amortization
 		vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
 		double notional					//notional
 		);
 
-	QCInterestRateLeg buildIcpClpLeg(
+	QCInterestRateLeg buildIcpLeg(
 		string receivePay,				//receive or pay
 		QCDate startDate,				//start date
 		QCDate endDate,					//end date
 		vector<QCDate> calendar,		//settlement calendar
 		int settlementLag,				//settlement lag
-		string stubPeriod,				//stub period
+		QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
 		string periodicity,				//periodicity
 		QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
-		string amortization,							//amortization
+		QCInterestRateLeg::QCAmortization amortization,	//amortization
 		vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
 		double notional									//notional
 		);
+
+	QCInterestRateLeg buildFloatingRateLeg(
+		string receivePay,					//receive or pay
+		QCDate startDate,					//start date
+		QCDate endDate,						//end date
+		vector<QCDate> settleCalendar,		//settlement calendar
+		int settlementLag,					//settlement lag
+		string stubPeriod,					//stub period
+		string settlePeriodicity,			//settlement periodicity
+		QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
+		string amortization,						//amortization
+		vector<tuple<QCDate, double, double>> amortNotionalByDate,	//amortization and notional by end date
+		string fixingStubPeriod,					//fixing stub period
+		string fixingPeriodicity,					//fixing periodicity
+		vector<QCDate> fixingCalendar,				//fixing calendar
+		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
+		double notional								//notional
+		);
 };
-#endif //QCYEARFRACTIONFACTORY_H
+#endif //QCFACTORYFUNCTIONS_H

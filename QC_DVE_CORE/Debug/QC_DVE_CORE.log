@@ -1,4 +1,4 @@
-﻿Build started 28/12/2016 15:14:18.
+﻿Build started 30/12/2016 18:18:31.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCFactoryFunctions.cpp
@@ -37,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.56
+Time Elapsed 00:00:02.38

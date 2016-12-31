@@ -10,7 +10,7 @@ class QCFixedRatePayoff :
 public:
 	QCFixedRatePayoff(QCIntrstRtShrdPtr fixedRate,
 		shared_ptr<QCInterestRateLeg> irLeg,
-		QCZrCpnCrvShrdPtr discountCurve,
+		QCIntRtCrvShrdPtr discountCurve,
 		QCDate valueDate,
 		QCTimeSeriesShrdPtr fixingData);
 

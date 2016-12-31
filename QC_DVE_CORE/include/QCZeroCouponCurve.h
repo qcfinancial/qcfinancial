@@ -33,8 +33,6 @@ public:
 	virtual ~QCZeroCouponCurve(void);
 
 protected:
-	vector<double> _dfDerivatives;	//Derivadas del factor de descuento interpolado
-									//respecto a las tasas de la curva.
 
 };
 

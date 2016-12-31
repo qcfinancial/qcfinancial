@@ -366,6 +366,31 @@ long QCDate::dayDiff(const QCDate& otherDate) const
     return otherDate.excelSerial() - this->excelSerial();
 }
 
+tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
+	vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
+{
+	QCDate lastDate{ _day, _month, _year };
+	QCDate nextDate{ _day, _month, _year };
+	unsigned long counter{ 0 };
+
+	while (true)
+	{
+		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
+		if (nextDate <= otherDate)
+		{
+			++counter;
+			lastDate = nextDate;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return make_tuple(counter, (int)lastDate.dayDiff(otherDate));
+
+}
+
 QCDate QCDate::addDays(long nDays) const
 {
     long newSerial = this->excelSerial() + nDays;

@@ -133,6 +133,58 @@ namespace HelperFunctions
 				fixings(i, 1).NumericValue()));
 		}
 	}
+
+	void buildManyFixings(CellMatrix& fixings, map<string, map<QCDate, double>>& mapManyFixings)
+	{
+		//La CellMatrix fixings debe venir ordenada por nombre
+		string lastName, nextName;
+		lastName = fixings(0, 0).StringValue();
+		map<QCDate, double> tempMap;
+		unsigned long numRows = fixings.RowsInStructure();
+		for (unsigned long i = 0; i < numRows; ++i)
+		{
+			nextName = fixings(i, 0).StringValue();
+			if (nextName == lastName)
+			{
+				tempMap.insert(pair<QCDate, double>(QCDate{ (long)fixings(i, 1).NumericValue() },
+					(double)fixings(i, 2).NumericValue()));
+				lastName = nextName;
+			}
+			else
+			{
+				mapManyFixings.insert(pair<string, map<QCDate, double>>(lastName, tempMap));
+				tempMap.clear();
+				tempMap.insert(pair<QCDate, double>(QCDate{ (long)fixings(i, 1).NumericValue() },
+					(double)fixings(i, 2).NumericValue()));
+				lastName = nextName;
+			}
+		}
+		//Un insert final
+		tempMap.insert(pair<QCDate, double>(QCDate{ (long)fixings(numRows, 1).NumericValue() },
+			(double)fixings(numRows, 2).NumericValue()));
+
+	}
+
+	void buildStringStringMap(CellMatrix& stringMatrix, map<string, string>& mapStringString)
+	{
+		for (unsigned long i = 0; i < stringMatrix.RowsInStructure(); ++i)
+		{
+			mapStringString.insert(pair<string, string>{stringMatrix(i, 0).StringValue(),
+				stringMatrix(i, 1).StringValue()});
+		}
+	}
+
+	void buildStringPairStringMap(CellMatrix& stringMatrix, map<string, pair<string, string>>& mapStringPairString)
+	{
+		for (unsigned long i = 0; i < stringMatrix.RowsInStructure(); ++i)
+		{
+			mapStringPairString.insert(pair<string, pair<string, string>>{stringMatrix(i, 0).StringValue(),
+				make_pair(stringMatrix(i, 1).StringValue(),
+				stringMatrix(i, 2).StringValue())});
+		}
+	}
+
 }
+
 
 #endif

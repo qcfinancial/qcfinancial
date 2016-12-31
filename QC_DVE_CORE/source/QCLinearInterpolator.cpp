@@ -15,27 +15,35 @@ double QCLinearInterpolator::interpolateAt(long value)
 	
 	long i = index(value);
 	
-	double x1 = _curve->getValuesAt(i).first;
-	double x2 = _curve->getValuesAt(i + 1).first;
-	double y1 = _curve->getValuesAt(i).second;
-	double y2 = _curve->getValuesAt(i + 1).second;
-
-	if (value < x1)
+	if (i == _curve->getLength() - 1)
 	{
 		_derivatives.at(i) = 1.0;
-		_derivatives.at(i + 1) = 0.0;
-		return y1;
+		return _curve->getValuesAt(i).second;
 	}
-	if (value > x2)
+	else
 	{
-		_derivatives.at(i) = 0.0;
-		_derivatives.at(i + 1) = 1.0;
-		return y2;
+		double x1 = _curve->getValuesAt(i).first;
+		double x2 = _curve->getValuesAt(i + 1).first;
+		double y1 = _curve->getValuesAt(i).second;
+		double y2 = _curve->getValuesAt(i + 1).second;
+
+		if (value < x1)
+		{
+			_derivatives.at(i) = 1.0;
+			_derivatives.at(i + 1) = 0.0;
+			return y1;
+		}
+		if (value > x2)
+		{
+			_derivatives.at(i) = 0.0;
+			_derivatives.at(i + 1) = 1.0;
+			return y2;
+		}
+		_derivatives.at(i) = -1 / (x2 - x1) * (value - x1) + 1;
+		_derivatives.at(i + 1) = 1 / (x2 - x1) * (value - x1);
+
+		return (y2 - y1) / (x2 - x1) * (value - x1) + y1;
 	}
-	_derivatives.at(i) = -1 / (x2 - x1) * (value - x1) + 1;
-	_derivatives.at(i + 1) = 1 / (x2 - x1) * (value - x1);
-	
-	return (y2 - y1) / (x2 - x1) * (value - x1) + y1;
 }
 
 double QCLinearInterpolator::derivativeAt(long value)

@@ -40,6 +40,32 @@ QCDate::QCBusDayAdjRules QCHelperFunctions::stringToQCBusDayAdjRule(string rule)
 	return QCDate::qcNo;
 }
 
+QCInterestRateLeg::QCStubPeriod QCHelperFunctions::stringToQCStubPeriod(string stubPeriod)
+{
+	if (stubPeriod == "NO")
+		return QCInterestRateLeg::qcNoStubPeriod;
+	if (stubPeriod == "CORTO FINAL")
+		return QCInterestRateLeg::qcShortBack;
+	if (stubPeriod == "LARGO FINAL")
+		return QCInterestRateLeg::qcLongBack;
+	if (stubPeriod == "CORTO INICIO")
+		return QCInterestRateLeg::qcShortFront;
+	if (stubPeriod == "LARGO INICIO")
+		return QCInterestRateLeg::qcLongFront;
+	return QCInterestRateLeg::qcNoStubPeriod;
+}
+
+QCInterestRateLeg::QCAmortization QCHelperFunctions::stringToQCAmortization(string amortization)
+{
+	if (amortization == "BULLET")
+		return QCInterestRateLeg::qcBulletAmort;
+	if (amortization == "CONSTANT")
+		return QCInterestRateLeg::qcConstantAmort;
+	if (amortization == "CUSTOM")
+		return QCInterestRateLeg::qcCustomAmort;
+	return QCInterestRateLeg::qcBulletAmort;
+}
+
 QCInterestRateCurve::QCTypeInterestRateCurve QCHelperFunctions::stringToQCIntRateCurve(string typeCurve)
 {
 	if (typeCurve == "ZEROCPN")
@@ -48,4 +74,5 @@ QCInterestRateCurve::QCTypeInterestRateCurve QCHelperFunctions::stringToQCIntRat
 		return QCInterestRateCurve::qcDiscountFactorCurve;
 	if (typeCurve == "PROJCRV")
 		return QCInterestRateCurve::qcProjectingCurve;
+	return QCInterestRateCurve::qcZeroCouponCurve;
 }

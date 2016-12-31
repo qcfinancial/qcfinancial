@@ -1098,6 +1098,113 @@ EXCEL_END
 
 //////////////////////////
 
+namespace
+{
+XLRegistration::Arg
+pvIcpClfLegsArgs[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "icpFixings","too lazy to comment this one ","XLF_OPER"},
+{ "ufFixings","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClfLegs("xlpvIcpClfLegs",
+"pvIcpClfLegs",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClfLegsArgs,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClfLegs(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER icpFixingsa,
+LPXLFOPER ufFixingsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper icpFixingsb(
+	(icpFixingsa));
+CellMatrix icpFixings(
+	icpFixingsb.AsCellMatrix("icpFixings"));
+
+XlfOper ufFixingsb(
+	(ufFixingsa));
+CellMatrix ufFixings(
+	ufFixingsb.AsCellMatrix("ufFixings"));
+
+CellMatrix result(
+	pvIcpClfLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		icpFixings,
+		ufFixings)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
 //////////////////////////
 // Methods that will get registered to execute in AutoOpen
 //////////////////////////

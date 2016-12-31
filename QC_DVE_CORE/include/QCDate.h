@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include<vector>
+#include <tuple>
 
 using namespace std;
 
@@ -185,6 +186,15 @@ class QCDate
          * @return (long) número de días calculados
          */
         long dayDiff(const QCDate& otherDate) const;
+
+		/*!
+		* Calcula el número de meses enteros entre otherDate y sí misma.
+		* Sera > 0 si otherDate es mayor que sí misma. Entrega el resto en dias.
+		* @param otherDate
+		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
+		*/
+		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate,
+			vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
 
         /*!
          * Calcula la fecha que resulta de sumar un número de días a si misma

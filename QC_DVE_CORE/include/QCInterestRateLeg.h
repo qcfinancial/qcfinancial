@@ -32,10 +32,33 @@ public:
 	};
 
 	/*!
+	* Enumera las distintas posibilidades de stub period
+	*/
+	enum QCStubPeriod
+	{
+		qcNoStubPeriod, /*!< No hay stub period */
+		qcShortBack,	/*!< Periodo corto al final */
+		qcLongBack,		/*!< Periodo largo al final */
+		qcShortFront,	/*!< Periodo corto al inicio */
+		qcLongFront		/*!< Periodo largo al inicio */
+	};
+
+	/*!
+	* Enumera las distintas posibilidades de amortizacion
+	*/
+	enum QCAmortization
+	{
+		//HAY QUE IMPLEMENTAR ESTE ENUM EN LA FACTORY FUNCTION DE FIXED RATE
+		qcBulletAmort,		/*!< Amortizacion bullet */
+		qcConstantAmort,	/*!< Amortizacion constante en cada periodo */
+		qcCustomAmort,		/*!< Amortizacion customizada */
+	};
+
+	/*!
 	* Representa las componentes esenciales de un periodo de un
 	* instrumento de tasa de interes. El orden es: disposicion, esDispFlujo,
 	* amortizacion, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago, fechaFixing,
-	* fechaInicioIndiceFixing, fechaFinalIndiceFixing
+	* fechaInicioIndice, fechaFinalIndice
 	*/
 	typedef tuple<double, bool, double, bool, double,
 		QCDate, QCDate, QCDate, QCDate, QCDate, QCDate> QCInterestRatePeriod;

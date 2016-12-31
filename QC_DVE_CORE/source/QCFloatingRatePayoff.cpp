@@ -5,7 +5,7 @@ QCFloatingRatePayoff::QCFloatingRatePayoff(QCIntrstRtShrdPtr floatingRate,
 	double multipSpread,
 	shared_ptr<QCInterestRateLeg> irLeg,
 	QCIntRtCrvShrdPtr projectingCurve,
-	QCZrCpnCrvShrdPtr discountCurve,
+	QCIntRtCrvShrdPtr discountCurve,
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fixingData) :
 	QCInterestRatePayoff(floatingRate, irLeg, valueDate, discountCurve, fixingData),

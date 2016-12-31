@@ -17,8 +17,11 @@ public:
 		QCInterestRate intRate);
 
 	virtual double getRateAt(long d) override;
+	virtual double getDiscountFactorAt(long d) override;
 	virtual double getForwardRate(long d1, long d2) override;
 	virtual double getForwardWf(long d1, long d2) override;
+	virtual double dfDerivativeAt(unsigned int index) override;
+
 
 	virtual ~QCProjectingInterestRateCurve();
 };

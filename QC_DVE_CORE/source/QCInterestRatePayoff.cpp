@@ -4,7 +4,7 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 	QCIntrstRtShrdPtr rate,
 	shared_ptr<QCInterestRateLeg> irLeg,
 	QCDate valueDate,
-	QCZrCpnCrvShrdPtr discountCurve,
+	QCIntRtCrvShrdPtr discountCurve,
 	QCTimeSeriesShrdPtr fixingData) :
 	_rate(rate),
 	_irLeg(irLeg),
@@ -100,10 +100,10 @@ double QCInterestRatePayoff::presentValue()
 		double flujo = get<2>(cshflw);
 		double df = _discountCurve->getDiscountFactorAt(d);
 		pv += flujo * df;
-		for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
+		/*for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
 		{
 			_pvRateDerivatives.at(i) += flujo * _discountCurve->dfDerivativeAt(i);
-		}
+		}*/
 	}
 
 	

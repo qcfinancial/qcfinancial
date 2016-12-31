@@ -11,7 +11,7 @@ public:
 		double multipSpread,
 		shared_ptr<QCInterestRateLeg> irLeg,
 		QCIntRtCrvShrdPtr projectingCurve,
-		QCZrCpnCrvShrdPtr discountCurve,
+		QCIntRtCrvShrdPtr discountCurve,
 		QCDate valueDate,
 		QCTimeSeriesShrdPtr fixingData
 		);

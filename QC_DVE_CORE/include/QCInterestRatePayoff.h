@@ -33,13 +33,13 @@ protected:
 		QCIntrstRtShrdPtr rate,
 		shared_ptr<QCInterestRateLeg> irLeg,
 		QCDate valueDate,
-		QCZrCpnCrvShrdPtr discountCurve,
+		QCIntRtCrvShrdPtr discountCurve,
 		QCTimeSeriesShrdPtr fixingData);
 	
 	QCIntrstRtShrdPtr _rate;
 	shared_ptr<QCInterestRateLeg> _irLeg;
 	QCDate _valueDate;
-	QCZrCpnCrvShrdPtr _discountCurve;
+	QCIntRtCrvShrdPtr _discountCurve;
 	QCTimeSeriesShrdPtr _fixingData;
 	
 	int _currentPeriod;
