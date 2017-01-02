@@ -17,6 +17,7 @@ public:
 	virtual double getForwardWf(long d1, long d2) override;
 	virtual double getInstantForwardRateAt(long d) override;
 	virtual double getDerivInstantForwardRateAt(long d) override;
+	virtual double fwdWfDerivativeAt(unsigned int index) override;
 
 	virtual ~QCZeroCouponDiscountFactorCurve();
 };

@@ -4,11 +4,13 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 	QCIntrstRtShrdPtr rate,
 	shared_ptr<QCInterestRateLeg> irLeg,
 	QCDate valueDate,
+	QCIntRtCrvShrdPtr projectingCurve,
 	QCIntRtCrvShrdPtr discountCurve,
 	QCTimeSeriesShrdPtr fixingData) :
 	_rate(rate),
 	_irLeg(irLeg),
 	_valueDate(valueDate),
+	_projectingCurve(projectingCurve),
 	_discountCurve(discountCurve),
 	_fixingData(fixingData)
 {
@@ -47,6 +49,12 @@ void QCInterestRatePayoff::payoff()
 	{
 		tempCurrentPeriod = _currentPeriod;
 	}
+	unsigned int curveLength = _projectingCurve->getLength();
+	_pvProjCurveDerivatives.resize(curveLength);
+	for (unsigned int j = 0; j < curveLength; ++j)
+	{
+		_pvProjCurveDerivatives.at(j) = 0.0;
+	}
 	for (int i = tempCurrentPeriod; i < _irLeg->size(); ++i)
 	{
 		QCInterestRateLeg::QCInterestRatePeriod prd = _irLeg->getPeriodAt(i);
@@ -66,7 +74,14 @@ void QCInterestRatePayoff::payoff()
 		double interest = notional * (_rate->wf(startDate, endDate) - 1);
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
 			qcInterest, interest));
-
+		
+		//Aqui podemos calcular la derivada del flujo respecto a los vertices de la
+		//curva de proyeccion.
+		for (unsigned int j = 0; j < curveLength; ++j)
+		{
+			_pvProjCurveDerivatives.at(j) += notional * _rate->yf(startDate, endDate) *
+				_allRatesDerivatives.at(i).at(j);
+		}
 		//Se agrega la amortizacion si corresponde
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
 			qcAmortization, get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(prd) *
@@ -118,6 +133,11 @@ double QCInterestRatePayoff::getPvRateDerivativeAt(unsigned int index)
 unsigned long QCInterestRatePayoff::discountCurveLength()
 {
 	return _discountCurve->getLength();
+}
+
+unsigned long QCInterestRatePayoff::projectingCurveLength()
+{
+	return _projectingCurve->getLength();
 }
 
 QCInterestRatePayoff::~QCInterestRatePayoff() {}

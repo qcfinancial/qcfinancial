@@ -9,8 +9,8 @@ QCIcpClpPayoff::QCIcpClpPayoff(QCIntrstRtShrdPtr floatingRate,
 	QCIntRtCrvShrdPtr discountCurve, //QCZrCpnCrvShrdPtr
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fixingData) :
-	QCInterestRatePayoff(floatingRate, irLeg, valueDate, discountCurve, fixingData),
-	_additiveSpread(additiveSpread), _multipSpread(multipSpread), _projectingCurve(projectingCurve)
+	QCInterestRatePayoff(floatingRate, irLeg, valueDate, projectingCurve, discountCurve, fixingData),
+	_additiveSpread(additiveSpread), _multipSpread(multipSpread)
 {
 	_setAllRates();
 }

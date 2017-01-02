@@ -18,6 +18,7 @@ public:
 	double dwf(long days);
 	double getRateFromWf(double wf, QCDate& startDate, QCDate& endDate);
 	double getRateFromWf(double wf, long days);
+	double yf(QCDate& startDate, QCDate& endDate);
 	~QCInterestRate();
 
 private:

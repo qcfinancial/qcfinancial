@@ -33,6 +33,12 @@ double QCZeroCouponDiscountFactorCurve::getForwardWf(long d1, long d2)
 	return 1 / this->getDiscountFactorFwd(d1, d2);
 }
 
+double QCZeroCouponDiscountFactorCurve::fwdWfDerivativeAt(unsigned int index)
+{
+	//TO DO
+	return 0.0;
+}
+
 double QCZeroCouponDiscountFactorCurve::getInstantForwardRateAt(long d)
 {
 	//TO DO

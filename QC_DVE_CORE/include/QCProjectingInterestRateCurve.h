@@ -21,7 +21,7 @@ public:
 	virtual double getForwardRate(long d1, long d2) override;
 	virtual double getForwardWf(long d1, long d2) override;
 	virtual double dfDerivativeAt(unsigned int index) override;
-
+	virtual double fwdWfDerivativeAt(unsigned int index) override;
 
 	virtual ~QCProjectingInterestRateCurve();
 };

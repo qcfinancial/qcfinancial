@@ -34,6 +34,10 @@ double QCProjectingInterestRateCurve::getForwardWf(long d1, long d2)
 	return _intRate.wf(d1);
 }
 
+double QCProjectingInterestRateCurve::fwdWfDerivativeAt(unsigned int index)
+{
+	return 0.0;
+}
 
 QCProjectingInterestRateCurve::~QCProjectingInterestRateCurve()
 {

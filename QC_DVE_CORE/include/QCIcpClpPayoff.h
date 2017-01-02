@@ -25,16 +25,7 @@ protected:
 	double _multipSpread;
 	
 	//Aqui se guardan todas las fijaciones libres de spreads
-	vector<double> _forwardRates;			
-	
-	//Aqui se guardan las derivadas de las tasas de proyeccion respecto a
-	//cada punto de la curva de proyeccion. Es una matriz porque por cada tasa
-	//proyectada existen derivadas respecto a cada vertice de la curva de proyeccion.
-	vector<vector<double>> _allRatesDerivatives;
-	
-	//Aqui se guardan las derivadas del valor presente respecto a
-	//los vertices de la curva de proyeccion.
-	vector<double> _pvProjCurveDerivatives;	
+	vector<double> _forwardRates;
 };
 
 #endif //QCICPCLPPAYOFF_H
