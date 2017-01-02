@@ -9,6 +9,7 @@
 #include <string>
 #include<vector>
 #include <tuple>
+#include <memory>
 
 using namespace std;
 
@@ -195,7 +196,14 @@ class QCDate
 		*/
 		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate,
 			vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
-
+		/*!
+		* Calcula el número de meses enteros entre otherDate y sí misma.
+		* Sera > 0 si otherDate es mayor que sí misma. Entrega el resto en dias.
+		* @param otherDate
+		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
+		*/
+		tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
+			shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
         /*!
          * Calcula la fecha que resulta de sumar un número de días a si misma
          * @param nDays número de días a sumar
@@ -214,12 +222,33 @@ class QCDate
 		QCDate businessDay(vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
 
 		/*!
+		* Calcula la siguiente fecha que es dia habil considerando el vector de
+		* fechas que son feriado y la regla (FOLLOW, MODFOLLOW). Si la fecha es habil
+		* entonces se retorna a si misma.
+		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
+		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+
+		/*!
 		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
 		* @param calendar (vector<QCDate>&) vector con los feriados
 		* @param nDays (int) numero de dias habiles
+		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate shift(vector<QCDate>& calendar, int nDays) const;
+		QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
+			QCDate::QCBusDayAdjRules direction) const;
+		/*!
+		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
+		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
+		* @param nDays (int) numero de dias habiles
+		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
+			QCDate::QCBusDayAdjRules direction) const;
 
 		/*!
          * Calcula la fecha que resulta de sumar un número de meses a si misma

@@ -17,15 +17,6 @@ using namespace std;
 
 //<xlw:libraryname=QC_DVE
 
-short // echoes a short
-EchoShort(short x // number to be echoed
-       );
-
-double //Devuelve la suma de 2 numeros
-suuma(double x //primer numero
-	, double y //segundo numero
-	);
-
 double //Devuelve la fraccion de agno entre dos fechas
 	qcYearFraction(int startDate //Fecha inicial
 				 , int endDate   //Fecha final
@@ -147,5 +138,20 @@ CellMatrix pvIcpClfLegs(double valueDate,
 	CellMatrix customAmort,
 	CellMatrix icpFixings,
 	CellMatrix ufFixings);
+
+CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,
+	string settlementStubPeriod, string settlementPeriodicity, string endDateAdjustment,
+	string settlementCalendar, int settlementLag,
+	string fixingStubPeriod, string fixingPeriodicity, int fixingLag,
+	string fixingCalendar, int fixingStartDateRule, string fixingTenor);
+
+CellMatrix pvFloatingRateLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix fixings,
+	CellMatrix intRateIndexChars);
 
 #endif

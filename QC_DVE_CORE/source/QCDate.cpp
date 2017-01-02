@@ -269,6 +269,26 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 		break;
 
 	case QCDate::qcPrev:
+		if (result.weekDay() == 6)
+		{
+			result = result.addDays(-1);
+		}
+		if (result.weekDay() == 0)
+		{
+			result = result.addDays(-2);
+		}
+		while (binary_search(calendar.begin(), calendar.end(), result))
+		{
+			result = result.addDays(-1);
+			if (result.weekDay() == 6)
+			{
+				result = result.addDays(-1);
+			}
+			if (result.weekDay() == 0)
+			{
+				result = result.addDays(-2);
+			}
+		}
 		break;
 
 	case QCDate::qcModPrev:
@@ -281,10 +301,90 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 	return result;
 }
 
-QCDate QCDate::shift(vector<QCDate>& calendar, int nDays) const
+QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
+{
+	//Solo esta implementado el caso FOLLOW, MOD_FOLLOW y PREV
+	QCDate result{ _day, _month, _year };
+	switch (rule)
+	{
+	case QCDate::qcNo:
+		break;
+
+	case QCDate::qcFollow:
+		if (result.weekDay() == 6)
+		{
+			result = result.addDays(2);
+		}
+		if (result.weekDay() == 0)
+		{
+			result = result.addDays(1);
+		}
+		while (binary_search(calendar->begin(), calendar->end(), result))
+		{
+			result = result.addDays(1);
+		}
+		break;
+
+	case QCDate::qcModFollow:
+		if (result.weekDay() == 6)
+		{
+			int month = result.month();
+			result = result.addDays(2);
+			if (result.month() != month)
+				result = result.addDays(-3);
+		}
+		if (result.weekDay() == 0)
+		{
+			int month = result.month();
+			result = result.addDays(1);
+			if (result.month() != month)
+				result = result.addDays(-2);
+		}
+		while (binary_search(calendar->begin(), calendar->end(), result))
+		{
+			result = result.addDays(-1);
+		}
+		break;
+
+	case QCDate::qcPrev:
+		if (result.weekDay() == 6)
+		{
+			result = result.addDays(-1);
+		}
+		if (result.weekDay() == 0)
+		{
+			result = result.addDays(-2);
+		}
+		while (binary_search(calendar->begin(), calendar->end(), result))
+		{
+			result = result.addDays(-1);
+			if (result.weekDay() == 6)
+			{
+				result = result.addDays(-1);
+			}
+			if (result.weekDay() == 0)
+			{
+				result = result.addDays(-2);
+			}
+		}
+
+		break;
+
+	case QCDate::qcModPrev:
+		break;
+
+	default:
+		break;
+	}
+
+	return result;
+}
+
+QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
+	QCDate::QCBusDayAdjRules direction) const
 {
 	QCDate result{ _day, _month, _year };
-	if (nDays > 0)
+	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
 		for (int i = 1; i < nDays + 1; ++i)
 		{
@@ -293,7 +393,28 @@ QCDate QCDate::shift(vector<QCDate>& calendar, int nDays) const
 	}
 	else
 	{
-		for (int i = 1; i < -nDays + 1; ++i)
+		for (int i = 1; i < nDays + 1; ++i)
+		{
+			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
+		}
+	}
+	return result;
+}
+
+QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
+	QCDate::QCBusDayAdjRules direction) const
+{
+	QCDate result{ _day, _month, _year };
+	if (direction == QCDate::qcFollow ||  direction == QCDate::qcModFollow)
+	{
+		for (int i = 1; i < nDays + 1; ++i)
+		{
+			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
+		}
+	}
+	else 
+	{
+		for (int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
 		}
@@ -368,6 +489,31 @@ long QCDate::dayDiff(const QCDate& otherDate) const
 
 tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
+{
+	QCDate lastDate{ _day, _month, _year };
+	QCDate nextDate{ _day, _month, _year };
+	unsigned long counter{ 0 };
+
+	while (true)
+	{
+		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
+		if (nextDate <= otherDate)
+		{
+			++counter;
+			lastDate = nextDate;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return make_tuple(counter, (int)lastDate.dayDiff(otherDate));
+
+}
+
+tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
+	shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
 {
 	QCDate lastDate{ _day, _month, _year };
 	QCDate nextDate{ _day, _month, _year };

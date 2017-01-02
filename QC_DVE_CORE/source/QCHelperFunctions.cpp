@@ -20,9 +20,24 @@ long QCHelperFunctions::tenor(string periodicity)
 	}
 }
 
+int QCHelperFunctions::lagToInt(string lag)
+{
+	QCHelperFunctions::lowerCase(lag);
+	if (string{ lag.back() } != "d")
+		return 0;
+	lag.pop_back();
+	return stoi(lag);
+}
+
 void QCHelperFunctions::lowerCase(string& word)
 {
 	transform(word.begin(), word.end(), word.begin(), tolower);
+}
+
+QCHelperFunctions::QCZeroOne QCHelperFunctions::boolToZeroOne(bool value)
+{
+	if (value) return QCHelperFunctions::qcOne;
+	return QCHelperFunctions::qcZero;
 }
 
 QCDate::QCBusDayAdjRules QCHelperFunctions::stringToQCBusDayAdjRule(string rule)

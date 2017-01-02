@@ -2,6 +2,7 @@
 #define QCHELPERFUNCTIONS_H
 
 #include <memory>
+#include <string>
 
 #include "QCDefinitions.h"
 #include "QCDate.h"
@@ -12,8 +13,16 @@ using namespace std;
 
 namespace QCHelperFunctions
 {
+	enum QCZeroOne
+	{
+		qcZero = 0,
+		qcOne = 1
+	};
+
 	long tenor(string periodicity);
+	int lagToInt(string lag);
 	void lowerCase(string& word);
+	QCZeroOne boolToZeroOne(bool value);
 	QCDate::QCBusDayAdjRules stringToQCBusDayAdjRule(string rule);
 	QCInterestRateLeg::QCStubPeriod stringToQCStubPeriod(string stubPeriod);
 	QCInterestRateLeg::QCAmortization stringToQCAmortization(string amortization);

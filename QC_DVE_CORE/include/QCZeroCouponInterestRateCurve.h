@@ -18,6 +18,7 @@ public:
 	virtual double getInstantForwardRateAt(long d) override;
 	virtual double getDerivInstantForwardRateAt(long d) override;
 	virtual double dfDerivativeAt(unsigned int index) override;
+	virtual double fwdWfDerivativeAt(unsigned int index) override;
 	virtual ~QCZeroCouponInterestRateCurve();
 
 };

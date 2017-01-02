@@ -18,6 +18,7 @@
 #include "QCZeroCouponInterestRateCurve.h"
 #include "QCZeroCouponDiscountFactorCurve.h"
 #include "QCInterestRate.h"
+#include "QCInterestRatePeriodsFactory.h"
 
 using namespace QCHelperFunctions;
 using namespace std;
@@ -263,7 +264,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 			QCDate fechaInicioPeriodo = startDate;
 			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
@@ -274,14 +275,14 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 				fechaInicioPeriodo = fechaFinalPeriodo;
 				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
 					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 				periods.at(i) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
 			}
 			fechaInicioPeriodo = fechaFinalPeriodo;
 			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
@@ -306,7 +307,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 			QCDate fechaInicioPeriodo = startDate;
 			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
@@ -317,14 +318,14 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 				fechaInicioPeriodo = fechaFinalPeriodo;
 				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
 					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 				periods.at(i) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
 			}
 			fechaInicioPeriodo = fechaFinalPeriodo;
 			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
@@ -353,7 +354,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 			QCDate fechaFinalPeriodo = endDate;
 			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			unsigned int numPeriods = periods.size();
 			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
@@ -369,7 +370,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 						fechaFinalPeriodo = fechaInicioPeriodo;
 						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
 							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 						periods.at(i) = make_tuple(0, false, 0, true, 0,
 							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
@@ -378,7 +379,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 
 				fechaFinalPeriodo = fechaInicioPeriodo;
 				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 				periods.at(0) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
@@ -405,7 +406,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 			QCDate fechaFinalPeriodo = endDate;
 			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			unsigned int numPeriods = periods.size();
 			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
@@ -421,7 +422,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 						fechaFinalPeriodo = fechaInicioPeriodo;
 						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
 							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 						periods.at(i) = make_tuple(0, false, 0, true, 0,
 							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
@@ -430,7 +431,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 
 				fechaFinalPeriodo = fechaInicioPeriodo;
 				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 				periods.at(0) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
@@ -571,28 +572,34 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 			QCDate fechaInicioPeriodo = startDate;
 			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-
-			for (unsigned int i = 1; i < periods.size() - 1; ++i)
+			unsigned int numPeriods = periods.size();
+			if (numPeriods >= 2)
 			{
+				if (numPeriods > 2)
+				{
+					for (unsigned int i = 1; i < periods.size() - 1; ++i)
+					{
+						fechaInicioPeriodo = fechaFinalPeriodo;
+						fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
+							calendar, endDateAdjustment);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
+						periods.at(i) = make_tuple(0, false, 0, true, 0,
+							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+					}
+				}
 				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
-				periods.at(i) = make_tuple(0, false, 0, true, 0,
+				fechaFinalPeriodo = endDate;
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
+				periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
 			}
-			fechaInicioPeriodo = fechaFinalPeriodo;
-			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
-			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
 		}
 		if (stubPeriod == QCInterestRateLeg::qcLongBack)
 		{
@@ -614,28 +621,35 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 			QCDate fechaInicioPeriodo = startDate;
 			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
+			unsigned int numPeriods = periods.size();
 			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
 
-			for (unsigned int i = 1; i < periods.size() - 1; ++i)
+			if (numPeriods >= 2)
 			{
+				if (numPeriods > 2)
+				{
+					for (unsigned int i = 1; i < periods.size() - 1; ++i)
+					{
+						fechaInicioPeriodo = fechaFinalPeriodo;
+						fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
+							calendar, endDateAdjustment);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
+						periods.at(i) = make_tuple(0, false, 0, true, 0,
+							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+					}
+				}
 				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
-				periods.at(i) = make_tuple(0, false, 0, true, 0,
+				fechaFinalPeriodo = endDate;
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
+				periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
 			}
-			fechaInicioPeriodo = fechaFinalPeriodo;
-			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
-			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
 		}
 		if (stubPeriod == QCInterestRateLeg::qcShortFront)
 		{
@@ -661,7 +675,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 			QCDate fechaFinalPeriodo = endDate;
 			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			unsigned int numPeriods = periods.size();
 			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
@@ -677,7 +691,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 						fechaFinalPeriodo = fechaInicioPeriodo;
 						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
 							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 						periods.at(i) = make_tuple(0, false, 0, true, 0,
 							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
@@ -686,7 +700,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 
 				fechaFinalPeriodo = fechaInicioPeriodo;
 				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 				periods.at(0) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
@@ -713,7 +727,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 			QCDate fechaFinalPeriodo = endDate;
 			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
 				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 			unsigned int numPeriods = periods.size();
 			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
@@ -729,7 +743,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 						fechaFinalPeriodo = fechaInicioPeriodo;
 						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
 							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 						periods.at(i) = make_tuple(0, false, 0, true, 0,
 							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
 							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
@@ -738,7 +752,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 
 				fechaFinalPeriodo = fechaInicioPeriodo;
 				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
+				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
 
 				periods.at(0) = make_tuple(0, false, 0, true, 0,
 					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
@@ -806,18 +820,20 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	return result;
 }
 
-QCInterestRateLeg buildFloatingRateLeg(
+
+QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 	string receivePay,					//receive or pay
 	QCDate startDate,					//start date
 	QCDate endDate,						//end date
 	vector<QCDate> settleCalendar,		//settlement calendar
 	int settlementLag,					//settlement lag
-	string stubPeriod,					//stub period
+	QCInterestRateLeg::QCStubPeriod stubPeriod,					//stub period
 	string settlePeriodicity,			//settlement periodicity
 	QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
-	string amortization,						//amortization
+	QCInterestRateLeg::QCAmortization amortization,				//amortization
 	vector<tuple<QCDate, double, double>> amortNotionalByDate,	//amortization and notional by end date
-	string fixingStubPeriod,					//fixing stub period
+	int fixingLag,								//fixing lag
+	QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
 	string fixingPeriodicity,					//fixing periodicity
 	vector<QCDate> fixingCalendar,				//fixing calendar
 	pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
@@ -845,49 +861,29 @@ QCInterestRateLeg buildFloatingRateLeg(
 	int signo;
 	if (receivePay == "R") { signo = 1; }
 	else { signo = -1; }
-	if (amortization != "CUSTOM")
-	{
-		if (stubPeriod == "CORTO FINAL")
-		{
-			QCDate fechaInicioPeriodo = startDate;
-			QCDate fechaFinalPeriodo = startDate;
-			QCDate fechaPagoPeriodo;
-			double disposicionInicial = -signo * notional;
-			int counter = 1;
-			while (true)
-			{
-				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * counter).businessDay(
-					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag);
-				if (fechaFinalPeriodo < endDate)
-				{
-					//Meter las fechas a la tupla del periodo. Amortizacion y nocional en 0 hasta
-					//saber cuantos periodos hay.
-					auto temp = make_tuple(disposicionInicial, false, 0, true, 0,
-						fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-						fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					periods.push_back(temp);
 
-					//Definir el startDate del proximo periodo
-					fechaInicioPeriodo = fechaFinalPeriodo;
-					disposicionInicial = 0.0;
-					++counter;
-				}
-				else
-				{
-					//Meter datos a la tupla del periodo. Como ya superamos la endDate
-					//ponemos endDate como ultima fecha final de periodo
-					auto temp = make_tuple(disposicionInicial, false, 0, true, 0,
-						fechaInicioPeriodo, endDate, fechaPagoPeriodo,
-						fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					periods.push_back(temp);
-					break;
-				}
-			}
-		}
+	if (amortization != QCInterestRateLeg::qcCustomAmort)
+	{
+		//Se da de alta la fabrica de periods
+		QCInterestRatePeriodsFactory factory{ startDate, endDate,
+			endDateAdjustment,
+			settlePeriodicity,
+			stubPeriod,
+			make_shared<vector<QCDate>>(settleCalendar),
+			(unsigned int)settlementLag,
+			fixingPeriodicity,
+			fixingStubPeriod,
+			make_shared<vector<QCDate>>(fixingCalendar),
+			(unsigned int)fixingLag,
+			(unsigned int)QCHelperFunctions::lagToInt(interestRateIndexChars.second),
+			interestRateIndexChars.first };
+
+		//Se generan los periodos
+		periods = factory.getPeriods();
+
 		//Calcular amortizaciones y nocionales vigentes
 		numPeriods = periods.size();
-		if (amortization == "BULLET")
+		if (amortization == QCInterestRateLeg::qcBulletAmort)
 		{
 			for (unsigned int i = 0; i < numPeriods; ++i)
 			{
@@ -895,7 +891,7 @@ QCInterestRateLeg buildFloatingRateLeg(
 			}
 			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
 		}
-		if (amortization == "CONSTANT")
+		if (amortization == QCInterestRateLeg::qcConstantAmort)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(0)) = signo * notional;
 			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(0)) = signo * notional / numPeriods;
@@ -916,8 +912,9 @@ QCInterestRateLeg buildFloatingRateLeg(
 		numPeriods = amortNotionalByDate.size();
 		periods.resize(numPeriods); //En este caso se sabe a priori cuantos flujos son
 		QCDate fechaFinalPeriodo = get<0>(amortNotionalByDate.at(0));
-		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(periodicity));
-		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(settlePeriodicity))
+			.businessDay(fixingCalendar, QCDate::qcPrev);
+		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
 		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
 			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
 			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
@@ -930,7 +927,7 @@ QCInterestRateLeg buildFloatingRateLeg(
 		{
 			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
 			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
-			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
 			auto temp = make_tuple(0, false,
 				signo * get<1>(amortNotionalByDate.at(i)), true,
 				signo * get<2>(amortNotionalByDate.at(i)),

@@ -100,10 +100,10 @@ double QCInterestRatePayoff::presentValue()
 		double flujo = get<2>(cshflw);
 		double df = _discountCurve->getDiscountFactorAt(d);
 		pv += flujo * df;
-		/*for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
+		for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
 		{
 			_pvRateDerivatives.at(i) += flujo * _discountCurve->dfDerivativeAt(i);
-		}*/
+		}
 	}
 
 	
@@ -115,5 +115,9 @@ double QCInterestRatePayoff::getPvRateDerivativeAt(unsigned int index)
 	return _pvRateDerivatives.at(index);
 }
 
+unsigned long QCInterestRatePayoff::discountCurveLength()
+{
+	return _discountCurve->getLength();
+}
 
 QCInterestRatePayoff::~QCInterestRatePayoff() {}

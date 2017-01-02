@@ -25,116 +25,6 @@ const char* LibraryName = "QC_DVE";
 namespace
 {
 XLRegistration::Arg
-EchoShortArgs[]=
-{
-{ "x"," number to be echoed ","XLF_OPER"}
-};
-  XLRegistration::XLFunctionRegistrationHelper
-registerEchoShort("xlEchoShort",
-"EchoShort",
-" echoes a short ",
-LibraryName,
-EchoShortArgs,
-1
-,false
-,false
-,""
-,""
-,false
-,false
-,false
-);
-}
-
-
-
-extern "C"
-{
-LPXLFOPER EXCEL_EXPORT
-xlEchoShort(
-LPXLFOPER xa)
-{
-EXCEL_BEGIN;
-
-	if (XlfExcel::Instance().IsCalledByFuncWiz())
-		return XlfOper(true);
-
-XlfOper xb(
-	(xa));
-short x(
-	xb.AsShort("x"));
-
-short result(
-	EchoShort(
-		x)
-	);
-return XlfOper(result);
-EXCEL_END
-}
-}
-
-
-
-//////////////////////////
-
-namespace
-{
-XLRegistration::Arg
-suumaArgs[]=
-{
-{ "x","primer numero ","B"},
-{ "y","segundo numero ","B"}
-};
-  XLRegistration::XLFunctionRegistrationHelper
-registersuuma("xlsuuma",
-"suuma",
-"Devuelve la suma de 2 numeros ",
-LibraryName,
-suumaArgs,
-2
-,false
-,false
-,""
-,""
-,false
-,false
-,false
-);
-}
-
-
-
-extern "C"
-{
-LPXLFOPER EXCEL_EXPORT
-xlsuuma(
-double x,
-double y)
-{
-EXCEL_BEGIN;
-
-	if (XlfExcel::Instance().IsCalledByFuncWiz())
-		return XlfOper(true);
-
-
-
-double result(
-	suuma(
-		x,
-		y)
-	);
-return XlfOper(result);
-EXCEL_END
-}
-}
-
-
-
-//////////////////////////
-
-namespace
-{
-XLRegistration::Arg
 qcYearFractionArgs[]=
 {
 { "startDate","Fecha inicial ","B"},
@@ -1195,6 +1085,258 @@ CellMatrix result(
 		customAmort,
 		icpFixings,
 		ufFixings)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+buildInterestRateLegArgs[]=
+{
+{ "startDate","too lazy to comment this one ","B"},
+{ "endDate","too lazy to comment this one ","B"},
+{ "calendars","too lazy to comment this one ","XLF_OPER"},
+{ "settlementStubPeriod","too lazy to comment this one ","XLF_OPER"},
+{ "settlementPeriodicity","too lazy to comment this one ","XLF_OPER"},
+{ "endDateAdjustment","too lazy to comment this one ","XLF_OPER"},
+{ "settlementCalendar","too lazy to comment this one ","XLF_OPER"},
+{ "settlementLag","too lazy to comment this one ","B"},
+{ "fixingStubPeriod","too lazy to comment this one ","XLF_OPER"},
+{ "fixingPeriodicity","too lazy to comment this one ","XLF_OPER"},
+{ "fixingLag","too lazy to comment this one ","B"},
+{ "fixingCalendar","too lazy to comment this one ","XLF_OPER"},
+{ "fixingStartDateRule","too lazy to comment this one ","B"},
+{ "fixingTenor","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerbuildInterestRateLeg("xlbuildInterestRateLeg",
+"buildInterestRateLeg",
+"too lazy to comment this function ",
+LibraryName,
+buildInterestRateLegArgs,
+14
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlbuildInterestRateLeg(
+double startDate,
+double endDate,
+LPXLFOPER calendarsa,
+LPXLFOPER settlementStubPerioda,
+LPXLFOPER settlementPeriodicitya,
+LPXLFOPER endDateAdjustmenta,
+LPXLFOPER settlementCalendara,
+double settlementLaga,
+LPXLFOPER fixingStubPerioda,
+LPXLFOPER fixingPeriodicitya,
+double fixingLaga,
+LPXLFOPER fixingCalendara,
+double fixingStartDateRulea,
+LPXLFOPER fixingTenora)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+
+XlfOper calendarsb(
+	(calendarsa));
+CellMatrix calendars(
+	calendarsb.AsCellMatrix("calendars"));
+
+XlfOper settlementStubPeriodb(
+	(settlementStubPerioda));
+string settlementStubPeriod(
+	settlementStubPeriodb.AsString("settlementStubPeriod"));
+
+XlfOper settlementPeriodicityb(
+	(settlementPeriodicitya));
+string settlementPeriodicity(
+	settlementPeriodicityb.AsString("settlementPeriodicity"));
+
+XlfOper endDateAdjustmentb(
+	(endDateAdjustmenta));
+string endDateAdjustment(
+	endDateAdjustmentb.AsString("endDateAdjustment"));
+
+XlfOper settlementCalendarb(
+	(settlementCalendara));
+string settlementCalendar(
+	settlementCalendarb.AsString("settlementCalendar"));
+
+int settlementLag(
+	static_cast<int>(settlementLaga));
+
+XlfOper fixingStubPeriodb(
+	(fixingStubPerioda));
+string fixingStubPeriod(
+	fixingStubPeriodb.AsString("fixingStubPeriod"));
+
+XlfOper fixingPeriodicityb(
+	(fixingPeriodicitya));
+string fixingPeriodicity(
+	fixingPeriodicityb.AsString("fixingPeriodicity"));
+
+int fixingLag(
+	static_cast<int>(fixingLaga));
+
+XlfOper fixingCalendarb(
+	(fixingCalendara));
+string fixingCalendar(
+	fixingCalendarb.AsString("fixingCalendar"));
+
+int fixingStartDateRule(
+	static_cast<int>(fixingStartDateRulea));
+
+XlfOper fixingTenorb(
+	(fixingTenora));
+string fixingTenor(
+	fixingTenorb.AsString("fixingTenor"));
+
+CellMatrix result(
+	buildInterestRateLeg(
+		startDate,
+		endDate,
+		calendars,
+		settlementStubPeriod,
+		settlementPeriodicity,
+		endDateAdjustment,
+		settlementCalendar,
+		settlementLag,
+		fixingStubPeriod,
+		fixingPeriodicity,
+		fixingLag,
+		fixingCalendar,
+		fixingStartDateRule,
+		fixingTenor)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvFloatingRateLegsArgs[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "fixings","too lazy to comment this one ","XLF_OPER"},
+{ "intRateIndexChars","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvFloatingRateLegs("xlpvFloatingRateLegs",
+"pvFloatingRateLegs",
+"too lazy to comment this function ",
+LibraryName,
+pvFloatingRateLegsArgs,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvFloatingRateLegs(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER fixingsa,
+LPXLFOPER intRateIndexCharsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper fixingsb(
+	(fixingsa));
+CellMatrix fixings(
+	fixingsb.AsCellMatrix("fixings"));
+
+XlfOper intRateIndexCharsb(
+	(intRateIndexCharsa));
+CellMatrix intRateIndexChars(
+	intRateIndexCharsb.AsCellMatrix("intRateIndexChars"));
+
+CellMatrix result(
+	pvFloatingRateLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		fixings,
+		intRateIndexChars)
 	);
 return XlfOper(result);
 EXCEL_END

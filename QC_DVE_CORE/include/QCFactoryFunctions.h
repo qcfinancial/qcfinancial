@@ -69,12 +69,13 @@ namespace QCFactoryFunctions
 		QCDate endDate,						//end date
 		vector<QCDate> settleCalendar,		//settlement calendar
 		int settlementLag,					//settlement lag
-		string stubPeriod,					//stub period
+		QCInterestRateLeg::QCStubPeriod stubPeriod,					//stub period
 		string settlePeriodicity,			//settlement periodicity
 		QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
-		string amortization,						//amortization
+		QCInterestRateLeg::QCAmortization amortization,				//amortization
 		vector<tuple<QCDate, double, double>> amortNotionalByDate,	//amortization and notional by end date
-		string fixingStubPeriod,					//fixing stub period
+		int fixingLag,								//fixing lag
+		QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
 		string fixingPeriodicity,					//fixing periodicity
 		vector<QCDate> fixingCalendar,				//fixing calendar
 		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	

@@ -6,6 +6,7 @@ QCZeroCouponCurve::QCZeroCouponCurve(shared_ptr<QCInterpolator> curve,
 	QCInterestRate intRate) : QCInterestRateCurve(curve, intRate)
 {
 	_dfDerivatives.resize(_curve->getLength());
+	_fwdWfDerivatives.resize(_curve->getLength());
 }
 
 double QCZeroCouponCurve::getRateAt(long d)

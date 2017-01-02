@@ -160,8 +160,7 @@ namespace HelperFunctions
 			}
 		}
 		//Un insert final
-		tempMap.insert(pair<QCDate, double>(QCDate{ (long)fixings(numRows, 1).NumericValue() },
-			(double)fixings(numRows, 2).NumericValue()));
+		mapManyFixings.insert(pair<string, map<QCDate, double>>(lastName, tempMap));
 
 	}
 

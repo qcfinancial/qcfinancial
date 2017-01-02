@@ -41,6 +41,7 @@ void QCFloatingRatePayoff::_setAllRates()
 		QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(per);
 		if (_valueDate >= temp)
 		{
+			QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
 			_allRates.at(i) = (_fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
 				+ _additiveSpread) * _multipSpread;
 		}

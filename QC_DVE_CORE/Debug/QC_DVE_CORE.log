@@ -1,8 +1,46 @@
-﻿Build started 30/12/2016 18:18:31.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 3 (Build target(s)).
+﻿Build started 02/01/2017 8:24:34.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCFactoryFunctions.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QC30360.cpp source\QCAct360.cpp source\QCAct365.cpp source\QCActAct.cpp source\QCBusinessCalendar.cpp source\QCClampedSpline.cpp source\QCCompoundWf.cpp source\QCContinousWf.cpp source\QCDate.cpp source\QCFactoryFunctions.cpp source\QCFixedRatePayoff.cpp source\QCFloatingRatePayoff.cpp source\QCHelperFunctions.cpp source\QCIcpClfPayoff.cpp source\QCIcpClpPayoff.cpp source\QCInterestRate.cpp source\QCInterestRateLeg.cpp source\QCInterestRatePayoff.cpp source\QCInterestRatePeriodsFactory.cpp source\QCInterpolator.cpp source\QCLinearInterpolator.cpp source\QCLinearWf.cpp source\QCLogLinearInterpolator.cpp source\QCProjectingInterestRateCurve.cpp source\QCTest.cpp source\QCWealthFactor.cpp source\QCZeroCouponDiscountFactorCurve.cpp source\QCZeroCouponInterestRateCurve.cpp
+         QCZeroCouponInterestRateCurve.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qczerocouponinterestratecurve.cpp(59): warning C4018: '<' : signed/unsigned mismatch
+         QCZeroCouponDiscountFactorCurve.cpp
+         QCWealthFactor.cpp
+         QCTest.cpp
+         QCProjectingInterestRateCurve.cpp
+         QCLogLinearInterpolator.cpp
+         QCLinearWf.cpp
+         QCLinearInterpolator.cpp
+         QCInterpolator.cpp
+         QCInterestRatePeriodsFactory.cpp
+         QCInterestRatePayoff.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcinterestratepayoff.cpp(103): warning C4018: '<' : signed/unsigned mismatch
+         QCInterestRateLeg.cpp
+         QCInterestRate.cpp
+         QCIcpClpPayoff.cpp
+         QCIcpClfPayoff.cpp
+         QCHelperFunctions.cpp
+         QCFloatingRatePayoff.cpp
+         QCFixedRatePayoff.cpp
          QCFactoryFunctions.cpp
+         QCDate.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(389): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(396): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(410): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(417): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         Compiling...
+         QCContinousWf.cpp
+         QCCompoundWf.cpp
+         QCClampedSpline.cpp
+         QCBusinessCalendar.cpp
+         QCActAct.cpp
+         QCAct365.cpp
+         QCAct360.cpp
+         QC30360.cpp
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCouponCurve.cpp
+         QCZeroCouponCurve.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib" /NOLOGO Debug\QC30360.obj
          Debug\QCAct360.obj
@@ -22,6 +60,7 @@
          Debug\QCInterestRate.obj
          Debug\QCInterestRateLeg.obj
          Debug\QCInterestRatePayoff.obj
+         Debug\QCInterestRatePeriodsFactory.obj
          Debug\QCInterpolator.obj
          Debug\QCLinearInterpolator.obj
          Debug\QCLinearWf.obj
@@ -33,8 +72,8 @@
          Debug\QCZeroCouponInterestRateCurve.obj
          Debug\QCZeroCouponCurve.obj
          QC_DVE_CORE.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib
-     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Build target(s)).
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.38
+Time Elapsed 00:00:13.37

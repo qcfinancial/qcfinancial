@@ -25,6 +25,7 @@ public:
 	int payoffSize();
 	double presentValue();
 	double getPvRateDerivativeAt(unsigned int index);
+	unsigned long discountCurveLength();
 	tuple<QCDate, QCCashFlowLabel, double> getCashflowAt(unsigned int n);
 	virtual ~QCInterestRatePayoff();
 

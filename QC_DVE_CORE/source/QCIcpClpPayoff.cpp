@@ -26,6 +26,7 @@ void QCIcpClpPayoff::_setAllRates()
 	int numPeriods = _irLeg->size();
 	_allRates.resize(numPeriods);
 	_forwardRates.resize(numPeriods);
+	_allRatesDerivatives.resize(numPeriods);
 	unsigned int tempCurrentPeriod;
 	if (_currentPeriod == -1)
 	{
@@ -75,6 +76,15 @@ void QCIcpClpPayoff::_setAllRates()
 			_rate->setValue(TNA);
 			double wfTNA = _rate->wf(pTNA);
 
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(_projectingCurve->getLength());
+			for (unsigned int j = 0; j < _projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = _projectingCurve->fwdWfDerivativeAt(j) * wfTNA * 360 / pZ;
+			}
+			_allRatesDerivatives.at(i) = tempDer;
+
 			//Calcula tasa asociada a este wf y guardar en _allRates
 			_allRates.at(i) = (_rate->getRateFromWf(wfTNA * wfZ, pZ + pTNA)
 				+ _additiveSpread) * _multipSpread;
@@ -94,6 +104,15 @@ void QCIcpClpPayoff::_setAllRates()
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
+
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(_projectingCurve->getLength());
+			for (unsigned int j = 0; j < _projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = _projectingCurve->fwdWfDerivativeAt(j) * 360.0 / (d2 - d1);
+			}
+			_allRatesDerivatives.at(i) = tempDer;
 
 			//Se aplican los spreads y se guarda la tasa en _allRates
 			_allRates.at(i) = (_forwardRates.at(i) + _additiveSpread) * _multipSpread;

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <utility>
+#include <memory>
 
 #pragma warning (disable : 4996)
 
@@ -30,23 +31,13 @@
 #include "QCProjectingInterestRateCurve.h"
 #include "QCFactoryFunctions.h"
 #include "QCHelperFunctions.h"
+#include "QCInterestRatePeriodsFactory.h"
+
 #include "HelperFunctions.h"
 
 using namespace std;
 
-short // echoes a short
-EchoShort(short x // number to be echoed
-           )
-{
-    return x;
-}
-
-double suuma(double x, double y)
-{
-	QCTest qct;
-	return qct.suma(x, y);
-	//return x + y;
-}
+#define BASIS_POINT .0001
 
 double qcYearFraction(int startDate, int endDate, string yf)
 {
@@ -1071,23 +1062,39 @@ CellMatrix pvFixedLegs(double valueDate,
 	}
 
 	//Calcular los valores presentes
-	vector<pair<long, double>> result;
+	vector<tuple<long, double, vector<double>>> result;
+	result.resize(payoffs.size());
+	double m2m;
 	vector<double> der;
+	unsigned long counter = 0;
+	unsigned int longestCurve = 0;
 	for (const auto& payoff : payoffs)
 	{
-		result.push_back(make_pair(payoff.first, payoff.second->presentValue()));
-		/*for (int i = 0; i < 19; ++i)
+		m2m = payoff.second->presentValue();
+		unsigned int vertices = payoff.second->discountCurveLength();
+		if (vertices > longestCurve)
+			longestCurve = vertices;
+		der.resize(vertices);
+		for (unsigned long i = 0; i < vertices; ++i)
 		{
-			der.push_back(payoff.second->getPvRateDerivativeAt(i));
-		}*/
+			der.at(i) = payoff.second->getPvRateDerivativeAt(i);
+		}
+		result.at(counter) = make_tuple(payoff.first, m2m, der);
+		der.clear();
+		++counter;
 	}
 
 	long cuantosM2M = legCharacteristics.RowsInStructure();
-	CellMatrix legM2M(cuantosM2M, 2);
+	CellMatrix legM2M(cuantosM2M, longestCurve + 2);
 	for (long i = 0; i < cuantosM2M; ++i)
 	{
-		legM2M(i, 0) = result.at(i).first;
-		legM2M(i, 1) = result.at(i).second;
+		legM2M(i, 0) = get<0>(result.at(i));
+		legM2M(i, 1) = get<1>(result.at(i));
+		unsigned int vertices = get<2>(result.at(i)).size();
+		for (unsigned int j = 0; j < vertices; ++j)
+		{
+			legM2M(i, j + 2) = get<2>(result.at(i)).at(j) * BASIS_POINT;
+		}
 	}
 	return legM2M;
 }
@@ -1519,9 +1526,9 @@ CellMatrix pvFloatingRateLegs(double valueDate,
 	map <long, shared_ptr<QCInterestRatePayoff>> payoffs;
 	for (unsigned long i = 0; i < legCharacteristics.RowsInStructure(); ++i)
 	{
-		string wf = legCharacteristics(i, 15).StringValue();
+		string wf = legCharacteristics(i, 19).StringValue();
 		QCHelperFunctions::lowerCase(wf);
-		string yf = legCharacteristics(i, 16).StringValue();
+		string yf = legCharacteristics(i, 20).StringValue();
 		QCHelperFunctions::lowerCase(yf);
 		shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
 			(double)legCharacteristics(i, 11).NumericValue(), yf, wf);
@@ -1539,24 +1546,31 @@ CellMatrix pvFloatingRateLegs(double valueDate,
 			QCDate{ (long)legCharacteristics(i, 3).NumericValue() }, //end date
 			mapHolidays.at(legCharacteristics(i, 4).StringValue()),  //settlement calendar
 			(int)legCharacteristics(i, 5).NumericValue(),			 //settlement lag
-			legCharacteristics(i, 6).StringValue(),					 //stub period
+			QCHelperFunctions::stringToQCStubPeriod(
+			legCharacteristics(i, 6).StringValue()),				 //stub period
 			legCharacteristics(i, 7).StringValue(),					 //periodicity
 			QCHelperFunctions::stringToQCBusDayAdjRule(
 			legCharacteristics(i, 8).StringValue()),				 //end date adjustment
-			legCharacteristics(i, 9).StringValue(),					 //amortization
+			QCHelperFunctions::stringToQCAmortization(
+			legCharacteristics(i, 9).StringValue()),				 //amortization
 			amortIfCustom,											 //amortization and notional by end date
-			legCharacteristics(i, 13).StringValue(),				 //fixing stub period
+			(int)legCharacteristics(i, 16).NumericValue(),			 //fixing lag
+			QCHelperFunctions::stringToQCStubPeriod(
+			legCharacteristics(i, 13).StringValue()),				 //fixing stub period
 			legCharacteristics(i, 14).StringValue(),				 //fixing periodicity
 			mapHolidays.at(legCharacteristics(i, 15).StringValue()), //fixing calendar
-			indexChars.at(legCharacteristics(i, 10).StringValue()), //interest rate index tenor
+			indexChars.at(legCharacteristics(i, 10).StringValue()),  //interest rate index tenor
 			(double)legCharacteristics(i, 18).NumericValue()		 //notional
 			);
 		shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
-			new QCIcpClfPayoff{ tmpIntRate, legCharacteristics(i, 12).NumericValue(), 1.0,
-			make_shared<QCInterestRateLeg>(tmpIntRateLeg), allCurves.at(legCharacteristics(i, 17).StringValue()),
-			allCurves.at(legCharacteristics(i, 18).StringValue()), allValueDate,
-			make_shared<map<QCDate, double>>(mapIcpFixings),
-			make_shared<map<QCDate, double>>(mapUfFixings) });
+			new QCFloatingRatePayoff{tmpIntRate,
+			legCharacteristics(i, 12).NumericValue(), 1.0,
+			make_shared<QCInterestRateLeg>(tmpIntRateLeg),
+			allCurves.at(legCharacteristics(i, 21).StringValue()),
+			allCurves.at(legCharacteristics(i, 22).StringValue()),
+			allValueDate,
+			make_shared<map<QCDate, double>>(mapManyFixings.at(legCharacteristics(i, 10).StringValue()))});
+		
 		payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(
 			(long)legCharacteristics(i, 0).NumericValue(),
 			tmpIntRatePayoff));
@@ -1568,10 +1582,10 @@ CellMatrix pvFloatingRateLegs(double valueDate,
 	for (const auto& payoff : payoffs)
 	{
 		result.push_back(make_pair(payoff.first, payoff.second->presentValue()));
-		for (int i = 0; i < 19; ++i)
+		/*for (int i = 0; i < 19; ++i)
 		{
 			der.push_back(payoff.second->getPvRateDerivativeAt(i));
-		}
+		}*/
 	}
 
 	long cuantosM2M = legCharacteristics.RowsInStructure();
@@ -1582,4 +1596,46 @@ CellMatrix pvFloatingRateLegs(double valueDate,
 		legM2M(i, 1) = result.at(i).second;
 	}
 	return legM2M;
+}
+
+CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,
+	string settlementStubPeriod, string settlementPeriodicity, string endDateAdjustment,
+	string settlementCalendar, int settlementLag,
+	string fixingStubPeriod, string fixingPeriodicity, int fixingLag,
+	string fixingCalendar, int fixingStartDateRule, string fixingTenor)
+{
+	//holidays: nombre, fecha. Se construye un map<string, vector<QCDate>> que para cada nombre de calendario
+	//tenga todas las fechas
+	map<string, vector<QCDate>> mapHolidays;
+	HelperFunctions::buildHolidays(calendars, mapHolidays);
+
+	QCInterestRatePeriodsFactory factory{ QCDate{ (long)startDate }, QCDate{ (long)endDate },
+		QCHelperFunctions::stringToQCBusDayAdjRule(endDateAdjustment), settlementPeriodicity,
+		QCHelperFunctions::stringToQCStubPeriod(settlementStubPeriod),
+		make_shared<vector<QCDate>>(mapHolidays.at(settlementCalendar)),
+		(unsigned int)settlementLag, fixingPeriodicity, QCHelperFunctions::stringToQCStubPeriod(fixingStubPeriod),
+		make_shared<vector<QCDate>>(mapHolidays.at(fixingCalendar)), (unsigned int)fixingLag,
+		(unsigned int)fixingStartDateRule, fixingTenor };
+
+	auto periods = factory.getPeriods();
+
+	//Hay que transformar periods a CellMatrix y retornar
+	CellMatrix result(periods.size(), 11);
+
+	for (unsigned int i = 0; i < periods.size(); ++i)
+	{
+		result(i, 0) = get<0>(periods.at(i));
+		result(i, 1) = QCHelperFunctions::boolToZeroOne(get<1>(periods.at(i)));
+		result(i, 2) = get<2>(periods.at(i));
+		result(i, 3) = QCHelperFunctions::boolToZeroOne(get<3>(periods.at(i)));
+		result(i, 4) = get<4>(periods.at(i));
+		result(i, 5) = get<5>(periods.at(i)).excelSerial();
+		result(i, 6) = get<6>(periods.at(i)).excelSerial();
+		result(i, 7) = get<7>(periods.at(i)).excelSerial();
+		result(i, 8) = get<8>(periods.at(i)).excelSerial();
+		result(i, 9) = get<9>(periods.at(i)).excelSerial();
+		result(i, 10) = get<10>(periods.at(i)).excelSerial();
+	}
+
+	return result;
 }

@@ -14,6 +14,12 @@ double QCZeroCouponInterestRateCurve::getRateAt(long d)
 
 double QCZeroCouponInterestRateCurve::getDiscountFactorFwd(long d1, long d2)
 {
+	if (d1 > d2)
+	{
+		long d = d2;
+		d2 = d1;
+		d1 = d;
+	}
 	double rate1 = _curve->interpolateAt(d1);
 	double rate2 = _curve->interpolateAt(d2);
 	_intRate.setValue(rate1);
@@ -25,7 +31,26 @@ double QCZeroCouponInterestRateCurve::getDiscountFactorFwd(long d1, long d2)
 
 double QCZeroCouponInterestRateCurve::getForwardWf(long d1, long d2)
 {
-	return 1 / this->getDiscountFactorFwd(d1, d2);
+	if (d1 > d2)
+	{
+		long d = d2;
+		d2 = d1;
+		d1 = d;
+	}
+	double rate1 = _curve->interpolateAt(d1);
+	double rate2 = _curve->interpolateAt(d2);
+	_intRate.setValue(rate1);
+	double wf1 = _intRate.wf(d1);
+	_intRate.setValue(rate2);
+	double wf2 = _intRate.wf(d2);
+	//Se loopea para tener las derivadas
+	for (unsigned int i = 0; i < _curve->getLength(); ++i)
+	{
+		double dwf1 = _curve->rateDerivativeAt(i) * _intRate.dwf(d1);
+		double dwf2 = _curve->rateDerivativeAt(i) * _intRate.dwf(d2);
+		_fwdWfDerivatives.at(i) = pow(wf2, -2.0) * (dwf1 * wf2 - wf1 * dwf2);
+	}
+	return wf2 / wf1;;
 }
 
 double QCZeroCouponInterestRateCurve::getForwardRate(long d1, long d2)
@@ -67,6 +92,11 @@ double QCZeroCouponInterestRateCurve::getDiscountFactorAt(long d)
 double QCZeroCouponInterestRateCurve::dfDerivativeAt(unsigned int index)
 {
 	return _dfDerivatives.at(index);
+}
+
+double QCZeroCouponInterestRateCurve::fwdWfDerivativeAt(unsigned int index)
+{
+	return _fwdWfDerivatives.at(index);
 }
 
 QCZeroCouponInterestRateCurve::~QCZeroCouponInterestRateCurve()
