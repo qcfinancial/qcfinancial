@@ -20,7 +20,6 @@ public:
 
 protected:
 	virtual void _setAllRates() override; 
-	QCIntRtCrvShrdPtr _projectingCurve;
 	double _additiveSpread;
 	double _multipSpread;
 	

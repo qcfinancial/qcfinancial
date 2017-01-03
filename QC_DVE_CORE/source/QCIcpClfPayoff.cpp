@@ -10,7 +10,7 @@ QCIcpClfPayoff::QCIcpClfPayoff(QCIntrstRtShrdPtr floatingRate,
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fixingData, //En este map deben venir los ICP
 	QCTimeSeriesShrdPtr fixingDataUF) :
-	QCInterestRatePayoff(floatingRate, irLeg, valueDate, projectingCurve, discountCurve, fixingData),
+	QCInterestRatePayoff(floatingRate, irLeg, valueDate, discountCurve, discountCurve, fixingData),
 	_additiveSpread(additiveSpread), _multipSpread(multipSpread), _fixingDataUF(fixingDataUF)
 {
 	_setAllRates();
@@ -27,6 +27,7 @@ void QCIcpClfPayoff::_setAllRates()
 	int numPeriods = _irLeg->size();
 	_allRates.resize(numPeriods);
 	_forwardRates.resize(numPeriods);
+	_allRatesDerivatives.resize(numPeriods);
 	unsigned int tempCurrentPeriod;
 	if (_currentPeriod == -1)
 	{
@@ -71,16 +72,26 @@ void QCIcpClfPayoff::_setAllRates()
 			int pZ = _valueDate.dayDiff(endDate);
 
 			//Calcula tasa z a pZ y se guarda en _forwardRates
-			double wfZ = _projectingCurve->getForwardWf(0, pZ);
+			double wfZ = QCInterestRatePayoff::_projectingCurve->getForwardWf(0, pZ);
 			double z = _rate->getRateFromWf(wfZ, pZ);
 			_forwardRates.at(i) = z;
 
 			//Calcula wf = (1+TRA*pTNA/360)*(1+z*pZ/360)
 			_rate->setValue(TRA);
-			double wfTNA = _rate->wf(pTRA);
+			double wfTRA = _rate->wf(pTRA);
+
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+					* wfTRA * 360 / pZ;
+			}
+			_allRatesDerivatives.at(i) = tempDer;
 
 			//Calcula tasa asociada a este wf y guardar en _allRates
-			_allRates.at(i) = (_rate->getRateFromWf(wfTNA * wfZ, pZ + pTRA)
+			_allRates.at(i) = (_rate->getRateFromWf(wfTRA * wfZ, pZ + pTRA)
 				+ _additiveSpread) * _multipSpread;
 		}
 		else
@@ -98,6 +109,16 @@ void QCIcpClfPayoff::_setAllRates()
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
+
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+					* 360.0 / (d2 - d1);
+			}
+			_allRatesDerivatives.at(i) = tempDer;
 
 			//Se aplican los spreads y se guarda la tasa en _allRates
 			_allRates.at(i) = (_forwardRates.at(i) + _additiveSpread) * _multipSpread;

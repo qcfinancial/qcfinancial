@@ -68,7 +68,7 @@ void QCIcpClpPayoff::_setAllRates()
 			int pZ = _valueDate.dayDiff(endDate);
 
 			//Calcula tasa z a pZ y se guarda en _forwardRates
-			double wfZ = _projectingCurve->getForwardWf(0, pZ);
+			double wfZ = QCInterestRatePayoff::_projectingCurve->getForwardWf(0, pZ);
 			double z = _rate->getRateFromWf(wfZ, pZ);
 			_forwardRates.at(i) = z;
 
@@ -78,10 +78,11 @@ void QCIcpClpPayoff::_setAllRates()
 
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
-			tempDer.resize(_projectingCurve->getLength());
-			for (unsigned int j = 0; j < _projectingCurve->getLength(); ++j)
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
 			{
-				tempDer.at(j) = _projectingCurve->fwdWfDerivativeAt(j) * wfTNA * 360 / pZ;
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+					* wfTNA * 360 / pZ;
 			}
 			_allRatesDerivatives.at(i) = tempDer;
 
@@ -100,17 +101,18 @@ void QCIcpClpPayoff::_setAllRates()
 			//La tasa fwd se expresa en la convencion en que se construyo
 			//la curva de proyeccion. Al fabricar el payoff se debe poner atencion
 			//a que esta coincida con las caracteristicas del swap.
-			double wfFwd = _projectingCurve->getForwardWf(d1, d2);
+			double wfFwd = QCInterestRatePayoff::_projectingCurve->getForwardWf(d1, d2);
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
 
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
-			tempDer.resize(_projectingCurve->getLength());
-			for (unsigned int j = 0; j < _projectingCurve->getLength(); ++j)
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
 			{
-				tempDer.at(j) = _projectingCurve->fwdWfDerivativeAt(j) * 360.0 / (d2 - d1);
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+					* 360.0 / (d2 - d1);
 			}
 			_allRatesDerivatives.at(i) = tempDer;
 

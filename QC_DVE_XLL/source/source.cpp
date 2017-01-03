@@ -1236,25 +1236,56 @@ CellMatrix pvIcpClpLegs(double valueDate,
 	}
 
 	//Calcular los valores presentes
-	vector<pair<long, double>> result;
-	vector<double> der;
+	vector<tuple<long, double, vector<double>, vector<double>>> result;
+	result.resize(payoffs.size());
+	double m2m;
+	vector<double> discDer;
+	vector<double> projDer;
+	unsigned long counter = 0;
+	unsigned int longestDiscCurve = 0;
+	unsigned int longestProjCurve = 0;
 	for (const auto& payoff : payoffs)
 	{
-		result.push_back(make_pair(payoff.first, payoff.second->presentValue()));
-		for (int i = 0; i < 19; ++i)
+		m2m = payoff.second->presentValue();
+		unsigned int discVertices = payoff.second->discountCurveLength();
+		if (discVertices > longestDiscCurve)
+			longestDiscCurve = discVertices;
+		discDer.resize(discVertices);
+		for (unsigned long i = 0; i < discVertices; ++i)
 		{
-			der.push_back(payoff.second->getPvRateDerivativeAt(i));
+			discDer.at(i) = payoff.second->getPvRateDerivativeAt(i);
 		}
+
+		unsigned int projVertices = payoff.second->projectingCurveLength();
+		if (projVertices > longestProjCurve)
+			longestProjCurve = projVertices;
+		projDer.resize(projVertices);
+		for (unsigned long i = 0; i < projVertices; ++i)
+		{
+			projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
+		}
+		result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+		++counter;
 	}
 
-	long cuantosM2M = legCharacteristics.RowsInStructure();
-	CellMatrix legM2M(cuantosM2M, 2);
-	for (long i = 0; i < cuantosM2M; ++i)
+	long cuantosResultados = legCharacteristics.RowsInStructure();
+	CellMatrix legM2MAndDelta(cuantosResultados, longestDiscCurve + longestProjCurve + 2);
+	for (long i = 0; i < cuantosResultados; ++i)
 	{
-		legM2M(i, 0) = result.at(i).first;
-		legM2M(i, 1) = result.at(i).second;
+		legM2MAndDelta(i, 0) = get<0>(result.at(i));
+		legM2MAndDelta(i, 1) = get<1>(result.at(i));
+		unsigned int discVertices = get<2>(result.at(i)).size();
+		for (unsigned int j = 0; j < discVertices; ++j)
+		{
+			legM2MAndDelta(i, j + 2) = get<2>(result.at(i)).at(j) * BASIS_POINT;
+		}
+		unsigned int projVertices = get<3>(result.at(i)).size();
+		for (unsigned int j = 0; j < projVertices; ++j)
+		{
+			legM2MAndDelta(i, j + discVertices + 2) = get<3>(result.at(i)).at(j) * BASIS_POINT;
+		}
 	}
-	return legM2M;
+	return legM2MAndDelta;
 }
 
 CellMatrix pvIcpClfLegs(double valueDate,
@@ -1400,25 +1431,56 @@ CellMatrix pvIcpClfLegs(double valueDate,
 	}
 
 	//Calcular los valores presentes
-	vector<pair<long, double>> result;
-	vector<double> der;
+	vector<tuple<long, double, vector<double>, vector<double>>> result;
+	result.resize(payoffs.size());
+	double m2m;
+	vector<double> discDer;
+	vector<double> projDer;
+	unsigned long counter = 0;
+	unsigned int longestDiscCurve = 0;
+	unsigned int longestProjCurve = 0;
 	for (const auto& payoff : payoffs)
 	{
-		result.push_back(make_pair(payoff.first, payoff.second->presentValue()));
-		for (int i = 0; i < 19; ++i)
+		m2m = payoff.second->presentValue();
+		unsigned int discVertices = payoff.second->discountCurveLength();
+		if (discVertices > longestDiscCurve)
+			longestDiscCurve = discVertices;
+		discDer.resize(discVertices);
+		for (unsigned long i = 0; i < discVertices; ++i)
 		{
-			der.push_back(payoff.second->getPvRateDerivativeAt(i));
+			discDer.at(i) = payoff.second->getPvRateDerivativeAt(i);
 		}
+
+		unsigned int projVertices = payoff.second->projectingCurveLength();
+		if (projVertices > longestProjCurve)
+			longestProjCurve = projVertices;
+		projDer.resize(projVertices);
+		for (unsigned long i = 0; i < projVertices; ++i)
+		{
+			projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
+		}
+		result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+		++counter;
 	}
 
-	long cuantosM2M = legCharacteristics.RowsInStructure();
-	CellMatrix legM2M(cuantosM2M, 2);
-	for (long i = 0; i < cuantosM2M; ++i)
+	long cuantosResultados = legCharacteristics.RowsInStructure();
+	CellMatrix legM2MAndDelta(cuantosResultados, longestDiscCurve + longestProjCurve + 2);
+	for (long i = 0; i < cuantosResultados; ++i)
 	{
-		legM2M(i, 0) = result.at(i).first;
-		legM2M(i, 1) = result.at(i).second;
+		legM2MAndDelta(i, 0) = get<0>(result.at(i));
+		legM2MAndDelta(i, 1) = get<1>(result.at(i));
+		unsigned int discVertices = get<2>(result.at(i)).size();
+		for (unsigned int j = 0; j < discVertices; ++j)
+		{
+			legM2MAndDelta(i, j + 2) = get<2>(result.at(i)).at(j) * BASIS_POINT;
+		}
+		unsigned int projVertices = get<3>(result.at(i)).size();
+		for (unsigned int j = 0; j < projVertices; ++j)
+		{
+			legM2MAndDelta(i, j + discVertices + 2) = get<3>(result.at(i)).at(j) * BASIS_POINT;
+		}
 	}
-	return legM2M;
+	return legM2MAndDelta;
 }
 
 
@@ -1577,25 +1639,57 @@ CellMatrix pvFloatingRateLegs(double valueDate,
 	}
 
 	//Calcular los valores presentes
-	vector<pair<long, double>> result;
-	vector<double> der;
+	vector<tuple<long, double, vector<double>, vector<double>>> result;
+	result.resize(payoffs.size());
+	double m2m;
+	vector<double> discDer;
+	vector<double> projDer;
+	unsigned long counter = 0;
+	unsigned int longestDiscCurve = 0;
+	unsigned int longestProjCurve = 0;
 	for (const auto& payoff : payoffs)
 	{
-		result.push_back(make_pair(payoff.first, payoff.second->presentValue()));
-		/*for (int i = 0; i < 19; ++i)
+		m2m = payoff.second->presentValue();
+		unsigned int discVertices = payoff.second->discountCurveLength();
+		if (discVertices > longestDiscCurve)
+			longestDiscCurve = discVertices;
+		discDer.resize(discVertices);
+		for (unsigned long i = 0; i < discVertices; ++i)
 		{
-			der.push_back(payoff.second->getPvRateDerivativeAt(i));
-		}*/
+			discDer.at(i) = payoff.second->getPvRateDerivativeAt(i);
+		}
+
+		unsigned int projVertices = payoff.second->projectingCurveLength();
+		if (projVertices > longestProjCurve)
+			longestProjCurve = projVertices;
+		projDer.resize(projVertices);
+		for (unsigned long i = 0; i < projVertices; ++i)
+		{
+			projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
+		}
+		result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+		++counter;
 	}
 
-	long cuantosM2M = legCharacteristics.RowsInStructure();
-	CellMatrix legM2M(cuantosM2M, 2);
-	for (long i = 0; i < cuantosM2M; ++i)
+	long cuantosResultados = legCharacteristics.RowsInStructure();
+	CellMatrix legM2MAndDelta(cuantosResultados, longestDiscCurve + longestProjCurve + 2);
+	for (long i = 0; i < cuantosResultados; ++i)
 	{
-		legM2M(i, 0) = result.at(i).first;
-		legM2M(i, 1) = result.at(i).second;
+		legM2MAndDelta(i, 0) = get<0>(result.at(i));
+		legM2MAndDelta(i, 1) = get<1>(result.at(i));
+		unsigned int discVertices = get<2>(result.at(i)).size();
+		for (unsigned int j = 0; j < discVertices; ++j)
+		{
+			legM2MAndDelta(i, j + 2) = get<2>(result.at(i)).at(j) * BASIS_POINT;
+		}
+		unsigned int projVertices = get<3>(result.at(i)).size();
+		for (unsigned int j = 0; j < projVertices; ++j)
+		{
+			legM2MAndDelta(i, j + discVertices + 2) = get<3>(result.at(i)).at(j) * BASIS_POINT;
+		}
 	}
-	return legM2M;
+	return legM2MAndDelta;
+
 }
 
 CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,

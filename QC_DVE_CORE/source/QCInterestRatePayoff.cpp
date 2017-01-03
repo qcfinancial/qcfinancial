@@ -130,6 +130,11 @@ double QCInterestRatePayoff::getPvRateDerivativeAt(unsigned int index)
 	return _pvRateDerivatives.at(index);
 }
 
+double QCInterestRatePayoff::getPvProjRateDerivativeAt(unsigned int index)
+{
+	return _pvProjCurveDerivatives.at(index);
+}
+
 unsigned long QCInterestRatePayoff::discountCurveLength()
 {
 	return _discountCurve->getLength();

@@ -25,6 +25,7 @@ void QCFloatingRatePayoff::_setAllRates()
 	int numPeriods = _irLeg->size();
 	_allRates.resize(numPeriods);
 	_forwardRates.resize(numPeriods);
+	_allRatesDerivatives.resize(numPeriods);
 	unsigned int tempCurrentPeriod;
 	if (_currentPeriod == -1)
 	{
@@ -44,6 +45,15 @@ void QCFloatingRatePayoff::_setAllRates()
 			QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
 			_allRates.at(i) = (_fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
 				+ _additiveSpread) * _multipSpread;
+
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = 0.0;
+			}
+			_allRatesDerivatives.at(i) = tempDer;
 		}
 		else
 		{
@@ -56,10 +66,20 @@ void QCFloatingRatePayoff::_setAllRates()
 			//La tasa fwd se expresa en la convencion en que se construyo
 			//la curva de proyeccion. Al fabricar el payoff se debe poner atencion
 			//a que esta coincida con las caracteristicas del swap.
-			double tasaFwd = _projectingCurve->getForwardRate(d1, d2);
+			double tasaFwd = QCInterestRatePayoff::_projectingCurve->getForwardRate(d1, d2);
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = tasaFwd;
+
+			//Se calculan y guardan las derivadas de este factor Fwd
+			vector<double> tempDer;
+			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
+			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
+			{
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+					* _rate->yf(date1, date2);
+			}
+			_allRatesDerivatives.at(i) = tempDer;
 
 			//Se aplican los spreads y se guarda la tasa en _allRates
 			_allRates.at(i) = (tasaFwd + _additiveSpread) * _multipSpread;

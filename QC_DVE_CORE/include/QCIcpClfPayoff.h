@@ -21,7 +21,6 @@ public:
 
 protected:
 	virtual void _setAllRates() override;
-	QCIntRtCrvShrdPtr _projectingCurve;
 	double _additiveSpread;
 	double _multipSpread;
 	vector<double> _forwardRates; //Aqui se guardan todas las fijaciones libres de spreads
