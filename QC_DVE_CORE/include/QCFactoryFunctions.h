@@ -49,6 +49,20 @@ namespace QCFactoryFunctions
 		double notional					//notional
 		);
 
+	QCInterestRateLeg buildFixedRateLeg2(
+		string receivePay,				//receive or pay
+		QCDate startDate,				//start date
+		QCDate endDate,					//end date
+		vector<QCDate> calendar,		//settlement calendar
+		int settlementLag,				//settlement lag
+		QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
+		string periodicity,				//periodicity
+		QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+		QCInterestRateLeg::QCAmortization amortization,	//amortization
+		vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+		double notional					//notional
+		);
+
 	QCInterestRateLeg buildIcpLeg(
 		string receivePay,				//receive or pay
 		QCDate startDate,				//start date
@@ -63,7 +77,40 @@ namespace QCFactoryFunctions
 		double notional									//notional
 		);
 
+	QCInterestRateLeg buildIcpLeg2(
+		string receivePay,				//receive or pay
+		QCDate startDate,				//start date
+		QCDate endDate,					//end date
+		vector<QCDate> calendar,		//settlement calendar
+		int settlementLag,				//settlement lag
+		QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
+		string periodicity,				//periodicity
+		QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+		QCInterestRateLeg::QCAmortization amortization,	//amortization
+		vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+		double notional									//notional
+		);
+
 	QCInterestRateLeg buildFloatingRateLeg(
+		string receivePay,					//receive or pay
+		QCDate startDate,					//start date
+		QCDate endDate,						//end date
+		vector<QCDate> settleCalendar,		//settlement calendar
+		int settlementLag,					//settlement lag
+		QCInterestRateLeg::QCStubPeriod stubPeriod,					//stub period
+		string settlePeriodicity,			//settlement periodicity
+		QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
+		QCInterestRateLeg::QCAmortization amortization,				//amortization
+		vector<tuple<QCDate, double, double>> amortNotionalByDate,	//amortization and notional by end date
+		int fixingLag,								//fixing lag
+		QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
+		string fixingPeriodicity,					//fixing periodicity
+		vector<QCDate> fixingCalendar,				//fixing calendar
+		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
+		double notional								//notional
+		);
+
+	QCInterestRateLeg buildFloatingRateLeg2(
 		string receivePay,					//receive or pay
 		QCDate startDate,					//start date
 		QCDate endDate,						//end date

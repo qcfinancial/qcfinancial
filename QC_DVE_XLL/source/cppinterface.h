@@ -122,7 +122,22 @@ CellMatrix pvFixedLegs(double valueDate,
 	CellMatrix legCharacteristics,
 	CellMatrix customAmort);
 
+CellMatrix pvFixedLegs2(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort);
+
 CellMatrix pvIcpClpLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix fixings);
+
+CellMatrix pvIcpClpLegs2(double valueDate,
 	CellMatrix holidays,
 	CellMatrix curveValues,
 	CellMatrix curveCharacteristics,
@@ -139,6 +154,15 @@ CellMatrix pvIcpClfLegs(double valueDate,
 	CellMatrix icpFixings,
 	CellMatrix ufFixings);
 
+CellMatrix pvIcpClfLegs2(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix icpFixings,
+	CellMatrix ufFixings);
+
 CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,
 	string settlementStubPeriod, string settlementPeriodicity, string endDateAdjustment,
 	string settlementCalendar, int settlementLag,
@@ -146,6 +170,15 @@ CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix cal
 	string fixingCalendar, int fixingStartDateRule, string fixingTenor);
 
 CellMatrix pvFloatingRateLegs(double valueDate,
+	CellMatrix holidays,
+	CellMatrix curveValues,
+	CellMatrix curveCharacteristics,
+	CellMatrix legCharacteristics,
+	CellMatrix customAmort,
+	CellMatrix fixings,
+	CellMatrix intRateIndexChars);
+
+CellMatrix pvFloatingRateLegs2(double valueDate,
 	CellMatrix holidays,
 	CellMatrix curveValues,
 	CellMatrix curveCharacteristics,

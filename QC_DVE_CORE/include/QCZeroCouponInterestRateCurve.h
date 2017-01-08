@@ -13,6 +13,7 @@ public:
 	virtual double getRateAt(long d) override;
 	virtual double getDiscountFactorAt(long d) override;
 	virtual double getDiscountFactorFwd(long d1, long d2) override;
+	virtual double getForwardRate(QCInterestRate& intRate, long d1, long d2) override;
 	virtual double getForwardRate(long d1, long d2) override;
 	virtual double getForwardWf(long d1, long d2) override;
 	virtual double getInstantForwardRateAt(long d) override;

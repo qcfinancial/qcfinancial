@@ -22,6 +22,12 @@ double QCZeroCouponDiscountFactorCurve::getDiscountFactorFwd(long d1, long d2)
 	return _curve->interpolateAt(d2) / _curve->interpolateAt(d1);
 }
 
+double QCZeroCouponDiscountFactorCurve::getForwardRate(QCInterestRate& intRate, long d1, long d2)
+{
+	double df = this->getDiscountFactorFwd(d1, d2);
+	return intRate.getRateFromWf(df, d2 - d1);
+}
+
 double QCZeroCouponDiscountFactorCurve::getForwardRate(long d1, long d2)
 {
 	double df = this->getDiscountFactorFwd(d1, d2);

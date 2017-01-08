@@ -239,208 +239,27 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 	//Cuantos periodos enteros hay entre startDate y endDate y cuantos meses sobran
 	if (amortization != QCInterestRateLeg::qcCustomAmort)
 	{
-		unsigned int numWholePeriods = get<0>(distanceMonthsDays) / QCHelperFunctions::tenor(periodicity);
-		unsigned int remainderInMonths = get<0>(distanceMonthsDays) % QCHelperFunctions::tenor(periodicity);
-		if (stubPeriod == QCInterestRateLeg::qcShortBack || stubPeriod == QCInterestRateLeg::qcNoStubPeriod)
+		if (amortization != QCInterestRateLeg::qcCustomAmort)
 		{
-			/*
-			Case "CORTO FINAL"
-				periods = numWholePeriods + 1 - Indicador(remainderMonths + dDias, 0)
-				ReDim result(1 To periods, 1 To 2) As Date
-				result(1, 1) = startDate
-				result(1, 2) = boolBusDay(busDay, AddMonths(startDate, Ten(periodicity)))
-				For i = 2 To periods - 1
-					result(i, 1) = result(i - 1, 2)
-					result(i, 2) = boolBusDay(busDay, AddMonths(startDate, i * Ten(periodicity)))
-				Next i
-				result(periods, 1) = result(periods - 1, 2)
-				result(periods, 2) = endDate
-			*/
-			int indicador = 0;
-			if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
-				indicador = 1;
-			periods.resize(numWholePeriods + 1- indicador);
+			//Se da de alta la fabrica de periods
+			QCInterestRatePeriodsFactory factory{ startDate, endDate,
+				endDateAdjustment,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				(unsigned int)settlementLag,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				0,
+				0,
+				periodicity };
 
-			QCDate fechaInicioPeriodo = startDate;
-			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-
-			for (unsigned int i = 1; i < periods.size() - 1; ++i)
-			{
-				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(i) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-			}
-			fechaInicioPeriodo = fechaFinalPeriodo;
-			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
+			//Se generan los periodos
+			periods = factory.getPeriods();
 		}
-		if (stubPeriod == QCInterestRateLeg::qcLongBack)
-		{
-			/*
-			Case "LARGO FINAL"
-				periods = numWholePeriods
-				ReDim result(1 To periods, 1 To 2) As Date
-				result(1, 1) = startDate
-				result(1, 2) = boolBusDay(busDay, AddMonths(startDate, Ten(periodicity)))
-				For i = 2 To periods - 1
-					result(i, 1) = result(i - 1, 2)
-					result(i, 2) = boolBusDay(busDay, AddMonths(startDate, i * Ten(periodicity)))
-				Next i
-				result(periods, 1) = result(periods - 1, 2)
-				result(periods, 2) = endDate
-			*/
-			periods.resize(numWholePeriods);
-
-			QCDate fechaInicioPeriodo = startDate;
-			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-
-			for (unsigned int i = 1; i < periods.size() - 1; ++i)
-			{
-				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-					calendar, endDateAdjustment);
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(i) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-			}
-			fechaInicioPeriodo = fechaFinalPeriodo;
-			fechaFinalPeriodo = endDate;
-			fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-			periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-		}
-		if (stubPeriod == QCInterestRateLeg::qcShortFront)
-		{
-			/*
-			Case "CORTO INICIO"
-				periods = numWholePeriods + 1 - Indicador(remainderMonths + dDias, 0)
-				ReDim result(1 To periods, 1 To 2) As Date
-				result(periods, 1) = BussDay(AddMonths(endDate, -Ten(periodicity)))
-				result(periods, 2) = endDate
-				For i = periods - 1 To 2 Step -1
-					result(i, 1) = boolBusDay(busDay, AddMonths(endDate, (i - periods - 1) * Ten(periodicity)))
-					result(i, 2) = result(i + 1, 1)
-				Next i
-				result(1, 1) = startDate
-				result(1, 2) = result(2, 1)
-			*/
-
-			int indicador = 0;
-			if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
-				indicador = 1;
-			periods.resize(numWholePeriods + 1 - indicador);
-
-			QCDate fechaFinalPeriodo = endDate;
-			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			unsigned int numPeriods = periods.size();
-			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = numPeriods - 2; i > 0; --i)
-					{
-						fechaFinalPeriodo = fechaInicioPeriodo;
-						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-
-				fechaFinalPeriodo = fechaInicioPeriodo;
-				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(0) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-			}
-		}
-		if (stubPeriod == QCInterestRateLeg::qcLongFront)
-		{
-			/*
-			Case "LARGO INICIO"
-				periods = numWholePeriods
-				ReDim result(1 To periods, 1 To 2) As Date
-				result(periods, 1) = BussDay(AddMonths(endDate, -Ten(periodicity)))
-				result(periods, 2) = endDate
-				For i = periods - 1 To 2 Step -1
-					result(i, 1) = boolBusDay(busDay, AddMonths(endDate, (i - periods - 1) * Ten(periodicity)))
-					result(i, 2) = result(i + 1, 1)
-				Next i
-				result(1, 1) = startDate
-				result(1, 2) = result(2, 1)
-			*/
-
-			periods.resize(numWholePeriods);
-
-			QCDate fechaFinalPeriodo = endDate;
-			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			unsigned int numPeriods = periods.size();
-			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = numPeriods - 2; i > 0; --i)
-					{
-						fechaFinalPeriodo = fechaInicioPeriodo;
-						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-
-				fechaFinalPeriodo = fechaInicioPeriodo;
-				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-				periods.at(0) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
-
-			}
-		}
-		//Calcular amortizaciones y nocionales vigentes
 		
+		//Calcular amortizaciones y nocionales vigentes
 		numPeriods = periods.size();
 		if (amortization == QCInterestRateLeg::qcBulletAmort)
 		{
@@ -499,6 +318,132 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 	return result;
 }
 
+QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
+	string receivePay,			//receive or pay
+	QCDate startDate,			//start date
+	QCDate endDate,				//end date
+	vector<QCDate> calendar,	//settlement calendar
+	int settlementLag,			//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,	//stub period
+	string periodicity,			//periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	//amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+	double notional				//notional
+	)
+{
+	//QCInterestRatePeriod es:
+	//tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate>
+	//intRtPrdElmntInitialAccrtn,	/*!< Disposicion inicial del periodo */
+	//intRtPrdElmntAcctrnIsCshflw,	/*!< Indica si la disposicion inicial es flujo */
+	//intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
+	//inRtPrdElmntAmrtztnIsCshflw,	/*!< Indica si la amortizacion final es flujo */
+	//intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
+	//intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
+	//intRtPrdElmntEndDate,			/*!< Fecha final del periodo */
+	//intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
+
+	//Las siguientes 3 son para patas flotantes
+	//intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
+	//intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
+	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
+
+	//Aqui se guardaran los periodos
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+
+	//Apenas se calcule el numero de periodos se registrara aqui
+	unsigned int numPeriods;
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	//La distancia en meses y dias entre startDate y endDate
+	tuple<unsigned long, int> distanceMonthsDays = startDate.monthDiffDayRemainder(
+		endDate, calendar, endDateAdjustment);
+
+	//Cuantos periodos enteros hay entre startDate y endDate y cuantos meses sobran
+	if (amortization != QCInterestRateLeg::qcCustomAmort)
+	{
+		if (amortization != QCInterestRateLeg::qcCustomAmort)
+		{
+			//Se da de alta la fabrica de periods
+			QCInterestRatePeriodsFactory factory{ startDate, endDate,
+				endDateAdjustment,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				(unsigned int)settlementLag,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				0,
+				0,
+				periodicity };
+
+			//Se generan los periodos
+			periods = factory.getPeriods();
+		}
+
+		//Calcular amortizaciones y nocionales vigentes
+		numPeriods = periods.size();
+		if (amortization == QCInterestRateLeg::qcBulletAmort)
+		{
+			for (unsigned int i = 0; i < numPeriods; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
+			}
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
+		}
+		if (amortization == QCInterestRateLeg::qcConstantAmort)
+		{
+			unsigned int numAmort = amortNotionalByDate.size();
+			for (unsigned int i = 0; i < numAmort; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1- i)) =
+					signo * get<2>(amortNotionalByDate.at(numAmort - 1 - i));
+				get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1 - i)) =
+					signo * get<1>(amortNotionalByDate.at(numAmort - 1 - i));
+			}
+		}
+	}
+	else
+	{
+		//Se arma el primer period con la primera linea de amortNotionalByDate usando como startDate
+		//la fecha de amortizacion - 1 vez la periodicidad. Settlement date queda como businessDay de endDate
+		//y las fechas de pata flotante igual a start date
+		numPeriods = amortNotionalByDate.size();
+		periods.resize(numPeriods); //En este caso se sabe a priori cuantos flujos son
+		QCDate fechaFinalPeriodo = get<0>(amortNotionalByDate.at(0));
+		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(periodicity));
+		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
+			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
+			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+			fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
+		periods.at(0) = temp;
+
+		//Loop sobre el resto de los flujos tomando como start date el end date
+		//del period anterior y la misma regla para settlement date y fixing dates
+		for (unsigned long i = 1; i < periods.size(); ++i)
+		{
+			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
+			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
+			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+			auto temp = make_tuple(0, false,
+				signo * get<1>(amortNotionalByDate.at(i)), true,
+				signo * get<2>(amortNotionalByDate.at(i)),
+				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+				fechaInicioPeriodo, fechaInicioPeriodo, fechaInicioPeriodo);
+			periods.at(i) = temp;
+		}
+	}
+
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+	return result;
+}
+
 QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	string receivePay,				//receive or pay
 	QCDate startDate,				//start date
@@ -547,218 +492,24 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	//Cuantos periodos enteros hay entre startDate y endDate y cuantos meses sobran
 	if (amortization != QCInterestRateLeg::qcCustomAmort)
 	{
-		unsigned int numWholePeriods = get<0>(distanceMonthsDays) / QCHelperFunctions::tenor(periodicity);
-		unsigned int remainderInMonths = get<0>(distanceMonthsDays) % QCHelperFunctions::tenor(periodicity);
-		if (stubPeriod == QCInterestRateLeg::qcShortBack || stubPeriod == QCInterestRateLeg::qcNoStubPeriod)
+		if (amortization != QCInterestRateLeg::qcCustomAmort)
 		{
-			/*
-			Case "CORTO FINAL"
-			periods = numWholePeriods + 1 - Indicador(remainderMonths + dDias, 0)
-			ReDim result(1 To periods, 1 To 2) As Date
-			result(1, 1) = startDate
-			result(1, 2) = boolBusDay(busDay, AddMonths(startDate, Ten(periodicity)))
-			For i = 2 To periods - 1
-			result(i, 1) = result(i - 1, 2)
-			result(i, 2) = boolBusDay(busDay, AddMonths(startDate, i * Ten(periodicity)))
-			Next i
-			result(periods, 1) = result(periods - 1, 2)
-			result(periods, 2) = endDate
-			*/
-			int indicador = 0;
-			if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
-				indicador = 1;
-			periods.resize(numWholePeriods + 1 - indicador);
+			//Se da de alta la fabrica de periods
+			QCInterestRatePeriodsFactory factory{ startDate, endDate,
+				endDateAdjustment,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				(unsigned int)settlementLag,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				0,
+				0,
+				periodicity };
 
-			QCDate fechaInicioPeriodo = startDate;
-			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-			unsigned int numPeriods = periods.size();
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = 1; i < periods.size() - 1; ++i)
-					{
-						fechaInicioPeriodo = fechaFinalPeriodo;
-						fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = endDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-			}
-		}
-		if (stubPeriod == QCInterestRateLeg::qcLongBack)
-		{
-			/*
-			Case "LARGO FINAL"
-			periods = numWholePeriods
-			ReDim result(1 To periods, 1 To 2) As Date
-			result(1, 1) = startDate
-			result(1, 2) = boolBusDay(busDay, AddMonths(startDate, Ten(periodicity)))
-			For i = 2 To periods - 1
-			result(i, 1) = result(i - 1, 2)
-			result(i, 2) = boolBusDay(busDay, AddMonths(startDate, i * Ten(periodicity)))
-			Next i
-			result(periods, 1) = result(periods - 1, 2)
-			result(periods, 2) = endDate
-			*/
-			periods.resize(numWholePeriods);
-
-			QCDate fechaInicioPeriodo = startDate;
-			QCDate fechaFinalPeriodo = startDate.addMonths(tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			unsigned int numPeriods = periods.size();
-			periods.at(0) = make_tuple(-signo * notional, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = 1; i < periods.size() - 1; ++i)
-					{
-						fechaInicioPeriodo = fechaFinalPeriodo;
-						fechaFinalPeriodo = startDate.addMonths(tenor(periodicity) * (i + 1)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-				fechaInicioPeriodo = fechaFinalPeriodo;
-				fechaFinalPeriodo = endDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(periods.size() - 1) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-			}
-		}
-		if (stubPeriod == QCInterestRateLeg::qcShortFront)
-		{
-			/*
-			Case "CORTO INICIO"
-			periods = numWholePeriods + 1 - Indicador(remainderMonths + dDias, 0)
-			ReDim result(1 To periods, 1 To 2) As Date
-			result(periods, 1) = BussDay(AddMonths(endDate, -Ten(periodicity)))
-			result(periods, 2) = endDate
-			For i = periods - 1 To 2 Step -1
-			result(i, 1) = boolBusDay(busDay, AddMonths(endDate, (i - periods - 1) * Ten(periodicity)))
-			result(i, 2) = result(i + 1, 1)
-			Next i
-			result(1, 1) = startDate
-			result(1, 2) = result(2, 1)
-			*/
-
-			int indicador = 0;
-			if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
-				indicador = 1;
-			periods.resize(numWholePeriods + 1 - indicador);
-
-			QCDate fechaFinalPeriodo = endDate;
-			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			unsigned int numPeriods = periods.size();
-			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = numPeriods - 2; i > 0; --i)
-					{
-						fechaFinalPeriodo = fechaInicioPeriodo;
-						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-
-				fechaFinalPeriodo = fechaInicioPeriodo;
-				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-				periods.at(0) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-			}
-		}
-		if (stubPeriod == QCInterestRateLeg::qcLongFront)
-		{
-			/*
-			Case "LARGO INICIO"
-			periods = numWholePeriods
-			ReDim result(1 To periods, 1 To 2) As Date
-			result(periods, 1) = BussDay(AddMonths(endDate, -Ten(periodicity)))
-			result(periods, 2) = endDate
-			For i = periods - 1 To 2 Step -1
-			result(i, 1) = boolBusDay(busDay, AddMonths(endDate, (i - periods - 1) * Ten(periodicity)))
-			result(i, 2) = result(i + 1, 1)
-			Next i
-			result(1, 1) = startDate
-			result(1, 2) = result(2, 1)
-			*/
-
-			periods.resize(numWholePeriods);
-
-			QCDate fechaFinalPeriodo = endDate;
-			QCDate fechaInicioPeriodo = endDate.addMonths(-tenor(periodicity)).businessDay(
-				calendar, endDateAdjustment);
-			QCDate fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-			unsigned int numPeriods = periods.size();
-			periods.at(numPeriods - 1) = make_tuple(0, false, 0, true, 0,
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-
-			if (numPeriods >= 2)
-			{
-				if (numPeriods > 2)
-				{
-					for (unsigned int i = numPeriods - 2; i > 0; --i)
-					{
-						fechaFinalPeriodo = fechaInicioPeriodo;
-						fechaInicioPeriodo = endDate.addMonths((i - numPeriods) * tenor(periodicity)).businessDay(
-							calendar, endDateAdjustment);
-						fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-						periods.at(i) = make_tuple(0, false, 0, true, 0,
-							fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-							fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-					}
-				}
-
-				fechaFinalPeriodo = fechaInicioPeriodo;
-				fechaInicioPeriodo = startDate;
-				fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, settlementLag, QCDate::qcFollow);
-
-				periods.at(0) = make_tuple(0, false, 0, true, 0,
-					fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-					fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
-
-			}
+			//Se generan los periodos
+			periods = factory.getPeriods();
 		}
 		//Calcular amortizaciones y nocionales vigentes
 		numPeriods = periods.size();
@@ -820,6 +571,131 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	return result;
 }
 
+QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
+	string receivePay,				//receive or pay
+	QCDate startDate,				//start date
+	QCDate endDate,					//end date
+	vector<QCDate> calendar,		//settlement calendar
+	int settlementLag,				//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
+	string periodicity,				//periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	//amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+	double notional									//notional
+	)
+{
+	//QCInterestRatePeriod es:
+	//tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate>
+	//intRtPrdElmntInitialAccrtn,	/*!< Disposicion inicial del periodo */
+	//intRtPrdElmntAcctrnIsCshflw,	/*!< Indica si la disposicion inicial es flujo */
+	//intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
+	//inRtPrdElmntAmrtztnIsCshflw,	/*!< Indica si la amortizacion final es flujo */
+	//intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
+	//intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
+	//intRtPrdElmntEndDate,			/*!< Fecha final del periodo */
+	//intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
+
+	//Las siguientes 3 son para patas flotantes
+	//intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
+	//intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
+	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
+
+	//Aqui se guardaran los periodos
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+
+	//Apenas se calcule el numero de periodos se registrara aqui
+	unsigned int numPeriods;
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	//La distancia en meses y dias entre startDate y endDate
+	tuple<unsigned long, int> distanceMonthsDays = startDate.monthDiffDayRemainder(
+		endDate, calendar, endDateAdjustment);
+
+	//Cuantos periodos enteros hay entre startDate y endDate y cuantos meses sobran
+	if (amortization != QCInterestRateLeg::qcCustomAmort)
+	{
+		if (amortization != QCInterestRateLeg::qcCustomAmort)
+		{
+			//Se da de alta la fabrica de periods
+			QCInterestRatePeriodsFactory factory{ startDate, endDate,
+				endDateAdjustment,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				(unsigned int)settlementLag,
+				periodicity,
+				stubPeriod,
+				make_shared<vector<QCDate>>(calendar),
+				0,
+				0,
+				periodicity };
+
+			//Se generan los periodos
+			periods = factory.getPeriods();
+		}
+		//Calcular amortizaciones y nocionales vigentes
+		numPeriods = periods.size();
+		if (amortization == QCInterestRateLeg::qcBulletAmort)
+		{
+			for (unsigned int i = 0; i < numPeriods; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
+			}
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
+		}
+		if (amortization == QCInterestRateLeg::qcConstantAmort)
+		{
+			unsigned int numAmort = amortNotionalByDate.size();
+			for (unsigned int i = 0; i < numAmort; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1 - i)) =
+					signo * get<2>(amortNotionalByDate.at(numAmort - 1 - i));
+				get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1 - i)) =
+					signo * get<1>(amortNotionalByDate.at(numAmort - 1 - i));
+			}
+		}
+	}
+	else
+	{
+		//Se arma el primer period con la primera linea de amortNotionalByDate usando como startDate
+		//la fecha de amortizacion - 1 vez la periodicidad. Settlement date queda como businessDay de endDate
+		//y las fechas de pata flotante igual a start date
+		numPeriods = amortNotionalByDate.size();
+		periods.resize(numPeriods); //En este caso se sabe a priori cuantos flujos son
+		QCDate fechaFinalPeriodo = get<0>(amortNotionalByDate.at(0));
+		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(periodicity));
+		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
+			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
+			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+			fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+		periods.at(0) = temp;
+
+		//Loop sobre el resto de los flujos tomando como start date el end date
+		//del period anterior y la misma regla para settlement date y fixing dates
+		for (unsigned long i = 1; i < periods.size(); ++i)
+		{
+			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
+			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
+			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(calendar, endDateAdjustment);
+			auto temp = make_tuple(0, false,
+				signo * get<1>(amortNotionalByDate.at(i)), true,
+				signo * get<2>(amortNotionalByDate.at(i)),
+				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+			periods.at(i) = temp;
+		}
+	}
+
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+
+	return result;
+}
 
 QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 	string receivePay,					//receive or pay
@@ -915,10 +791,16 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(settlePeriodicity))
 			.businessDay(fixingCalendar, QCDate::qcPrev);
 		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
+		QCDate fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
+			QCDate::qcPrev);
+		QCDate fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
+			QCDate::qcFollow);
+		QCDate fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
+			interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
 		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
 			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
 			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-			fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+			fechaFixing, fechaStartFixing, fechaEndFixing);
 		periods.at(0) = temp;
 
 		//Loop sobre el resto de los flujos tomando como start date el end date
@@ -928,11 +810,151 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
 			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
 			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
+			fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
+				QCDate::qcPrev);
+			fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
+				QCDate::qcFollow);
+			fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
+				interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
+
 			auto temp = make_tuple(0, false,
 				signo * get<1>(amortNotionalByDate.at(i)), true,
 				signo * get<2>(amortNotionalByDate.at(i)),
 				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaInicioPeriodo, fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaFixing, fechaStartFixing, fechaEndFixing);
+			periods.at(i) = temp;
+		}
+	}
+
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+
+	return result;
+}
+
+QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
+	string receivePay,					//receive or pay
+	QCDate startDate,					//start date
+	QCDate endDate,						//end date
+	vector<QCDate> settleCalendar,		//settlement calendar
+	int settlementLag,					//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,					//stub period
+	string settlePeriodicity,			//settlement periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,				//amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate,	//amortization and notional by end date
+	int fixingLag,								//fixing lag
+	QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
+	string fixingPeriodicity,					//fixing periodicity
+	vector<QCDate> fixingCalendar,				//fixing calendar
+	pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
+	double notional								//notional
+	)
+{
+	//QCInterestRatePeriod es:
+	//tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate>
+	//intRtPrdElmntInitialAccrtn,	/*!< Disposicion inicial del periodo */
+	//intRtPrdElmntAcctrnIsCshflw,	/*!< Indica si la disposicion inicial es flujo */
+	//intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
+	//inRtPrdElmntAmrtztnIsCshflw,	/*!< Indica si la amortizacion final es flujo */
+	//intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
+	//intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
+	//intRtPrdElmntEndDate,			/*!< Fecha final del periodo */
+	//intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
+
+	//Las siguientes 3 son para patas flotantes
+	//intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
+	//intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
+	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
+
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+	unsigned int numPeriods;
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	if (amortization != QCInterestRateLeg::qcCustomAmort)
+	{
+		//Se da de alta la fabrica de periods
+		QCInterestRatePeriodsFactory factory{ startDate, endDate,
+			endDateAdjustment,
+			settlePeriodicity,
+			stubPeriod,
+			make_shared<vector<QCDate>>(settleCalendar),
+			(unsigned int)settlementLag,
+			fixingPeriodicity,
+			fixingStubPeriod,
+			make_shared<vector<QCDate>>(fixingCalendar),
+			(unsigned int)fixingLag,
+			(unsigned int)QCHelperFunctions::lagToInt(interestRateIndexChars.second),
+			interestRateIndexChars.first };
+
+		//Se generan los periodos
+		periods = factory.getPeriods();
+
+		//Calcular amortizaciones y nocionales vigentes
+		numPeriods = periods.size();
+		if (amortization == QCInterestRateLeg::qcBulletAmort)
+		{
+			for (unsigned int i = 0; i < numPeriods; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
+			}
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
+		}
+		if (amortization == QCInterestRateLeg::qcConstantAmort)
+		{
+			unsigned int numAmort = amortNotionalByDate.size();
+			for (unsigned int i = 0; i < numAmort; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1 - i)) =
+					signo * get<2>(amortNotionalByDate.at(numAmort - 1 - i));
+				get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1 - i)) =
+					signo * get<1>(amortNotionalByDate.at(numAmort - 1 - i));
+			}
+		}
+	}
+	else
+	{
+		//Se arma el primer period con la primera linea de amortNotionalByDate usando como startDate
+		//la fecha de amortizacion - 1 vez la periodicidad. Settlement date queda como businessDay de endDate
+		//y las fechas de pata flotante igual a start date
+		numPeriods = amortNotionalByDate.size();
+		periods.resize(numPeriods); //En este caso se sabe a priori cuantos flujos son
+		QCDate fechaFinalPeriodo = get<0>(amortNotionalByDate.at(0));
+		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(settlePeriodicity))
+			.businessDay(fixingCalendar, QCDate::qcPrev);
+		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
+		QCDate fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
+			QCDate::qcPrev);
+		QCDate fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
+			QCDate::qcFollow);
+		QCDate fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
+			interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
+		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
+			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
+			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+			fechaFixing, fechaStartFixing, fechaEndFixing);
+		periods.at(0) = temp;
+
+		//Loop sobre el resto de los flujos tomando como start date el end date
+		//del period anterior y la misma regla para settlement date y fixing dates
+		for (unsigned long i = 1; i < periods.size(); ++i)
+		{
+			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
+			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
+			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
+			fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
+				QCDate::qcPrev);
+			fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
+				QCDate::qcFollow);
+			fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
+				interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
+
+			auto temp = make_tuple(0, false,
+				signo * get<1>(amortNotionalByDate.at(i)), true,
+				signo * get<2>(amortNotionalByDate.at(i)),
+				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
+				fechaFixing, fechaStartFixing, fechaEndFixing);
 			periods.at(i) = temp;
 		}
 	}

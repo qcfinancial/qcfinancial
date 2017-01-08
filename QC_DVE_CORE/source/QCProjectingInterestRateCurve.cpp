@@ -21,6 +21,10 @@ double QCProjectingInterestRateCurve::dfDerivativeAt(unsigned int index)
 	return 1.0;
 }
 
+double QCProjectingInterestRateCurve::getForwardRate(QCInterestRate& intRate, long d1, long d2)
+{
+	return getForwardRate(d1, d2);
+}
 double QCProjectingInterestRateCurve::getForwardRate(long d1, long d2)
 {
 	//Este metodo tiene esta firma para que, para las patas flotantes,

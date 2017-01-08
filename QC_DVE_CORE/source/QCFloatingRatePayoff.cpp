@@ -66,7 +66,8 @@ void QCFloatingRatePayoff::_setAllRates()
 			//La tasa fwd se expresa en la convencion en que se construyo
 			//la curva de proyeccion. Al fabricar el payoff se debe poner atencion
 			//a que esta coincida con las caracteristicas del swap.
-			double tasaFwd = QCInterestRatePayoff::_projectingCurve->getForwardRate(d1, d2);
+			double tasaFwd = QCInterestRatePayoff::_projectingCurve->
+				getForwardRate(*(QCInterestRatePayoff::_rate),  d1, d2);
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = tasaFwd;

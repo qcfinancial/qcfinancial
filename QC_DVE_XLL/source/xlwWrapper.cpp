@@ -892,6 +892,97 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
+pvFixedLegs2Args[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvFixedLegs2("xlpvFixedLegs2",
+"pvFixedLegs2",
+"too lazy to comment this function ",
+LibraryName,
+pvFixedLegs2Args,
+6
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvFixedLegs2(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+CellMatrix result(
+	pvFixedLegs2(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
 pvIcpClpLegsArgs[]=
 {
 { "valueDate","too lazy to comment this one ","B"},
@@ -971,6 +1062,105 @@ CellMatrix fixings(
 
 CellMatrix result(
 	pvIcpClpLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		fixings)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClpLegs2Args[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "fixings","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClpLegs2("xlpvIcpClpLegs2",
+"pvIcpClpLegs2",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClpLegs2Args,
+7
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClpLegs2(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER fixingsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper fixingsb(
+	(fixingsa));
+CellMatrix fixings(
+	fixingsb.AsCellMatrix("fixings"));
+
+CellMatrix result(
+	pvIcpClpLegs2(
 		valueDate,
 		holidays,
 		curveValues,
@@ -1077,6 +1267,113 @@ CellMatrix ufFixings(
 
 CellMatrix result(
 	pvIcpClfLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		icpFixings,
+		ufFixings)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvIcpClfLegs2Args[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "icpFixings","too lazy to comment this one ","XLF_OPER"},
+{ "ufFixings","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvIcpClfLegs2("xlpvIcpClfLegs2",
+"pvIcpClfLegs2",
+"too lazy to comment this function ",
+LibraryName,
+pvIcpClfLegs2Args,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvIcpClfLegs2(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER icpFixingsa,
+LPXLFOPER ufFixingsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper icpFixingsb(
+	(icpFixingsa));
+CellMatrix icpFixings(
+	icpFixingsb.AsCellMatrix("icpFixings"));
+
+XlfOper ufFixingsb(
+	(ufFixingsa));
+CellMatrix ufFixings(
+	ufFixingsb.AsCellMatrix("ufFixings"));
+
+CellMatrix result(
+	pvIcpClfLegs2(
 		valueDate,
 		holidays,
 		curveValues,
@@ -1329,6 +1626,113 @@ CellMatrix intRateIndexChars(
 
 CellMatrix result(
 	pvFloatingRateLegs(
+		valueDate,
+		holidays,
+		curveValues,
+		curveCharacteristics,
+		legCharacteristics,
+		customAmort,
+		fixings,
+		intRateIndexChars)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+pvFloatingRateLegs2Args[]=
+{
+{ "valueDate","too lazy to comment this one ","B"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "curveValues","too lazy to comment this one ","XLF_OPER"},
+{ "curveCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "legCharacteristics","too lazy to comment this one ","XLF_OPER"},
+{ "customAmort","too lazy to comment this one ","XLF_OPER"},
+{ "fixings","too lazy to comment this one ","XLF_OPER"},
+{ "intRateIndexChars","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerpvFloatingRateLegs2("xlpvFloatingRateLegs2",
+"pvFloatingRateLegs2",
+"too lazy to comment this function ",
+LibraryName,
+pvFloatingRateLegs2Args,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlpvFloatingRateLegs2(
+double valueDate,
+LPXLFOPER holidaysa,
+LPXLFOPER curveValuesa,
+LPXLFOPER curveCharacteristicsa,
+LPXLFOPER legCharacteristicsa,
+LPXLFOPER customAmorta,
+LPXLFOPER fixingsa,
+LPXLFOPER intRateIndexCharsa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper curveValuesb(
+	(curveValuesa));
+CellMatrix curveValues(
+	curveValuesb.AsCellMatrix("curveValues"));
+
+XlfOper curveCharacteristicsb(
+	(curveCharacteristicsa));
+CellMatrix curveCharacteristics(
+	curveCharacteristicsb.AsCellMatrix("curveCharacteristics"));
+
+XlfOper legCharacteristicsb(
+	(legCharacteristicsa));
+CellMatrix legCharacteristics(
+	legCharacteristicsb.AsCellMatrix("legCharacteristics"));
+
+XlfOper customAmortb(
+	(customAmorta));
+CellMatrix customAmort(
+	customAmortb.AsCellMatrix("customAmort"));
+
+XlfOper fixingsb(
+	(fixingsa));
+CellMatrix fixings(
+	fixingsb.AsCellMatrix("fixings"));
+
+XlfOper intRateIndexCharsb(
+	(intRateIndexCharsa));
+CellMatrix intRateIndexChars(
+	intRateIndexCharsb.AsCellMatrix("intRateIndexChars"));
+
+CellMatrix result(
+	pvFloatingRateLegs2(
 		valueDate,
 		holidays,
 		curveValues,
