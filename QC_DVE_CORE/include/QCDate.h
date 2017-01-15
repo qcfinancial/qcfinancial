@@ -70,6 +70,13 @@ class QCDate
          */
         QCDate(int d, int m, int y);
 
+		/*!
+		* Constructor
+		* @param stringDate yyyy/mm/dd o yyyy-mm-dd
+		* @return un objeto QCDate con la fecha d/m/y
+		*/
+		QCDate(string& stringDate);
+
         /*!
          * Copy constructor
          * @param otherDate otro objeto de tipo QCDate

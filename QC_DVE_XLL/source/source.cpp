@@ -39,6 +39,11 @@ using namespace std;
 
 #define BASIS_POINT .0001
 
+double qcFecha(string f)
+{
+	QCDate fecha{ f };
+	return (double)fecha.excelSerial();
+}
 double qcYearFraction(int startDate, int endDate, string yf)
 {
 	QCDate stDate{ startDate };
@@ -1637,7 +1642,6 @@ CellMatrix pvIcpClpLegs2(double valueDate,
 	}
 	return legM2MAndDelta;
 }
-
 
 CellMatrix pvIcpClfLegs(double valueDate,
 	CellMatrix holidays,

@@ -17,6 +17,8 @@ using namespace std;
 
 //<xlw:libraryname=QC_DVE
 
+double qcFecha(string f);
+
 double //Devuelve la fraccion de agno entre dos fechas
 	qcYearFraction(int startDate //Fecha inicial
 				 , int endDate   //Fecha final

@@ -6,7 +6,6 @@
 #include <sstream>
 #include <exception>
 #include <algorithm>
-
 //
 //  QCDate.cpp
 //  QC-FXOptions
@@ -40,6 +39,35 @@ QCDate::QCDate(int d, int m, int y)
     {
         throw invalid_argument("Invalid day, month and year");
     }
+}
+
+QCDate::QCDate(string& stringDate)
+{
+	if (stringDate.length() != 10)
+		throw invalid_argument("String has invalid length shoulf be yyyy/mm/dd");
+	int d, m, y;
+	try
+	{
+		d = stoi(stringDate.substr(8, 2));
+		m = stoi(stringDate.substr(5, 2));
+		y = stoi(stringDate.substr(0, 4));
+	}
+	catch (exception& e)
+	{
+		throw invalid_argument("Invalid day, month and year");
+	}
+	if (_validate(d, m, y))
+	{
+		_day = d;
+		_month = m;
+		_year = y;
+		return;
+	}
+	else
+	{
+		throw invalid_argument("Invalid day, month and year");
+	}
+
 }
 
 QCDate::QCDate(long excelSerial)
@@ -102,8 +130,8 @@ bool QCDate::_validate(int d, int m, int y)
     {
         if (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0))
         {
-            printf("%d is a leap year", y);
-            cout << endl;
+            //printf("%d is a leap year", y);
+            //cout << endl;
             return true;
         }
         else

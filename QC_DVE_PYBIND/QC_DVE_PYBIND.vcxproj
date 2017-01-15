@@ -41,15 +41,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;C:\Users\Soporte\Anaconda2\include;$(IncludePath)</IncludePath>
+    <IncludePath>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include;\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;C:\Users\Soporte\Anaconda2\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Soporte\Anaconda2\libs;$(LibraryPath)</LibraryPath>
     <TargetExt>.pyd</TargetExt>
+    <OutDir>c:\Users\Soporte\Anaconda2</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;C:\Users\Soporte\Anaconda2\include;$(IncludePath)</IncludePath>
+    <IncludePath>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include;\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;C:\Users\Soporte\Anaconda2\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Soporte\Anaconda2\libs;$(LibraryPath)</LibraryPath>
     <TargetExt>.pyd</TargetExt>
+    <OutDir>c:\Users\Soporte\Anaconda2</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,11 +86,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\QC_DVE_CORE\include\QCDate.h" />
     <ClInclude Include="include.h" />
+    <ClInclude Include="Include\QCDvePyBindHelperFunctions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\QC_DVE_CORE\source\QC30360.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct360.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct365.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCActAct.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCCompoundWf.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCContinousWf.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCDate.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFactoryFunctions.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCHelperFunctions.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRate.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRateLeg.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterpolator.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLinearInterpolator.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLinearWf.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLogLinearInterpolator.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCProjectingInterestRateCurve.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCWealthFactor.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponCurve.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponDiscountFactorCurve.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,7 +18,7 @@
     <ClInclude Include="include.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\QC_DVE_CORE\include\QCDate.h">
+    <ClInclude Include="Include\QCDvePyBindHelperFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -27,6 +27,81 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\QC_DVE_CORE\source\QCDate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCHelperFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFactoryFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QC30360.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct360.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct365.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCActAct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCCompoundWf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCContinousWf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLinearWf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponDiscountFactorCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCProjectingInterestRateCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLinearInterpolator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCWealthFactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRateLeg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterpolator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLogLinearInterpolator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

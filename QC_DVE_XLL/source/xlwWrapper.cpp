@@ -25,6 +25,61 @@ const char* LibraryName = "QC_DVE";
 namespace
 {
 XLRegistration::Arg
+qcFechaArgs[]=
+{
+{ "f","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerqcFecha("xlqcFecha",
+"qcFecha",
+"too lazy to comment this function ",
+LibraryName,
+qcFechaArgs,
+1
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlqcFecha(
+LPXLFOPER fa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper fb(
+	(fa));
+string f(
+	fb.AsString("f"));
+
+double result(
+	qcFecha(
+		f)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
 qcYearFractionArgs[]=
 {
 { "startDate","Fecha inicial ","B"},
