@@ -460,7 +460,6 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 		success = PyTuple_SetItem(legM2MAndDelta, i, temp);
 	}
 	return legM2MAndDelta;
-	//return Py_BuildValue("s", indexChars.at("TAB 180 CLP").first.c_str());
 }
 
 PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
@@ -1081,7 +1080,7 @@ PyMethodDef QC_DVE_Methods[] =
 	{ 0, 0, 0, 0 }
 };
 
-//funcion __init__ python, Tecnicamente acá estamos construyendo el modulo pyd 
+//funcion __init__ python, tecnicamente acá estamos construyendo el modulo pyd 
 PyMODINIT_FUNC
 initQC_DVE_PYBIND(void)
 {

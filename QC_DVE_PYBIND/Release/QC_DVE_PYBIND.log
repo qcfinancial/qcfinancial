@@ -1,17 +1,11 @@
-﻿Build started 15/01/2017 9:54:18.
+﻿Build started 17/01/2017 12:24:44.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(93): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(124): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(164): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(158): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(349): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(570): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(774): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1030): warning C4101: 'label' : unreferenced local variable
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp
+         QCIcpClfPayoff.cpp
+     1>..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp(86): warning C4018: '<' : signed/unsigned mismatch
+     1>..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp(116): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib" /MACHINE:X86 /SAFESEH /DLL Release\QC30360.obj
          Release\QCAct360.obj
@@ -48,4 +42,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.55
+Time Elapsed 00:00:04.58
