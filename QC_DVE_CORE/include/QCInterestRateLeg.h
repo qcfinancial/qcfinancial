@@ -48,10 +48,10 @@ public:
 	*/
 	enum QCAmortization
 	{
-		//HAY QUE IMPLEMENTAR ESTE ENUM EN LA FACTORY FUNCTION DE FIXED RATE
 		qcBulletAmort,		/*!< Amortizacion bullet */
 		qcConstantAmort,	/*!< Amortizacion constante en cada periodo */
 		qcCustomAmort,		/*!< Amortizacion customizada */
+		qcFrenchAmort,		/*!< Amortizacion estilo frances (cuota constante) */
 	};
 
 	/*!

@@ -78,6 +78,8 @@ QCInterestRateLeg::QCAmortization QCHelperFunctions::stringToQCAmortization(stri
 		return QCInterestRateLeg::qcConstantAmort;
 	if (amortization == "CUSTOM")
 		return QCInterestRateLeg::qcCustomAmort;
+	if (amortization == "FRENCH")
+		return QCInterestRateLeg::qcFrenchAmort;
 	return QCInterestRateLeg::qcBulletAmort;
 }
 

@@ -127,11 +127,13 @@ namespace QCDvePyBindHelperFunctions
 				PyString_AsString(PyList_GetItem(PyList_GetItem(fixings, i), 0))) },
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(fixings, i), 1))));
 		}
+
+		cout << "icp_fixings" << endl;
 	}
 
 	void buildManyFixings(PyObject* fixings, map<string, map<QCDate, double>>& mapManyFixings)
 	{
-		//La CellMatrix fixings debe venir ordenada por nombre
+		//La list de fixings debe venir ordenada por nombre
 		string lastName, nextName;
 		lastName = PyString_AsString(PyList_GetItem(PyList_GetItem(fixings, 0), 0));
 		map<QCDate, double> tempMap;

@@ -418,6 +418,191 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
 	return result;
 }
 
+QCInterestRateLeg QCFactoryFunctions::buildFrenchFixedRateLeg(
+	QCDate valueDate,			//value date
+	string receivePay,			//receive or pay
+	QCDate startDate,			//start date
+	QCDate endDate,				//end date
+	vector<QCDate> calendar,	//settlement calendar
+	int settlementLag,			//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,	//stub period
+	string periodicity,			//periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	//amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+	double notional,			//notional
+	shared_ptr<QCInterestRate> intRate //interest rate
+	)
+{
+	if (amortization != QCInterestRateLeg::qcFrenchAmort)
+	{
+		throw invalid_argument("La operacion debe tener amortizacion francesa.");
+	}
+	//Aqui se guardaran los periodos
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	//Se da de alta la fabrica de periods
+	QCInterestRatePeriodsFactory factory{ startDate, endDate,
+		endDateAdjustment,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		(unsigned int)settlementLag,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		0,
+		0,
+		periodicity };
+
+	//Se generan los periodos
+	periods = factory.getPeriods();
+
+	unsigned int numPeriods = periods.size();
+	long currentPeriod = 0;
+	
+	//Determinar el current period
+	for (long i = 0; i < numPeriods; ++i)
+	{
+		if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
+			valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
+		{
+			currentPeriod = i;
+			break;
+		}
+	}
+
+	//Con esas fechas residuales y el notional calcular la cuota
+	long periodsCuota = numPeriods - currentPeriod;
+	double r = 1 / (1 + intRate->getValue() / 12.0);
+	double formula = r * (1 - pow(r, periodsCuota)) / (1 - r);
+	double cuota = notional / formula;
+
+	/*cout << "numPeriods: " << numPeriods << " curr: " << currentPeriod <<
+	" cuota: " << cuota << " nocional: " << notional << endl;
+	*/
+
+	//Con la cuota y el nocional calcular el nocional vigente y las amortizaciones
+	double tempNotional = notional;
+	r = intRate->getValue() / 12.0;
+	for (long i = currentPeriod; i < numPeriods; ++i)
+	{
+		get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
+		double amort = cuota - tempNotional * r;
+		//cout << "amort: " << amort << endl;
+		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
+		tempNotional -= amort;
+	}
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+	return result;
+}
+
+QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
+	QCDate valueDate,			//value date
+	string receivePay,			//receive or pay
+	QCDate startDate,			//start date
+	QCDate endDate,				//end date
+	vector<QCDate> calendar,	//settlement calendar
+	int settlementLag,			//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,	//stub period
+	string periodicity,			//periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	//amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
+	double notional,			//notional
+	shared_ptr<QCInterestRate> intRate //interest rate
+	)
+{
+	//Aqui se guardaran los periodos
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	//Se da de alta la fabrica de periods
+	QCInterestRatePeriodsFactory factory{ startDate, endDate,
+		endDateAdjustment,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		(unsigned int)settlementLag,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		0,
+		0,
+		periodicity };
+
+	//Se generan los periodos
+	periods = factory.getPeriods();
+
+	unsigned int numPeriods = periods.size();
+	long currentPeriod = 0;
+
+	//Determinar el current period
+	for (long i = 0; i < numPeriods; ++i)
+	{
+		if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
+			valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
+		{
+			currentPeriod = i;
+			break;
+		}
+	}
+
+	if (amortization == QCInterestRateLeg::qcFrenchAmort)
+	{
+		//Con esas fechas residuales y el notional calcular la cuota
+		long periodsCuota = numPeriods - currentPeriod;
+		double r = 1 / (1 + intRate->getValue() / 12.0);
+		double formula = r * (1 - pow(r, periodsCuota)) / (1 - r);
+		double cuota = notional / formula;
+
+		//Con la cuota y el nocional calcular el nocional vigente y las amortizaciones
+		double tempNotional = notional;
+		r = intRate->getValue() / 12.0;
+		for (long i = currentPeriod; i < numPeriods; ++i)
+		{
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
+			double amort = cuota - tempNotional * r;
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
+			tempNotional -= amort;
+		}
+	}
+
+	if (amortization == QCInterestRateLeg::qcBulletAmort)
+	{
+		for (long i = currentPeriod; i < numPeriods; ++i)
+		{
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+		}
+		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+	}
+
+	if (amortization == QCInterestRateLeg::qcConstantAmort)
+	{
+		double amort = notional / (numPeriods - currentPeriod);
+		double tempNotional = notional;
+		for (long i = currentPeriod; i < numPeriods; ++i)
+		{
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
+			tempNotional -= amort;
+		}
+	}
+
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+	return result;
+}
+
+
 QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	string receivePay,				//receive or pay
 	QCDate startDate,				//start date
@@ -645,6 +830,88 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
 	return result;
 }
 
+QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
+	QCDate valueDate,
+	string receivePay,				//receive or pay
+	QCDate startDate,				//start date
+	QCDate endDate,					//end date
+	vector<QCDate> calendar,		//settlement calendar
+	int settlementLag,				//settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,		//stub period
+	string periodicity,				//periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	//amortization
+	double notional									//notional
+	)
+
+{
+	//Aqui se guardaran los periodos
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+
+	//Apenas se calcule el numero de periodos se registrara aqui
+	unsigned int numPeriods;
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	//Se da de alta la fabrica de periods
+	QCInterestRatePeriodsFactory factory{ startDate, endDate,
+		endDateAdjustment,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		(unsigned int)settlementLag,
+		periodicity,
+		stubPeriod,
+		make_shared<vector<QCDate>>(calendar),
+		0,
+		0,
+		periodicity };
+
+	//Se generan los periodos
+	periods = factory.getPeriods();
+
+	numPeriods = periods.size();
+	long currentPeriod = 0;
+
+	//Determinar el current period
+	for (long i = 0; i < numPeriods; ++i)
+	{
+		if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
+			valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
+		{
+			currentPeriod = i;
+			break;
+		}
+	}
+
+	if (amortization == QCInterestRateLeg::qcBulletAmort)
+	{
+		for (long i = currentPeriod; i < numPeriods; ++i)
+		{
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+		}
+		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+	}
+
+	if (amortization == QCInterestRateLeg::qcConstantAmort)
+	{
+		double amort = notional / (numPeriods - currentPeriod);
+		double tempNotional = notional;
+		for (long i = currentPeriod; i < numPeriods; ++i)
+		{
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
+			tempNotional -= amort;
+		}
+	}
+
+	QCInterestRateLeg result{ periods, numPeriods - 1 };
+	return result;
+}
+
 QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 	string receivePay,					//receive or pay
 	QCDate startDate,					//start date
@@ -843,52 +1110,87 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		}
 	}
 	
-	/*else
-	{
-		//Se arma el primer period con la primera linea de amortNotionalByDate usando como startDate
-		//la fecha de amortizacion - 1 vez la periodicidad. Settlement date queda como businessDay de endDate
-		//y las fechas de pata flotante igual a start date
-		numPeriods = amortNotionalByDate.size();
-		periods.resize(numPeriods); //En este caso se sabe a priori cuantos flujos son
-		QCDate fechaFinalPeriodo = get<0>(amortNotionalByDate.at(0));
-		QCDate fechaInicioPeriodo = fechaFinalPeriodo.addMonths(-tenor(settlePeriodicity))
-			.businessDay(fixingCalendar, QCDate::qcPrev);
-		QCDate fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
-		QCDate fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
-			QCDate::qcPrev);
-		QCDate fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
-			QCDate::qcFollow);
-		QCDate fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
-			interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
-		auto temp = make_tuple(-signo * get<2>(amortNotionalByDate.at(0)),
-			false, signo * get<1>(amortNotionalByDate.at(0)), true, signo * get<2>(amortNotionalByDate.at(0)),
-			fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-			fechaFixing, fechaStartFixing, fechaEndFixing);
-		periods.at(0) = temp;
-
-		//Loop sobre el resto de los flujos tomando como start date el end date
-		//del period anterior y la misma regla para settlement date y fixing dates
-		for (unsigned long i = 1; i < periods.size(); ++i)
-		{
-			fechaInicioPeriodo = get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i - 1));
-			fechaFinalPeriodo = get<0>(amortNotionalByDate.at(i));
-			fechaPagoPeriodo = fechaFinalPeriodo.businessDay(settleCalendar, endDateAdjustment);
-			fechaFixing = fechaInicioPeriodo.shift(fixingCalendar, (unsigned int)fixingLag,
-				QCDate::qcPrev);
-			fechaStartFixing = fechaFixing.shift(fixingCalendar, stoi(interestRateIndexChars.first),
-				QCDate::qcFollow);
-			fechaEndFixing = fechaStartFixing.addMonths(QCHelperFunctions::tenor(
-				interestRateIndexChars.first)).businessDay(fixingCalendar, QCDate::qcFollow);
-
-			auto temp = make_tuple(0, false,
-				signo * get<1>(amortNotionalByDate.at(i)), true,
-				signo * get<2>(amortNotionalByDate.at(i)),
-				fechaInicioPeriodo, fechaFinalPeriodo, fechaPagoPeriodo,
-				fechaFixing, fechaStartFixing, fechaEndFixing);
-			periods.at(i) = temp;
-		}
-	}*/
-
 	QCInterestRateLeg result{ periods, numPeriods - 1 };
 	return result;
 }
+
+	QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg3(
+		QCDate valueDate,					//value date
+		string receivePay,					//receive or pay
+		QCDate startDate,					//start date
+		QCDate endDate,						//end date
+		vector<QCDate> settleCalendar,		//settlement calendar
+		int settlementLag,					//settlement lag
+		QCInterestRateLeg::QCStubPeriod stubPeriod,					//stub period
+		string settlePeriodicity,			//settlement periodicity
+		QCDate::QCBusDayAdjRules endDateAdjustment, //end date adjustment
+		QCInterestRateLeg::QCAmortization amortization,				//amortization
+		int fixingLag,								//fixing lag
+		QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
+		string fixingPeriodicity,					//fixing periodicity
+		vector<QCDate> fixingCalendar,				//fixing calendar
+		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
+		double notional								//notional
+		)
+	{
+		QCInterestRateLeg::QCInterestRatePeriods periods;
+		unsigned int numPeriods;
+		int signo;
+		if (receivePay == "R") { signo = 1; }
+		else { signo = -1; }
+
+		//Se da de alta la fabrica de periods
+		QCInterestRatePeriodsFactory factory{ startDate, endDate,
+			endDateAdjustment,
+			settlePeriodicity,
+			stubPeriod,
+			make_shared<vector<QCDate>>(settleCalendar),
+			(unsigned int)settlementLag,
+			fixingPeriodicity,
+			fixingStubPeriod,
+			make_shared<vector<QCDate>>(fixingCalendar),
+			(unsigned int)fixingLag,
+			(unsigned int)QCHelperFunctions::lagToInt(interestRateIndexChars.second),
+			interestRateIndexChars.first };
+
+		//Se generan los periodos
+		periods = factory.getPeriods();
+
+		numPeriods = periods.size();
+		long currentPeriod = 0;
+
+		//Determinar el current period
+		for (long i = 0; i < numPeriods; ++i)
+		{
+			if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
+				valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
+			{
+				currentPeriod = i;
+				break;
+			}
+		}
+
+		if (amortization == QCInterestRateLeg::qcBulletAmort)
+		{
+			for (long i = currentPeriod; i < numPeriods; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+			}
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+		}
+
+		if (amortization == QCInterestRateLeg::qcConstantAmort)
+		{
+			double amort = notional / (numPeriods - currentPeriod);
+			double tempNotional = notional;
+			for (long i = currentPeriod; i < numPeriods; ++i)
+			{
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
+				get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
+				tempNotional -= amort;
+			}
+		}
+
+		QCInterestRateLeg result{ periods, numPeriods - 1 };
+		return result;
+	}
