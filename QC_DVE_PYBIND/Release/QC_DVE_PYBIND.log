@@ -1,4 +1,4 @@
-﻿Build started 29/01/2017 12:47:50.
+﻿Build started 16/02/2017 14:12:45.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
      1>ClCompile:
@@ -6,16 +6,45 @@
          main.cpp
      1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(93): warning C4018: '<' : signed/unsigned mismatch
      1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(124): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(166): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(164): warning C4018: '<' : signed/unsigned mismatch
      1>main.cpp(154): warning C4018: '<' : signed/unsigned mismatch
      1>main.cpp(335): warning C4018: '<' : signed/unsigned mismatch
      1>main.cpp(538): warning C4018: '<' : signed/unsigned mismatch
      1>main.cpp(751): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(967): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1172): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1408): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1627): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1889): warning C4101: 'label' : unreferenced local variable
+     1>main.cpp(973): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1195): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1210): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>main.cpp(1439): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1453): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>main.cpp(1658): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1673): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
+     1>main.cpp(1923): warning C4101: 'label' : unreferenced local variable
+     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from 'double' to 'long', possible loss of data
+                 main.cpp(1016) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 with
+                 [
+                     _Other1=double &
+         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
+                 ]
+                 main.cpp(1016) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 with
+                 [
+                     _Other1=double &
+         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
+                 ]
+     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from '__int64' to 'long', possible loss of data
+                 main.cpp(1706) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 with
+                 [
+                     _Other1=__int64 &
+         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
+                 ]
+                 main.cpp(1706) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 with
+                 [
+                     _Other1=__int64 &
+         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
+                 ]
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib" /MACHINE:X86 /SAFESEH /DLL Release\QC30360.obj
          Release\QCAct360.obj
@@ -52,4 +81,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.22
+Time Elapsed 00:00:05.28

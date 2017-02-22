@@ -12,14 +12,15 @@
 /*!
  * @brief La clase QC30360 implementa el método 30/360.
  * Hereda de la clase abstracta QCYearFraction
+ * @author Alvaro Díaz
  */
 class QC30360 : public QCYearFraction
 {
 public:
     /*!
       * La función yf devuelve la fracción de año entre dos fechas en convención 30/360.
-      * @param [in] firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
-      * @param [in] secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
+      * @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
+      * @param secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
       * @return un double con la fracción de año calculada
       */
     double yf(const QCDate& firstDate, const QCDate& secondDate);
@@ -27,8 +28,8 @@ public:
     /*!
      * La función countDays devuelve el número de días entre firstDate y secondDate en 30/360.
      * Si se desea un número positivo firstDate debe ser menor que secondDate
-     * @param [in] firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
-     * @param [in] secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
+     * @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
+     * @param secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
      * @return un long con el número de días calculados
      */
     long countDays(const QCDate& firstDate, const QCDate& secondDate);
@@ -36,7 +37,7 @@ public:
 	/*!
 	* La función yf devuelve un proxy de la fracción de año cuando el argumento es un
 	* numero de dias.
-	* @param days
+	* @param days corresponde a un numero de dias suponiendo que este numero ya esta bien calculado
 	* @return un double con la fracción de año calculada
 	*/
 	virtual double yf(long days);

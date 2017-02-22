@@ -1,0 +1,76 @@
+\hypertarget{class_q_c_linear_wf}{\section{Q\+C\+Linear\+Wf Class Reference}
+\label{class_q_c_linear_wf}\index{Q\+C\+Linear\+Wf@{Q\+C\+Linear\+Wf}}
+}
+Inheritance diagram for Q\+C\+Linear\+Wf\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_q_c_linear_wf}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual double \hyperlink{class_q_c_linear_wf_ad9ac92ae46857a060f47ceda4291bd72}{wf} (double \hyperlink{class_q_c_linear_wf_ad0a049fd92a36cecd4b766b181a3cf7b}{rate}, double yf) override
+\item 
+virtual double \hyperlink{class_q_c_linear_wf_ad0a049fd92a36cecd4b766b181a3cf7b}{rate} (double \hyperlink{class_q_c_linear_wf_ad9ac92ae46857a060f47ceda4291bd72}{wf}, double yf) override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 6 of file Q\+C\+Linear\+Wf.\+h.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_linear_wf_ad0a049fd92a36cecd4b766b181a3cf7b}{\index{Q\+C\+Linear\+Wf@{Q\+C\+Linear\+Wf}!rate@{rate}}
+\index{rate@{rate}!Q\+C\+Linear\+Wf@{Q\+C\+Linear\+Wf}}
+\subsubsection[{rate}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Linear\+Wf\+::rate (
+\begin{DoxyParamCaption}
+\item[{double}]{wf, }
+\item[{double}]{yf}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_linear_wf_ad0a049fd92a36cecd4b766b181a3cf7b}
+La función rate devuelve el valor de la tasa asociada al valor del factor de capitalización y su fracción de año asociada. 
+\begin{DoxyParams}{Parameters}
+{\em wf} & es el valor del factor de capitalización \\
+\hline
+{\em yf} & es el valor de la fracción de año \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(double) valor de la tasa asociada 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_wealth_factor_aad4a3d84f0c2073162cc5fcce5509d1c}{Q\+C\+Wealth\+Factor}.
+
+\hypertarget{class_q_c_linear_wf_ad9ac92ae46857a060f47ceda4291bd72}{\index{Q\+C\+Linear\+Wf@{Q\+C\+Linear\+Wf}!wf@{wf}}
+\index{wf@{wf}!Q\+C\+Linear\+Wf@{Q\+C\+Linear\+Wf}}
+\subsubsection[{wf}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Linear\+Wf\+::wf (
+\begin{DoxyParamCaption}
+\item[{double}]{rate, }
+\item[{double}]{yf}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_linear_wf_ad9ac92ae46857a060f47ceda4291bd72}
+La función wf devuelve el valor del factor de capitalización dado el valor de una tasa y su fracción de año asociada. Cuando se invoca este método, también se calcula la derivada del factor de capitalización respecto al parámetro rate. Este valor se almacena en la variable protected \+\_\+dwf 
+\begin{DoxyParams}{Parameters}
+{\em rate} & es el valor de la tasa \\
+\hline
+{\em yf} & es el valor de la fracción de año \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(double) valor del factor de capitalización 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_wealth_factor_a63ddc9c957aa438c1278b541f6e1ebbe}{Q\+C\+Wealth\+Factor}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Linear\+Wf.\+h\end{DoxyCompactItemize}

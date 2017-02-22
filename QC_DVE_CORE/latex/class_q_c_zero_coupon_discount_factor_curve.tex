@@ -1,0 +1,173 @@
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve}{\section{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve Class Reference}
+\label{class_q_c_zero_coupon_discount_factor_curve}\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+}
+Inheritance diagram for Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_q_c_zero_coupon_discount_factor_curve}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a25350242d9f5a47d8b271d77dcbbc61c}{{\bfseries Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve} (shared\+\_\+ptr$<$ \hyperlink{class_q_c_interpolator}{Q\+C\+Interpolator} $>$ curve, \hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} int\+Rate)}\label{class_q_c_zero_coupon_discount_factor_curve_a25350242d9f5a47d8b271d77dcbbc61c}
+
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_a00da6a6176e027de613935504683e254}{get\+Rate\+At} (long d) override
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_a1c09de3cfa88c80f8ece2feac6905c0d}{get\+Discount\+Factor\+At} (long d) override
+\item 
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a9befe6e28f78e8d5e634914a953d0acb}{virtual double {\bfseries get\+Discount\+Factor\+Fwd} (long d1, long d2) override}\label{class_q_c_zero_coupon_discount_factor_curve_a9befe6e28f78e8d5e634914a953d0acb}
+
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_a444623664ba1bd0d0855bc11cbde64dd}{get\+Forward\+Rate} (\hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} \&int\+Rate, long d1, long d2) override
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_a9287f90424bfa40964835df46d3e3601}{get\+Forward\+Rate} (long d1, long d2) override
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_ab9b135fa9deab14e415f95d619c1bfae}{get\+Forward\+Wf} (long d1, long d2) override
+\item 
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a906f9c8951880ed584e8104168fdf14d}{virtual double {\bfseries get\+Instant\+Forward\+Rate\+At} (long d) override}\label{class_q_c_zero_coupon_discount_factor_curve_a906f9c8951880ed584e8104168fdf14d}
+
+\item 
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_aeb4a1654dbec9d763e9b9c00dfeb62a7}{virtual double {\bfseries get\+Deriv\+Instant\+Forward\+Rate\+At} (long d) override}\label{class_q_c_zero_coupon_discount_factor_curve_aeb4a1654dbec9d763e9b9c00dfeb62a7}
+
+\item 
+virtual double \hyperlink{class_q_c_zero_coupon_discount_factor_curve_a336906041380286ee1f8257d9a97e486}{fwd\+Wf\+Derivative\+At} (unsigned int index) override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 7 of file Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve.\+h.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a336906041380286ee1f8257d9a97e486}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!fwd\+Wf\+Derivative\+At@{fwd\+Wf\+Derivative\+At}}
+\index{fwd\+Wf\+Derivative\+At@{fwd\+Wf\+Derivative\+At}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{fwd\+Wf\+Derivative\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::fwd\+Wf\+Derivative\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_a336906041380286ee1f8257d9a97e486}
+Este método es un getter que retorna la derivada del último factor de capitalización forward calculado. \begin{DoxyReturn}{Returns}
+valor de la derivada. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a8aa3dcfb5a3ce169094db4e2f0849a94}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a1c09de3cfa88c80f8ece2feac6905c0d}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!get\+Discount\+Factor\+At@{get\+Discount\+Factor\+At}}
+\index{get\+Discount\+Factor\+At@{get\+Discount\+Factor\+At}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{get\+Discount\+Factor\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::get\+Discount\+Factor\+At (
+\begin{DoxyParamCaption}
+\item[{long}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_a1c09de3cfa88c80f8ece2feac6905c0d}
+Retorna el factor de descuento interpolado al plazo d. 
+\begin{DoxyParams}{Parameters}
+{\em d} & plazo a interpolar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor del factor de descuento interpolado. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{class_q_c_zero_coupon_curve_ac7546a18d2fe462e14ddae2d8c87b7c5}{Q\+C\+Zero\+Coupon\+Curve}.
+
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a444623664ba1bd0d0855bc11cbde64dd}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!get\+Forward\+Rate@{get\+Forward\+Rate}}
+\index{get\+Forward\+Rate@{get\+Forward\+Rate}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{get\+Forward\+Rate}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::get\+Forward\+Rate (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\+C\+Interest\+Rate} \&}]{int\+Rate, }
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_a444623664ba1bd0d0855bc11cbde64dd}
+Retorna la tasa forward entre los plazos d1 y d2 en la convención de int\+Rate. 
+\begin{DoxyParams}{Parameters}
+{\em int\+Rate} & convención de la tasa forward que se debe calcular. \\
+\hline
+{\em d1} & plazo más corto de la tasa forward. \\
+\hline
+{\em d2} & plazo más largo de la tasa forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa forward calculada. Probablemente este método puede mejorarse haciendo que retorne void y el valor de la tasa forward calculada se almacene dentro de la variable int\+Rate. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a66e79c4ed2e08916f14bbbfb5d1d3c96}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a9287f90424bfa40964835df46d3e3601}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!get\+Forward\+Rate@{get\+Forward\+Rate}}
+\index{get\+Forward\+Rate@{get\+Forward\+Rate}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{get\+Forward\+Rate}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::get\+Forward\+Rate (
+\begin{DoxyParamCaption}
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_a9287f90424bfa40964835df46d3e3601}
+Retorna la tasa forward entre los plazos d1 y d2 en la convención de las tasas de la curva. 
+\begin{DoxyParams}{Parameters}
+{\em d1} & plazo más corto de la tasa forward. \\
+\hline
+{\em d2} & plazo más largo de la tasa forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa forward calculada. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_af4c22b08db379ea8ce825f9999e2bc34}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_ab9b135fa9deab14e415f95d619c1bfae}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!get\+Forward\+Wf@{get\+Forward\+Wf}}
+\index{get\+Forward\+Wf@{get\+Forward\+Wf}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{get\+Forward\+Wf}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::get\+Forward\+Wf (
+\begin{DoxyParamCaption}
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_ab9b135fa9deab14e415f95d619c1bfae}
+Retorna la factor de capitalización forward entre los plazos d1 y d2. 
+\begin{DoxyParams}{Parameters}
+{\em d1} & plazo más corto del factor forward. \\
+\hline
+{\em d2} & plazo más largo del fcator forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor del factor forward calculado. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a36c88024727170486082197f1abff78e}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_zero_coupon_discount_factor_curve_a00da6a6176e027de613935504683e254}{\index{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}!get\+Rate\+At@{get\+Rate\+At}}
+\index{get\+Rate\+At@{get\+Rate\+At}!Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve@{Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve}}
+\subsubsection[{get\+Rate\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve\+::get\+Rate\+At (
+\begin{DoxyParamCaption}
+\item[{long}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_zero_coupon_discount_factor_curve_a00da6a6176e027de613935504683e254}
+Retorna la tasa interpolada al plazo d. 
+\begin{DoxyParams}{Parameters}
+{\em d} & plazo a interpolar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa interpolada en la convención de las tasas de la curva. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{class_q_c_zero_coupon_curve_a83289d8e7ef3cacdc407820b715d9b19}{Q\+C\+Zero\+Coupon\+Curve}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Zero\+Coupon\+Discount\+Factor\+Curve.\+h\end{DoxyCompactItemize}

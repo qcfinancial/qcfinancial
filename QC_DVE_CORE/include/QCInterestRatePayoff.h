@@ -34,6 +34,12 @@ public:
 	int payoffSize();
 
 	/*!
+	* Retorna el valor del flujo de caja de _valueDate
+	* @return (double) el valor del cashflow
+	*/
+	double getValueDateCashflow();
+
+	/*!
 	* Calcula y retorna el valor presente de la pata descontando con la curva de descuento.
 	* Dentro de este proceso se calculan tambien las derivadas del valor presente respecto
 	* a cada punto de las curvas de descuento y proyeccion.
@@ -105,6 +111,10 @@ protected:
 
 	virtual void _setAllRates();
 	vector<double> _allRates;
+
+	//Aqui se guarda el valor del cashflow correspondiente a _valueDate.
+	//Si no existe ese cashflow se guarda un 0.
+	double _valueDateCashflow;
 
 	//Aqui se guardan las derivadas del valor presente respecto a cada vertice
 	//de la curva de descuento.

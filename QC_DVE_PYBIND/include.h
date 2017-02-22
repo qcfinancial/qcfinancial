@@ -5,6 +5,7 @@
 
 #include <Python.h>
 #include <string>
+#include <iostream>
 
 #ifdef _DEBUG_WAS_DEFINED
 #define _DEBUG 1

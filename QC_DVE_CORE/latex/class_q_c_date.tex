@@ -1,0 +1,609 @@
+\hypertarget{class_q_c_date}{\section{Q\+C\+Date Class Reference}
+\label{class_q_c_date}\index{Q\+C\+Date@{Q\+C\+Date}}
+}
+
+
+\hyperlink{class_q_c_date}{Q\+C\+Date} es la implementación de Q\+Code de una clase para manejar fechas.  
+
+
+
+
+{\ttfamily \#include $<$Q\+C\+Date.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{class_q_c_date_a19bc952d3dba68ce61881ec85837c7eb}{Q\+C\+Week\+Day} \{ \\*
+{\bfseries qc\+Monday} = 1, 
+{\bfseries qc\+Tuesday} = 2, 
+{\bfseries qc\+Wednesday} = 3, 
+{\bfseries qc\+Thursday} = 4, 
+\\*
+{\bfseries qc\+Friday} = 5, 
+{\bfseries qc\+Saturday} = 6, 
+{\bfseries qc\+Sunday} = 0
+ \}
+\item 
+enum \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Bus\+Day\+Adj\+Rules} \{ \\*
+{\bfseries qc\+No} = 0, 
+{\bfseries qc\+Follow} = 1, 
+{\bfseries qc\+Mod\+Follow} = 2, 
+{\bfseries qc\+Prev} = 3, 
+\\*
+{\bfseries qc\+Mod\+Prev} = 4
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_q_c_date_a4668aa0f8cc6671f1f4413a9d9152bce}{Q\+C\+Date} ()
+\item 
+\hyperlink{class_q_c_date_aa4234ef62a09004355f1a8c227bb0b80}{Q\+C\+Date} (long \hyperlink{class_q_c_date_a91dae9aacdc06dcc3c3aaac686a6a6f7}{excel\+Serial})
+\item 
+\hyperlink{class_q_c_date_a9f91ba907afd6cce87c9d1d114658ac4}{Q\+C\+Date} (int d, int m, int y)
+\item 
+\hyperlink{class_q_c_date_a8e41bf9b439d97d9abe4e9ee25f719a9}{Q\+C\+Date} (string \&string\+Date)
+\item 
+\hyperlink{class_q_c_date_af5f2687a03cda466dc5da09a60b88f69}{Q\+C\+Date} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&other\+Date)
+\item 
+void \hyperlink{class_q_c_date_a4f0c7ff2fb664ca4daa7904145430552}{operator=} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&other\+Date)
+\item 
+bool \hyperlink{class_q_c_date_aae27db758f29a013c3f845b2e1a07f52}{operator$<$} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+bool \hyperlink{class_q_c_date_aa88cc696fb1f87212e9ceba4226d925d}{operator$>$} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+bool \hyperlink{class_q_c_date_a4a7c6e33664af9bbe09b7f0a0fa74288}{operator$<$=} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+bool \hyperlink{class_q_c_date_a741cc0cd4e2424a0218009f5a412f78c}{operator$>$=} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+bool \hyperlink{class_q_c_date_ab0663f35f0ba5772ff78a25dc5359ad6}{operator==} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+bool \hyperlink{class_q_c_date_ac98d34b3105e66151643fd8cb1f9d3e7}{operator!=} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&rhs) const 
+\item 
+void \hyperlink{class_q_c_date_a5c291812c6186f241dfbf2d38e443fa4}{set\+Date\+From\+Excel\+Serial} (long \hyperlink{class_q_c_date_a91dae9aacdc06dcc3c3aaac686a6a6f7}{excel\+Serial})
+\item 
+void \hyperlink{class_q_c_date_a6f243d10b5e895b831389b695a2ee21f}{set\+Day} (int d)
+\item 
+void \hyperlink{class_q_c_date_ad6761685c9c092b6a655b53fc09d5075}{set\+Month} (int m)
+\item 
+void \hyperlink{class_q_c_date_add8aa03f53dca484371467bd67b673f7}{set\+Year} (int y)
+\item 
+void \hyperlink{class_q_c_date_a83992c0c1735992b1589584ec12bd7f4}{set\+Day\+Month\+Year} (int d, int m, int y)
+\item 
+int \hyperlink{class_q_c_date_afdd2b7572d223f7295345ce4e3331434}{day} () const 
+\item 
+int \hyperlink{class_q_c_date_a947dd2de2e8e1f94d17df771a3a2ffd0}{month} () const 
+\item 
+int \hyperlink{class_q_c_date_a0d2a079ef29c00f5518ccf122aeb5d4d}{year} () const 
+\item 
+long \hyperlink{class_q_c_date_a91dae9aacdc06dcc3c3aaac686a6a6f7}{excel\+Serial} () const 
+\item 
+long \hyperlink{class_q_c_date_a1591b1ddccfbaa539c623bd7223685d6}{day\+Diff} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&other\+Date) const 
+\item 
+tuple$<$ unsigned long, int $>$ \hyperlink{class_q_c_date_a9100d8c3ba63fd98127b5ddcbfa04f28}{month\+Diff\+Day\+Remainder} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&other\+Date, vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$ \&calendar, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Bus\+Day\+Adj\+Rules} rule) const 
+\item 
+tuple$<$ unsigned long, int $>$ \hyperlink{class_q_c_date_ae2dc2722a7a9f6b102320e1a9ef53d6f}{month\+Diff\+Day\+Remainder} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&other\+Date, shared\+\_\+ptr$<$ vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$$>$ calendar, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules} rule) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a3c5f40573c1bd67ac55f1303fbfb1c71}{add\+Days} (long n\+Days) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a25b12688ac06d13d3158ca2088204e87}{business\+Day} (vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$ \&calendar, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Bus\+Day\+Adj\+Rules} rule) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a6ad72169ba55466099b7810cdc902afe}{business\+Day} (shared\+\_\+ptr$<$ vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$$>$ calendar, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules} rule) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a34de9e14026c01c22abeb1b1a58c7f6b}{shift} (vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$ \&calendar, unsigned int n\+Days, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules} direction) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a4c7462e643f04fc9b4d5bca5691e9aa7}{shift} (shared\+\_\+ptr$<$ vector$<$ \hyperlink{class_q_c_date}{Q\+C\+Date} $>$$>$ calendar, unsigned int n\+Days, \hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules} direction) const 
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_date_a618bd3108f2a5d9cbf877ffe876d8ef3}{add\+Months} (int n\+Months) const 
+\item 
+\hyperlink{class_q_c_date_a19bc952d3dba68ce61881ec85837c7eb}{Q\+C\+Week\+Day} \hyperlink{class_q_c_date_a1d8a40402f9bbd16c19b01a479aabc32}{week\+Day} () const 
+\item 
+string \hyperlink{class_q_c_date_a95b4d1fef1541ffdd3581bb22271620e}{description} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_q_c_date}{Q\+C\+Date} es la implementación de Q\+Code de una clase para manejar fechas. 
+
+\begin{DoxyAuthor}{Author}
+Alvaro Díaz (Q\+Code) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+Julio, 2016 
+\end{DoxyDate}
+
+
+Definition at line 22 of file Q\+C\+Date.\+h.
+
+
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Bus\+Day\+Adj\+Rules@{Q\+C\+Bus\+Day\+Adj\+Rules}}
+\index{Q\+C\+Bus\+Day\+Adj\+Rules@{Q\+C\+Bus\+Day\+Adj\+Rules}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Bus\+Day\+Adj\+Rules}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}}}\label{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}
+Q\+C\+Week\+Day es un enum que sirve para identificar los días de la semana. 
+
+Definition at line 42 of file Q\+C\+Date.\+h.
+
+\hypertarget{class_q_c_date_a19bc952d3dba68ce61881ec85837c7eb}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Week\+Day@{Q\+C\+Week\+Day}}
+\index{Q\+C\+Week\+Day@{Q\+C\+Week\+Day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Week\+Day}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Q\+C\+Date\+::\+Q\+C\+Week\+Day}}}\label{class_q_c_date_a19bc952d3dba68ce61881ec85837c7eb}
+Q\+C\+Week\+Day es un enum que sirve para identificar los días de la semana. 
+
+Definition at line 28 of file Q\+C\+Date.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_q_c_date_a4668aa0f8cc6671f1f4413a9d9152bce}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Date}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Date\+::\+Q\+C\+Date (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a4668aa0f8cc6671f1f4413a9d9152bce}
+Constructor por default \begin{DoxyReturn}{Returns}
+un objecto \hyperlink{class_q_c_date}{Q\+C\+Date} inicializado al 12 de enero de 1969 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_aa4234ef62a09004355f1a8c227bb0b80}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Date}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Date\+::\+Q\+C\+Date (
+\begin{DoxyParamCaption}
+\item[{long}]{excel\+Serial}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_aa4234ef62a09004355f1a8c227bb0b80}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em excel\+Serial} & (long) representación de Excel de una fecha \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un objecto \hyperlink{class_q_c_date}{Q\+C\+Date} con la fecha indicada por excel\+Serial 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a9f91ba907afd6cce87c9d1d114658ac4}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Date}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Date\+::\+Q\+C\+Date (
+\begin{DoxyParamCaption}
+\item[{int}]{d, }
+\item[{int}]{m, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a9f91ba907afd6cce87c9d1d114658ac4}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em d} & día \\
+\hline
+{\em m} & mes \\
+\hline
+{\em y} & año \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un objeto \hyperlink{class_q_c_date}{Q\+C\+Date} con la fecha d/m/y 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a8e41bf9b439d97d9abe4e9ee25f719a9}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Date}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Date\+::\+Q\+C\+Date (
+\begin{DoxyParamCaption}
+\item[{string \&}]{string\+Date}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a8e41bf9b439d97d9abe4e9ee25f719a9}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em string\+Date} & yyyy/mm/dd o yyyy-\/mm-\/dd \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+un objeto \hyperlink{class_q_c_date}{Q\+C\+Date} con la fecha d/m/y 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_af5f2687a03cda466dc5da09a60b88f69}{\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\index{Q\+C\+Date@{Q\+C\+Date}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{Q\+C\+Date}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Date\+::\+Q\+C\+Date (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{other\+Date}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_af5f2687a03cda466dc5da09a60b88f69}
+Copy constructor 
+\begin{DoxyParams}{Parameters}
+{\em other\+Date} & otro objeto de tipo \hyperlink{class_q_c_date}{Q\+C\+Date} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+objeto \hyperlink{class_q_c_date}{Q\+C\+Date} receptor de la copia 
+\end{DoxyReturn}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_date_a3c5f40573c1bd67ac55f1303fbfb1c71}{\index{Q\+C\+Date@{Q\+C\+Date}!add\+Days@{add\+Days}}
+\index{add\+Days@{add\+Days}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{add\+Days}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::add\+Days (
+\begin{DoxyParamCaption}
+\item[{long}]{n\+Days}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a3c5f40573c1bd67ac55f1303fbfb1c71}
+Calcula la fecha que resulta de sumar un número de días a si misma 
+\begin{DoxyParams}{Parameters}
+{\em n\+Days} & número de días a sumar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a618bd3108f2a5d9cbf877ffe876d8ef3}{\index{Q\+C\+Date@{Q\+C\+Date}!add\+Months@{add\+Months}}
+\index{add\+Months@{add\+Months}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{add\+Months}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::add\+Months (
+\begin{DoxyParamCaption}
+\item[{int}]{n\+Months}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a618bd3108f2a5d9cbf877ffe876d8ef3}
+Calcula la fecha que resulta de sumar un número de meses a si misma 
+\begin{DoxyParams}{Parameters}
+{\em n\+Months} & número de meses a sumar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a25b12688ac06d13d3158ca2088204e87}{\index{Q\+C\+Date@{Q\+C\+Date}!business\+Day@{business\+Day}}
+\index{business\+Day@{business\+Day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{business\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::business\+Day (
+\begin{DoxyParamCaption}
+\item[{vector$<$ {\bf Q\+C\+Date} $>$ \&}]{calendar, }
+\item[{{\bf Q\+C\+Bus\+Day\+Adj\+Rules}}]{rule}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a25b12688ac06d13d3158ca2088204e87}
+Calcula la siguiente fecha que es dia habil considerando el vector de fechas que son feriado y la regla (F\+O\+L\+L\+O\+W, M\+O\+D\+F\+O\+L\+L\+O\+W). Si la fecha es habil entonces se retorna a si misma. 
+\begin{DoxyParams}{Parameters}
+{\em calendar} & (vector$<$\+Q\+C\+Date$>$\&) vector con los feriados \\
+\hline
+{\em rule} & (string) regla para el calculo (F\+O\+L\+L\+O\+W, M\+O\+D\+\_\+\+F\+O\+L\+L\+O\+W, P\+R\+E\+V, M\+O\+D\+\_\+\+P\+R\+E\+V) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a6ad72169ba55466099b7810cdc902afe}{\index{Q\+C\+Date@{Q\+C\+Date}!business\+Day@{business\+Day}}
+\index{business\+Day@{business\+Day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{business\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::business\+Day (
+\begin{DoxyParamCaption}
+\item[{shared\+\_\+ptr$<$ vector$<$ {\bf Q\+C\+Date} $>$$>$}]{calendar, }
+\item[{{\bf Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}}]{rule}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a6ad72169ba55466099b7810cdc902afe}
+Calcula la siguiente fecha que es dia habil considerando el vector de fechas que son feriado y la regla (F\+O\+L\+L\+O\+W, M\+O\+D\+F\+O\+L\+L\+O\+W). Si la fecha es habil entonces se retorna a si misma. 
+\begin{DoxyParams}{Parameters}
+{\em calendar} & (shared\+\_\+ptr$<$vector$<$\+Q\+C\+Date$>$$>$) vector con los feriados \\
+\hline
+{\em rule} & (string) regla para el calculo (F\+O\+L\+L\+O\+W, M\+O\+D\+\_\+\+F\+O\+L\+L\+O\+W, P\+R\+E\+V, M\+O\+D\+\_\+\+P\+R\+E\+V) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_afdd2b7572d223f7295345ce4e3331434}{\index{Q\+C\+Date@{Q\+C\+Date}!day@{day}}
+\index{day@{day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{day}]{\setlength{\rightskip}{0pt plus 5cm}int Q\+C\+Date\+::day (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_afdd2b7572d223f7295345ce4e3331434}
+Getter \begin{DoxyReturn}{Returns}
+(int) el día de la fecha 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a1591b1ddccfbaa539c623bd7223685d6}{\index{Q\+C\+Date@{Q\+C\+Date}!day\+Diff@{day\+Diff}}
+\index{day\+Diff@{day\+Diff}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{day\+Diff}]{\setlength{\rightskip}{0pt plus 5cm}long Q\+C\+Date\+::day\+Diff (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{other\+Date}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a1591b1ddccfbaa539c623bd7223685d6}
+Calcula el número de días reales entre other\+Date y sí misma Sera $>$ 0 si other\+Date es mayor que sí misma. 
+\begin{DoxyParams}{Parameters}
+{\em other\+Date} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(long) número de días calculados 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a95b4d1fef1541ffdd3581bb22271620e}{\index{Q\+C\+Date@{Q\+C\+Date}!description@{description}}
+\index{description@{description}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{description}]{\setlength{\rightskip}{0pt plus 5cm}string Q\+C\+Date\+::description (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a95b4d1fef1541ffdd3581bb22271620e}
+Retorna a si misma como string legible y printer friendly \begin{DoxyReturn}{Returns}
+(std\+::string) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a91dae9aacdc06dcc3c3aaac686a6a6f7}{\index{Q\+C\+Date@{Q\+C\+Date}!excel\+Serial@{excel\+Serial}}
+\index{excel\+Serial@{excel\+Serial}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{excel\+Serial}]{\setlength{\rightskip}{0pt plus 5cm}long Q\+C\+Date\+::excel\+Serial (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a91dae9aacdc06dcc3c3aaac686a6a6f7}
+\begin{DoxyReturn}{Returns}
+(int) Retorna la fecha como su representación en Excel 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a947dd2de2e8e1f94d17df771a3a2ffd0}{\index{Q\+C\+Date@{Q\+C\+Date}!month@{month}}
+\index{month@{month}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{month}]{\setlength{\rightskip}{0pt plus 5cm}int Q\+C\+Date\+::month (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a947dd2de2e8e1f94d17df771a3a2ffd0}
+Getter \begin{DoxyReturn}{Returns}
+(int) el mes de la fecha 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a9100d8c3ba63fd98127b5ddcbfa04f28}{\index{Q\+C\+Date@{Q\+C\+Date}!month\+Diff\+Day\+Remainder@{month\+Diff\+Day\+Remainder}}
+\index{month\+Diff\+Day\+Remainder@{month\+Diff\+Day\+Remainder}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{month\+Diff\+Day\+Remainder}]{\setlength{\rightskip}{0pt plus 5cm}tuple$<$unsigned long, int$>$ Q\+C\+Date\+::month\+Diff\+Day\+Remainder (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{other\+Date, }
+\item[{vector$<$ {\bf Q\+C\+Date} $>$ \&}]{calendar, }
+\item[{{\bf Q\+C\+Bus\+Day\+Adj\+Rules}}]{rule}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a9100d8c3ba63fd98127b5ddcbfa04f28}
+Calcula el número de meses enteros entre other\+Date y sí misma. Sera $>$ 0 si other\+Date es mayor que sí misma. Entrega el resto en dias. 
+\begin{DoxyParams}{Parameters}
+{\em other\+Date} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(tuple$<$unsigned long, unsigned int$>$) número de meses y resto en días. 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_ae2dc2722a7a9f6b102320e1a9ef53d6f}{\index{Q\+C\+Date@{Q\+C\+Date}!month\+Diff\+Day\+Remainder@{month\+Diff\+Day\+Remainder}}
+\index{month\+Diff\+Day\+Remainder@{month\+Diff\+Day\+Remainder}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{month\+Diff\+Day\+Remainder}]{\setlength{\rightskip}{0pt plus 5cm}tuple$<$unsigned long, int$>$ Q\+C\+Date\+::month\+Diff\+Day\+Remainder (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{other\+Date, }
+\item[{shared\+\_\+ptr$<$ vector$<$ {\bf Q\+C\+Date} $>$$>$}]{calendar, }
+\item[{{\bf Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}}]{rule}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_ae2dc2722a7a9f6b102320e1a9ef53d6f}
+Calcula el número de meses enteros entre other\+Date y sí misma. Sera $>$ 0 si other\+Date es mayor que sí misma. Entrega el resto en dias. 
+\begin{DoxyParams}{Parameters}
+{\em other\+Date} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(tuple$<$unsigned long, unsigned int$>$) número de meses y resto en días. 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_ac98d34b3105e66151643fd8cb1f9d3e7}{\index{Q\+C\+Date@{Q\+C\+Date}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator"!=}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_ac98d34b3105e66151643fd8cb1f9d3e7}
+Operator != sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_aae27db758f29a013c3f845b2e1a07f52}{\index{Q\+C\+Date@{Q\+C\+Date}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator$<$}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator$<$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_aae27db758f29a013c3f845b2e1a07f52}
+Operator $<$ sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a4a7c6e33664af9bbe09b7f0a0fa74288}{\index{Q\+C\+Date@{Q\+C\+Date}!operator$<$=@{operator$<$=}}
+\index{operator$<$=@{operator$<$=}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator$<$=}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator$<$= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a4a7c6e33664af9bbe09b7f0a0fa74288}
+Operator $<$= sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a4f0c7ff2fb664ca4daa7904145430552}{\index{Q\+C\+Date@{Q\+C\+Date}!operator=@{operator=}}
+\index{operator=@{operator=}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator=}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{other\+Date}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a4f0c7ff2fb664ca4daa7904145430552}
+Operator= sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em other\+Date} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_ab0663f35f0ba5772ff78a25dc5359ad6}{\index{Q\+C\+Date@{Q\+C\+Date}!operator==@{operator==}}
+\index{operator==@{operator==}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_ab0663f35f0ba5772ff78a25dc5359ad6}
+Operator == sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_aa88cc696fb1f87212e9ceba4226d925d}{\index{Q\+C\+Date@{Q\+C\+Date}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator$>$}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator$>$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_aa88cc696fb1f87212e9ceba4226d925d}
+Operator $>$ sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a741cc0cd4e2424a0218009f5a412f78c}{\index{Q\+C\+Date@{Q\+C\+Date}!operator$>$=@{operator$>$=}}
+\index{operator$>$=@{operator$>$=}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{operator$>$=}]{\setlength{\rightskip}{0pt plus 5cm}bool Q\+C\+Date\+::operator$>$= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{rhs}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a741cc0cd4e2424a0218009f5a412f78c}
+Operator $>$= sobrecarga 
+\begin{DoxyParams}{Parameters}
+{\em rhs} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(bool) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a5c291812c6186f241dfbf2d38e443fa4}{\index{Q\+C\+Date@{Q\+C\+Date}!set\+Date\+From\+Excel\+Serial@{set\+Date\+From\+Excel\+Serial}}
+\index{set\+Date\+From\+Excel\+Serial@{set\+Date\+From\+Excel\+Serial}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{set\+Date\+From\+Excel\+Serial}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::set\+Date\+From\+Excel\+Serial (
+\begin{DoxyParamCaption}
+\item[{long}]{excel\+Serial}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a5c291812c6186f241dfbf2d38e443fa4}
+Setter\+: setea la fecha a partir de su representación Excel 
+\begin{DoxyParams}{Parameters}
+{\em excel\+Serial} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_a6f243d10b5e895b831389b695a2ee21f}{\index{Q\+C\+Date@{Q\+C\+Date}!set\+Day@{set\+Day}}
+\index{set\+Day@{set\+Day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{set\+Day}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::set\+Day (
+\begin{DoxyParamCaption}
+\item[{int}]{d}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a6f243d10b5e895b831389b695a2ee21f}
+Setter\+: setea el día de la fecha 
+\begin{DoxyParams}{Parameters}
+{\em d} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_a83992c0c1735992b1589584ec12bd7f4}{\index{Q\+C\+Date@{Q\+C\+Date}!set\+Day\+Month\+Year@{set\+Day\+Month\+Year}}
+\index{set\+Day\+Month\+Year@{set\+Day\+Month\+Year}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{set\+Day\+Month\+Year}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::set\+Day\+Month\+Year (
+\begin{DoxyParamCaption}
+\item[{int}]{d, }
+\item[{int}]{m, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_a83992c0c1735992b1589584ec12bd7f4}
+Setter\+: setea día, mes y año 
+\begin{DoxyParams}{Parameters}
+{\em d} & día \\
+\hline
+{\em m} & mes \\
+\hline
+{\em y} & año \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_ad6761685c9c092b6a655b53fc09d5075}{\index{Q\+C\+Date@{Q\+C\+Date}!set\+Month@{set\+Month}}
+\index{set\+Month@{set\+Month}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{set\+Month}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::set\+Month (
+\begin{DoxyParamCaption}
+\item[{int}]{m}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_ad6761685c9c092b6a655b53fc09d5075}
+Setter\+: setea el mes de la fecha 
+\begin{DoxyParams}{Parameters}
+{\em m} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_add8aa03f53dca484371467bd67b673f7}{\index{Q\+C\+Date@{Q\+C\+Date}!set\+Year@{set\+Year}}
+\index{set\+Year@{set\+Year}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{set\+Year}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Date\+::set\+Year (
+\begin{DoxyParamCaption}
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_date_add8aa03f53dca484371467bd67b673f7}
+Setter\+: setea el año de la fecha 
+\begin{DoxyParams}{Parameters}
+{\em y} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_date_a34de9e14026c01c22abeb1b1a58c7f6b}{\index{Q\+C\+Date@{Q\+C\+Date}!shift@{shift}}
+\index{shift@{shift}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{shift}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::shift (
+\begin{DoxyParamCaption}
+\item[{vector$<$ {\bf Q\+C\+Date} $>$ \&}]{calendar, }
+\item[{unsigned int}]{n\+Days, }
+\item[{{\bf Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}}]{direction}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a34de9e14026c01c22abeb1b1a58c7f6b}
+Suma n\+Days dias habiles a la fecha considerando el calendario entregado. 
+\begin{DoxyParams}{Parameters}
+{\em calendar} & (vector$<$\+Q\+C\+Date$>$\&) vector con los feriados \\
+\hline
+{\em n\+Days} & (int) numero de dias habiles \\
+\hline
+{\em direction} & (\hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}) indica si hay que avanzar o retroceder \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a4c7462e643f04fc9b4d5bca5691e9aa7}{\index{Q\+C\+Date@{Q\+C\+Date}!shift@{shift}}
+\index{shift@{shift}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{shift}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Date\+::shift (
+\begin{DoxyParamCaption}
+\item[{shared\+\_\+ptr$<$ vector$<$ {\bf Q\+C\+Date} $>$$>$}]{calendar, }
+\item[{unsigned int}]{n\+Days, }
+\item[{{\bf Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}}]{direction}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a4c7462e643f04fc9b4d5bca5691e9aa7}
+Suma n\+Days dias habiles a la fecha considerando el calendario entregado. 
+\begin{DoxyParams}{Parameters}
+{\em calendar} & (shared\+\_\+ptr$<$vector$<$\+Q\+C\+Date$>$$>$) vector con los feriados \\
+\hline
+{\em n\+Days} & (int) numero de dias habiles \\
+\hline
+{\em direction} & (\hyperlink{class_q_c_date_a17e5b6c9a1a784f917c8e84045d7e362}{Q\+C\+Date\+::\+Q\+C\+Bus\+Day\+Adj\+Rules}) indica si hay que avanzar o retroceder \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a1d8a40402f9bbd16c19b01a479aabc32}{\index{Q\+C\+Date@{Q\+C\+Date}!week\+Day@{week\+Day}}
+\index{week\+Day@{week\+Day}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{week\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Week\+Day} Q\+C\+Date\+::week\+Day (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a1d8a40402f9bbd16c19b01a479aabc32}
+Retorna el día de la semana \begin{DoxyReturn}{Returns}
+(Q\+C\+Week\+Day) día de la semana resultante 
+\end{DoxyReturn}
+\hypertarget{class_q_c_date_a0d2a079ef29c00f5518ccf122aeb5d4d}{\index{Q\+C\+Date@{Q\+C\+Date}!year@{year}}
+\index{year@{year}!Q\+C\+Date@{Q\+C\+Date}}
+\subsubsection[{year}]{\setlength{\rightskip}{0pt plus 5cm}int Q\+C\+Date\+::year (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_q_c_date_a0d2a079ef29c00f5518ccf122aeb5d4d}
+Getter \begin{DoxyReturn}{Returns}
+(int) el año de la fecha 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Date.\+h\end{DoxyCompactItemize}

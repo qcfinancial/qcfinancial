@@ -64,7 +64,7 @@ void QCInterestRatePayoff::payoff()
 			qcAccretion, get<QCInterestRateLeg::intRtPrdElmntInitialAccrtn>(prd) *
 			get<QCInterestRateLeg::intRtPrdElmntAcctrnIsCshflw>(prd)));
 
-		//Se fija el valor de la tasa
+		//Se fija el valor de la tasas
 		_rate->setValue(_allRates.at(i));
 
 		//Se calcula el interes
@@ -74,13 +74,16 @@ void QCInterestRatePayoff::payoff()
 		double interest = notional * (_rate->wf(startDate, endDate) - 1);
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
 			qcInterest, interest));
+		double yf = _rate->yf(startDate, endDate);
 		
 		//Aqui podemos calcular la derivada del flujo respecto a los vertices de la
 		//curva de proyeccion.
+		QCDate settDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd);
+		long d = _valueDate.dayDiff(settDate);
+		double df = _discountCurve->getDiscountFactorAt(d);
 		for (unsigned int j = 0; j < curveLength; ++j)
 		{
-			_pvProjCurveDerivatives.at(j) += notional * _rate->yf(startDate, endDate) *
-				_allRatesDerivatives.at(i).at(j);
+			_pvProjCurveDerivatives.at(j) += notional * _allRatesDerivatives.at(i).at(j) * df * yf;
 		}
 		//Se agrega la amortizacion si corresponde
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
@@ -94,6 +97,11 @@ int QCInterestRatePayoff::payoffSize()
 	return _payoffs.size();
 }
 
+double QCInterestRatePayoff::getValueDateCashflow()
+{
+	return _valueDateCashflow;
+}
+
 tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsigned int n)
 {
 	return _payoffs.at(n);
@@ -103,6 +111,7 @@ double QCInterestRatePayoff::presentValue()
 {
 	payoff();
 	double pv{ 0.0 };
+	_valueDateCashflow = 0.0;
 	//Tamagno del vector de derivadas
 	_pvRateDerivatives.resize(_discountCurve->getLength());
 	for (unsigned int i = 0; i < _pvRateDerivatives.size() - 1; ++i)
@@ -112,16 +121,22 @@ double QCInterestRatePayoff::presentValue()
 	for (const auto& cshflw : _payoffs)
 	{
 		long d = _valueDate.dayDiff(get<0>(cshflw));
-		double flujo = get<2>(cshflw);
-		double df = _discountCurve->getDiscountFactorAt(d);
-		pv += flujo * df;
-		for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
+		if (d > 0)
 		{
-			_pvRateDerivatives.at(i) += flujo * _discountCurve->dfDerivativeAt(i);
+			double flujo = get<2>(cshflw);
+			double df = _discountCurve->getDiscountFactorAt(d);
+			pv += flujo * df;
+			for (unsigned int i = 0; i < _discountCurve->getLength(); ++i)
+			{
+				_pvRateDerivatives.at(i) += flujo * _discountCurve->dfDerivativeAt(i);
+			}
+		}
+		else
+		{
+			_valueDateCashflow = get<2>(cshflw);
 		}
 	}
 
-	
 	return pv;
 }
 

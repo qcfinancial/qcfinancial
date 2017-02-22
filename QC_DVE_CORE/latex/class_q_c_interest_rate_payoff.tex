@@ -1,0 +1,215 @@
+\hypertarget{class_q_c_interest_rate_payoff}{\section{Q\+C\+Interest\+Rate\+Payoff Class Reference}
+\label{class_q_c_interest_rate_payoff}\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+}
+Inheritance diagram for Q\+C\+Interest\+Rate\+Payoff\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.917808cm]{class_q_c_interest_rate_payoff}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_q_c_interest_rate_payoff_a3e218905ae425cad5283b438d338becc}{payoff} ()
+\item 
+int \hyperlink{class_q_c_interest_rate_payoff_a9277006372cd491323a9e4dce6d3cb85}{payoff\+Size} ()
+\item 
+double \hyperlink{class_q_c_interest_rate_payoff_a07a3040226a9996e4e77b4a39e3dbb31}{get\+Value\+Date\+Cashflow} ()
+\item 
+double \hyperlink{class_q_c_interest_rate_payoff_aa1fa4acff91e83dfb2174a4067c0231f}{present\+Value} ()
+\item 
+double \hyperlink{class_q_c_interest_rate_payoff_a1f1b38019791d59e4fd4053652da72a4}{get\+Pv\+Rate\+Derivative\+At} (unsigned int index)
+\item 
+double \hyperlink{class_q_c_interest_rate_payoff_a4c6072e011a2a05bcf45b2dbdfe33d56}{get\+Pv\+Proj\+Rate\+Derivative\+At} (unsigned int index)
+\item 
+unsigned long \hyperlink{class_q_c_interest_rate_payoff_ab2b6f0b4059cd77feb33d8d153a6366c}{discount\+Curve\+Length} ()
+\item 
+unsigned long \hyperlink{class_q_c_interest_rate_payoff_a15936bf1fd9af7d442393efc681e4f63}{projecting\+Curve\+Length} ()
+\item 
+tuple$<$ \hyperlink{class_q_c_date}{Q\+C\+Date}, Q\+C\+Cash\+Flow\+Label, \\*
+double $>$ \hyperlink{class_q_c_interest_rate_payoff_a5c696c809dddf2c442f2aa25cfe7b55d}{get\+Cashflow\+At} (unsigned int n)
+\item 
+virtual \hyperlink{class_q_c_interest_rate_payoff_ae446121666d1b9b0573322977a2a907a}{$\sim$\+Q\+C\+Interest\+Rate\+Payoff} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a3ef90fad027f853c7d70ad3ae609edc6}{{\bfseries Q\+C\+Interest\+Rate\+Payoff} (\hyperlink{_q_c_definitions_8h_ae6a21ad26d19e482e3b01179cbc05298}{Q\+C\+Intrst\+Rt\+Shrd\+Ptr} rate, shared\+\_\+ptr$<$ \hyperlink{class_q_c_interest_rate_leg}{Q\+C\+Interest\+Rate\+Leg} $>$ ir\+Leg, \hyperlink{class_q_c_date}{Q\+C\+Date} value\+Date, \hyperlink{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr} projecting\+Curve, \hyperlink{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr} discount\+Curve, \hyperlink{_q_c_definitions_8h_a6a601ffd693c05dd81309e3dca08b8f5}{Q\+C\+Time\+Series\+Shrd\+Ptr} fixing\+Data)}\label{class_q_c_interest_rate_payoff_a3ef90fad027f853c7d70ad3ae609edc6}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_aae61a0e8b38e909f31b6b170a5785748}{virtual void {\bfseries \+\_\+set\+All\+Rates} ()}\label{class_q_c_interest_rate_payoff_aae61a0e8b38e909f31b6b170a5785748}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a60cda238d4546b03aa286fe46b8da62c}{\hyperlink{_q_c_definitions_8h_ae6a21ad26d19e482e3b01179cbc05298}{Q\+C\+Intrst\+Rt\+Shrd\+Ptr} {\bfseries \+\_\+rate}}\label{class_q_c_interest_rate_payoff_a60cda238d4546b03aa286fe46b8da62c}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a1b2b849d61696578c7d06d71b5c4c6f4}{shared\+\_\+ptr$<$ \hyperlink{class_q_c_interest_rate_leg}{Q\+C\+Interest\+Rate\+Leg} $>$ {\bfseries \+\_\+ir\+Leg}}\label{class_q_c_interest_rate_payoff_a1b2b849d61696578c7d06d71b5c4c6f4}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a6bab476f9fb3c09af76311ffebf245e8}{\hyperlink{class_q_c_date}{Q\+C\+Date} {\bfseries \+\_\+value\+Date}}\label{class_q_c_interest_rate_payoff_a6bab476f9fb3c09af76311ffebf245e8}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a8849771f1a8bc47a024db46d11bc1244}{\hyperlink{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr} {\bfseries \+\_\+projecting\+Curve}}\label{class_q_c_interest_rate_payoff_a8849771f1a8bc47a024db46d11bc1244}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a74dc75796c398ab2878b8b4e48fa81c4}{\hyperlink{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr} {\bfseries \+\_\+discount\+Curve}}\label{class_q_c_interest_rate_payoff_a74dc75796c398ab2878b8b4e48fa81c4}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a00403e0cfa9b5e4d050921e7ef3fcb7b}{\hyperlink{_q_c_definitions_8h_a6a601ffd693c05dd81309e3dca08b8f5}{Q\+C\+Time\+Series\+Shrd\+Ptr} {\bfseries \+\_\+fixing\+Data}}\label{class_q_c_interest_rate_payoff_a00403e0cfa9b5e4d050921e7ef3fcb7b}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_acbed42b93a13fb7346e0390ad83acafd}{int {\bfseries \+\_\+current\+Period}}\label{class_q_c_interest_rate_payoff_acbed42b93a13fb7346e0390ad83acafd}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a29527bbc61ba81fa84e9978f7fd94edb}{vector$<$ tuple$<$ \hyperlink{class_q_c_date}{Q\+C\+Date}, \\*
+Q\+C\+Cash\+Flow\+Label, double $>$ $>$ {\bfseries \+\_\+payoffs}}\label{class_q_c_interest_rate_payoff_a29527bbc61ba81fa84e9978f7fd94edb}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a0055baa42a22388a201534c188403d07}{vector$<$ double $>$ {\bfseries \+\_\+all\+Rates}}\label{class_q_c_interest_rate_payoff_a0055baa42a22388a201534c188403d07}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a832d4808ce5a927c22096dcf9c699c47}{double {\bfseries \+\_\+value\+Date\+Cashflow}}\label{class_q_c_interest_rate_payoff_a832d4808ce5a927c22096dcf9c699c47}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a3016cee34dde022c62757714d9dc3431}{vector$<$ double $>$ {\bfseries \+\_\+pv\+Rate\+Derivatives}}\label{class_q_c_interest_rate_payoff_a3016cee34dde022c62757714d9dc3431}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_ae167b48aed467caa1ddc1392b21bc44d}{vector$<$ vector$<$ double $>$ $>$ {\bfseries \+\_\+all\+Rates\+Derivatives}}\label{class_q_c_interest_rate_payoff_ae167b48aed467caa1ddc1392b21bc44d}
+
+\item 
+\hypertarget{class_q_c_interest_rate_payoff_a4b8d7f37769cfb641ec55e06dd60f24d}{vector$<$ double $>$ {\bfseries \+\_\+pv\+Proj\+Curve\+Derivatives}}\label{class_q_c_interest_rate_payoff_a4b8d7f37769cfb641ec55e06dd60f24d}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 21 of file Q\+C\+Interest\+Rate\+Payoff.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_q_c_interest_rate_payoff_ae446121666d1b9b0573322977a2a907a}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!````~Q\+C\+Interest\+Rate\+Payoff@{$\sim$\+Q\+C\+Interest\+Rate\+Payoff}}
+\index{````~Q\+C\+Interest\+Rate\+Payoff@{$\sim$\+Q\+C\+Interest\+Rate\+Payoff}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{$\sim$\+Q\+C\+Interest\+Rate\+Payoff}]{\setlength{\rightskip}{0pt plus 5cm}virtual Q\+C\+Interest\+Rate\+Payoff\+::$\sim$\+Q\+C\+Interest\+Rate\+Payoff (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_q_c_interest_rate_payoff_ae446121666d1b9b0573322977a2a907a}
+Destructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_interest_rate_payoff_ab2b6f0b4059cd77feb33d8d153a6366c}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!discount\+Curve\+Length@{discount\+Curve\+Length}}
+\index{discount\+Curve\+Length@{discount\+Curve\+Length}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{discount\+Curve\+Length}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long Q\+C\+Interest\+Rate\+Payoff\+::discount\+Curve\+Length (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_ab2b6f0b4059cd77feb33d8d153a6366c}
+Retorna el largo (numero de vertices) de la curva de descuento. \begin{DoxyReturn}{Returns}
+(unsigned long) largo de la curva. 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a5c696c809dddf2c442f2aa25cfe7b55d}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!get\+Cashflow\+At@{get\+Cashflow\+At}}
+\index{get\+Cashflow\+At@{get\+Cashflow\+At}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{get\+Cashflow\+At}]{\setlength{\rightskip}{0pt plus 5cm}tuple$<${\bf Q\+C\+Date}, Q\+C\+Cash\+Flow\+Label, double$>$ Q\+C\+Interest\+Rate\+Payoff\+::get\+Cashflow\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{n}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a5c696c809dddf2c442f2aa25cfe7b55d}
+Retorna la tupla que describe el cashflow en el indice n del vector donde se registran los cashflows del payoff. Cada cashflow se forma con una fecha (fecha del cashflow), una etiqueta que indica que tipo de casflow es (interes, disposicion o amortizacion) y el monto del cashflow. 
+\begin{DoxyParams}{Parameters}
+{\em n} & indice del cashflow solicitado. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(tuple$<$\+Q\+C\+Date, Q\+C\+Cash\+Flow\+Label, double$>$) cashflow. 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a4c6072e011a2a05bcf45b2dbdfe33d56}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!get\+Pv\+Proj\+Rate\+Derivative\+At@{get\+Pv\+Proj\+Rate\+Derivative\+At}}
+\index{get\+Pv\+Proj\+Rate\+Derivative\+At@{get\+Pv\+Proj\+Rate\+Derivative\+At}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{get\+Pv\+Proj\+Rate\+Derivative\+At}]{\setlength{\rightskip}{0pt plus 5cm}double Q\+C\+Interest\+Rate\+Payoff\+::get\+Pv\+Proj\+Rate\+Derivative\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{index}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a4c6072e011a2a05bcf45b2dbdfe33d56}
+Retorna la derivada del valor presente respecto a la componente index de la curva de proyeccion (se cuenta a partir de 0). 
+\begin{DoxyParams}{Parameters}
+{\em index} & el indice solicitado \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(double) la derivada solicitada 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a1f1b38019791d59e4fd4053652da72a4}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!get\+Pv\+Rate\+Derivative\+At@{get\+Pv\+Rate\+Derivative\+At}}
+\index{get\+Pv\+Rate\+Derivative\+At@{get\+Pv\+Rate\+Derivative\+At}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{get\+Pv\+Rate\+Derivative\+At}]{\setlength{\rightskip}{0pt plus 5cm}double Q\+C\+Interest\+Rate\+Payoff\+::get\+Pv\+Rate\+Derivative\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{index}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a1f1b38019791d59e4fd4053652da72a4}
+Retorna la derivada del valor presente respecto a la componente index de la curva de descuento (se cuenta a partir de 0). 
+\begin{DoxyParams}{Parameters}
+{\em index} & el indice solicitado \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(double) la derivada solicitada 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a07a3040226a9996e4e77b4a39e3dbb31}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!get\+Value\+Date\+Cashflow@{get\+Value\+Date\+Cashflow}}
+\index{get\+Value\+Date\+Cashflow@{get\+Value\+Date\+Cashflow}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{get\+Value\+Date\+Cashflow}]{\setlength{\rightskip}{0pt plus 5cm}double Q\+C\+Interest\+Rate\+Payoff\+::get\+Value\+Date\+Cashflow (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a07a3040226a9996e4e77b4a39e3dbb31}
+Retorna el valor del flujo de caja de \+\_\+value\+Date \begin{DoxyReturn}{Returns}
+(double) el valor del cashflow 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a3e218905ae425cad5283b438d338becc}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!payoff@{payoff}}
+\index{payoff@{payoff}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{payoff}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Interest\+Rate\+Payoff\+::payoff (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a3e218905ae425cad5283b438d338becc}
+Genera los flujos de caja y los guarda dentro de la clase \begin{DoxyReturn}{Returns}
+(void) 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a9277006372cd491323a9e4dce6d3cb85}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!payoff\+Size@{payoff\+Size}}
+\index{payoff\+Size@{payoff\+Size}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{payoff\+Size}]{\setlength{\rightskip}{0pt plus 5cm}int Q\+C\+Interest\+Rate\+Payoff\+::payoff\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a9277006372cd491323a9e4dce6d3cb85}
+Calcula y retorna el numero de flujos de caja \begin{DoxyReturn}{Returns}
+(int) el numero de flujos 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_aa1fa4acff91e83dfb2174a4067c0231f}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!present\+Value@{present\+Value}}
+\index{present\+Value@{present\+Value}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{present\+Value}]{\setlength{\rightskip}{0pt plus 5cm}double Q\+C\+Interest\+Rate\+Payoff\+::present\+Value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_aa1fa4acff91e83dfb2174a4067c0231f}
+Calcula y retorna el valor presente de la pata descontando con la curva de descuento. Dentro de este proceso se calculan tambien las derivadas del valor presente respecto a cada punto de las curvas de descuento y proyeccion. \begin{DoxyReturn}{Returns}
+(double) el valor presente 
+\end{DoxyReturn}
+\hypertarget{class_q_c_interest_rate_payoff_a15936bf1fd9af7d442393efc681e4f63}{\index{Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}!projecting\+Curve\+Length@{projecting\+Curve\+Length}}
+\index{projecting\+Curve\+Length@{projecting\+Curve\+Length}!Q\+C\+Interest\+Rate\+Payoff@{Q\+C\+Interest\+Rate\+Payoff}}
+\subsubsection[{projecting\+Curve\+Length}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long Q\+C\+Interest\+Rate\+Payoff\+::projecting\+Curve\+Length (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_interest_rate_payoff_a15936bf1fd9af7d442393efc681e4f63}
+Retorna el largo (numero de vertices) de la curva de proyeccion. \begin{DoxyReturn}{Returns}
+(unsigned long) largo de la curva. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Interest\+Rate\+Payoff.\+h\end{DoxyCompactItemize}

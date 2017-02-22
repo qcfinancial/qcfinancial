@@ -165,11 +165,20 @@ CellMatrix pvIcpClfLegs2(double valueDate,
 	CellMatrix icpFixings,
 	CellMatrix ufFixings);
 
-CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,
-	string settlementStubPeriod, string settlementPeriodicity, string endDateAdjustment,
-	string settlementCalendar, int settlementLag,
-	string fixingStubPeriod, string fixingPeriodicity, int fixingLag,
-	string fixingCalendar, int fixingStartDateRule, string fixingTenor);
+CellMatrix buildInterestRateLeg(double startDate,
+	double endDate,
+	CellMatrix calendars,
+	string settlementStubPeriod,
+	string settlementPeriodicity,
+	string endDateAdjustment,
+	string settlementCalendar,
+	int settlementLag,
+	string fixingStubPeriod,
+	string fixingPeriodicity,
+	int fixingLag,
+	string fixingCalendar,
+	int fixingStartDateRule,
+	string fixingTenor);
 
 CellMatrix pvFloatingRateLegs(double valueDate,
 	CellMatrix holidays,

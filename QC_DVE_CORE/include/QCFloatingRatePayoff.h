@@ -1,7 +1,11 @@
 #ifndef QCFLOATINGRATEPAYOFF_H
 #define QCFLOATINGRATEPAYOFF_H
 
+#include <iostream>
 #include "QCInterestRatePayoff.h"
+
+using namespace std;
+
 class QCFloatingRatePayoff :
 	public QCInterestRatePayoff
 {

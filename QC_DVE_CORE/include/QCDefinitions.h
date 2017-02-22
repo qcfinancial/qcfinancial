@@ -1,6 +1,11 @@
 #ifndef QCDEFINITIONS_H
 #define QCDEFINITIONS_H
 
+/*!
+* @file QCDefinitions.h
+* @brief Contiene enum y typedef que se usan en otras clases y funciones
+*/
+
 #include <memory>
 #include <vector>
 #include <utility>
@@ -23,9 +28,9 @@ using namespace std;
 */
 enum QCZCCRepresentation
 {
-	qcZCCInterestRate,			/*!< ZCC se representa con tasas */
-	qcZCCDiscountFactor,		/*!< ZCC se representa con df */
-	qcZCCWealthFactor			/*!< ZCC se representa con wf */
+	qcZCCInterestRate,			/*!< Curva cero cupón se representa con tasas */
+	qcZCCDiscountFactor,		/*!< Curva cero cupón se representa con df */
+	qcZCCWealthFactor			/*!< Curva cero cupón se representa con wf */
 };
 
 /*!
@@ -50,6 +55,9 @@ typedef  shared_ptr<QCInterestRatePayoff> QCIntrstRtPffShrdPtr;
 
 /*!
 * Shared pointer de map<QCDate, double>
+* Este tipo se utiliza para representar un serie de tiempo de un factor de mercado.
+* Por ejemplo, los valores durante un año de la Libor USD 3M se almacenarían en un
+* objeto de este tipo.
 */
 typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
 

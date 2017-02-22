@@ -414,6 +414,7 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	QCDate result{ _day, _month, _year };
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
+		result = result.businessDay(calendar, QCDate::qcFollow);
 		for (int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
@@ -421,6 +422,7 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	}
 	else
 	{
+		result = result.businessDay(calendar, QCDate::qcPrev);
 		for (int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
@@ -433,15 +435,17 @@ QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	QCDate::QCBusDayAdjRules direction) const
 {
 	QCDate result{ _day, _month, _year };
-	if (direction == QCDate::qcFollow ||  direction == QCDate::qcModFollow)
+	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
+		result = result.businessDay(calendar, QCDate::qcFollow);
 		for (int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
 		}
 	}
-	else 
+	else
 	{
+		result = result.businessDay(calendar, QCDate::qcPrev);
 		for (int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
@@ -521,11 +525,11 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	QCDate lastDate{ _day, _month, _year };
 	QCDate nextDate{ _day, _month, _year };
 	unsigned long counter{ 0 };
-
+	QCDate otherDateAdjusted = otherDate.businessDay(calendar, rule);
 	while (true)
 	{
 		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
-		if (nextDate <= otherDate)
+		if (nextDate <= otherDateAdjusted)
 		{
 			++counter;
 			lastDate = nextDate;
@@ -536,7 +540,7 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 		}
 	}
 
-	return make_tuple(counter, (int)lastDate.dayDiff(otherDate));
+	return make_tuple(counter, (int)lastDate.dayDiff(otherDateAdjusted));
 
 }
 
@@ -546,11 +550,12 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	QCDate lastDate{ _day, _month, _year };
 	QCDate nextDate{ _day, _month, _year };
 	unsigned long counter{ 0 };
+	QCDate otherDateAdjusted = otherDate.businessDay(calendar, rule);
 
 	while (true)
 	{
 		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
-		if (nextDate <= otherDate)
+		if (nextDate <= otherDateAdjusted)
 		{
 			++counter;
 			lastDate = nextDate;
@@ -561,7 +566,7 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 		}
 	}
 
-	return make_tuple(counter, (int)lastDate.dayDiff(otherDate));
+	return make_tuple(counter, (int)lastDate.dayDiff(otherDateAdjusted));
 
 }
 
@@ -569,6 +574,48 @@ QCDate QCDate::addDays(long nDays) const
 {
     long newSerial = this->excelSerial() + nDays;
     return QCDate {newSerial};
+}
+
+QCDate QCDate::moveToDayOfMonth(unsigned int dayOfMonth, QCDate::QCDirection direction,
+	bool stopAtEndOfMonth) const
+{
+	QCDate result{ _day, _month, _year };
+	if (dayOfMonth == _day)
+	{
+		return result;
+	}
+	if (direction == QCDate::qcForward)
+	{
+		while (result.day() != dayOfMonth)
+		{
+			result = result.addDays(1);
+			if (stopAtEndOfMonth)
+			{
+				if (result.isEndOfMonth())
+					break;
+			}
+		}
+	}
+	else
+	{
+		while (result.day() != dayOfMonth)
+		{
+			result = result.addDays(-1);
+		}
+	}
+	return result;
+}
+
+bool QCDate::isEndOfMonth() const
+{
+	if (this->addDays(1).month() != this->month())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool QCDate::operator<(const QCDate& rhs) const

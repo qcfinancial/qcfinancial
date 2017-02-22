@@ -1,0 +1,184 @@
+\hypertarget{class_q_c_projecting_interest_rate_curve}{\section{Q\+C\+Projecting\+Interest\+Rate\+Curve Class Reference}
+\label{class_q_c_projecting_interest_rate_curve}\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+}
+
+
+{\ttfamily \#include $<$Q\+C\+Projecting\+Interest\+Rate\+Curve.\+h$>$}
+
+Inheritance diagram for Q\+C\+Projecting\+Interest\+Rate\+Curve\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_q_c_projecting_interest_rate_curve}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_c_projecting_interest_rate_curve_a0f1053cb9509354040a90c68b098f570}{{\bfseries Q\+C\+Projecting\+Interest\+Rate\+Curve} (shared\+\_\+ptr$<$ \hyperlink{class_q_c_interpolator}{Q\+C\+Interpolator} $>$ curve, \hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} int\+Rate)}\label{class_q_c_projecting_interest_rate_curve_a0f1053cb9509354040a90c68b098f570}
+
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_af2f420b0178d8a86b67e9d800ec96c8e}{get\+Rate\+At} (long d) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_a777da5100b3dd412e9764c6129c6715b}{get\+Discount\+Factor\+At} (long d) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_a2f01098cb4e3c2ba6163fb9bef4a6b66}{get\+Forward\+Rate} (\hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} \&int\+Rate, long d1, long d2) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_a07a0b96ca283abb7f3e0a79432bcdee9}{get\+Forward\+Rate} (long d1, long d2) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_af58caeb654c8b7623716997d39e96045}{get\+Forward\+Wf} (long d1, long d2) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_aa32b5f4d4bea4565e3610bda00ed8d06}{df\+Derivative\+At} (unsigned int index) override
+\item 
+virtual double \hyperlink{class_q_c_projecting_interest_rate_curve_ad6b67e23665886cdcf91957fe12e10d8}{fwd\+Wf\+Derivative\+At} (unsigned int index) override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+class \hyperlink{class_q_c_projecting_interest_rate_curve}{Q\+C\+Projecting\+Interest\+Rate\+Curve} Clase que modela curvas de proyeccion modernas donde la tasa fwd se obtiene directamente como un punto interpolado de la curva sin usar factores de descuento fwd. 
+
+Definition at line 12 of file Q\+C\+Projecting\+Interest\+Rate\+Curve.\+h.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_projecting_interest_rate_curve_aa32b5f4d4bea4565e3610bda00ed8d06}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!df\+Derivative\+At@{df\+Derivative\+At}}
+\index{df\+Derivative\+At@{df\+Derivative\+At}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{df\+Derivative\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::df\+Derivative\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_aa32b5f4d4bea4565e3610bda00ed8d06}
+Este método es un getter que retorna la derivada del último factor de capitalización calculado. \begin{DoxyReturn}{Returns}
+valor de la derivada. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a07a3e60dc1e7d25a025fc587b055c813}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_ad6b67e23665886cdcf91957fe12e10d8}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!fwd\+Wf\+Derivative\+At@{fwd\+Wf\+Derivative\+At}}
+\index{fwd\+Wf\+Derivative\+At@{fwd\+Wf\+Derivative\+At}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{fwd\+Wf\+Derivative\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::fwd\+Wf\+Derivative\+At (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_ad6b67e23665886cdcf91957fe12e10d8}
+Este método es un getter que retorna la derivada del último factor de capitalización forward calculado. \begin{DoxyReturn}{Returns}
+valor de la derivada. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a8aa3dcfb5a3ce169094db4e2f0849a94}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_a777da5100b3dd412e9764c6129c6715b}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!get\+Discount\+Factor\+At@{get\+Discount\+Factor\+At}}
+\index{get\+Discount\+Factor\+At@{get\+Discount\+Factor\+At}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{get\+Discount\+Factor\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::get\+Discount\+Factor\+At (
+\begin{DoxyParamCaption}
+\item[{long}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_a777da5100b3dd412e9764c6129c6715b}
+Retorna el factor de descuento interpolado al plazo d. 
+\begin{DoxyParams}{Parameters}
+{\em d} & plazo a interpolar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor del factor de descuento interpolado. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_abe670a951f0fca2273726d13ce9cda06}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_a2f01098cb4e3c2ba6163fb9bef4a6b66}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!get\+Forward\+Rate@{get\+Forward\+Rate}}
+\index{get\+Forward\+Rate@{get\+Forward\+Rate}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{get\+Forward\+Rate}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::get\+Forward\+Rate (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\+C\+Interest\+Rate} \&}]{int\+Rate, }
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_a2f01098cb4e3c2ba6163fb9bef4a6b66}
+Retorna la tasa forward entre los plazos d1 y d2 en la convención de int\+Rate. 
+\begin{DoxyParams}{Parameters}
+{\em int\+Rate} & convención de la tasa forward que se debe calcular. \\
+\hline
+{\em d1} & plazo más corto de la tasa forward. \\
+\hline
+{\em d2} & plazo más largo de la tasa forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa forward calculada. Probablemente este método puede mejorarse haciendo que retorne void y el valor de la tasa forward calculada se almacene dentro de la variable int\+Rate. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a66e79c4ed2e08916f14bbbfb5d1d3c96}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_a07a0b96ca283abb7f3e0a79432bcdee9}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!get\+Forward\+Rate@{get\+Forward\+Rate}}
+\index{get\+Forward\+Rate@{get\+Forward\+Rate}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{get\+Forward\+Rate}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::get\+Forward\+Rate (
+\begin{DoxyParamCaption}
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_a07a0b96ca283abb7f3e0a79432bcdee9}
+Retorna la tasa forward entre los plazos d1 y d2 en la convención de las tasas de la curva. 
+\begin{DoxyParams}{Parameters}
+{\em d1} & plazo más corto de la tasa forward. \\
+\hline
+{\em d2} & plazo más largo de la tasa forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa forward calculada. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_af4c22b08db379ea8ce825f9999e2bc34}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_af58caeb654c8b7623716997d39e96045}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!get\+Forward\+Wf@{get\+Forward\+Wf}}
+\index{get\+Forward\+Wf@{get\+Forward\+Wf}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{get\+Forward\+Wf}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::get\+Forward\+Wf (
+\begin{DoxyParamCaption}
+\item[{long}]{d1, }
+\item[{long}]{d2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_af58caeb654c8b7623716997d39e96045}
+Retorna la factor de capitalización forward entre los plazos d1 y d2. 
+\begin{DoxyParams}{Parameters}
+{\em d1} & plazo más corto del factor forward. \\
+\hline
+{\em d2} & plazo más largo del fcator forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor del factor forward calculado. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a36c88024727170486082197f1abff78e}{Q\+C\+Interest\+Rate\+Curve}.
+
+\hypertarget{class_q_c_projecting_interest_rate_curve_af2f420b0178d8a86b67e9d800ec96c8e}{\index{Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}!get\+Rate\+At@{get\+Rate\+At}}
+\index{get\+Rate\+At@{get\+Rate\+At}!Q\+C\+Projecting\+Interest\+Rate\+Curve@{Q\+C\+Projecting\+Interest\+Rate\+Curve}}
+\subsubsection[{get\+Rate\+At}]{\setlength{\rightskip}{0pt plus 5cm}virtual double Q\+C\+Projecting\+Interest\+Rate\+Curve\+::get\+Rate\+At (
+\begin{DoxyParamCaption}
+\item[{long}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}}\label{class_q_c_projecting_interest_rate_curve_af2f420b0178d8a86b67e9d800ec96c8e}
+Retorna la tasa interpolada al plazo d. 
+\begin{DoxyParams}{Parameters}
+{\em d} & plazo a interpolar \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+valor de la tasa interpolada en la convención de las tasas de la curva. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_q_c_interest_rate_curve_a0a73e8506d0706becd93b04c4499a9c6}{Q\+C\+Interest\+Rate\+Curve}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Projecting\+Interest\+Rate\+Curve.\+h\end{DoxyCompactItemize}

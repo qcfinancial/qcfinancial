@@ -37,7 +37,8 @@ class QCDate
         };
 
 		/*!
-		* QCWeekDay es un enum que sirve para identificar los días de la semana.
+		* QCBusDayAdjRules es un enum que sirve para identificar las formas de realizar un ajuste
+		* de fechas.
 		*/
 		enum QCBusDayAdjRules
 		{
@@ -46,6 +47,16 @@ class QCDate
 			qcModFollow = 2,
 			qcPrev = 3,
 			qcModPrev = 4
+		};
+
+		/*!
+		* QCDirection es un enum que sirve para identificar si un desplazamiento de fechas es
+		* hacia adelante o hacia atrás.
+		*/
+		enum QCDirection
+		{
+			qcBackward = 0,
+			qcForward = 1
 		};
 
         /*!
@@ -217,6 +228,22 @@ class QCDate
          * @return (QCDate) fecha resultante
          */
         QCDate addDays(long nDays) const;
+
+		/*!
+		* Desplaza la fecha lo que sea necesario en la direccion direction para que el día de la nueva
+		* fecha coincida con el parámetro dayOfMonth. Si es necesario, se cambia de mes y de año.
+		* @param dayOfMonth día del mes que se quiere alcanzar
+		* @param direction dirección del movimiento
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate moveToDayOfMonth(unsigned int dayOfMonth, QCDirection direction,
+			bool stopAtEndOfMonth = false) const;
+
+		/*!
+		* Indica si la fecha corresponde al último día del mes.
+		* @return (bool) true si es el último día del mes, false en los otros casos.
+		*/
+		bool isEndOfMonth() const;
 
 		/*!
 		* Calcula la siguiente fecha que es dia habil considerando el vector de

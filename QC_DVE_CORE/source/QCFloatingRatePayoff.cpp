@@ -68,6 +68,10 @@ void QCFloatingRatePayoff::_setAllRates()
 			//a que esta coincida con las caracteristicas del swap.
 			double tasaFwd = QCInterestRatePayoff::_projectingCurve->
 				getForwardRate(*(QCInterestRatePayoff::_rate),  d1, d2);
+			
+			//Los siguientes dos calculos son necesarios para el calculo de derivadas
+			double wfFwd = QCInterestRatePayoff::_projectingCurve->getForwardWf(d1, d2);
+			double yf = _rate->yf(date1, date2);
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = tasaFwd;
@@ -77,8 +81,8 @@ void QCFloatingRatePayoff::_setAllRates()
 			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
 			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
 			{
-				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
-					* _rate->yf(date1, date2);
+				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j) * _multipSpread
+					/ yf;
 			}
 			_allRatesDerivatives.at(i) = tempDer;
 

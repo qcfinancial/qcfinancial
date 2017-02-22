@@ -581,15 +581,15 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	{
 		for (long i = currentPeriod; i < numPeriods; ++i)
 		{
-			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 		}
-		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
 	}
 
 	if (amortization == QCInterestRateLeg::qcConstantAmort)
 	{
-		double amort = notional / (numPeriods - currentPeriod);
-		double tempNotional = notional;
+		double amort = signo * notional / (numPeriods - currentPeriod);
+		double tempNotional = signo * notional;
 		for (long i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
@@ -601,7 +601,6 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	QCInterestRateLeg result{ periods, numPeriods - 1 };
 	return result;
 }
-
 
 QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	string receivePay,				//receive or pay
@@ -891,15 +890,15 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
 	{
 		for (long i = currentPeriod; i < numPeriods; ++i)
 		{
-			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 		}
-		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+		get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
 	}
 
 	if (amortization == QCInterestRateLeg::qcConstantAmort)
 	{
-		double amort = notional / (numPeriods - currentPeriod);
-		double tempNotional = notional;
+		double amort = signo * notional / (numPeriods - currentPeriod);
+		double tempNotional = signo * notional;
 		for (long i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
@@ -1174,15 +1173,15 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		{
 			for (long i = currentPeriod; i < numPeriods; ++i)
 			{
-				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = notional;
+				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 			}
-			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = notional;
+			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(numPeriods - 1)) = signo * notional;
 		}
 
 		if (amortization == QCInterestRateLeg::qcConstantAmort)
 		{
-			double amort = notional / (numPeriods - currentPeriod);
-			double tempNotional = notional;
+			double amort = signo * notional / (numPeriods - currentPeriod);
+			double tempNotional = signo * notional;
 			for (long i = currentPeriod; i < numPeriods; ++i)
 			{
 				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;

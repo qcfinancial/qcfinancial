@@ -871,6 +871,7 @@ PyObject* cashflow_floating_rate_legs(PyObject* self, PyObject*  args)
 
 PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 {
+	cout << "Enter function pv_fixed_rate_legs." << endl;
 	char* fecha;
 	PyObject* holidays;
 	PyObject* curveValues;
@@ -890,17 +891,20 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 	{
 		return NULL;
 	}
-
+	double numOp;
 	try
 	{
 		map<string, vector<QCDate>> mapHolidays;
 		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
+		cout << "	Finished map holidays" << endl;
 
 		map<string, pair<vector<long>, vector<double>>> crvValues;
 		QCDvePyBindHelperFunctions::buildCurveValues(curveValues, crvValues);
+		cout << "	Finished map curve values" << endl;
 
 		map<string, QCDvePyBindHelperFunctions::string4> crvChars;
 		QCDvePyBindHelperFunctions::buildCurveCharacteristics(curveCharacteristics, crvChars);
+		cout << "	Finished map curve characteristics" << endl;
 
 		map<string, shared_ptr<QCZeroCouponCurve>> allCurves;
 
@@ -923,6 +927,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				wf, yf, get<3>(crvChars.at(curva.first)));
 			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
 		}
+		cout << "	Finished constructing curve objects" << endl;
 
 		//Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
 		//(en ese orden) en esta estructura.
@@ -934,6 +939,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 		}
 		map<unsigned long, vector<tuple<QCDate, double, double>>> dateNotionalAndAmortByIdLeg;
 		QCDvePyBindHelperFunctions::buildCustomAmortization(customAmort, dateNotionalAndAmortByIdLeg);
+		cout << "	Finished amortization map" << endl;
 
 		//Ahora hay que construir QCInterestRatePayoff para cada operacion
 		//Se requiere:
@@ -974,12 +980,14 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)),
 				yf, wf);
 
-			long numOp = PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			numOp = PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			cout << "\tnumOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (string(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9))) != "BULLET")
 			{
-				amortIfCustom = dateNotionalAndAmortByIdLeg.at(numOp);
+				amortIfCustom = dateNotionalAndAmortByIdLeg.at((unsigned long)numOp);
 			}
+			cout << "\tLlegue aqui" << endl;
 			QCInterestRateLeg tmpIntRateLeg = QCFactoryFunctions::buildFixedRateLeg2(
 				string(PyString_AsString(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 1))),//receive or pay
@@ -1000,55 +1008,62 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				amortIfCustom,										//amortization and notional by end date
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11))		 //notional
 				);
+			cout << "\tInterest Rate Leg constructed" << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpIntRateLeg),
 				allCurves.at(string(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14)))),
 				allValueDate, nullptr });
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
 		}
+		cout << "	Finished constructing payoffs" << endl;
 
 		//Calcular los valores presentes
-		vector<tuple<long, double, vector<double>>> result;
+		vector<tuple<long, double, double, vector<double>>> result;
 		result.resize(payoffs.size());
 		double m2m;
+		double valueDateCashflow;
 		vector<double> der;
 		unsigned long counter = 0;
 		unsigned int longestCurve = 0;
 		for (const auto& payoff : payoffs)
 		{
 			m2m = payoff.second->presentValue();
+			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int vertices = payoff.second->discountCurveLength();
 			der.resize(vertices);
 			for (unsigned long i = 0; i < vertices; ++i)
 			{
 				der.at(i) = payoff.second->getPvRateDerivativeAt(i);
 			}
-			result.at(counter) = make_tuple(payoff.first, m2m, der);
+			result.at(counter) = make_tuple(payoff.first, m2m, valueDateCashflow, der);
 			der.clear();
 			++counter;
 		}
+		cout << "	Finished present value and sensitivities" << endl;
 
 		long cuantosM2M = PyList_Size(legCharacteristics);
 		PyObject* legM2M = PyList_New(cuantosM2M);
 		for (long i = 0; i < cuantosM2M; ++i)
 		{
-			unsigned int vertices = get<2>(result.at(i)).size();
-			PyObject* temp = PyList_New(vertices + 2);
+			unsigned int vertices = get<3>(result.at(i)).size();
+			PyObject* temp = PyList_New(vertices + 3);
 			int success;
 			success = PyList_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
 			success = PyList_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
+			success = PyList_SetItem(temp, 2, PyFloat_FromDouble(get<2>(result.at(i))));
 			for (unsigned int j = 0; j < vertices; ++j)
 			{
-				success = PyList_SetItem(temp, j + 2, PyFloat_FromDouble(get<2>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyList_SetItem(temp, j + 3, PyFloat_FromDouble(get<3>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			success = PyList_SetItem(legM2M, i, temp);
 		}
+		cout << "	Output prepared" << endl;
 
 		return legM2M;
 	}
 	catch (exception& e)
 	{
-		string msg = "Error en las patas fijas. " + string(e.what());
+		string msg = "Error en las patas fijas. " + string(e.what()) + " numOp: " + to_string(numOp);
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}
@@ -1056,6 +1071,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 
 PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 {
+	cout << "Enter function pv_floating_rate_legs" << endl;
 	char* fecha;
 	PyObject* holidays;
 	PyObject* curveValues;
@@ -1078,17 +1094,20 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 	{
 		return NULL;
 	}
-
+	double numOp;
 	try
 	{
 		map<string, vector<QCDate>> mapHolidays;
 		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
+		cout << "\tFinished map holidays" << endl;
 
 		map<string, pair<vector<long>, vector<double>>> crvValues;
 		QCDvePyBindHelperFunctions::buildCurveValues(curveValues, crvValues);
+		cout << "\tFinished map curve values" << endl;
 
 		map<string, QCDvePyBindHelperFunctions::string4> crvChars;
 		QCDvePyBindHelperFunctions::buildCurveCharacteristics(curveCharacteristics, crvChars);
+		cout << "\tFinished map curve characteristics" << endl;
 
 		map<string, shared_ptr<QCZeroCouponCurve>> allCurves;
 
@@ -1111,7 +1130,8 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 				wf, yf, get<3>(crvChars.at(curva.first)));
 			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
 		}
-
+		cout << "\tFinished constructing curve objects" << endl;
+		
 		//Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
 		//(en ese orden) en esta estructura.
 		if (PyList_Size(customAmort) == 0)
@@ -1122,14 +1142,17 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 		}
 		map<unsigned long, vector<tuple<QCDate, double, double>>> dateNotionalAndAmortByIdLeg;
 		QCDvePyBindHelperFunctions::buildCustomAmortization(customAmort, dateNotionalAndAmortByIdLeg);
+		cout << "\tFinished amortizations" << endl;
 
 		//Metemos los fixings de los indices de tasa flotante en esta estructura
 		map<string, map<QCDate, double>> mapManyFixings;
 		QCDvePyBindHelperFunctions::buildManyFixings(fixings, mapManyFixings);
+		cout << "\tFinished fixings" << endl;
 
 		//Metemos las caracteristicas de los indices en esta estructura
 		map<string, pair<string, string>> indexChars; //en el pair viene el tenor y el start date rule
 		QCDvePyBindHelperFunctions::buildStringPairStringMap(intRateIndexChars, indexChars);
+		cout << "\tFinished interest rate index characteristics" << endl;
 
 		//Ahora hay que construir QCInterestRatePayoff para cada operacion
 		//Se requiere:
@@ -1179,7 +1202,8 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
-			long numOp = PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			numOp = (long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			//cout << "numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9)) != "BULLET")
 			{
@@ -1225,11 +1249,13 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
 		}
+		cout << "\tFinished constructing payoffs" << endl;
 
 		//Calcular los valores presentes
-		vector<tuple<long, double, vector<double>, vector<double>>> result;
+		vector<tuple<long, double, double, vector<double>, vector<double>>> result;
 		result.resize(payoffs.size());
 		double m2m;
+		double valueDateCashflow;
 		vector<double> discDer;
 		vector<double> projDer;
 		unsigned long counter = 0;
@@ -1238,6 +1264,7 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 		for (const auto& payoff : payoffs)
 		{
 			m2m = payoff.second->presentValue();
+			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int discVertices = payoff.second->discountCurveLength();
 			if (discVertices > longestDiscCurve)
 				longestDiscCurve = discVertices;
@@ -1255,38 +1282,42 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 			{
 				projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
 			}
-			result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+			result.at(counter) = make_tuple(payoff.first, m2m, valueDateCashflow, discDer, projDer);
 			++counter;
 		}
+		cout << "\tFinished present value and sensitivities" << endl;
 
 		long cuantosResultados = PyList_Size(legCharacteristics);
 		PyObject* legM2MAndDelta = PyTuple_New(cuantosResultados);
 		for (long i = 0; i < cuantosResultados; ++i)
 		{
-			unsigned int discVertices = get<2>(result.at(i)).size();
-			unsigned int projVertices = get<3>(result.at(i)).size();
-			PyObject* temp = PyTuple_New(discVertices + projVertices + 3);
+			unsigned int discVertices = get<3>(result.at(i)).size();
+			unsigned int projVertices = get<4>(result.at(i)).size();
+			PyObject* temp = PyTuple_New(discVertices + projVertices + 4);
 			int success;
 			success = PyTuple_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
 			success = PyTuple_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
-			success = PyTuple_SetItem(temp, 2, PyInt_FromLong(discVertices));
+			success = PyTuple_SetItem(temp, 2, PyFloat_FromDouble(get<2>(result.at(i))));
+			success = PyTuple_SetItem(temp, 3, PyInt_FromLong(discVertices));
 			for (unsigned int j = 0; j < discVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3, PyFloat_FromDouble(
-					get<2>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4, PyFloat_FromDouble(
+					get<3>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			for (unsigned int j = 0; j < projVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3 + discVertices, PyFloat_FromDouble(
-					get<3>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4 + discVertices, PyFloat_FromDouble(
+					get<4>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			success = PyTuple_SetItem(legM2MAndDelta, i, temp);
 		}
+		cout << "\tOutput prepared" << endl;
+
 		return legM2MAndDelta;
 	}
 	catch (exception& e)
 	{
-		string msg = "Error en las patas flotantes. " + string(e.what());
+		string msg = "Error en las patas flotantes. " + string(e.what()) + " numOp: " + to_string(numOp);
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}
@@ -1316,7 +1347,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 	{
 		return NULL;
 	}
-
+	double numOp;
 	try
 	{
 		map<string, vector<QCDate>> mapHolidays;
@@ -1414,7 +1445,8 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
-			long numOp = PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			numOp = PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			cout << "icpclf numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9)) != "BULLET")
 			{
@@ -1452,20 +1484,18 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 		}
 
 		//Calcular los valores presentes
-		vector<tuple<long, double, vector<double>, vector<double>>> result;
+		vector<tuple<long, double, double, vector<double>, vector<double>>> result;
 		result.resize(payoffs.size());
 		double m2m;
+		double valueDateCashflow;
 		vector<double> discDer;
 		vector<double> projDer;
 		unsigned long counter = 0;
-		unsigned int longestDiscCurve = 0;
-		unsigned int longestProjCurve = 0;
 		for (const auto& payoff : payoffs)
 		{
 			m2m = payoff.second->presentValue();
+			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int discVertices = payoff.second->discountCurveLength();
-			if (discVertices > longestDiscCurve)
-				longestDiscCurve = discVertices;
 			discDer.resize(discVertices);
 			for (unsigned long i = 0; i < discVertices; ++i)
 			{
@@ -1473,14 +1503,13 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 			}
 
 			unsigned int projVertices = payoff.second->projectingCurveLength();
-			if (projVertices > longestProjCurve)
-				longestProjCurve = projVertices;
+			cout << "proj. vertices 1: " << projVertices << endl;
 			projDer.resize(projVertices);
 			for (unsigned long i = 0; i < projVertices; ++i)
 			{
 				projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
 			}
-			result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+			result.at(counter) = make_tuple(payoff.first, m2m, valueDateCashflow, discDer, projDer);
 			++counter;
 		}
 
@@ -1488,22 +1517,24 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 		PyObject* legM2MAndDelta = PyTuple_New(cuantosResultados);
 		for (long i = 0; i < cuantosResultados; ++i)
 		{
-			unsigned int discVertices = get<2>(result.at(i)).size();
-			unsigned int projVertices = get<3>(result.at(i)).size();
-			PyObject* temp = PyTuple_New(discVertices + projVertices + 3);
+			unsigned int discVertices = get<3>(result.at(i)).size();
+			unsigned int projVertices = get<4>(result.at(i)).size();
+			cout << "proj. vertices 2: " << projVertices << endl;
+			PyObject* temp = PyTuple_New(discVertices + projVertices + 4);
 			int success;
 			success = PyTuple_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
 			success = PyTuple_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
-			success = PyTuple_SetItem(temp, 2, PyInt_FromLong(discVertices));
+			success = PyTuple_SetItem(temp, 2, PyFloat_FromDouble(get<2>(result.at(i))));
+			success = PyTuple_SetItem(temp, 3, PyInt_FromLong(discVertices));
 			for (unsigned int j = 0; j < discVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3, PyFloat_FromDouble(
-					get<2>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4, PyFloat_FromDouble(
+					get<3>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			for (unsigned int j = 0; j < projVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3 + discVertices, PyFloat_FromDouble(
-					get<3>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4 + discVertices, PyFloat_FromDouble(
+					get<4>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			success = PyTuple_SetItem(legM2MAndDelta, i, temp);
 		}
@@ -1511,7 +1542,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 	}
 	catch (exception& e)
 	{
-		string msg = "Error en las patas icp_clf. " + string(e.what());
+		string msg = "Error en las patas icp_clf. " + string(e.what()) + " numOp: " + to_string(numOp);
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}
@@ -1539,7 +1570,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 	{
 		return NULL;
 	}
-
+	long long numOp;
 	try
 	{
 		map<string, vector<QCDate>> mapHolidays;
@@ -1633,9 +1664,11 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
-			long numOp = PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			numOp = (long long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			cout << "numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
-			if (PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9)) != "BULLET")
+			if (string(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 9))) != "BULLET")
 			{
 				amortIfCustom = dateNotionalAndAmortByIdLeg.at(numOp);
 			}
@@ -1658,6 +1691,9 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				amortIfCustom,										//amortization and notional by end date
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14))	//notional
 				);
+			cout << "notional: " << PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(
+				legCharacteristics, i), 14));
+			cout << "buildIcpLegOk" << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCIcpClpPayoff{ tmpIntRate, PyFloat_AsDouble(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 12)), 1.0,
@@ -1666,24 +1702,23 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))),
 				allValueDate,
 				make_shared<map<QCDate, double>>(mapIcpFixings) });
+			cout << "payoff ok" << endl;
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
 		}
 
 		//Calcular los valores presentes
-		vector<tuple<long, double, vector<double>, vector<double>>> result;
+		vector<tuple<long, double, double, vector<double>, vector<double>>> result;
 		result.resize(payoffs.size());
 		double m2m;
+		double valueDateCashflow;
 		vector<double> discDer;
 		vector<double> projDer;
 		unsigned long counter = 0;
-		unsigned int longestDiscCurve = 0;
-		unsigned int longestProjCurve = 0;
 		for (const auto& payoff : payoffs)
 		{
 			m2m = payoff.second->presentValue();
+			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int discVertices = payoff.second->discountCurveLength();
-			if (discVertices > longestDiscCurve)
-				longestDiscCurve = discVertices;
 			discDer.resize(discVertices);
 			for (unsigned long i = 0; i < discVertices; ++i)
 			{
@@ -1691,14 +1726,12 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 			}
 
 			unsigned int projVertices = payoff.second->projectingCurveLength();
-			if (projVertices > longestProjCurve)
-				longestProjCurve = projVertices;
 			projDer.resize(projVertices);
 			for (unsigned long i = 0; i < projVertices; ++i)
 			{
 				projDer.at(i) = payoff.second->getPvProjRateDerivativeAt(i);
 			}
-			result.at(counter) = make_tuple(payoff.first, m2m, discDer, projDer);
+			result.at(counter) = make_tuple(payoff.first, m2m, valueDateCashflow, discDer, projDer);
 			++counter;
 		}
 
@@ -1706,22 +1739,23 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 		PyObject* legM2MAndDelta = PyTuple_New(cuantosResultados);
 		for (long i = 0; i < cuantosResultados; ++i)
 		{
-			unsigned int discVertices = get<2>(result.at(i)).size();
-			unsigned int projVertices = get<3>(result.at(i)).size();
-			PyObject* temp = PyTuple_New(discVertices + projVertices + 3);
+			unsigned int discVertices = get<3>(result.at(i)).size();
+			unsigned int projVertices = get<4>(result.at(i)).size();
+			PyObject* temp = PyTuple_New(discVertices + projVertices + 4);
 			int success;
 			success = PyTuple_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
 			success = PyTuple_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
-			success = PyTuple_SetItem(temp, 2, PyInt_FromLong(discVertices));
+			success = PyTuple_SetItem(temp, 2, PyFloat_FromDouble(get<2>(result.at(i))));
+			success = PyTuple_SetItem(temp, 3, PyInt_FromLong(discVertices));
 			for (unsigned int j = 0; j < discVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3, PyFloat_FromDouble(
-					get<2>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4, PyFloat_FromDouble(
+					get<3>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			for (unsigned int j = 0; j < projVertices; ++j)
 			{
-				success = PyTuple_SetItem(temp, j + 3 + discVertices, PyFloat_FromDouble(
-					get<3>(result.at(i)).at(j) * BASIS_POINT));
+				success = PyTuple_SetItem(temp, j + 4 + discVertices, PyFloat_FromDouble(
+					get<4>(result.at(i)).at(j) * BASIS_POINT));
 			}
 			success = PyTuple_SetItem(legM2MAndDelta, i, temp);
 		}
@@ -1729,7 +1763,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 	}
 	catch (exception& e)
 	{
-		string msg = "Error en las patas icp_clp. " + string(e.what());
+		string msg = "Error en las patas icp_clp. " + string(e.what()) + " numOp: " + to_string(numOp);
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}

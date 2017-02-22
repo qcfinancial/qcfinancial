@@ -127,8 +127,6 @@ namespace QCDvePyBindHelperFunctions
 				PyString_AsString(PyList_GetItem(PyList_GetItem(fixings, i), 0))) },
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(fixings, i), 1))));
 		}
-
-		cout << "icp_fixings" << endl;
 	}
 
 	void buildManyFixings(PyObject* fixings, map<string, map<QCDate, double>>& mapManyFixings)

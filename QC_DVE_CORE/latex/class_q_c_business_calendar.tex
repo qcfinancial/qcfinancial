@@ -1,0 +1,138 @@
+\hypertarget{class_q_c_business_calendar}{\section{Q\+C\+Business\+Calendar Class Reference}
+\label{class_q_c_business_calendar}\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+}
+
+
+La clase \hyperlink{class_q_c_business_calendar}{Q\+C\+Business\+Calendar} representa días feriados de una jurisdicción.  
+
+
+
+
+{\ttfamily \#include $<$Q\+C\+Business\+Calendar.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_q_c_business_calendar_a4460142026e84efab275be4712c366f8}{Q\+C\+Business\+Calendar} (\hyperlink{class_q_c_date}{Q\+C\+Date} \&start\+Date, int length)
+\item 
+void \hyperlink{class_q_c_business_calendar_ab72834f0e628a1f903bcb4a32c22f346}{add\+Holyday} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&holyday)
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_business_calendar_a5608f57e89472291cfdea26685b6eea6}{next\+Business\+Day} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&fecha)
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_business_calendar_a83697d6856882aff5d315884bcdd8ed8}{mod\+Next\+Business\+Day} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&fecha)
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_business_calendar_a90b4ba160b7a61818da7eb1e76305c6d}{previous\+Business\+Day} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&fecha)
+\item 
+\hyperlink{class_q_c_date}{Q\+C\+Date} \hyperlink{class_q_c_business_calendar_a7d5760e3664caa8b963d340998551ac5}{shift} (const \hyperlink{class_q_c_date}{Q\+C\+Date} \&fecha, int n\+Days)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+La clase \hyperlink{class_q_c_business_calendar}{Q\+C\+Business\+Calendar} representa días feriados de una jurisdicción. 
+
+Definition at line 16 of file Q\+C\+Business\+Calendar.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_q_c_business_calendar_a4460142026e84efab275be4712c366f8}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{Q\+C\+Business\+Calendar}]{\setlength{\rightskip}{0pt plus 5cm}Q\+C\+Business\+Calendar\+::\+Q\+C\+Business\+Calendar (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\+C\+Date} \&}]{start\+Date, }
+\item[{int}]{length}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_a4460142026e84efab275be4712c366f8}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em start\+Date} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha inicial del calendario \\
+\hline
+{\em length} & (int) largo en años del calendario \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+objeto construido 
+\end{DoxyReturn}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_c_business_calendar_ab72834f0e628a1f903bcb4a32c22f346}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!add\+Holyday@{add\+Holyday}}
+\index{add\+Holyday@{add\+Holyday}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{add\+Holyday}]{\setlength{\rightskip}{0pt plus 5cm}void Q\+C\+Business\+Calendar\+::add\+Holyday (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{holyday}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_ab72834f0e628a1f903bcb4a32c22f346}
+Agrega una fecha (\hyperlink{class_q_c_date}{Q\+C\+Date}) al calendario (que representa un feriado) 
+\begin{DoxyParams}{Parameters}
+{\em holyday} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) el feriado a agregar \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_q_c_business_calendar_a83697d6856882aff5d315884bcdd8ed8}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!mod\+Next\+Business\+Day@{mod\+Next\+Business\+Day}}
+\index{mod\+Next\+Business\+Day@{mod\+Next\+Business\+Day}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{mod\+Next\+Business\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Business\+Calendar\+::mod\+Next\+Business\+Day (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{fecha}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_a83697d6856882aff5d315884bcdd8ed8}
+Calcula el día hábil siguiente a la fecha ingresada en comvención modificada. Si el día hábil siguiente cambia de mes respecto a la fecha ingresada, entonces retorna el día hábil anterior. Si la fecha ingresada es hábil se retorna la misma fecha. 
+\begin{DoxyParams}{Parameters}
+{\em fecha} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha ingresada \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+el día hábil siguiente 
+\end{DoxyReturn}
+\hypertarget{class_q_c_business_calendar_a5608f57e89472291cfdea26685b6eea6}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!next\+Business\+Day@{next\+Business\+Day}}
+\index{next\+Business\+Day@{next\+Business\+Day}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{next\+Business\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Business\+Calendar\+::next\+Business\+Day (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{fecha}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_a5608f57e89472291cfdea26685b6eea6}
+Calcula el día hábil siguiente a la fecha que ingresa. Si la fecha que ingresa es hábil se mantiene igual. 
+\begin{DoxyParams}{Parameters}
+{\em fecha} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha que ingresa \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) el día hábil siguiente 
+\end{DoxyReturn}
+\hypertarget{class_q_c_business_calendar_a90b4ba160b7a61818da7eb1e76305c6d}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!previous\+Business\+Day@{previous\+Business\+Day}}
+\index{previous\+Business\+Day@{previous\+Business\+Day}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{previous\+Business\+Day}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Business\+Calendar\+::previous\+Business\+Day (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{fecha}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_a90b4ba160b7a61818da7eb1e76305c6d}
+Calcula el día hábil anterior a la fecha ingresada 
+\begin{DoxyParams}{Parameters}
+{\em fecha} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\hypertarget{class_q_c_business_calendar_a7d5760e3664caa8b963d340998551ac5}{\index{Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}!shift@{shift}}
+\index{shift@{shift}!Q\+C\+Business\+Calendar@{Q\+C\+Business\+Calendar}}
+\subsubsection[{shift}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\+C\+Date} Q\+C\+Business\+Calendar\+::shift (
+\begin{DoxyParamCaption}
+\item[{const {\bf Q\+C\+Date} \&}]{fecha, }
+\item[{int}]{n\+Days}
+\end{DoxyParamCaption}
+)}}\label{class_q_c_business_calendar_a7d5760e3664caa8b963d340998551ac5}
+Mueve una fecha un número n\+Days de días. 
+\begin{DoxyParams}{Parameters}
+{\em fecha} & (\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha que se debe mover \\
+\hline
+{\em n\+Days} & (int) número de días a mover (pos o neg) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\hyperlink{class_q_c_date}{Q\+C\+Date}) fecha movida 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/Q\+C\+Business\+Calendar.\+h\end{DoxyCompactItemize}

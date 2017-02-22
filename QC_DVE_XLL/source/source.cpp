@@ -32,7 +32,6 @@
 #include "QCFactoryFunctions.h"
 #include "QCHelperFunctions.h"
 #include "QCInterestRatePeriodsFactory.h"
-
 #include "HelperFunctions.h"
 
 using namespace std;
@@ -1640,6 +1639,7 @@ CellMatrix pvIcpClpLegs2(double valueDate,
 			legM2MAndDelta(i, j + discVertices + 2) = get<3>(result.at(i)).at(j) * BASIS_POINT;
 		}
 	}
+	
 	return legM2MAndDelta;
 }
 

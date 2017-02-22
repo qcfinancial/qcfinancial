@@ -1,0 +1,147 @@
+\hypertarget{_q_c_definitions_8h}{\section{include/\+Q\+C\+Definitions.h File Reference}
+\label{_q_c_definitions_8h}\index{include/\+Q\+C\+Definitions.\+h@{include/\+Q\+C\+Definitions.\+h}}
+}
+
+
+Contiene enum y typedef que se usan en otras clases y funciones.  
+
+
+{\ttfamily \#include $<$memory$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$utility$>$}\\*
+{\ttfamily \#include $<$tuple$>$}\\*
+{\ttfamily \#include $<$map$>$}\\*
+{\ttfamily \#include \char`\"{}Q\+C\+Date.\+h\char`\"{}}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_interest_rate_curve}{Q\+C\+Interest\+Rate\+Curve} $>$ \hyperlink{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_zero_coupon_curve}{Q\+C\+Zero\+Coupon\+Curve} $>$ \hyperlink{_q_c_definitions_8h_a041384dd6e5600afe47d0ec835a0000f}{Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ Q\+C\+Discount\+Factor\+Curve $>$ \hyperlink{_q_c_definitions_8h_a2519585063febc023711bce0c5d17b31}{Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_interest_rate_payoff}{Q\+C\+Interest\+Rate\+Payoff} $>$ \hyperlink{_q_c_definitions_8h_abf56b288608ba1b455eed753174d29a4}{Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr$<$ map\\*
+$<$ \hyperlink{class_q_c_date}{Q\+C\+Date}, double $>$ $>$ \hyperlink{_q_c_definitions_8h_a6a601ffd693c05dd81309e3dca08b8f5}{Q\+C\+Time\+Series\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_wealth_factor}{Q\+C\+Wealth\+Factor} $>$ \hyperlink{_q_c_definitions_8h_a2085df477a1aafaad6ed79890607f447}{Q\+C\+Wlth\+Fctr\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_year_fraction}{Q\+C\+Year\+Fraction} $>$ \hyperlink{_q_c_definitions_8h_abcfd4021c75f633fa6d7a4552ced4a38}{Q\+C\+Yr\+Frctn\+Shrd\+Ptr}
+\item 
+typedef shared\+\_\+ptr\\*
+$<$ \hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} $>$ \hyperlink{_q_c_definitions_8h_ae6a21ad26d19e482e3b01179cbc05298}{Q\+C\+Intrst\+Rt\+Shrd\+Ptr}
+\item 
+typedef tuple$<$ \hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} $>$ \hyperlink{_q_c_definitions_8h_a4fc6d76137db7e80b2562f8562798296}{Q\+C\+Fixed\+Leg\+Tuple}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fc}{Q\+C\+Z\+C\+C\+Representation} \{ \hyperlink{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca6aceb05608b9d85a54b985499c54a64f}{qc\+Z\+C\+C\+Interest\+Rate}, 
+\hyperlink{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca9bf5d15037a5ad967285aca5746a88a8}{qc\+Z\+C\+C\+Discount\+Factor}, 
+\hyperlink{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca264b4f453fe9dd0fa94b6b1074dcb53a}{qc\+Z\+C\+C\+Wealth\+Factor}
+ \}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contiene enum y typedef que se usan en otras clases y funciones. 
+
+
+
+Definition in file \hyperlink{_q_c_definitions_8h_source}{Q\+C\+Definitions.\+h}.
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{_q_c_definitions_8h_a2519585063febc023711bce0c5d17b31}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr@{Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr}}
+\index{Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr@{Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<$Q\+C\+Discount\+Factor\+Curve$>$ {\bf Q\+C\+Disc\+Fctr\+Crv\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_a2519585063febc023711bce0c5d17b31}
+Shared pointer de Q\+C\+Discount\+Factor\+Curve 
+
+Definition at line 49 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_a4fc6d76137db7e80b2562f8562798296}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Fixed\+Leg\+Tuple@{Q\+C\+Fixed\+Leg\+Tuple}}
+\index{Q\+C\+Fixed\+Leg\+Tuple@{Q\+C\+Fixed\+Leg\+Tuple}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Fixed\+Leg\+Tuple}]{\setlength{\rightskip}{0pt plus 5cm}typedef tuple$<${\bf Q\+C\+Interest\+Rate}$>$ {\bf Q\+C\+Fixed\+Leg\+Tuple}}}\label{_q_c_definitions_8h_a4fc6d76137db7e80b2562f8562798296}
+Representa en una tupla los elementos de una pata fija que permiten construir el \hyperlink{class_q_c_interest_rate_leg}{Q\+C\+Interest\+Rate\+Leg} asociado 
+
+Definition at line 83 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_abf56b288608ba1b455eed753174d29a4}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr@{Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr}}
+\index{Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr@{Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Interest\+Rate\+Payoff}$>$ {\bf Q\+C\+Intrst\+Rt\+Pff\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_abf56b288608ba1b455eed753174d29a4}
+Shared pointer de \hyperlink{class_q_c_interest_rate_payoff}{Q\+C\+Interest\+Rate\+Payoff} 
+
+Definition at line 54 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_ae6a21ad26d19e482e3b01179cbc05298}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Intrst\+Rt\+Shrd\+Ptr@{Q\+C\+Intrst\+Rt\+Shrd\+Ptr}}
+\index{Q\+C\+Intrst\+Rt\+Shrd\+Ptr@{Q\+C\+Intrst\+Rt\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Intrst\+Rt\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Interest\+Rate}$>$ {\bf Q\+C\+Intrst\+Rt\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_ae6a21ad26d19e482e3b01179cbc05298}
+Shared pointer de \hyperlink{class_q_c_interest_rate}{Q\+C\+Interest\+Rate} 
+
+Definition at line 77 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr@{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr}}
+\index{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr@{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Interest\+Rate\+Curve}$>$ {\bf Q\+C\+Int\+Rt\+Crv\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_a4b4fb466e49550e3dfd40003562cd19d}
+Shared pointer de \hyperlink{class_q_c_interest_rate_curve}{Q\+C\+Interest\+Rate\+Curve} 
+
+Definition at line 39 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_a6a601ffd693c05dd81309e3dca08b8f5}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Time\+Series\+Shrd\+Ptr@{Q\+C\+Time\+Series\+Shrd\+Ptr}}
+\index{Q\+C\+Time\+Series\+Shrd\+Ptr@{Q\+C\+Time\+Series\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Time\+Series\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<$map$<${\bf Q\+C\+Date}, double$>$ $>$ {\bf Q\+C\+Time\+Series\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_a6a601ffd693c05dd81309e3dca08b8f5}
+Shared pointer de map$<$\+Q\+C\+Date, double$>$ Este tipo se utiliza para representar un serie de tiempo de un factor de mercado. Por ejemplo, los valores durante un año de la Libor U\+S\+D 3\+M se almacenarían en un objeto de este tipo. 
+
+Definition at line 62 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_a2085df477a1aafaad6ed79890607f447}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Wlth\+Fctr\+Shrd\+Ptr@{Q\+C\+Wlth\+Fctr\+Shrd\+Ptr}}
+\index{Q\+C\+Wlth\+Fctr\+Shrd\+Ptr@{Q\+C\+Wlth\+Fctr\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Wlth\+Fctr\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Wealth\+Factor}$>$ {\bf Q\+C\+Wlth\+Fctr\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_a2085df477a1aafaad6ed79890607f447}
+Shared pointer de \hyperlink{class_q_c_wealth_factor}{Q\+C\+Wealth\+Factor} 
+
+Definition at line 67 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_abcfd4021c75f633fa6d7a4552ced4a38}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Yr\+Frctn\+Shrd\+Ptr@{Q\+C\+Yr\+Frctn\+Shrd\+Ptr}}
+\index{Q\+C\+Yr\+Frctn\+Shrd\+Ptr@{Q\+C\+Yr\+Frctn\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Yr\+Frctn\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Year\+Fraction}$>$ {\bf Q\+C\+Yr\+Frctn\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_abcfd4021c75f633fa6d7a4552ced4a38}
+Shared pointer de \hyperlink{class_q_c_year_fraction}{Q\+C\+Year\+Fraction} 
+
+Definition at line 72 of file Q\+C\+Definitions.\+h.
+
+\hypertarget{_q_c_definitions_8h_a041384dd6e5600afe47d0ec835a0000f}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr@{Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr}}
+\index{Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr@{Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr}]{\setlength{\rightskip}{0pt plus 5cm}typedef shared\+\_\+ptr$<${\bf Q\+C\+Zero\+Coupon\+Curve}$>$ {\bf Q\+C\+Zr\+Cpn\+Crv\+Shrd\+Ptr}}}\label{_q_c_definitions_8h_a041384dd6e5600afe47d0ec835a0000f}
+Shared pointer de \hyperlink{class_q_c_zero_coupon_curve}{Q\+C\+Zero\+Coupon\+Curve} 
+
+Definition at line 44 of file Q\+C\+Definitions.\+h.
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fc}{\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!Q\+C\+Z\+C\+C\+Representation@{Q\+C\+Z\+C\+C\+Representation}}
+\index{Q\+C\+Z\+C\+C\+Representation@{Q\+C\+Z\+C\+C\+Representation}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}
+\subsubsection[{Q\+C\+Z\+C\+C\+Representation}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Q\+C\+Z\+C\+C\+Representation}}}\label{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fc}
+Enumera las alternativas al dar de alta una curva cero cupon \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{qc\+Z\+C\+C\+Interest\+Rate@{qc\+Z\+C\+C\+Interest\+Rate}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!qc\+Z\+C\+C\+Interest\+Rate@{qc\+Z\+C\+C\+Interest\+Rate}}\item[{\em 
+\hypertarget{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca6aceb05608b9d85a54b985499c54a64f}{qc\+Z\+C\+C\+Interest\+Rate}\label{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca6aceb05608b9d85a54b985499c54a64f}
+}]Curva cero cupón se representa con tasas \index{qc\+Z\+C\+C\+Discount\+Factor@{qc\+Z\+C\+C\+Discount\+Factor}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!qc\+Z\+C\+C\+Discount\+Factor@{qc\+Z\+C\+C\+Discount\+Factor}}\item[{\em 
+\hypertarget{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca9bf5d15037a5ad967285aca5746a88a8}{qc\+Z\+C\+C\+Discount\+Factor}\label{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca9bf5d15037a5ad967285aca5746a88a8}
+}]Curva cero cupón se representa con df \index{qc\+Z\+C\+C\+Wealth\+Factor@{qc\+Z\+C\+C\+Wealth\+Factor}!Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}}\index{Q\+C\+Definitions.\+h@{Q\+C\+Definitions.\+h}!qc\+Z\+C\+C\+Wealth\+Factor@{qc\+Z\+C\+C\+Wealth\+Factor}}\item[{\em 
+\hypertarget{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca264b4f453fe9dd0fa94b6b1074dcb53a}{qc\+Z\+C\+C\+Wealth\+Factor}\label{_q_c_definitions_8h_a71276d31176b562a1d8604c5bcb850fca264b4f453fe9dd0fa94b6b1074dcb53a}
+}]Curva cero cupón se representa con wf \end{description}
+\end{Desc}
+
+
+Definition at line 29 of file Q\+C\+Definitions.\+h.
+
