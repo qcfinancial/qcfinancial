@@ -2,8 +2,10 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "include.h"
+#include "QCCurrencyConverter.h"
 #include "QCDate.h"
 #include "QCDvePyBindHelperFunctions.h"
 #include "QCZeroCouponCurve.h"
@@ -13,6 +15,7 @@
 #include "QCFloatingRatePayoff.h"
 #include "QCIcpClfPayoff.h"
 #include "QCIcpClpPayoff.h"
+#include "QCDiscountBondPayoff.h"
 
 using namespace std;
 #define BASIS_POINT .0001
@@ -28,7 +31,7 @@ PyObject* some_function(PyObject* self, PyObject* args)
 
 	//PyArg_ParseTuple obtiene los argumentos Python (argumentos que
 	//le entregamos a la funcion desde python) y las tranforma a objetos C
-	//(son los valores alojados como referencia en la funciÛn).
+	//(son los valores alojados como referencia en la funci√≥n).
 	//El retorno es TRUE si todos los argumentos estan bien identificados como 
 	//objetos C
 	//
@@ -42,12 +45,12 @@ PyObject* some_function(PyObject* self, PyObject* args)
 	//c: char
 	//s: (string or Unicode) [const char *]
 	//S: (string)[PyStringObject *]
-	//ExtraÒamente no encuentro BOOLEAN
+	//Extra√±amente no encuentro BOOLEAN
 	//|: el resto de los argumentos son opcionales
 	//(items): tuple
 	//[items]: list
 	//{items}: dictionary
-	//... Hay m·s https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTuple
+	//... Hay m√°s https://docs.python.org/2/c-api/arg.html#c.PyArg_ParseTuple
 
 	if (!PyArg_ParseTuple(args, "ii", &i, &j))
 	{
@@ -55,7 +58,7 @@ PyObject* some_function(PyObject* self, PyObject* args)
 	}
 
 	//PyInt_FromLong transforma un valor C en un int Python
-	//Py_BuildValue("i", i + j); que no es utilizado ac· realiza la misma acciÛn 
+	//Py_BuildValue("i", i + j); que no es utilizado ac√° realiza la misma acci√≥n 
 	// que la funcion anterior solo que en este caso es mas generica ya 
 	// que utiliza los mismo identificadores de variables que PyArg_ParseTuple
 	//
@@ -898,6 +901,12 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
 		cout << "	Finished map holidays" << endl;
 
+		if (PyList_Size(curveValues) == 0)
+		{
+			string msg = "Error en las patas fijas. El vector de curvas esta vacio";
+			PyErr_SetString(qcDveError, msg.c_str());
+			return NULL;
+		}
 		map<string, pair<vector<long>, vector<double>>> crvValues;
 		QCDvePyBindHelperFunctions::buildCurveValues(curveValues, crvValues);
 		cout << "	Finished map curve values" << endl;
@@ -987,7 +996,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 			{
 				amortIfCustom = dateNotionalAndAmortByIdLeg.at((unsigned long)numOp);
 			}
-			cout << "\tLlegue aqui" << endl;
+			cout << "\tAmortizaciones Ok." << endl;
 			QCInterestRateLeg tmpIntRateLeg = QCFactoryFunctions::buildFixedRateLeg2(
 				string(PyString_AsString(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 1))),//receive or pay
@@ -1602,6 +1611,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				get<0>(crvChars.at(curva.first)),
 				wf, yf, get<3>(crvChars.at(curva.first)));
 			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
+			cout << "Entro la curva: " << curva.first << endl;
 		}
 
 		//Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
@@ -1694,6 +1704,10 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 			cout << "notional: " << PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(
 				legCharacteristics, i), 14));
 			cout << "buildIcpLegOk" << endl;
+			cout << "curva1: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 17))
+				<< endl;
+			cout << "curva2: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))
+				<< endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCIcpClpPayoff{ tmpIntRate, PyFloat_AsDouble(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 12)), 1.0,
@@ -1764,6 +1778,203 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 	catch (exception& e)
 	{
 		string msg = "Error en las patas icp_clp. " + string(e.what()) + " numOp: " + to_string(numOp);
+		PyErr_SetString(qcDveError, msg.c_str());
+		return NULL;
+	}
+}
+
+PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
+{
+	char* fecha;
+	PyObject* holidays;
+	PyObject* curveValues;
+	PyObject* curveCharacteristics;
+	PyObject* legCharacteristics;
+	PyObject* fxFixings;
+	PyObject* typeFxRate;
+
+	if (!PyArg_ParseTuple(args,
+		"sO!O!O!O!O!O!",
+		&fecha,
+		&PyList_Type, &holidays,
+		&PyList_Type, &curveValues,
+		&PyList_Type, &curveCharacteristics,
+		&PyList_Type, &legCharacteristics,
+		&PyList_Type, &fxFixings,
+		&PyList_Type, &typeFxRate))
+	{
+		cout << "ERROR" << endl;
+		return NULL;
+	}
+	long long numOp;
+	cout << "Enter discount_bond_legs" << endl;
+	try
+	{
+		map<string, vector<QCDate>> mapHolidays;
+		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
+
+		map<string, pair<vector<long>, vector<double>>> crvValues;
+		QCDvePyBindHelperFunctions::buildCurveValues(curveValues, crvValues);
+
+		map<string, QCDvePyBindHelperFunctions::string4> crvChars;
+		QCDvePyBindHelperFunctions::buildCurveCharacteristics(curveCharacteristics, crvChars);
+
+		map<string, string> fxRateChars;
+		QCDvePyBindHelperFunctions::buildFxRateIndexFxRate(typeFxRate, fxRateChars);
+		for (auto& x : fxRateChars)
+		{
+			cout << "\t√çndice: " << x.first << ", " << x.second << endl;
+		}
+		map<string, shared_ptr<QCZeroCouponCurve>> allCurves;
+
+		//Loopeo sobre los keys de crvValues
+		for (const auto &curva : crvValues)
+		{
+			vector<long> tmpLng{ curva.second.first };
+			vector<double> tmpDbl{ curva.second.second };
+
+			string wf = get<1>(crvChars.at(curva.first));
+			QCHelperFunctions::lowerCase(wf);
+
+			string yf = get<2>(crvChars.at(curva.first));
+			QCHelperFunctions::lowerCase(yf);
+
+			shared_ptr<QCZeroCouponCurve> tmpCrv = QCFactoryFunctions::zrCpnCrvShrdPtr(
+				tmpLng,
+				tmpDbl,
+				get<0>(crvChars.at(curva.first)),
+				wf, yf, get<3>(crvChars.at(curva.first)));
+			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
+			cout << "\tIngres√≥ la curva: " << curva.first << endl;
+		}
+
+		//Metemos los fixings de los √≠ndices de tasa flotante en esta estructura
+		map<string, map<QCDate, double>> mapManyFixings;
+		QCDvePyBindHelperFunctions::buildManyFixings(fxFixings, mapManyFixings);
+		cout << "\tFinished Fx Fixings" << endl;
+
+		//Ahora hay que construir QCInterestRatePayoff para cada operacion
+		//Se requiere:
+		//	shared_ptr<QCInterestRate>
+		//	shared_ptr<QCInterestRateLeg>
+		//	QCDate (valueDate)
+		//	shared_ptr<QCZeroCouponCurve> (la curva de descuento)
+		//	shared_ptr<QCTimeSeries> (los fixings)
+
+		//La info esta en la CellMatrix legCharacteristics:
+		//0:	id_leg						long
+		//1:	rec_pay						string
+		//2:	start_date					QCDate
+		//3:	end_date					QCDate
+		//4:	fx_rate						string
+		//5:	settlement_lag				int
+		//6:	settlement_mechanism		string
+		//7:	settlement_currency			string
+		//8:	settlement_fx_rate_index	string
+		//9:	fixing_calendar				string
+		//10:	fixing_lag					integer
+		//11:	settlement_calendar			string
+		//12:	notional_currency			string
+		//13:	notional					double
+		//14:	discount_curve				string
+
+		string strDate{ fecha };
+		QCDate allValueDate{ strDate };
+
+		map<long, shared_ptr<QCInterestRatePayoff>> payoffs;
+		QCCurrencyConverter crrncyCnvrtr;
+
+		for (unsigned long i = 0; i < PyList_Size(legCharacteristics); ++i)
+		{
+			numOp = (long long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			cout << "\tnumOp: " << numOp << endl;
+			QCInterestRateLeg tmpIntRateLeg = QCFactoryFunctions::buildDiscountBondLeg(
+				PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 1)),	//receive or pay
+				QCDate{ string(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 2))) },	//start date
+				QCDate{ string(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 3))) },	//end date
+				PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 5)),		//settlement lag
+				PyInt_AsLong(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)),	//fixing lag
+				mapHolidays.at(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 9))),		//fixing calendar
+				mapHolidays.at(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 11))),		//settlement calendar
+				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 13))	//notional
+				);
+			cout << "\tbuildDiscountBondLegOk" << endl;
+			cout << "\tfx rate code: " << PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 8)) << endl;;
+			cout << "\tcurve: " << PyString_AsString(PyList_GetItem(PyList_GetItem(
+				legCharacteristics, i), 14)) << endl;
+			cout << crrncyCnvrtr.getFxRateEnum(fxRateChars.at(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 8)))) << endl;
+
+			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
+				new QCDiscountBondPayoff{ make_shared<QCInterestRateLeg>(tmpIntRateLeg),
+				allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14))),
+				allValueDate,
+				make_shared<map<QCDate, double>>(mapManyFixings.at(
+				PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 8)))),
+				crrncyCnvrtr.getCurrencyEnum(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 12))),
+				crrncyCnvrtr.getFxRateEnum(fxRateChars.at(PyString_AsString(PyList_GetItem(
+				PyList_GetItem(legCharacteristics, i), 8)))) }
+			);
+			cout << "\tpayoff ok" << endl;
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+		}
+
+		cout << "\tFinished constructing payoffs" << endl;
+
+		//Calcular los valores presentes
+		vector<tuple<long, double, double, vector<double>>> result;
+		result.resize(payoffs.size());
+		double m2m;
+		double valueDateCashflow;
+		vector<double> der;
+		unsigned long counter = 0;
+		unsigned int longestCurve = 0;
+		for (const auto& payoff : payoffs)
+		{
+			m2m = payoff.second->presentValue();
+			valueDateCashflow = payoff.second->getValueDateCashflow();
+			unsigned int vertices = payoff.second->discountCurveLength();
+			der.resize(vertices);
+			for (unsigned long i = 0; i < vertices; ++i)
+			{
+				der.at(i) = payoff.second->getPvRateDerivativeAt(i);
+			}
+			result.at(counter) = make_tuple(payoff.first, m2m, valueDateCashflow, der);
+			der.clear();
+			++counter;
+		}
+		cout << "\tFinished present value and sensitivities" << endl;
+		cout << "result.size() " << result.size() << endl;
+
+		long cuantosM2M = PyList_Size(legCharacteristics);
+		PyObject* legM2M = PyList_New(cuantosM2M);
+		for (long i = 0; i < cuantosM2M; ++i)
+		{
+			unsigned int vertices = get<3>(result.at(i)).size();
+			PyObject* temp = PyList_New(vertices + 3);
+			int success;
+			success = PyList_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
+			success = PyList_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
+			success = PyList_SetItem(temp, 2, PyFloat_FromDouble(get<2>(result.at(i))));
+			for (unsigned int j = 0; j < vertices; ++j)
+			{
+				success = PyList_SetItem(temp, j + 3, PyFloat_FromDouble(get<3>(result.at(i)).at(j) * BASIS_POINT));
+			}
+			success = PyList_SetItem(legM2M, i, temp);
+		}
+		cout << "\tOutput prepared" << endl;
+
+		return legM2M;
+	}
+	catch (exception& e)
+	{
+		string msg = "Error en las patas a descuento. " + string(e.what()) + " numOp: " + to_string(numOp);
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}
@@ -1944,13 +2155,13 @@ PyObject * test_uso_tuples_r_lil_string_int(PyObject * self, PyObject * args)
 }
 
 //PyMethodDef es un arreglo de las funciones 
-// que que ser·n empaquetadas en el modulo de Python
+// que que ser√°n empaquetadas en el modulo de Python
 PyMethodDef QC_DVE_Methods[] =
 {
-	//Primer argumento:		nombre con que se llamara a la funciÛn en python.
-	//Segundo argumento:	funcion que se llamar· (se castea a funcion de python)
+	//Primer argumento:		nombre con que se llamara a la funci√≥n en python.
+	//Segundo argumento:	funcion que se llamar√° (se castea a funcion de python)
 	//tercer argumento:		flag que le dice al interprete la convencion utilizada por la funcion C
-	//						 - METH_VARARGS: la funcion espera par·metros Python
+	//						 - METH_VARARGS: la funcion espera par√°metros Python
 	//						 - METH_KEYWORDS: The function expects three parameters: self, args, and a 
 	//						   dictionary of all the keyword arguments. 
 	//						   The flag is typically combined with METH_VARARGS,
@@ -1971,6 +2182,7 @@ PyMethodDef QC_DVE_Methods[] =
 	{ "pv_floating_rate_legs", (PyCFunction)pv_floating_rate_legs, METH_VARARGS, 0 },
 	{ "pv_icp_clf_rate_legs", (PyCFunction)pv_icp_clf_rate_legs, METH_VARARGS, 0 },
 	{ "pv_icp_clp_rate_legs", (PyCFunction)pv_icp_clp_rate_legs, METH_VARARGS, 0 },
+	{ "pv_discount_bond_legs", (PyCFunction)pv_discount_bond_legs, METH_VARARGS, 0 },
 	{ "cashflow_fixed_mortgages", (PyCFunction)cashflow_fixed_mortgages, METH_VARARGS, 0 },
 	{ "cashflow_fixed_swaps", (PyCFunction)cashflow_fixed_swaps, METH_VARARGS, 0 },
 	{ "cashflow_icp_clp_rate_legs", (PyCFunction)cashflow_icp_clp_rate_legs, METH_VARARGS, 0 },
@@ -1978,7 +2190,7 @@ PyMethodDef QC_DVE_Methods[] =
 	{ 0, 0, 0, 0 }
 };
 
-//funcion __init__ python, tecnicamente ac· estamos construyendo el modulo pyd 
+//funcion __init__ python, tecnicamente ac√° estamos construyendo el modulo pyd 
 PyMODINIT_FUNC
 initQC_DVE_PYBIND(void)
 {

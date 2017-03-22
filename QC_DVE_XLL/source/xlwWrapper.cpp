@@ -25,6 +25,91 @@ const char* LibraryName = "QC_DVE";
 namespace
 {
 XLRegistration::Arg
+checkBoostrappingArgs[]=
+{
+{ "xlValueDate","too lazy to comment this one ","B"},
+{ "xlInputRates","too lazy to comment this one ","XLF_OPER"},
+{ "xlInputFixedLegs","too lazy to comment this one ","XLF_OPER"},
+{ "calendar","too lazy to comment this one ","XLF_OPER"},
+{ "interpolator","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registercheckBoostrapping("xlcheckBoostrapping",
+"checkBoostrapping",
+"too lazy to comment this function ",
+LibraryName,
+checkBoostrappingArgs,
+5
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlcheckBoostrapping(
+double xlValueDatea,
+LPXLFOPER xlInputRatesa,
+LPXLFOPER xlInputFixedLegsa,
+LPXLFOPER calendara,
+LPXLFOPER interpolatora)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+int xlValueDate(
+	static_cast<int>(xlValueDatea));
+
+XlfOper xlInputRatesb(
+	(xlInputRatesa));
+CellMatrix xlInputRates(
+	xlInputRatesb.AsCellMatrix("xlInputRates"));
+
+XlfOper xlInputFixedLegsb(
+	(xlInputFixedLegsa));
+CellMatrix xlInputFixedLegs(
+	xlInputFixedLegsb.AsCellMatrix("xlInputFixedLegs"));
+
+XlfOper calendarb(
+	(calendara));
+CellMatrix calendar(
+	calendarb.AsCellMatrix("calendar"));
+
+XlfOper interpolatorb(
+	(interpolatora));
+string interpolator(
+	interpolatorb.AsString("interpolator"));
+
+CellMatrix result(
+	checkBoostrapping(
+		xlValueDate,
+		xlInputRates,
+		xlInputFixedLegs,
+		calendar,
+		interpolator)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
 qcFechaArgs[]=
 {
 { "f","too lazy to comment this one ","XLF_OPER"}

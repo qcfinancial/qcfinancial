@@ -57,7 +57,14 @@ double QCZeroCouponInterestRateCurve::getForwardWf(long d1, long d2)
 		der = _curve->rateDerivativeAt(i);
 		double ddwf2 = dwf2 * der;
 
-		_fwdWfDerivatives.at(i) = pow(wf1, -2.0) * (ddwf2 * wf1 - wf2 * ddwf1);
+		if (d1 <= 0)
+		{
+			_fwdWfDerivatives.at(i) = ddwf2;
+		}
+		else
+		{
+			_fwdWfDerivatives.at(i) = pow(wf1, -2.0) * (ddwf2 * wf1 - wf2 * ddwf1);
+		}
 	}
 	//Se loopea para tener las derivadas
 	double result = wf2 / wf1;

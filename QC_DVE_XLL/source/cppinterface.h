@@ -17,6 +17,12 @@ using namespace std;
 
 //<xlw:libraryname=QC_DVE
 
+CellMatrix checkBoostrapping(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputFixedLegs,
+	CellMatrix calendar,
+	string interpolator);
+
 double qcFecha(string f);
 
 double //Devuelve la fraccion de agno entre dos fechas

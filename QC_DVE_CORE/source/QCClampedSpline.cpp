@@ -3,7 +3,7 @@
 
 double QCClampedSpline::interpolateAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 	long temp = _curve->getLength();
 	double t = value - _curve->getValuesAt(i).first;
 	double a = _curve->getValuesAt(i).second;
@@ -12,14 +12,14 @@ double QCClampedSpline::interpolateAt(long value)
 
 double QCClampedSpline::derivativeAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 	double t = value - _curve->getValuesAt(i).first;
 	return _b[i] + 2.0 * _c[i] * t + 3.0 * _d[i] * pow(t, 2.0);
 }
 
 double QCClampedSpline::secondDerivativeAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 	double t = value - _curve->getValuesAt(i).first;
 	return 2.0 * _c[i] + 6.0 * _d[i] * t;
 }

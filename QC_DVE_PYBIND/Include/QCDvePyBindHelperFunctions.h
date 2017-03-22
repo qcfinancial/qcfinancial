@@ -81,6 +81,17 @@ namespace QCDvePyBindHelperFunctions
 		}
 	}
 
+	void buildFxRateIndexFxRate(PyObject* fxRateChars,
+		map<string, string>& fxRateIndexFxRate)
+	{
+		for (int i = 0; i < PyList_Size(fxRateChars); ++i)
+		{
+			fxRateIndexFxRate.insert(pair<string, string>(
+				PyString_AsString(PyList_GetItem(PyList_GetItem(fxRateChars, i), 0)),
+				PyString_AsString(PyList_GetItem(PyList_GetItem(fxRateChars, i), 1))));
+		}
+	}
+
 	void buildCustomAmortization(PyObject* customAmort,
 		map<unsigned long, vector<tuple<QCDate, double, double>>>& dateNotionalAndAmortByIdLeg)
 	{

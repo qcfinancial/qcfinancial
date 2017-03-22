@@ -13,7 +13,7 @@ double QCLinearInterpolator::interpolateAt(long value)
 		_derivatives.at(j) = 0;
 	}
 	
-	long i = index(value);
+	long i = _index(value);
 	
 	if (i == _curve->getLength() - 1)
 	{
@@ -48,7 +48,7 @@ double QCLinearInterpolator::interpolateAt(long value)
 
 double QCLinearInterpolator::derivativeAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 
 	//Si es el primer o ultimo x de la curva
 

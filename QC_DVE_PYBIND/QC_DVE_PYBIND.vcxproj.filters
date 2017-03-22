@@ -104,5 +104,8 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

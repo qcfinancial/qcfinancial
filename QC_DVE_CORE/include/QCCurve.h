@@ -8,19 +8,72 @@
 
 using namespace std;
 
+/*!
+* @brief QCCurve representa una curva de Set ---> R. Set debe ser ordenable y en la mayoría de las aplicaciones
+* será Z (enteros relativos) o R (campo real).
+*/
 template<class T>
 class QCCurve
 {
 public:
-	//Constructors
+	/*!
+	* Constructor por defecto
+	*/
 	QCCurve(void){}
+
+	/*!
+	* Constructor
+	* @param abscissa<T> vector con las abscisas de la curva
+	* @param vector<double> con las ordenadas de la curva
+	*/
 	QCCurve(vector<T>& abscissa, vector<double>& ordinate);
 
-	//Getter
-	pair<T, double> getValuesAt(long position);
+	/*!
+	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tamaño de los
+	* vectores de abscisa y ordenadas.
+	* @param newSize nuevo tamaño de la curva
+	*/
+	void reset(unsigned long newSize);
+
+	/*!
+	* Este método actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
+	* a un par ya existente, entonces sobre escribe los valores existentes. Si la abscisa no existe,
+	* se inserta un nuevo par en la posición que corresponda (ordenado por abscisa ascendente).
+	* @param x abscisa
+	* @param y ordenada
+	*/
+	void setPair(T x, double y);
+
+	/*!
+	Método que actualiza el valor de la ordenada en una posición dada.
+	* @param pos
+	* @param value
+	*/
+	void setOrdinateAtWithValue(unsigned long position, double value);
+
+	/*!
+	Método que actualiza el valor de la abscisa en una posición dada.
+	* @param pos
+	* @param value
+	*/
+	void setAbscissaAtWithValue(unsigned long position, T value);
+
+	/*!
+	* Método que devuelve el valor de un par ordenado en una posición dada.
+	* @param position posición del par buscado.
+	* @return valor del par buscado.
+	*/
+	pair<T, double> getValuesAt(unsigned long position);
+
+	/*!
+	* Método que devuelve el largo de la curva modelada.
+	@return largo de la curva.
+	*/
 	long getLength();
 
-	//Destructor
+	/*!
+	* Destructor
+	*/
 	~QCCurve(void);
 
 protected:
@@ -76,7 +129,39 @@ template<class T> QCCurve<T>::~QCCurve(void)
 {
 }
 
-template<class T> pair<T, double> QCCurve<T>::getValuesAt(long position)
+template<class T> void QCCurve<T>::reset(unsigned long newSize)
+{
+	_values.clear();
+	_values.resize(newSize);
+}
+
+template<class T> void QCCurve<T>::setPair(T x, double y)
+{
+	for (auto& elmnt : _values)
+	{
+		if (elmnt.first == x)
+		{
+			elmnt.second = y;
+			return;
+		}
+	}
+	_values.push_back(make_pair(x, y));
+	sort(_values.begin(), _values.end());
+}
+
+template<class T> void QCCurve<T>::setOrdinateAtWithValue(unsigned long position, double value)
+{
+	_values.at(position).second = value;
+	return;
+}
+
+template<class T> void QCCurve<T>::setAbscissaAtWithValue(unsigned long position, T value)
+{
+	_values.at(position).first = value;
+	return;
+}
+
+template<class T> pair<T, double> QCCurve<T>::getValuesAt(unsigned long position)
 {
 	return _values[position];
 }

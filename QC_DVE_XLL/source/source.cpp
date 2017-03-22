@@ -23,6 +23,7 @@
 #include "QCFloatingRatePayoff.h"
 #include "QCIcpClpPayoff.h"
 #include "QCIcpClfPayoff.h"
+#include "QCTimeDepositPayoff.h"
 #include "QCCurve.h"
 #include "QCInterpolator.h"
 #include "QCLinearInterpolator.h"
@@ -33,16 +34,139 @@
 #include "QCHelperFunctions.h"
 #include "QCInterestRatePeriodsFactory.h"
 #include "HelperFunctions.h"
+#include "QCZeroCurveBootstrappingFromRatesAndFixedLegs.h"
 
 using namespace std;
 
 #define BASIS_POINT .0001
+
+CellMatrix checkBoostrapping(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputFixedLegs,
+	CellMatrix calendar,
+	string interpolator)
+{
+	//Define fecha
+	QCDate valueDate{ xlValueDate };
+
+	//Define calendario
+	vector<QCDate> scl;
+	unsigned int cuantasFechas = calendar.RowsInStructure();
+	scl.resize(cuantasFechas);
+	for (unsigned int i = 0; i < cuantasFechas; ++i)
+	{
+		scl.at(i) = QCDate{ (long)calendar(i, 0).NumericValue() };
+	}
+
+	unsigned int cuantasTasas = xlInputRates.RowsInStructure();
+	vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+	inputRates.resize(cuantasTasas);
+
+	unsigned int cuantosSwaps = xlInputFixedLegs.RowsInStructure();
+	vector<shared_ptr<QCFixedRatePayoff>> inputFixedLegs;
+	inputFixedLegs.resize(cuantosSwaps);
+
+	vector<long> tenors;
+	tenors.resize(cuantasTasas + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCDate fecha{ (long)xlInputRates(i, 1).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	for (unsigned int i = cuantasTasas; i < cuantasTasas + cuantosSwaps; ++i)
+	{
+		QCDate fecha{ (long)xlInputFixedLegs(i - cuantasTasas, 2).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	vector<double> rates;
+	rates.resize(cuantasTasas + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+	{
+		rates.at(i) = 0.0;
+	}
+	
+	QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, "LINEAR", "act/365", "com");
+
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+			"R",
+			QCDate{ (long)xlInputRates(i, 0).NumericValue() },
+			QCDate{ (long)xlInputRates(i, 1).NumericValue() },
+			1.0);
+		string yf{ xlInputRates(i, 3).StringValue() };
+		string wf{ xlInputRates(i, 4).StringValue() };
+		QCHelperFunctions::lowerCase(yf);
+		QCHelperFunctions::lowerCase(wf);
+		QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputRates(i, 2).NumericValue(), yf, wf);
+		QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+		inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+	}
+
+	vector<tuple<QCDate, double, double>> amortIfCustom;
+	for (unsigned int i = 0; i < cuantosSwaps; ++i)
+	{
+		//Se construye el interest rate
+		string wf = xlInputFixedLegs(i, 11).StringValue();
+		QCHelperFunctions::lowerCase(wf);
+		string yf = xlInputFixedLegs(i, 12).StringValue();
+		QCHelperFunctions::lowerCase(yf);
+		shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputFixedLegs(i, 9).NumericValue(), yf, wf);
+		
+		//buildFixedRateLeg
+		//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+		QCInterestRateLeg tmpFixedLeg = QCFactoryFunctions::buildFixedRateLeg2(
+			"R",			//receive or pay
+			QCDate{ (long)xlInputFixedLegs(i, 1).NumericValue() },			//start date
+			QCDate{ (long)xlInputFixedLegs(i, 2).NumericValue() },			//end date
+			scl,	//settlement calendar
+			(int)xlInputFixedLegs(i, 4).NumericValue(),			//settlement lag
+			QCHelperFunctions::stringToQCStubPeriod(xlInputFixedLegs(i, 5).StringValue()),	//stub period
+			xlInputFixedLegs(i, 6).StringValue(),			//periodicity
+			QCHelperFunctions::stringToQCBusDayAdjRule(xlInputFixedLegs(i, 7).StringValue()),//end date adjustment
+			QCHelperFunctions::stringToQCAmortization(xlInputFixedLegs(i, 8).StringValue()),	//amortization
+			amortIfCustom, //amortization and notional by date
+			1.0);			//notional
+
+		//buildFixedRatePayoff
+		shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
+			new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpFixedLeg), curve, valueDate,
+			nullptr });
+
+		//Se agrega el payoff al vector de fixed legs
+		inputFixedLegs.at(i) = tmpIntRatePayoff;
+	}
+
+	//Tengo que dar de alta el objeto bootstrapeador
+	QCDate v;
+	vector<shared_ptr<QCTimeDepositPayoff>> td;
+	vector<shared_ptr<QCFixedRatePayoff>> fr;
+	QCZrCpnCrvShrdPtr c;
+	QCZeroCurveBootstrappingFromRatesAndFixedLegs boot{ valueDate, inputRates, inputFixedLegs, curve };
+
+	boot.generateCurve();
+
+	CellMatrix result(cuantasTasas + cuantosSwaps, 2);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+	{
+		pair<long, double> temp = curve->getValuesAt(i);
+		result(i, 0) = temp.first;
+		result(i, 1) = temp.second;
+	}
+	return result;
+
+}
 
 double qcFecha(string f)
 {
 	QCDate fecha{ f };
 	return (double)fecha.excelSerial();
 }
+
 double qcYearFraction(int startDate, int endDate, string yf)
 {
 	QCDate stDate{ startDate };

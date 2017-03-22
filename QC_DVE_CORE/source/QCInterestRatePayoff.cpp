@@ -84,6 +84,8 @@ void QCInterestRatePayoff::payoff()
 		for (unsigned int j = 0; j < curveLength; ++j)
 		{
 			_pvProjCurveDerivatives.at(j) += notional * _allRatesDerivatives.at(i).at(j) * df * yf;
+			//cout << "allRates derivative: " << j << ": " << _allRatesDerivatives.at(i).at(j) << endl;;
+			//cout << "pv derivative: " << j << ": " << _pvProjCurveDerivatives.at(j) << endl;
 		}
 		//Se agrega la amortizacion si corresponde
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
@@ -92,9 +94,14 @@ void QCInterestRatePayoff::payoff()
 	}
 }
 
-int QCInterestRatePayoff::payoffSize()
+int QCInterestRatePayoff::payoffSize() const 
 {
 	return _payoffs.size();
+}
+
+unsigned int QCInterestRatePayoff::getLastPeriodIndex() const
+{
+	return _irLeg->lastPeriod();
 }
 
 double QCInterestRatePayoff::getValueDateCashflow()
@@ -107,7 +114,7 @@ tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsig
 	return _payoffs.at(n);
 }
 
-double QCInterestRatePayoff::presentValue()
+double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 {
 	payoff();
 	double pv{ 0.0 };
@@ -121,7 +128,16 @@ double QCInterestRatePayoff::presentValue()
 	for (const auto& cshflw : _payoffs)
 	{
 		long d = _valueDate.dayDiff(get<0>(cshflw));
-		if (d > 0)
+		bool condition;
+		if (includeFirstCashflow == true)
+		{
+			condition = (d >= 0);
+		}
+		else
+		{
+			condition = (d > 0);
+		}
+		if (condition)
 		{
 			double flujo = get<2>(cshflw);
 			double df = _discountCurve->getDiscountFactorAt(d);

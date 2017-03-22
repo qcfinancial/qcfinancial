@@ -68,6 +68,16 @@ shared_ptr<QCWealthFactor> QCFactoryFunctions::wfSharedPtr(const string& whichWf
 	return 0;
 }
 
+shared_ptr<QCInterestRate> QCFactoryFunctions::zeroIntRateSharedPtr()
+{
+	//Constructor de QCInterestRate
+	//QCInterestRate(double value, QCYrFrctnShrdPtr yearFraction, QCWlthFctrShrdPtr wealthFactor)
+
+	return make_shared<QCInterestRate>(QCInterestRate{ 0.0,
+		QCFactoryFunctions::yfSharedPtr("act/360"),
+		QCFactoryFunctions::wfSharedPtr("lin") });
+}
+
 shared_ptr<QCInterestRate> QCFactoryFunctions::intRateSharedPtr(double value,
 	const string& whichYf, const string& whichWf)
 {
@@ -103,6 +113,7 @@ QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vect
 	return zrCrvPtr;
 }
 
+//El parámetro typeCurve aún no está implementado
 QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
 	const string& interpolator, const string& wf, const string& yf, const string& typeCurve)
 {
@@ -190,6 +201,80 @@ QCIntRtCrvShrdPtr QCFactoryFunctions::discFctrCrvShrdPtr(vector<long>& tenors, v
 	QCIntRtCrvShrdPtr discFctrCrvPtr(new QCZeroCouponDiscountFactorCurve{ interpol, intRate });
 
 	return discFctrCrvPtr;
+}
+
+QCInterestRateLeg QCFactoryFunctions::buildDiscountBondLeg(
+	string receivePay,				/*!< receive or pay */
+	QCDate startDate,				/*!< start date */
+	QCDate endDate,					/*!< end date */
+	unsigned int fixingLag,			/*!< fixing lag refers to fx rate */
+	unsigned int settlementLag,				/*!< settlement lag */
+	vector<QCDate> fixingCalendar,	/*!< fixing calendar refers to fx rate */
+	vector<QCDate> settlementCalendar,	/*!< settlement calendar */
+	double notional					/*!< notional */
+	)
+{
+	//QCInterestRatePeriod es:
+	//tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate>
+	//intRtPrdElmntInitialAccrtn,	/*!< Disposicion inicial del periodo */
+	//intRtPrdElmntAcctrnIsCshflw,	/*!< Indica si la disposicion inicial es flujo */
+	//intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
+	//inRtPrdElmntAmrtztnIsCshflw,	/*!< Indica si la amortizacion final es flujo */
+	//intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
+	//intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
+	//intRtPrdElmntEndDate,			/*!< Fecha final del periodo */
+	//intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
+
+	//Las siguientes 3 son para patas flotantes
+	//intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
+	//intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
+	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
+
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	auto period = make_tuple(0.0, 0, signo * notional, 1, signo * notional, startDate, endDate,
+		endDate.shift(settlementCalendar, settlementLag, QCDate::qcFollow),
+		endDate.shift(fixingCalendar, fixingLag, QCDate::qcPrev), startDate, startDate);
+	QCInterestRateLeg::QCInterestRatePeriods periods{ period };
+	return QCInterestRateLeg{ periods, 0 };
+
+}
+
+QCInterestRateLeg QCFactoryFunctions::buildTimeDepositLeg(
+	string receivePay,				/*!< receive or pay */
+	QCDate startDate,				/*!< start date */
+	QCDate endDate,					/*!< end date */
+	double notional					/*!< notional */
+	)
+{
+	//QCInterestRatePeriod es:
+	//tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate>
+	//intRtPrdElmntInitialAccrtn,	/*!< Disposicion inicial del periodo */
+	//intRtPrdElmntAcctrnIsCshflw,	/*!< Indica si la disposicion inicial es flujo */
+	//intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
+	//inRtPrdElmntAmrtztnIsCshflw,	/*!< Indica si la amortizacion final es flujo */
+	//intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
+	//intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
+	//intRtPrdElmntEndDate,			/*!< Fecha final del periodo */
+	//intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
+
+	//Las siguientes 3 son para patas flotantes
+	//intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
+	//intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
+	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
+	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
+
+	int signo;
+	if (receivePay == "R") { signo = 1; }
+	else { signo = -1; }
+
+	auto period = make_tuple(-signo * notional, true, signo * notional, true, signo * notional, startDate, endDate,
+		endDate, startDate, startDate, startDate);
+	QCInterestRateLeg::QCInterestRatePeriods periods{ period };
+	return QCInterestRateLeg{ periods, 0 };
 }
 
 QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
@@ -770,9 +855,19 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
 
 	//Se generan los periodos
 	periods = factory.getPeriods();
-		
-	//Calcular amortizaciones y nocionales vigentes
 	numPeriods = periods.size();
+
+	//Se ajustan las fechas de inicio y final de índice de fixing y se dejan igual que
+	//startDate y endDate de cada período.
+	for (unsigned int i = 0; i < numPeriods; ++i)
+	{
+		get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(periods.at(i)) =
+			get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i));
+		get<QCInterestRateLeg::intRtPrdElmntFxngEndDate>(periods.at(i)) =
+			get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i));
+	}
+
+	//Calcular amortizaciones y nocionales vigentes
 	if (amortization == QCInterestRateLeg::qcBulletAmort)
 	{
 		for (unsigned int i = 0; i < numPeriods; ++i)

@@ -14,10 +14,19 @@
 #include "QCWealthFactor.h"
 #include "QCYearFraction.h"
 
+/*!
+* @author Alvaro Díaz
+* @brief Clase base abstracta para curvas cero cupón.
+* @details Esta clase define varios métodos que las clases derivadas deben implementar.
+*/
 class QCZeroCouponCurve : public QCInterestRateCurve
 {
 public:
-	//Constructor
+	/*!
+	* Constructor
+	* @param curve tenors y tasas de la curva
+	* @param intRate convención de las tasas de la curva. El valor que venga dentro de este objeto es irrelevante.
+	*/
 	QCZeroCouponCurve(shared_ptr<QCInterpolator> curve,
 		QCInterestRate intRate);
 

@@ -8,7 +8,7 @@ QCInterpolator(curve)
 
 double QCLogLinearInterpolator::interpolateAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 	for (unsigned int j = 0; j < _derivatives.size(); ++j)
 	{
 		_derivatives.at(j) = 0;
@@ -46,7 +46,7 @@ double QCLogLinearInterpolator::interpolateAt(long value)
 
 double QCLogLinearInterpolator::derivativeAt(long value)
 {
-	long i = index(value);
+	long i = _index(value);
 
 	//Si es el primer o ultimo x de la curva
 

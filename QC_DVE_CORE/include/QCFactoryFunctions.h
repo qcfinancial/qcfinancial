@@ -27,6 +27,11 @@ namespace QCFactoryFunctions
 	QCZrCpnCrvShrdPtr zrCpnCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
 		const string& interpolator, const string& yf, const string& wf, const string& typeCurve);
 
+	/*!
+	* Construye una tasa de interés Lin Act/360 c0n valor 0.
+	*/
+	shared_ptr<QCInterestRate> zeroIntRateSharedPtr();
+
 	shared_ptr<QCInterestRateCurve> intRtCrvShrdPtr(
 		vector<long>& tenors, vector<double>& rates,
 		const string& interpolator, const string& wf, const string& yf,
@@ -34,6 +39,24 @@ namespace QCFactoryFunctions
 	
 	QCIntRtCrvShrdPtr discFctrCrvShrdPtr(vector<long>& tenors, vector<double>& dfs,
 		const string& interpolator, const string& yf, const string& wf);
+
+	QCInterestRateLeg buildDiscountBondLeg(
+		string receivePay,				/*!< receive or pay */
+		QCDate startDate,				/*!< start date */
+		QCDate endDate,					/*!< end date */
+		unsigned int fixingLag,			/*!< fixing lag refers to fx rate */
+		unsigned int settlementLag,				/*!< settlement lag */
+		vector<QCDate> fixingCalendar,	/*!< fixing calendar refers to fx rate */
+		vector<QCDate> settlementCalendar,	/*!< settlement calendar */
+		double notional					/*!< notional */
+		);
+
+	QCInterestRateLeg buildTimeDepositLeg(
+		string receivePay,				/*!< receive or pay */
+		QCDate startDate,				/*!< start date */
+		QCDate endDate,					/*!< end date */
+		double notional					/*!< notional */
+		);
 
 	QCInterestRateLeg buildFixedRateLeg(
 		string receivePay,				//receive or pay

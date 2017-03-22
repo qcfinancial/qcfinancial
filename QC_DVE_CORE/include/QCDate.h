@@ -263,21 +263,22 @@ class QCDate
 		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+		QCDate businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
 
 		/*!
 		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
 		* @param calendar (vector<QCDate>&) vector con los feriados
-		* @param nDays (int) numero de dias habiles
+		* @param nDays (unsigned int) numero de dias habiles
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
+		QCDate shift(vector<QCDate>& calendar, unsigned int nDays,
 			QCDate::QCBusDayAdjRules direction) const;
+
 		/*!
 		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
 		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
-		* @param nDays (int) numero de dias habiles
+		* @param nDays (unsigned int) numero de dias habiles
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/

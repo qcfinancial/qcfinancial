@@ -61,34 +61,44 @@ void QCIcpClpPayoff::_setAllRates()
 			else
 			{
 				TNA = round((icpValue / icpStart - 1)*360.0 / (double)pTNA * 10000) / 10000.0;
+				/* cout << "icp inicio: " << icpValue << endl;
+				cout << "icp hoy: " << icpStart << endl;
+				cout << "TNA: " << TNA << endl;
+				*/
 			}
 			
-			//Calcula el plazo pZ desde valueDate hasta endDate
-			QCDate endDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(per);
-			int pZ = _valueDate.dayDiff(endDate);
-
-			//Calcula tasa z a pZ y se guarda en _forwardRates
-			double wfZ = QCInterestRatePayoff::_projectingCurve->getForwardWf(0, pZ);
-			double z = _rate->getRateFromWf(wfZ, pZ);
-			_forwardRates.at(i) = z;
-
 			//Calcula wf = (1+TNA*pTNA/360)*(1+z*pZ/360)
 			_rate->setValue(TNA);
 			double wfTNA = _rate->wf(pTNA);
 
+			//Calcula el plazo pZ desde valueDate hasta endDate
+			QCDate endDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(per);
+			int pZ = _valueDate.dayDiff(endDate);
+
+			//Calcula wfZ al plazo pZ
+			double wfZ = QCInterestRatePayoff::_projectingCurve->getForwardWf(0, pZ);
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
 			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
 			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
 			{
 				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
-					* wfTNA * 360 / pZ;
+					* wfTNA * 360.0 / (pZ + pTNA);
+				//cout << "der: " << j << ": " << tempDer.at(j) << endl;
+				//(wfTNA*wfZ-1)*360/(pZ+pTNA)
+				//wfTNA*wfZ*360/(pZ+pTNA)-360/(pZ+pTNA)
+
 			}
 			_allRatesDerivatives.at(i) = tempDer;
+
+			//Se calcula y guarda la tasa forward z a partir de wfZ
+			double z = _rate->getRateFromWf(wfZ, pZ);
+			_forwardRates.at(i) = z;
 
 			//Calcula tasa asociada a este wf y guardar en _allRates
 			_allRates.at(i) = (_rate->getRateFromWf(wfTNA * wfZ, pZ + pTNA)
 				+ _additiveSpread) * _multipSpread;
+			//cout << "all rates: " << i << " " << _allRates.at(i) << endl;
 		}
 		else
 		{
@@ -103,9 +113,6 @@ void QCIcpClpPayoff::_setAllRates()
 			//a que esta coincida con las caracteristicas del swap.
 			double wfFwd = QCInterestRatePayoff::_projectingCurve->getForwardWf(d1, d2);
 
-			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
-			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
-
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
 			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
@@ -113,11 +120,18 @@ void QCIcpClpPayoff::_setAllRates()
 			{
 				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
 					* 360.0 / (d2 - d1);
+				//cout << "d1: " << d1 << endl;
+				//cout << "d2: " << d2 << endl;
 			}
 			_allRatesDerivatives.at(i) = tempDer;
 
+			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
+			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
+
 			//Se aplican los spreads y se guarda la tasa en _allRates
 			_allRates.at(i) = (_forwardRates.at(i) + _additiveSpread) * _multipSpread;
+			//cout << "all rates: " << i << " " << _allRates.at(i) << endl;
+
 		}
 	}
 }

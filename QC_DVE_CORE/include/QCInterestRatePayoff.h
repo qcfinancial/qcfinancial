@@ -11,11 +11,20 @@
 #include "QCZeroCouponCurve.h"
 #include "QCInterestRate.h"
 
+/*!
+* @brief QCInterestRatePayoff define una interfaz general para estructura de flujos de caja
+* de un instrumento de tasa de interés. Es una clase que no se puede instanciar directamente.
+*/
+
+/*!
+* Enumera los tipos de flujos de caja que un payoff puede contener:
+* disposición (accretion), interés y amortización.
+*/
 enum QCCashFlowLabel
 {
-	qcAccretion,
-	qcInterest,
-	qcAmortization
+	qcAccretion,	/*!< Disposición */
+	qcInterest,		/*!< Interés */
+	qcAmortization	/*!< Amortización */
 };
 
 class QCInterestRatePayoff
@@ -31,7 +40,13 @@ public:
 	* Calcula y retorna el numero de flujos de caja
 	* @return (int) el numero de flujos
 	*/
-	int payoffSize();
+	int payoffSize() const;
+
+	/*!
+	* Retorna el índice del último flujo
+	* @return índice
+	*/
+	unsigned int getLastPeriodIndex() const;
 
 	/*!
 	* Retorna el valor del flujo de caja de _valueDate
@@ -45,7 +60,7 @@ public:
 	* a cada punto de las curvas de descuento y proyeccion.
 	* @return (double) el valor presente
 	*/
-	double presentValue();
+	double presentValue(bool includeFirstCashflow = false);
 
 	/*!
 	* Retorna la derivada del valor presente respecto a la componente index de la
@@ -91,6 +106,17 @@ public:
 	virtual ~QCInterestRatePayoff();
 
 protected:
+	/*! Constructor de la clase. El hecho que sea protected impide que esta clase pueda
+	* ser instanciada de forma directa. Sólo se pueden instanciar sus clases derivadas.
+	* @param rate guarda el valor y el tipo de tasa qu se utiliza para el cálculo de intereses.
+	* @param irLeg estructura de fechas, nocionales vigentes, amortizaciones y disposiciones.
+	* @param valueDate fecha a la cual se calculará el valor presente del payoff cuando se ejecue
+	* el método presentValue().
+	* @param projectingCurve curva de proyección de tasas forward.
+	* @param curva de descuento.
+	* @fixingData información necesaria para tasas conocidas a valueDate que intervengan en el
+	* proceso de cálculo de intereses.
+	*/
 	QCInterestRatePayoff(
 		QCIntrstRtShrdPtr rate,
 		shared_ptr<QCInterestRateLeg> irLeg,
@@ -99,34 +125,52 @@ protected:
 		QCIntRtCrvShrdPtr discountCurve,
 		QCTimeSeriesShrdPtr fixingData);
 	
+	/*! Aqui se almacena la variable rate usada en el constructor.*/
 	QCIntrstRtShrdPtr _rate;
+
+	/*! Aqui se almacena la variable irLeg usada en el constructor.*/
 	shared_ptr<QCInterestRateLeg> _irLeg;
+
+	/*! Aqui se almacena la variable valueDate usada en el constructor.*/
 	QCDate _valueDate;
+
+	/*! Aqui se almacena la variable projectingCurve usada en el constructor.*/
 	QCIntRtCrvShrdPtr _projectingCurve;
+
+	/*! Aqui se almacena la variable discountCurve usada en el constructor.*/
 	QCIntRtCrvShrdPtr _discountCurve;
+
+	/*! Aqui se almacena la variable fixingData usada en el constructor.*/
 	QCTimeSeriesShrdPtr _fixingData;
 	
+	/*! Aquí se almacena el período vigente considerando valueDate.*/
 	int _currentPeriod;
+
+	/* Aquí se almacenan los flujos calculados con el método payoff().*/
 	vector<tuple<QCDate, QCCashFlowLabel, double>> _payoffs;
 
+	/*! Este método calcula o determina todas las tasas neceserias para el cálculo
+	* de intereses. */
 	virtual void _setAllRates();
+
+	/*! Aquí se almacenan las tasas obtenidas con _setAllRates().*/
 	vector<double> _allRates;
 
-	//Aqui se guarda el valor del cashflow correspondiente a _valueDate.
-	//Si no existe ese cashflow se guarda un 0.
+	/*! Aqui se guarda el valor del cashflow correspondiente a _valueDate.
+	* Si no existe ese cashflow se guarda un 0.*/
 	double _valueDateCashflow;
 
-	//Aqui se guardan las derivadas del valor presente respecto a cada vertice
-	//de la curva de descuento.
+	/*! Aqui se guardan las derivadas del valor presente respecto a cada vértice
+	* de la curva de descuento.*/
 	vector<double> _pvRateDerivatives;
 
-	//Aqui se guardan las derivadas de las tasas de proyeccion respecto a
-	//cada punto de la curva de proyeccion. Es una matriz porque por cada tasa
-	//proyectada existen derivadas respecto a cada vertice de la curva de proyeccion.
+	/*! Aqui se guardan las derivadas de las tasas de proyección respecto a
+	* cada punto de la curva de proyeccion. Es una matriz porque por cada tasa
+	* proyectada existen derivadas respecto a cada vértice de la curva de proyección.*/
 	vector<vector<double>> _allRatesDerivatives;
 
-	//Aqui se guardan las derivadas del valor presente respecto a
-	//los vertices de la curva de proyeccion.
+	/*! Aqui se guardan las derivadas del valor presente respecto a
+	* los vértices de la curva de proyección.*/
 	vector<double> _pvProjCurveDerivatives;
 };
 

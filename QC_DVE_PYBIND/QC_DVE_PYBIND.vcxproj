@@ -97,6 +97,7 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCCompoundWf.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCContinousWf.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCDate.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCFactoryFunctions.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp" />

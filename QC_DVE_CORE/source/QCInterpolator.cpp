@@ -6,20 +6,43 @@
 QCInterpolator::QCInterpolator(shared_ptr<QCCurve<long>> curve) : _curve(curve)
 {}
 
-QCInterpolator::~QCInterpolator(void)
-{}
+void QCInterpolator::reset(unsigned long newSize)
+{
+	_curve->reset(newSize);
+	_derivatives.resize(newSize);
+}
+
+void QCInterpolator::setPair(long x, double y)
+{
+	_curve->setPair(x, y);
+}
+
+void QCInterpolator::setOrdinateAtWithValue(unsigned long position, double value)
+{
+	_curve->setOrdinateAtWithValue(position, value);
+}
+
+void QCInterpolator::setAbscissaAtWithValue(unsigned long position, long value)
+{
+	_curve->setAbscissaAtWithValue(position, value);
+}
 
 long QCInterpolator::getLength()
 {
 	return _curve->getLength();
 }
 
-double QCInterpolator::rateDerivativeAt(unsigned int rateIndex)
+double QCInterpolator::rateDerivativeAt(unsigned long rateIndex)
 {
 	return _derivatives.at(rateIndex);
 }
 
-long QCInterpolator::index(long arg)
+pair<long, double> QCInterpolator::getValuesAt(unsigned long position)
+{
+	return _curve->getValuesAt(position);
+}
+
+long QCInterpolator::_index(long arg)
 {
 	vector<double> data;
 	for (long i = 0; i < _curve->getLength(); ++i)
@@ -59,4 +82,7 @@ long QCInterpolator::index(long arg)
 
     return indice;
 }
+
+QCInterpolator::~QCInterpolator(void)
+{}
 

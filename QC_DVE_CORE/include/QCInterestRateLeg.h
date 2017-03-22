@@ -16,18 +16,18 @@ public:
 	*/
 	enum InterestRatePeriodElement
 	{
-		intRtPrdElmntInitialAccrtn, /*!< Disposicion inicial del periodo */
-		intRtPrdElmntAcctrnIsCshflw,/*!< Indica si la disposicion inicial es flujo */
-		intRtPrdElmntFinalAmrtztn,	/*!< Amortizacion final del periodo */
-		inRtPrdElmntAmrtztnIsCshflw,/*!< Indica si la amortizacion final es flujo */
-		intRtPrdElmntNotional,		/*!< Nocional vigente del periodo */
-		intRtPrdElmntStartDate,		/*!< Fecha de inicio del periodo */
-		intRtPrdElmntEndDate,		/*!< Fecha final del periodo */
+		intRtPrdElmntInitialAccrtn, /*!< Disposición inicial del período */
+		intRtPrdElmntAcctrnIsCshflw,/*!< Indica si la disposición inicial es flujo */
+		intRtPrdElmntFinalAmrtztn,	/*!< Amortización final del periodo */
+		inRtPrdElmntAmrtztnIsCshflw,/*!< Indica si la amortización final es flujo */
+		intRtPrdElmntNotional,		/*!< Nocional vigente del período */
+		intRtPrdElmntStartDate,		/*!< Fecha de inicio del período */
+		intRtPrdElmntEndDate,		/*!< Fecha final del período */
 		intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
 		//Las siguientes 3 son para patas flotantes
-		intRtPrdElmntFxngDate,		/*!< Fecha de fixing del indice */
-		intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo del indice */
-		intRtPrdElmntFxngEndDate	/*!< Fecha final de devengo del indice */
+		intRtPrdElmntFxngDate,		/*!< Fecha de fixing del índice */
+		intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo (fecha de valor) del índice */
+		intRtPrdElmntFxngEndDate	/*!< Fecha final de devengo del índice */
 		//Las siguientes 3 son para patas multicurrency
 	};
 
@@ -37,10 +37,20 @@ public:
 	enum QCStubPeriod
 	{
 		qcNoStubPeriod, /*!< No hay stub period */
-		qcShortBack,	/*!< Periodo corto al final */
-		qcLongBack,		/*!< Periodo largo al final */
-		qcShortFront,	/*!< Periodo corto al inicio */
-		qcLongFront		/*!< Periodo largo al inicio */
+		qcShortBack,	/*!< Período corto al final */
+		qcLongBack,		/*!< Período largo al final */
+		qcShortFront,	/*!< Período corto al inicio */
+		qcLongFront,	/*!< Período largo al inicio */
+		/*! Long Front puede pensarse como aplicar primero Short Front y luego fusionar los
+		* primeros dos flujos. Esto da origen a las generalizaciones de tipo qcLongFrontx siguientes
+		* donde x es el número de períodos que se agrupan al inicio luego de aplicar Short Front.
+		* Estos stubs actuarán incluso en el caso de calendarios cuadrados agrupando los x
+		* períodos iniciales.
+		*/
+		qcLongFront2,	/*!< Período largo al inicio agrupando 2*/
+		qcLongFront3,	/*!< Período largo al inicio agrupando 3 */
+		qcLongFront4,	/*!< Período largo al inicio agrupando 4 */
+		qcLongFront5	/*!< Período largo al inicio agrupando 5 */
 	};
 
 	/*!
@@ -48,16 +58,16 @@ public:
 	*/
 	enum QCAmortization
 	{
-		qcBulletAmort,		/*!< Amortizacion bullet */
-		qcConstantAmort,	/*!< Amortizacion constante en cada periodo */
-		qcCustomAmort,		/*!< Amortizacion customizada */
-		qcFrenchAmort,		/*!< Amortizacion estilo frances (cuota constante) */
+		qcBulletAmort,		/*!< Amortización bullet */
+		qcConstantAmort,	/*!< Amortización constante en cada periodo */
+		qcCustomAmort,		/*!< Amortización customizada */
+		qcFrenchAmort,		/*!< Amortización estilo francés (cuota constante) */
 	};
 
 	/*!
-	* Representa las componentes esenciales de un periodo de un
-	* instrumento de tasa de interes. El orden es: disposicion, esDispFlujo,
-	* amortizacion, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago, fechaFixing,
+	* Representa las componentes esenciales de un período de un
+	* instrumento de tasa de interés. El orden es: disposición, esDispFlujo,
+	* amortización, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago, fechaFixing,
 	* fechaInicioIndice, fechaFinalIndice
 	*/
 	typedef tuple<double, bool, double, bool, double,
@@ -68,19 +78,45 @@ public:
 	*/
 	typedef vector<QCInterestRatePeriod> QCInterestRatePeriods;
 
+	/*! Constructor de la clase.
+	* @param periods vector con los períodos
+	* @param índice que identifica el último período
+	*/
 	QCInterestRateLeg(QCInterestRatePeriods periods,
 		unsigned int lastPeriod);
+
+	/*! Operador de igualdad */
 	void operator=(const QCInterestRateLeg& otherLeg);
 	
+	/*! Getter para los períodos.
+	* @return vector con los perídos.
+	*/
 	QCInterestRatePeriods periods() const;
+
+	/*! Getter para el índice del último período.
+	* @return índice del último período.
+	*/
 	unsigned int lastPeriod() const;
 	
+	/*! Getter para el tamaño del vector de períodos.
+	* @return tamaño del vector de períodos
+	*/
 	int size();
+
+	/*! Getter para un período específico.
+	* @param n índice del período que se quiere obtener.
+	* @return período con índice n.
+	*/
 	QCInterestRatePeriod getPeriodAt(unsigned int n);
+
+	/*! Destructor */
 	~QCInterestRateLeg();
 
 protected:
+	/*! Variable donde se almacenan los períodos. */
 	QCInterestRatePeriods _periods;
+
+	/*! Variable donde se almacena el valor del índice del último período. */
 	unsigned int _lastPeriod;
 };
 

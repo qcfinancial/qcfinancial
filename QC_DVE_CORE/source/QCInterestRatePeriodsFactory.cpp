@@ -94,7 +94,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	//Esto es importante de notar, aqui se usa el calendario de settlement.
 	//Luego al calcular la fecha efectiva de fixing con el fixing lag se usara el calendario
 	//de fixing.
-	_fixingBasicDates = _buildBasicDates(_fixingPeriodicity, _fixingStubPeriod, _settlementCalendar);
+	_fixingBasicDates = _buildBasicDates2(_fixingPeriodicity, _fixingStubPeriod, _settlementCalendar);
 
 	//Loop sobre los basicperiods de settlement
 	QCDate fixingDate;
@@ -133,7 +133,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	return result;
 }
 
-//Con getPeriods3() se va a cambiar la lógica de construcción de las fechas de fixing
+//Con _getPeriods3() se va a cambiar la lógica de construcción de las fechas de fixing
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods3()
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
@@ -201,7 +201,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
 	else if (_fixingStubPeriod == QCInterestRateLeg::qcShortFront)
 	{
 		_fixingFlags.at(0) = true;
-		_fixingFlags.at(remainderFixing) == true;
+		_fixingFlags.at(remainderFixing) = true;
 		for (unsigned int i = remainderFixing + 1; i < numPeriods; ++i)
 		{
 			if (i % QCHelperFunctions::tenor(_fixingPeriodicity) == remainderFixing)
@@ -217,7 +217,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
 	else if (_fixingStubPeriod == QCInterestRateLeg::qcLongFront)
 	{
 		_fixingFlags.at(0) = true;
-		_fixingFlags.at(remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity)) == true;
+		_fixingFlags.at(remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity)) = true;
 		for (unsigned int i = remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity) + 1;
 			i < numPeriods; ++i)
 		{
@@ -468,19 +468,88 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 	{
 		stubPeriod = QCInterestRateLeg::qcShortFront;
 	}
-	if (remainderInDays == 0 && remainderInMonths == 0)
+	bool easyCase = remainderInDays == 0 && remainderInMonths == 0;
+	if (easyCase)
 	{
-		QCDate fechaInicioPeriodo = _startDate;
-		QCDate fechaFinalPeriodo;
-		periods.resize(numWholePeriods);
-		for (unsigned int i = 0; i < numWholePeriods; ++i)
+		bool easyStub = stubPeriod != QCInterestRateLeg::qcLongFront2 &&
+			stubPeriod != QCInterestRateLeg::qcLongFront3 &&
+			stubPeriod != QCInterestRateLeg::qcLongFront4 &&
+			stubPeriod != QCInterestRateLeg::qcLongFront5;
+		if (easyStub)
 		{
-			fechaFinalPeriodo = _startDate.addMonths(QCHelperFunctions::tenor(periodicity) * (i + 1)).businessDay(
-				calendar, _endDateAdjustment);
-			periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-			fechaInicioPeriodo = fechaFinalPeriodo;
+			QCDate fechaInicioPeriodo = _startDate;
+			QCDate fechaFinalPeriodo;
+			periods.resize(numWholePeriods);
+			for (unsigned int i = 0; i < numWholePeriods; ++i)
+			{
+				fechaFinalPeriodo = _startDate.addMonths(QCHelperFunctions::tenor(periodicity) * (i + 1)).businessDay(
+					calendar, _endDateAdjustment);
+				periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			return periods;
 		}
-		return periods;
+		else if (stubPeriod == QCInterestRateLeg::qcLongFront2)
+		{
+			vector<tuple<QCDate, QCDate>> tempPeriods;
+			QCDate fechaInicioPeriodo = _startDate;
+			QCDate fechaFinalPeriodo;
+			tempPeriods.resize(numWholePeriods);
+			for (unsigned int i = 0; i < numWholePeriods; ++i)
+			{
+				fechaFinalPeriodo = _startDate.addMonths(QCHelperFunctions::tenor(periodicity) * (i + 1)).businessDay(
+					calendar, _endDateAdjustment);
+				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			if (numWholePeriods == 1)
+			{
+				periods = tempPeriods;
+			}
+			else
+			{
+				periods.resize(numWholePeriods - 1);
+				fechaInicioPeriodo = get<0>(tempPeriods.at(0));
+				fechaFinalPeriodo = get<1>(tempPeriods.at(1));
+				periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				for (unsigned int i = 2; i < numWholePeriods; ++i)
+				{
+					periods.at(i - 1) = tempPeriods.at(i);
+				}
+			}
+			return periods;
+		}
+		else if (stubPeriod == QCInterestRateLeg::qcLongFront3)
+		{
+			vector<tuple<QCDate, QCDate>> tempPeriods;
+			QCDate fechaInicioPeriodo = _startDate;
+			QCDate fechaFinalPeriodo;
+			tempPeriods.resize(numWholePeriods);
+			for (unsigned int i = 0; i < numWholePeriods; ++i)
+			{
+				fechaFinalPeriodo = _startDate.addMonths(QCHelperFunctions::tenor(periodicity) * (i + 1)).businessDay(
+					calendar, _endDateAdjustment);
+				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			if (numWholePeriods == 1 || numWholePeriods == 2)
+			{
+				periods = tempPeriods;
+			}
+			else
+			{
+				periods.resize(numWholePeriods - 2);
+				fechaInicioPeriodo = get<0>(tempPeriods.at(0));
+				fechaFinalPeriodo = get<1>(tempPeriods.at(2));
+				periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				for (unsigned int i = 3; i < numWholePeriods; ++i)
+				{
+					periods.at(i - 2) = tempPeriods.at(i);
+				}
+			}
+			return periods;
+		}
+
 	}
 	if (stubPeriod == QCInterestRateLeg::qcShortBack)
 	{
@@ -631,6 +700,114 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 			//consecuencia de la fecha inicial del segundo período.
 			get<1>(periods.at(0)) = get<1>(periods.at(0)).businessDay(calendar, _endDateAdjustment);
 			get<0>(periods.at(1)) = get<1>(periods.at(0));
+		}
+	}
+	if (stubPeriod == QCInterestRateLeg::qcLongFront3)
+	{
+		unsigned int numPeriods = numWholePeriods + 1;
+		vector<tuple<QCDate, QCDate>> tempPeriods;
+		tempPeriods.resize(numPeriods);
+
+		QCDate fechaInicioPeriodo = _startDate;
+		QCDate fechaFinalPeriodo;
+
+		if (numPeriods == 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
+				businessDay(calendar, _endDateAdjustment);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+		}
+
+		if (numPeriods > 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			fechaInicioPeriodo = fechaFinalPeriodo;
+
+			QCDate pseudoStartDate = fechaFinalPeriodo;
+
+			for (unsigned int i = 1; i < numPeriods; ++i)
+			{
+				fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i)
+					.businessDay(calendar, _endDateAdjustment);
+				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
+			//consecuencia de la fecha inicial del segundo período.
+			get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
+			get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
+		}
+		if (numPeriods == 1 || numPeriods == 2)
+		{
+			periods = tempPeriods;
+		}
+		else
+		{
+			periods.resize(numPeriods - 2);
+			fechaInicioPeriodo = get<0>(tempPeriods.at(0));
+			fechaFinalPeriodo = get<1>(tempPeriods.at(2));
+			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			for (unsigned int i = 3; i < numPeriods; ++i)
+			{
+				periods.at(i - 2) = tempPeriods.at(i);
+			}
+		}
+	}
+	if (stubPeriod == QCInterestRateLeg::qcLongFront2)
+	{
+		unsigned int numPeriods = numWholePeriods + 1;
+		vector<tuple<QCDate, QCDate>> tempPeriods;
+		tempPeriods.resize(numPeriods);
+
+		QCDate fechaInicioPeriodo = _startDate;
+		QCDate fechaFinalPeriodo;
+
+		if (numPeriods == 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
+				businessDay(calendar, _endDateAdjustment);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+		}
+
+		if (numPeriods > 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			fechaInicioPeriodo = fechaFinalPeriodo;
+
+			QCDate pseudoStartDate = fechaFinalPeriodo;
+
+			for (unsigned int i = 1; i < numPeriods; ++i)
+			{
+				fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i)
+					.businessDay(calendar, _endDateAdjustment);
+				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
+			//consecuencia de la fecha inicial del segundo período.
+			get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
+			get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
+		}
+		if (numPeriods == 1)
+		{
+			periods = tempPeriods;
+		}
+		else
+		{
+			periods.resize(numPeriods - 1);
+			fechaInicioPeriodo = get<0>(tempPeriods.at(0));
+			fechaFinalPeriodo = get<1>(tempPeriods.at(1));
+			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			for (unsigned int i = 2; i < numPeriods; ++i)
+			{
+				periods.at(i - 1) = tempPeriods.at(i);
+			}
 		}
 	}
 

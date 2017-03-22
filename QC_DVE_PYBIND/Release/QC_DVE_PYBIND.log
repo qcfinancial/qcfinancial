@@ -1,45 +1,46 @@
-﻿Build started 16/02/2017 14:12:45.
+﻿Build started 08/03/2017 11:34:28.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(93): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(124): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(164): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(154): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(335): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(538): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(751): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(973): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1195): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1210): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>main.cpp(1439): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1453): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>main.cpp(1658): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1673): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
-     1>main.cpp(1923): warning C4101: 'label' : unreferenced local variable
+     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(104): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(135): warning C4018: '<' : signed/unsigned mismatch
+     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(175): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(157): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(338): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(541): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(754): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(982): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1204): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1219): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>main.cpp(1448): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1462): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>main.cpp(1668): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(1683): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
+     1>main.cpp(1887): warning C4018: '<' : signed/unsigned mismatch
+     1>main.cpp(2134): warning C4101: 'label' : unreferenced local variable
      1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from 'double' to 'long', possible loss of data
-                 main.cpp(1016) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 main.cpp(1025) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
                  with
                  [
                      _Other1=double &
          ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
                  ]
-                 main.cpp(1016) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 main.cpp(1025) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
                  with
                  [
                      _Other1=double &
          ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
                  ]
      1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from '__int64' to 'long', possible loss of data
-                 main.cpp(1706) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 main.cpp(1720) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
                  with
                  [
                      _Other1=__int64 &
          ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
                  ]
-                 main.cpp(1706) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
+                 main.cpp(1720) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
                  with
                  [
                      _Other1=__int64 &
@@ -53,6 +54,7 @@
          Release\QCCompoundWf.obj
          Release\QCContinousWf.obj
          Release\QCDate.obj
+         Release\QCDiscountBondPayoff.obj
          Release\QCFactoryFunctions.obj
          Release\QCFixedRatePayoff.obj
          Release\QCFloatingRatePayoff.obj
@@ -81,4 +83,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.28
+Time Elapsed 00:00:07.40

@@ -1,3 +1,4 @@
+#include <exception>
 #include "QCFixedRatePayoff.h"
 
 
@@ -15,6 +16,7 @@ QCFixedRatePayoff::QCFixedRatePayoff(
 void QCFixedRatePayoff::_setAllRates()
 {
 	unsigned int numPeriods = _irLeg->size();
+
 	_allRates.resize(numPeriods);
 	double rate{ _rate->getValue() };
 	for (unsigned int i = 0; i <numPeriods; ++i)
@@ -28,6 +30,30 @@ void QCFixedRatePayoff::_setAllRates()
 	{
 		_allRatesDerivatives.at(i) = temp;
 	}
+}
+
+QCInterestRateLeg::QCInterestRatePeriod QCFixedRatePayoff::getPeriodAt(unsigned int n) const
+{
+	return _irLeg->getPeriodAt(n);
+}
+
+bool QCFixedRatePayoff::operator<(const QCFixedRatePayoff& rhs)
+{
+	unsigned int lastPeriod = _irLeg->lastPeriod();
+	QCDate lastDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(this->getPeriodAt(lastPeriod));
+	lastPeriod = rhs.getLastPeriodIndex();
+	QCDate lastDateRhs = get<QCInterestRateLeg::intRtPrdElmntEndDate>(rhs.getPeriodAt(lastPeriod));
+	return lastDate < lastDateRhs;
+}
+
+bool QCFixedRatePayoff::lessThan(shared_ptr<QCFixedRatePayoff> lhs, shared_ptr<QCFixedRatePayoff> rhs)
+{
+	return *lhs < *rhs;
+}
+
+double QCFixedRatePayoff::getRateValue()
+{
+	return _rate->getValue();
 }
 
 QCFixedRatePayoff::~QCFixedRatePayoff()
