@@ -107,5 +107,20 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCTimeDepositPayoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFXForward.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

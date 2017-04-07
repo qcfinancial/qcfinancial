@@ -5,157 +5,27 @@
 
 #include "QCZeroCurveBootstrappingFromRatesAndFixedLegs.h"
 
-#define EPSILON 0.000000001
+const double EPSILON = 0.0000000001;
+const double BP = 0.0001;
 
 QCZeroCurveBootstrappingFromRatesAndFixedLegs::QCZeroCurveBootstrappingFromRatesAndFixedLegs(
 	QCDate valueDate,
 	vector<shared_ptr<QCTimeDepositPayoff>> inputRates,
 	vector<shared_ptr<QCFixedRatePayoff>> inputFixedRateLegs,
-	QCZrCpnCrvShrdPtr curve) :_valueDate(valueDate), _inputRates(inputRates),
-	_inputFixedRateLegs(inputFixedRateLegs), _curve(curve)
+	QCZrCpnCrvShrdPtr curve) : QCInterestRateCurveGenerator(
+	valueDate,inputRates,inputFixedRateLegs,
+	QCInterestRateCurveGenerator::emptyForward(), QCInterestRateCurveGenerator::emptyFloatingLegs(),
+	curve)
 {
-	if (!_checkInputRates())
-	{
-		throw invalid_argument(_checkInputRatesMsg);
-	}
 
-	if (!_checkInputFixedRateLegs())
-	{
-		throw invalid_argument(_checkInputFixedRateLegsMsg);
-	}
-}
-
-bool QCZeroCurveBootstrappingFromRatesAndFixedLegs::_checkInputRates()
-{
-	//Se ordena el vector de tasas iniciales por orden de fecha final ascendente
-	//El orden está definido en la sobrecarga del operador < en QCTimeDepositPayoff
-	sort(_inputRates.begin(),_inputRates.end(), QCTimeDepositPayoff::lessThan);
-
-	//Se verifica que la fecha inicial de la primera tasa sea igual a valueDate. Esto implica que se supone
-	//que vamos a construir una curva cero desde t + 0 = valueDate
-	if (get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputRates.at(0)->getPeriodAt(0)) != _valueDate)
-	{
-		_checkInputRatesMsg = "La fecha inicial de la primera tasa debe ser igual a valueDate";
-		return false;
-	}
-
-	//Primero se verifica si los endDate son estrictamente crecientes
-	//Si no lo son se arroja una excepción.
-	for (unsigned int i = 1; i < _inputRates.size(); ++i)
-	{
-		if (!(get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(i - 1)->getPeriodAt(0)) <
-			get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(i)->getPeriodAt(0))))
-		{
-			_checkInputRatesMsg = "Las tasas iniciales deben tener fechas finales estrictamente crecientes";
-			return false;
-		}
-	}
-
-	//Luego se chequea si todos los start date son iguales
-	bool todosStartDateSonValueDate = true;
-	for (unsigned int i = 1; i < _inputRates.size(); ++i)
-	{
-		if (get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputRates.at(i)->getPeriodAt(0)) != _valueDate)
-		{
-			todosStartDateSonValueDate = false;
-			break;
-		}
-	}
-
-	//Si no lo son se verifica que los startDate y endDate estén en una sucesión admisible.
-	//	staDate1	endDate1
-	//	endDate1	endDate2
-	//	endDate2	endDate3
-	//	endDate3	endDate4
-	//	endDate3	endDate5
-	//	endDate3	endDate6 ...
-	if (!todosStartDateSonValueDate)
-	{
-		for (unsigned int i = 1; i < _inputRates.size(); ++i)
-		{
-			//endDate1 = startDate2
-			bool flag1 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(i - 1)->getPeriodAt(0)) ==
-				get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputRates.at(i)->getPeriodAt(0));
-
-			//startDate2 = startDate1
-			bool flag2 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputRates.at(i - 1)->getPeriodAt(0)) ==
-				get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputRates.at(i)->getPeriodAt(0));
-
-			//Se debe cumplir al menos una de las dos condiciones anteriores
-			if (!(flag1 || flag2))
-			{
-				_checkInputRatesMsg = "Las tasas iniciales deben tener una sucesión de fechas de inicio ";
-				_checkInputRatesMsg += "y final admisibles.";
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
-bool QCZeroCurveBootstrappingFromRatesAndFixedLegs::_checkInputFixedRateLegs()
-{
-	//Se ordena el vector de patas fijas iniciales por orden de fecha final ascendente
-	//El orden está definido en la sobrecarga del operador < en QCFixedRatePayoff
-	sort(_inputFixedRateLegs.begin(), _inputFixedRateLegs.end(), QCFixedRatePayoff::lessThan);
-
-	//Primero se verifica si los endDate son estrictamente crecientes
-	//Si no lo son se retorna false .
-	for (unsigned int i = 1; i < _inputFixedRateLegs.size(); ++i)
-	{
-		unsigned int lastPeriodIndex1 = _inputFixedRateLegs.at(i - 1)->getLastPeriodIndex();
-		unsigned int lastPeriodIndex2 = _inputFixedRateLegs.at(i)->getLastPeriodIndex();
-
-		if (!(get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(i - 1)->getPeriodAt(lastPeriodIndex1)) <
-			get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(i)->getPeriodAt(lastPeriodIndex2))))
-		{
-			_checkInputFixedRateLegsMsg = "Los swaps iniciales deben tener fechas finales estrictamente crecientes";
-			return false;
-		}
-	}
-
-	//Luego se chequea si todos los start date son iguales.
-	//Si no lo son se retorna falso.
-	for (unsigned int i = 1; i < _inputFixedRateLegs.size(); ++i)
-	{
-		if (get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputFixedRateLegs.at(i - 1)->getPeriodAt(0)) != 
-			get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputFixedRateLegs.at(i)->getPeriodAt(0)))
-		{
-			_checkInputFixedRateLegsMsg = "Las fechas iniciales de los swaps no son iguales.";
-			return false;
-		}
-	}
-
-	//Se verifica que el start date de los swaps sea <= que el end date de la tasa más larga.
-	unsigned int temp = _inputRates.size();
-	QCDate fecha1 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputFixedRateLegs.at(0)->getPeriodAt(0));
-	QCDate fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(temp - 1)->getPeriodAt(0));
-	if (fecha1 > fecha2)
-	{
-		_checkInputFixedRateLegsMsg = "El start date de los swaps es mayor que el end date de la ";
-		_checkInputFixedRateLegsMsg += "tasa mas larga.";
-		return false;
-	}
-
-	//Finalmente se verifica que la fecha final del swap más corto sea superior a la fecha final
-	//de la tasa más larga.
-	fecha1 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(temp - 1)->getPeriodAt(0));
-	unsigned int lastPeriod = _inputFixedRateLegs.at(0)->getLastPeriodIndex();
-	fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(0)->getPeriodAt(lastPeriod));
-	if (fecha2 <= fecha1)
-	{
-		_checkInputFixedRateLegsMsg = "La end date del swap más corto es inferior a la end date ";
-		_checkInputFixedRateLegsMsg += "de la tasa más larga.";
-		return false;
-	}
-	return true;
 }
 
 void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 {
+	cout << "Enter QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()" << endl;
+
 	//Loop sobre las tasas
-	unsigned int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
+	int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
 	QCDate startDate{ get<QCInterestRateLeg::intRtPrdElmntStartDate>(
 		_inputRates.at(0)->getPeriodAt(0)) }; //Fecha inicial de todas las tasas que vamos a calcular
 	for (auto& td : _inputRates)
@@ -168,7 +38,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
-		while (diff > EPSILON)
+		while (abs(diff) > EPSILON)
 		{
 			double f{ td->presentValue(true) };
 			double df{ td->getPvRateDerivativeAt(rateCounter) };
@@ -179,6 +49,8 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		}
 	}
 	
+	cout << "Rate convergence Ok" << endl;
+
 	rateCounter = _inputRates.size() - 1;
 	QCDate swapsStartDate{get<QCInterestRateLeg::intRtPrdElmntStartDate>( _inputFixedRateLegs.at(0)->getPeriodAt(0))};
 	long plazo{ _valueDate.dayDiff(swapsStartDate) };
@@ -193,33 +65,139 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
-		while (diff > EPSILON)
+		while (abs(diff) > EPSILON)
 		{
 			double f{ fr->presentValue(true) - df };
-			double df{ fr->getPvRateDerivativeAt(rateCounter) };
-			rNext = rLast - f / df;
+			double derf{ fr->getPvRateDerivativeAt(rateCounter) };
+			rNext = rLast - f / derf;
 			_curve->setOrdinateAtWithValue(rateCounter, rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
 		}
 	}
+
+	cout << "Fixed Rate Leg convergence Ok" << endl;
+
 	return;
+}
+
+void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives()
+{
+	size_t numRates{ _inputRates.size() };
+	size_t numSwaps{ _inputFixedRateLegs.size() };
+
+	//Aqui guardamos todas las curvas bumpeadas
+	vector<vector<double>> bumps;
+	bumps.resize(numRates + numSwaps);
+
+	for (size_t i = 0; i < numRates + numSwaps; ++i)
+	{
+		//Bumpear el input que corresponde
+		if (i < numRates)
+		{
+			_inputRates.at(i)->addToRateValue(BP);
+		}
+		else
+		{
+			_inputFixedRateLegs.at(i - numRates)->addToRateValue(BP);
+		}
+		
+		//Ejecutar generateCurve() y guardar los valores
+		for (size_t k = 0; k < numRates + numSwaps; ++k)
+		{
+			_curve->setOrdinateAtWithValue(k, 0.0);
+		}
+		generateCurve();
+		vector<double> temp;
+		temp.resize(numRates + numSwaps);
+		for (size_t j = 0; j < numRates + numSwaps; ++j)
+		{
+			temp.at(j) = _curve->getRateAtIndex(j);
+		}
+		bumps.at(i) = temp;
+		
+		//Devolver el 1pip()
+		if (i < numRates)
+		{
+			_inputRates.at(i)->addToRateValue(-BP);
+		}
+		else
+		{
+			_inputFixedRateLegs.at(i - numRates)->addToRateValue(-BP);
+		}
+	}
+	
+	//Se genera la curva con los inputs sin bumpear
+	generateCurve();
+
+	//Finalmente se calculan las derivadas
+	_derivatives.resize(numRates + numSwaps);
+	for (size_t i = 0; i < numRates + numSwaps; ++i)
+	{
+		_derivatives.at(i).resize(numRates + numSwaps);
+		for (size_t j = 0; j < numRates + numSwaps; ++j)
+		{
+			_derivatives.at(i).at(j) = bumps.at(j).at(i) - _curve->getRateAt(i);
+		}
+	}
 }
 
 unsigned int QCZeroCurveBootstrappingFromRatesAndFixedLegs::getCurveLength()
 {
-	return 0;
+	return _curve->getLength();
 }
 
-double QCZeroCurveBootstrappingFromRatesAndFixedLegs::getRateAt(unsigned int index)
+double QCZeroCurveBootstrappingFromRatesAndFixedLegs::getRateAt(size_t index)
 {
-	return 0.0;
+	return _curve->getRateAt(index);
+}
+
+void QCZeroCurveBootstrappingFromRatesAndFixedLegs::calculateDerivativesAt(size_t derivativeIndex)
+{
+	//Deducir a que input corresponde el índice y sumar 1pip al índice que corresponde
+	size_t numRates{ _inputRates.size() };
+	size_t numSwaps{ _inputFixedRateLegs.size() };
+	if (derivativeIndex < numRates + 1)
+	{
+		_inputRates.at(derivativeIndex)->addToRateValue(BP);
+	}
+	else
+	{
+		_inputFixedRateLegs.at(derivativeIndex - numRates)->addToRateValue(BP);
+	}
+
+	//Ejecutar generateCurve() y guardar los valores
+	generateCurve();
+	vector<double> temp;
+	temp.resize(numRates + numSwaps);
+	for (size_t i = 0; i < numRates + numSwaps; ++i)
+	{
+		temp.at(i) = _curve->getRateAt(i);
+	}
+	
+	//Devolver el 1pip y volver a ejecutar generateCurve()
+	if (derivativeIndex < numRates + 1)
+	{
+		_inputRates.at(derivativeIndex)->addToRateValue(-BP);
+	}
+	else
+	{
+		_inputFixedRateLegs.at(derivativeIndex - numRates)->addToRateValue(-BP);
+	}
+	generateCurve();
+
+	//Sacar la diferencia entre _curve y los valores guardados y guardar esas diferencias en _derivatives
+	for (size_t i = 0; i < numRates + numSwaps; ++i)
+	{
+		_derivatives.at(i).at(derivativeIndex) = (temp.at(i) - _curve->getRateAt(i)) / BP;
+	}
+	return;
 }
 
 double QCZeroCurveBootstrappingFromRatesAndFixedLegs::getDerivativeAt(
-	unsigned int rateIndex, unsigned int derivativeIndex)
+	size_t rateIndex, size_t derivativeIndex)
 {
-	return 0.0;
+	return _derivatives.at(rateIndex).at(derivativeIndex);
 }
 
 QCZeroCurveBootstrappingFromRatesAndFixedLegs::~QCZeroCurveBootstrappingFromRatesAndFixedLegs()

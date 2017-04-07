@@ -32,11 +32,6 @@ void QCFixedRatePayoff::_setAllRates()
 	}
 }
 
-QCInterestRateLeg::QCInterestRatePeriod QCFixedRatePayoff::getPeriodAt(unsigned int n) const
-{
-	return _irLeg->getPeriodAt(n);
-}
-
 bool QCFixedRatePayoff::operator<(const QCFixedRatePayoff& rhs)
 {
 	unsigned int lastPeriod = _irLeg->lastPeriod();

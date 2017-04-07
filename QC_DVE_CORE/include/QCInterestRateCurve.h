@@ -106,6 +106,16 @@ public:
 	}
 
 	/*!
+	* Retorna el valor de la tasa en la posición index
+	* @param índice de la tasa buscada
+	* @return valor de la tasa
+	*/
+	double getRateAtIndex(size_t index)
+	{
+		return _curve->getValuesAt(index).second;
+	}
+
+	/*!
 	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tamaño de los
 	* vectores de abscisa y ordenadas.
 	* @param newSize nuevo tamaño de la curva

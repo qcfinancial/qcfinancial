@@ -39,7 +39,8 @@ public:
 		qcGBP,
 		qcEUR,
 		qcJPY,
-		qcUSD
+		qcUSD,
+		qcCHF
 	};
 
 	/*!
@@ -130,6 +131,26 @@ public:
 				return x.first;
 		}
 		throw invalid_argument("No corresponding fx rate enum for this fx rate code.");
+	}
+
+	/*!
+	* Retorna el enum de la divisa fuerte de un tipo de cambio si se da el código en texto.
+	*/
+	QCCurrency getStrongCurrencyEnum(string code)
+	{
+		auto fx = getFxRateEnum(code);
+		auto strong = _getStrongCurrency(fx);
+		return getCurrencyEnum(strong);
+	}
+
+	/*!
+	* Retorna el enum de la divisa debil de un tipo de cambio si se da el código en texto.
+	*/
+	QCCurrency getWeakCurrencyEnum(string code)
+	{
+		auto fx = getFxRateEnum(code);
+		auto weak = _getWeakCurrency(fx);
+		return getCurrencyEnum(weak);
 	}
 
 	/*!

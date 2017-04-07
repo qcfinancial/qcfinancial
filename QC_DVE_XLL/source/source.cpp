@@ -35,6 +35,8 @@
 #include "QCInterestRatePeriodsFactory.h"
 #include "HelperFunctions.h"
 #include "QCZeroCurveBootstrappingFromRatesAndFixedLegs.h"
+#include "QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.h"
+#include "QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.h"
 
 using namespace std;
 
@@ -141,17 +143,425 @@ CellMatrix checkBoostrapping(int xlValueDate,
 		inputFixedLegs.at(i) = tmpIntRatePayoff;
 	}
 
-	//Tengo que dar de alta el objeto bootstrapeador
-	QCDate v;
-	vector<shared_ptr<QCTimeDepositPayoff>> td;
-	vector<shared_ptr<QCFixedRatePayoff>> fr;
-	QCZrCpnCrvShrdPtr c;
+	//Se da de alta el objeto bootstrapeador
 	QCZeroCurveBootstrappingFromRatesAndFixedLegs boot{ valueDate, inputRates, inputFixedLegs, curve };
 
+	boot.generateCurveAndDerivatives();
+	 
+	CellMatrix result(cuantasTasas + cuantosSwaps, cuantasTasas + cuantosSwaps + 2);
+	for (size_t i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+	{
+		pair<long, double> temp = curve->getValuesAt(i);
+		result(i, 0) = temp.first;
+		result(i, 1) = temp.second;
+		for (size_t j = 0; j < cuantasTasas + cuantosSwaps; ++j)
+		{
+			result(i, 2 + j) = boot.getDerivativeAt(i, j);
+		}
+	}
+	return result;
+
+}
+
+CellMatrix checkBoostrappingFwds(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	int whichLeg,
+	CellMatrix xlInputFixedLegs,
+	CellMatrix calendar,
+	CellMatrix auxCurve,
+	double fx,
+	string interpolator)
+{
+	//Define fecha
+	QCDate valueDate{ xlValueDate };
+
+	//Define calendario
+	vector<QCDate> scl;
+	unsigned int cuantasFechas = calendar.RowsInStructure();
+	scl.resize(cuantasFechas);
+	for (unsigned int i = 0; i < cuantasFechas; ++i)
+	{
+		scl.at(i) = QCDate{ (long)calendar(i, 0).NumericValue() };
+	}
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve
+	int puntosCurva = auxCurve.RowsInStructure();
+	vector<long> auxTenors;
+	auxTenors.resize(puntosCurva);
+	vector<double> auxRates;
+	auxRates.resize(puntosCurva);
+	for (int i = 0; i < puntosCurva; ++i)
+	{
+		auxTenors.at(i) = auxCurve(i, 0).NumericValue();
+		auxRates.at(i) = auxCurve(i, 1).NumericValue();
+	}
+
+	//definir la curva cero cupon de descuento
+	QCZrCpnCrvShrdPtr auxCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(auxTenors,
+		auxRates, "linear", "act/365", "com");
+
+	shared_ptr<map<QCDate, double>> fixings;
+	
+	unsigned int cuantasTasas = xlInputRates.RowsInStructure();
+	vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+	inputRates.resize(cuantasTasas);
+
+	unsigned int cuantosForwards = xlInputForwards.RowsInStructure();
+	vector<shared_ptr<QCFXForward>> inputForwards;
+	inputForwards.resize(cuantosForwards);
+
+	unsigned int cuantosSwaps = xlInputFixedLegs.RowsInStructure();
+	vector<shared_ptr<QCFixedRatePayoff>> inputFixedLegs;
+	inputFixedLegs.resize(cuantosSwaps);
+
+	vector<long> tenors;
+	tenors.resize(cuantasTasas + cuantosForwards + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCDate fecha{ (long)xlInputRates(i, 1).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	for (unsigned int i = cuantasTasas; i < cuantasTasas + cuantosForwards; ++i)
+	{
+		QCDate fecha{ (long)xlInputForwards(i - cuantasTasas, 1).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	for (unsigned int i = cuantasTasas + cuantosForwards; i < cuantasTasas + cuantosForwards + 
+		cuantosSwaps; ++i)
+	{
+		QCDate fecha{ (long)xlInputFixedLegs(i - cuantasTasas - cuantosForwards, 2).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	vector<double> rates;
+	rates.resize(cuantasTasas + cuantosForwards + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosForwards + cuantosSwaps; ++i)
+	{
+		rates.at(i) = 0.0;
+	}
+
+	QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(
+		tenors, rates, "LINEAR", "act/365", "com");
+
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+			"R",
+			QCDate{ (long)xlInputRates(i, 0).NumericValue() },
+			QCDate{ (long)xlInputRates(i, 1).NumericValue() },
+			1.0);
+		string yf{ xlInputRates(i, 3).StringValue() };
+		string wf{ xlInputRates(i, 4).StringValue() };
+		QCHelperFunctions::lowerCase(yf);
+		QCHelperFunctions::lowerCase(wf);
+		QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputRates(i, 2).NumericValue(), yf, wf);
+		QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+		inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+	}
+
+	map<QCCurrencyConverter::QCFxRate, double> fxRate;
+	vector<shared_ptr<QCDiscountBondPayoff>> legs;
+	legs.resize(2);
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLFCLP, fx));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
+	for (unsigned int i = 0; i < cuantosForwards; ++i)
+	{
+		QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
+			"R",
+			QCDate{ (long)xlInputForwards(i, 0).NumericValue() },
+			QCDate{ (long)xlInputForwards(i, 1).NumericValue() },
+			0, 0, scl, scl, 1.0); //Esta esta en UF
+		
+		QCInterestRateLeg dbLeg1 = QCFactoryFunctions::buildDiscountBondLeg(
+			"P",
+			QCDate{ (long)xlInputForwards(i, 0).NumericValue() },
+			QCDate{ (long)xlInputForwards(i, 1).NumericValue() },
+			0, 0, scl, scl, xlInputForwards(i, 3).NumericValue());
+		
+		auto dbPayoff0 = make_shared<QCDiscountBondPayoff>(
+			make_shared<QCInterestRateLeg>(dbLeg0),
+			curve, valueDate, fixings,
+			QCCurrencyConverter::qcCLF, QCCurrencyConverter::qcCLFCLP);
+		legs.at(0) = dbPayoff0;
+		
+		auto dbPayoff1 = make_shared<QCDiscountBondPayoff>(
+			make_shared<QCInterestRateLeg>(dbLeg1),
+			auxCrvPtr, valueDate, fixings,
+			QCCurrencyConverter::qcCLP, QCCurrencyConverter::qcCLPCLP);
+		legs.at(1) = dbPayoff1;
+		
+		auto fxFwd = make_shared<QCFXForward>(legs, QCCurrencyConverter::qcCLP,
+			make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+		
+		inputForwards.at(i) = fxFwd;
+	}
+
+	vector<tuple<QCDate, double, double>> amortIfCustom;
+	for (unsigned int i = 0; i < cuantosSwaps; ++i)
+	{
+		//Se construye el interest rate
+		string wf = xlInputFixedLegs(i, 11).StringValue();
+		QCHelperFunctions::lowerCase(wf);
+		string yf = xlInputFixedLegs(i, 12).StringValue();
+		QCHelperFunctions::lowerCase(yf);
+		shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputFixedLegs(i, 9).NumericValue(), yf, wf);
+
+		//buildFixedRateLeg
+		//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+		QCInterestRateLeg tmpFixedLeg = QCFactoryFunctions::buildFixedRateLeg2(
+			"R",			//receive or pay
+			QCDate{ (long)xlInputFixedLegs(i, 1).NumericValue() },			//start date
+			QCDate{ (long)xlInputFixedLegs(i, 2).NumericValue() },			//end date
+			scl,	//settlement calendar
+			(int)xlInputFixedLegs(i, 4).NumericValue(),			//settlement lag
+			QCHelperFunctions::stringToQCStubPeriod(xlInputFixedLegs(i, 5).StringValue()),	//stub period
+			xlInputFixedLegs(i, 6).StringValue(),			//periodicity
+			QCHelperFunctions::stringToQCBusDayAdjRule(xlInputFixedLegs(i, 7).StringValue()),//end date adjustment
+			QCHelperFunctions::stringToQCAmortization(xlInputFixedLegs(i, 8).StringValue()),	//amortization
+			amortIfCustom, //amortization and notional by date
+			1.0);			//notional
+
+		//buildFixedRatePayoff
+		shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
+			new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpFixedLeg), curve, valueDate,
+			nullptr });
+
+		//Se agrega el payoff al vector de fixed legs
+		inputFixedLegs.at(i) = tmpIntRatePayoff;
+	}
+
+	//Tengo que dar de alta el objeto bootstrapeador
+	QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs boot{ valueDate, inputRates,
+		inputForwards, (unsigned int)whichLeg, inputFixedLegs, curve };
+	
 	boot.generateCurve();
 
-	CellMatrix result(cuantasTasas + cuantosSwaps, 2);
-	for (unsigned int i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+	CellMatrix result(cuantasTasas + cuantosForwards + cuantosSwaps, 2);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosForwards + cuantosSwaps; ++i)
+	{
+		pair<long, double> temp = curve->getValuesAt(i);
+		result(i, 0) = temp.first;
+		result(i, 1) = temp.second;
+	}
+	return result;
+
+}
+
+CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	int whichLeg,
+	CellMatrix xlInputFloatingLegs,
+	CellMatrix holidays,
+	CellMatrix intRateIndexChars,
+	CellMatrix auxCurveFwd,
+	CellMatrix auxCurveFloating,
+	double fx,
+	double fixing,
+	string interpolator)
+{
+	//Define fecha
+	QCDate valueDate{ xlValueDate };
+
+	//holidays: nombre, fecha. Se construye un map<string, vector<QCDate>> que para cada nombre de calendario
+	//tenga todas las fechas
+	map<string, vector<QCDate>> mapHolidays;
+	HelperFunctions::buildHolidays(holidays, mapHolidays);
+
+	//Metemos las caracteristicas de los indices en esta estructura
+	map<string, pair<string, string>> indexChars; //en el pair viene el tenor y el start date rule
+	HelperFunctions::buildStringPairStringMap(intRateIndexChars, indexChars);
+
+
+	//Se construye el shared_ptr de QCZeroCouponCurve de la curva auxiliar de los fwd
+	int puntosCurva = auxCurveFwd.RowsInStructure();
+	vector<long> auxTenorsFwd;
+	auxTenorsFwd.resize(puntosCurva);
+	vector<double> auxRatesFwd;
+	auxRatesFwd.resize(puntosCurva);
+	for (int i = 0; i < puntosCurva; ++i)
+	{
+		auxTenorsFwd.at(i) = auxCurveFwd(i, 0).NumericValue();
+		auxRatesFwd.at(i) = auxCurveFwd(i, 1).NumericValue();
+	}
+
+	//definir la curva cero cupon auxiliar de forwards
+	shared_ptr<QCInterestRateCurve> auxCrvFwdPtr = QCFactoryFunctions::intRtCrvShrdPtr(auxTenorsFwd,
+		auxRatesFwd, "linear", "com", "act/365", QCInterestRateCurve::qcZeroCouponCurve);
+
+	//Se construye el shared_ptr de QCZeroCouponCurve de la curva auxiliar de las patas flotantes
+	puntosCurva = auxCurveFloating.RowsInStructure();
+	vector<long> auxTenorsFloating;
+	auxTenorsFloating.resize(puntosCurva);
+	vector<double> auxRatesFloating;
+	auxRatesFloating.resize(puntosCurva);
+	for (int i = 0; i < puntosCurva; ++i)
+	{
+		auxTenorsFloating.at(i) = auxCurveFloating(i, 0).NumericValue();
+		auxRatesFloating.at(i) = auxCurveFloating(i, 1).NumericValue();
+	}
+
+	//definir la curva cero cupon auxiliar de patas flotantes
+	shared_ptr<QCInterestRateCurve> auxCrvFloatingPtr = QCFactoryFunctions::intRtCrvShrdPtr(auxTenorsFloating,
+		auxRatesFloating, "linear", "com", "act/365", QCInterestRateCurve::qcZeroCouponCurve);
+
+	shared_ptr<map<QCDate, double>> fixings;
+
+	unsigned int cuantasTasas = xlInputRates.RowsInStructure();
+	vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+	inputRates.resize(cuantasTasas);
+
+	unsigned int cuantosForwards = xlInputForwards.RowsInStructure();
+	vector<shared_ptr<QCFXForward>> inputForwards;
+	inputForwards.resize(cuantosForwards);
+
+	unsigned int cuantosSwaps = xlInputFloatingLegs.RowsInStructure();
+	vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingLegs;
+	inputFloatingLegs.resize(cuantosSwaps);
+
+	vector<long> tenors;
+	tenors.resize(cuantasTasas + cuantosForwards + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCDate fecha{ (long)xlInputRates(i, 1).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	for (unsigned int i = cuantasTasas; i < cuantasTasas + cuantosForwards; ++i)
+	{
+		QCDate fecha{ (long)xlInputForwards(i - cuantasTasas, 1).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	for (unsigned int i = cuantasTasas + cuantosForwards; i < cuantasTasas + cuantosForwards +
+		cuantosSwaps; ++i)
+	{
+		QCDate fecha{ (long)xlInputFloatingLegs(i - cuantasTasas - cuantosForwards, 2).NumericValue() };
+		tenors.at(i) = valueDate.dayDiff(fecha);
+	}
+
+	vector<double> rates;
+	rates.resize(cuantasTasas + cuantosForwards + cuantosSwaps);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosForwards + cuantosSwaps; ++i)
+	{
+		rates.at(i) = 0.0;
+	}
+
+	shared_ptr<QCInterestRateCurve> curve = QCFactoryFunctions::intRtCrvShrdPtr(
+		tenors, rates, "LINEAR", "com", "act/365", QCInterestRateCurve::qcZeroCouponCurve);
+
+	for (unsigned int i = 0; i < cuantasTasas; ++i)
+	{
+		QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+			"R",
+			QCDate{ (long)xlInputRates(i, 0).NumericValue() },
+			QCDate{ (long)xlInputRates(i, 1).NumericValue() },
+			1.0);
+		string yf{ xlInputRates(i, 3).StringValue() };
+		string wf{ xlInputRates(i, 4).StringValue() };
+		QCHelperFunctions::lowerCase(yf);
+		QCHelperFunctions::lowerCase(wf);
+		QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputRates(i, 2).NumericValue(), yf, wf);
+		QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+		inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+	}
+
+	map<QCCurrencyConverter::QCFxRate, double> fxRate;
+	vector<shared_ptr<QCDiscountBondPayoff>> legs;
+	legs.resize(2);
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcUSDCLP, fx));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
+	for (unsigned int i = 0; i < cuantosForwards; ++i)
+	{
+		QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
+			"R",
+			QCDate{ (long)xlInputForwards(i, 0).NumericValue() },
+			QCDate{ (long)xlInputForwards(i, 1).NumericValue() },
+			0, 0, mapHolidays.at("SCL"), mapHolidays.at("SCL"), 1.0); //Esta esta en USD
+
+		double weakNotional = xlInputForwards(i, 3).NumericValue() + fx;
+		QCInterestRateLeg dbLeg1 = QCFactoryFunctions::buildDiscountBondLeg(
+			"P",
+			QCDate{ (long)xlInputForwards(i, 0).NumericValue() },
+			QCDate{ (long)xlInputForwards(i, 1).NumericValue() },
+			0, 0, mapHolidays.at("SCL"), mapHolidays.at("SCL"), weakNotional);
+
+		auto dbPayoff0 = make_shared<QCDiscountBondPayoff>(
+			make_shared<QCInterestRateLeg>(dbLeg0),
+			curve, valueDate, fixings,
+			QCCurrencyConverter::qcUSD, QCCurrencyConverter::qcUSDCLP);
+		legs.at(0) = dbPayoff0;
+
+		auto dbPayoff1 = make_shared<QCDiscountBondPayoff>(
+			make_shared<QCInterestRateLeg>(dbLeg1),
+			auxCrvFwdPtr, valueDate, fixings,
+			QCCurrencyConverter::qcCLP, QCCurrencyConverter::qcCLPCLP);
+		legs.at(1) = dbPayoff1;
+
+		auto fxFwd = make_shared<QCFXForward>(legs, QCCurrencyConverter::qcCLP,
+			make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+
+		inputForwards.at(i) = fxFwd;
+	}
+
+	vector<tuple<QCDate, double, double>> amortIfCustom;
+	map<QCDate, double> liborFixing;
+	liborFixing.insert(make_pair(QCDate{ 13, 3, 2017 }, fixing));
+	for (unsigned int i = 0; i < cuantosSwaps; ++i)
+	{
+		//Se construye el interest rate
+		string wf = xlInputFloatingLegs(i, 18).StringValue();
+		QCHelperFunctions::lowerCase(wf);
+		string yf = xlInputFloatingLegs(i, 19).StringValue();
+		QCHelperFunctions::lowerCase(yf);
+		shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+			xlInputFloatingLegs(i, 10).NumericValue(), yf, wf);
+
+		//buildFloatingRateLeg
+		//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+		QCInterestRateLeg tmpFloatingLeg = QCFactoryFunctions::buildFloatingRateLeg2(
+			"R",			//receive or pay
+			QCDate{ (long)xlInputFloatingLegs(i, 1).NumericValue() },			//start date
+			QCDate{ (long)xlInputFloatingLegs(i, 2).NumericValue() },			//end date
+			mapHolidays.at("SCL"),	//settlement calendar
+			(int)xlInputFloatingLegs(i, 4).NumericValue(),			//settlement lag
+			QCHelperFunctions::stringToQCStubPeriod(xlInputFloatingLegs(i, 5).StringValue()),	//stub period
+			xlInputFloatingLegs(i, 6).StringValue(),			//periodicity
+			QCHelperFunctions::stringToQCBusDayAdjRule(xlInputFloatingLegs(i, 7).StringValue()),//end date adjustment
+			QCHelperFunctions::stringToQCAmortization(xlInputFloatingLegs(i, 8).StringValue()),	//amortization
+			amortIfCustom, //amortization and notional by date
+			(int)xlInputFloatingLegs(i, 15).NumericValue(),	
+			QCHelperFunctions::stringToQCStubPeriod(xlInputFloatingLegs(i, 12).StringValue()),//fixing stub period
+			xlInputFloatingLegs(i, 13).StringValue(),			//periodicity
+			mapHolidays.at("LONDON"),
+			indexChars.at("Libor USD 3M"),
+			1.0);			//notional
+
+		//buildFloatingRatePayoff
+		shared_ptr<QCFloatingRatePayoff> tmpIntRatePayoff = shared_ptr<QCFloatingRatePayoff>(
+			new QCFloatingRatePayoff{ tmpIntRate, xlInputFloatingLegs(i, 11).NumericValue(), 1.0,
+			make_shared<QCInterestRateLeg>(tmpFloatingLeg),
+			auxCrvFloatingPtr, curve, valueDate,
+			make_shared<map<QCDate, double>>(liborFixing) });
+
+		//Se agrega el payoff al vector de fixed legs
+		inputFloatingLegs.at(i) = tmpIntRatePayoff;
+	}
+
+	//Tengo que dar de alta el objeto bootstrapeador
+	QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs boot{ valueDate, inputRates,
+		inputForwards, (unsigned int)whichLeg, inputFloatingLegs,
+		dynamic_pointer_cast<QCZeroCouponCurve>(curve) };
+	boot.generateCurve();
+
+	CellMatrix result(cuantasTasas + cuantosForwards + cuantosSwaps, 2);
+	for (unsigned int i = 0; i < cuantasTasas + cuantosForwards + cuantosSwaps; ++i)
 	{
 		pair<long, double> temp = curve->getValuesAt(i);
 		result(i, 0) = temp.first;

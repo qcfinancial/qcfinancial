@@ -14,6 +14,10 @@ long QCHelperFunctions::tenor(string periodicity)
 	{
 		return stoi(periodicity.substr(0, periodicity.size() - 1));
 	}
+	else if (symbol == "d")
+	{
+		return stoi(periodicity.substr(0, periodicity.size() - 1));
+	}
 	else
 	{
 		return 0;

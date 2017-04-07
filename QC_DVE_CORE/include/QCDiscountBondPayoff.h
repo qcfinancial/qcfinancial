@@ -42,6 +42,12 @@ public:
 	QCCurrencyConverter::QCCurrency getNotionalCurrency();
 
 	/*!
+	* Entrega el período de tasa de interés
+	* @return único QCInterestRatePeriod de este payoff.
+	*/
+	QCInterestRateLeg::QCInterestRatePeriod getPeriod() const;
+
+	/*!
 	* Destructor
 	*/
 	virtual ~QCDiscountBondPayoff();

@@ -1,52 +1,7 @@
-﻿Build started 08/03/2017 11:34:28.
+﻿Build started 07/04/2017 4:26:49.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(104): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(135): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include\QCDvePyBindHelperFunctions.h(175): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(157): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(338): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(541): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(754): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(982): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1204): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1219): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>main.cpp(1448): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1462): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>main.cpp(1668): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(1683): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
-     1>main.cpp(1887): warning C4018: '<' : signed/unsigned mismatch
-     1>main.cpp(2134): warning C4101: 'label' : unreferenced local variable
-     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from 'double' to 'long', possible loss of data
-                 main.cpp(1025) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=double &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-                 main.cpp(1025) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=double &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\utility(144): warning C4244: 'initializing' : conversion from '__int64' to 'long', possible loss of data
-                 main.cpp(1720) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=__int64 &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-                 main.cpp(1720) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=__int64 &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-       Link:
+     1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib" /MACHINE:X86 /SAFESEH /DLL Release\QC30360.obj
          Release\QCAct360.obj
          Release\QCAct365.obj
@@ -58,6 +13,7 @@
          Release\QCFactoryFunctions.obj
          Release\QCFixedRatePayoff.obj
          Release\QCFloatingRatePayoff.obj
+         Release\QCFXForward.obj
          Release\QCHelperFunctions.obj
          Release\QCIcpClfPayoff.obj
          Release\QCIcpClpPayoff.obj
@@ -70,17 +26,22 @@
          Release\QCLinearWf.obj
          Release\QCLogLinearInterpolator.obj
          Release\QCProjectingInterestRateCurve.obj
+         Release\QCTimeDepositPayoff.obj
          Release\QCWealthFactor.obj
          Release\QCZeroCouponCurve.obj
          Release\QCZeroCouponDiscountFactorCurve.obj
          Release\QCZeroCouponInterestRateCurve.obj
+         Release\QCZeroCurveBootstrappingFromRatesAndFixedLegs.obj
+         Release\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.obj
+         Release\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.obj
          Release\main.obj
             Creating library c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib and object c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.exp
          Generating code
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfxforward.cpp(118): warning C4715: 'QCFXForward::getPvRateDerivativeAtFromLeg' : not all control paths return a value
          Finished generating code
          QC_DVE_PYBIND.vcxproj -> c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd
      1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:07.40
+Time Elapsed 00:00:10.40

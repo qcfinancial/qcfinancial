@@ -110,6 +110,248 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
+checkBoostrappingFwdsArgs[]=
+{
+{ "xlValueDate","too lazy to comment this one ","B"},
+{ "xlInputRates","too lazy to comment this one ","XLF_OPER"},
+{ "xlInputForwards","too lazy to comment this one ","XLF_OPER"},
+{ "whichLeg","too lazy to comment this one ","B"},
+{ "xlInputFixedLegs","too lazy to comment this one ","XLF_OPER"},
+{ "calendar","too lazy to comment this one ","XLF_OPER"},
+{ "auxCurve","too lazy to comment this one ","XLF_OPER"},
+{ "fx","too lazy to comment this one ","B"},
+{ "interpolator","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registercheckBoostrappingFwds("xlcheckBoostrappingFwds",
+"checkBoostrappingFwds",
+"too lazy to comment this function ",
+LibraryName,
+checkBoostrappingFwdsArgs,
+9
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlcheckBoostrappingFwds(
+double xlValueDatea,
+LPXLFOPER xlInputRatesa,
+LPXLFOPER xlInputForwardsa,
+double whichLega,
+LPXLFOPER xlInputFixedLegsa,
+LPXLFOPER calendara,
+LPXLFOPER auxCurvea,
+double fx,
+LPXLFOPER interpolatora)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+int xlValueDate(
+	static_cast<int>(xlValueDatea));
+
+XlfOper xlInputRatesb(
+	(xlInputRatesa));
+CellMatrix xlInputRates(
+	xlInputRatesb.AsCellMatrix("xlInputRates"));
+
+XlfOper xlInputForwardsb(
+	(xlInputForwardsa));
+CellMatrix xlInputForwards(
+	xlInputForwardsb.AsCellMatrix("xlInputForwards"));
+
+int whichLeg(
+	static_cast<int>(whichLega));
+
+XlfOper xlInputFixedLegsb(
+	(xlInputFixedLegsa));
+CellMatrix xlInputFixedLegs(
+	xlInputFixedLegsb.AsCellMatrix("xlInputFixedLegs"));
+
+XlfOper calendarb(
+	(calendara));
+CellMatrix calendar(
+	calendarb.AsCellMatrix("calendar"));
+
+XlfOper auxCurveb(
+	(auxCurvea));
+CellMatrix auxCurve(
+	auxCurveb.AsCellMatrix("auxCurve"));
+
+
+XlfOper interpolatorb(
+	(interpolatora));
+string interpolator(
+	interpolatorb.AsString("interpolator"));
+
+CellMatrix result(
+	checkBoostrappingFwds(
+		xlValueDate,
+		xlInputRates,
+		xlInputForwards,
+		whichLeg,
+		xlInputFixedLegs,
+		calendar,
+		auxCurve,
+		fx,
+		interpolator)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+checkBoostrappingFwdsFloatingArgs[]=
+{
+{ "xlValueDate","too lazy to comment this one ","B"},
+{ "xlInputRates","too lazy to comment this one ","XLF_OPER"},
+{ "xlInputForwards","too lazy to comment this one ","XLF_OPER"},
+{ "whichLeg","too lazy to comment this one ","B"},
+{ "xlInputFloatingLegs","too lazy to comment this one ","XLF_OPER"},
+{ "holidays","too lazy to comment this one ","XLF_OPER"},
+{ "intRateIndexChars","too lazy to comment this one ","XLF_OPER"},
+{ "auxCurveFwd","too lazy to comment this one ","XLF_OPER"},
+{ "auxCurveFloating","too lazy to comment this one ","XLF_OPER"},
+{ "fx","too lazy to comment this one ","B"},
+{ "fixing","too lazy to comment this one ","B"},
+{ "interpolator","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registercheckBoostrappingFwdsFloating("xlcheckBoostrappingFwdsFloating",
+"checkBoostrappingFwdsFloating",
+"too lazy to comment this function ",
+LibraryName,
+checkBoostrappingFwdsFloatingArgs,
+12
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlcheckBoostrappingFwdsFloating(
+double xlValueDatea,
+LPXLFOPER xlInputRatesa,
+LPXLFOPER xlInputForwardsa,
+double whichLega,
+LPXLFOPER xlInputFloatingLegsa,
+LPXLFOPER holidaysa,
+LPXLFOPER intRateIndexCharsa,
+LPXLFOPER auxCurveFwda,
+LPXLFOPER auxCurveFloatinga,
+double fx,
+double fixing,
+LPXLFOPER interpolatora)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+int xlValueDate(
+	static_cast<int>(xlValueDatea));
+
+XlfOper xlInputRatesb(
+	(xlInputRatesa));
+CellMatrix xlInputRates(
+	xlInputRatesb.AsCellMatrix("xlInputRates"));
+
+XlfOper xlInputForwardsb(
+	(xlInputForwardsa));
+CellMatrix xlInputForwards(
+	xlInputForwardsb.AsCellMatrix("xlInputForwards"));
+
+int whichLeg(
+	static_cast<int>(whichLega));
+
+XlfOper xlInputFloatingLegsb(
+	(xlInputFloatingLegsa));
+CellMatrix xlInputFloatingLegs(
+	xlInputFloatingLegsb.AsCellMatrix("xlInputFloatingLegs"));
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper intRateIndexCharsb(
+	(intRateIndexCharsa));
+CellMatrix intRateIndexChars(
+	intRateIndexCharsb.AsCellMatrix("intRateIndexChars"));
+
+XlfOper auxCurveFwdb(
+	(auxCurveFwda));
+CellMatrix auxCurveFwd(
+	auxCurveFwdb.AsCellMatrix("auxCurveFwd"));
+
+XlfOper auxCurveFloatingb(
+	(auxCurveFloatinga));
+CellMatrix auxCurveFloating(
+	auxCurveFloatingb.AsCellMatrix("auxCurveFloating"));
+
+
+
+XlfOper interpolatorb(
+	(interpolatora));
+string interpolator(
+	interpolatorb.AsString("interpolator"));
+
+CellMatrix result(
+	checkBoostrappingFwdsFloating(
+		xlValueDate,
+		xlInputRates,
+		xlInputForwards,
+		whichLeg,
+		xlInputFloatingLegs,
+		holidays,
+		intRateIndexChars,
+		auxCurveFwd,
+		auxCurveFloating,
+		fx,
+		fixing,
+		interpolator)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
 qcFechaArgs[]=
 {
 { "f","too lazy to comment this one ","XLF_OPER"}

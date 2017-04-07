@@ -1,7 +1,5 @@
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\vc120.pdb
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\vc120.idb
-\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfixedratepayoff.obj
-\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfloatingratepayoff.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qchelperfunctions.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcicpclfpayoff.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcicpclppayoff.obj
@@ -20,6 +18,8 @@
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocoupondiscountfactorcurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocouponinterestratecurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocurvebootstrappingfromratesandfixedlegs.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocurvebootstrappingfromratesfwdsandfixedlegs.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocurvebootstrappingfromratesfwdsandfloatinglegs.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qc30360.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcact360.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcact365.obj
@@ -31,6 +31,9 @@
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcdate.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcdiscountbondpayoff.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfactoryfunctions.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfixedratepayoff.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfloatingratepayoff.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qcfxforward.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qczerocouponcurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\debug\qc_dve_core.lib
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\debug\qc_dve_core.tlog\cl.command.1.tlog

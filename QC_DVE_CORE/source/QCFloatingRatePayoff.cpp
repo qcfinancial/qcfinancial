@@ -14,7 +14,7 @@ QCFloatingRatePayoff::QCFloatingRatePayoff(QCIntrstRtShrdPtr floatingRate,
 	_setAllRates();
 }
 
-double QCFloatingRatePayoff::getForwardRateAt(int n)
+double QCFloatingRatePayoff::getForwardRateAt(size_t n)
 {
 	return _forwardRates.at(n);
 }
@@ -43,8 +43,8 @@ void QCFloatingRatePayoff::_setAllRates()
 		if (_valueDate >= temp)
 		{
 			QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
-			_allRates.at(i) = (_fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
-				+ _additiveSpread) * _multipSpread;
+			_allRates.at(i) = _fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
+				* _multipSpread + _additiveSpread;
 
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
@@ -90,6 +90,20 @@ void QCFloatingRatePayoff::_setAllRates()
 			_allRates.at(i) = (tasaFwd + _additiveSpread) * _multipSpread;
 		}
 	}
+}
+
+bool QCFloatingRatePayoff::operator<(const QCFloatingRatePayoff& rhs)
+{
+	unsigned int lastPeriod = _irLeg->lastPeriod();
+	QCDate lastDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(this->getPeriodAt(lastPeriod));
+	lastPeriod = rhs.getLastPeriodIndex();
+	QCDate lastDateRhs = get<QCInterestRateLeg::intRtPrdElmntEndDate>(rhs.getPeriodAt(lastPeriod));
+	return lastDate < lastDateRhs;
+}
+
+bool QCFloatingRatePayoff::lessThan(shared_ptr<QCFloatingRatePayoff> lhs, shared_ptr<QCFloatingRatePayoff> rhs)
+{
+	return *lhs < *rhs;
 }
 
 QCFloatingRatePayoff::~QCFloatingRatePayoff()

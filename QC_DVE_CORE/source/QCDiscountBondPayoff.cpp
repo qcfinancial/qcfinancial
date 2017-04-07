@@ -51,6 +51,11 @@ QCCurrencyConverter::QCCurrency QCDiscountBondPayoff::getNotionalCurrency()
 	return _notionalCurrency;
 }
 
+QCInterestRateLeg::QCInterestRatePeriod QCDiscountBondPayoff::getPeriod() const
+{
+	return _irLeg->getPeriodAt(0);
+}
+
 QCDiscountBondPayoff::~QCDiscountBondPayoff()
 {
 }

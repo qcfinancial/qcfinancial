@@ -16,6 +16,9 @@
 #include "QCIcpClfPayoff.h"
 #include "QCIcpClpPayoff.h"
 #include "QCDiscountBondPayoff.h"
+#include "QCTimeDepositPayoff.h"
+#include "QCZeroCurveBootstrappingFromRatesAndFixedLegs.h"
+#include "QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.h"
 
 using namespace std;
 #define BASIS_POINT .0001
@@ -871,6 +874,475 @@ PyObject* cashflow_floating_rate_legs(PyObject* self, PyObject*  args)
 		return NULL;
 	}
 }
+
+PyObject* boot_zero_rates_fixed_legs(PyObject* self, PyObject* args)
+{
+	cout << "Enter function boot_zero_rates_fixed_legs." << endl;
+	char* fecha;
+	PyObject* holidays;
+	PyObject* curveCharacteristics;
+	PyObject* zeroRates;
+	PyObject* fixedLegs;
+
+	if (!PyArg_ParseTuple(args,
+		"sO!O!O!O!",
+		&fecha,
+		&PyList_Type, &holidays,
+		&PyList_Type, &curveCharacteristics,
+		&PyList_Type, &zeroRates,
+		&PyList_Type, &fixedLegs))
+	{
+		string msg = "boot_zero_rates_fixed_legs: error en los argumentos.";
+		PyErr_SetString(qcDveError, msg.c_str());
+		return NULL;
+	}
+	try
+	{
+		//Se construye la fecha de proceso
+		string strDate{ fecha };
+		QCDate valueDate{ strDate };
+
+		//Se construye el vector con las fechas de los feriados
+		vector<QCDate> dateVector;
+		QCDvePyBindHelperFunctions::buildQCDateVector(holidays, dateVector);
+		cout << "\tboot_zero_rates_fixed_legs: finished holidays." << endl;
+
+		//Se construyen las caracteristicas de las curvas a construir
+		string curveInterpol{ PyString_AsString(PyList_GetItem(curveCharacteristics, 0)) }; //Interpolacion
+		string curveWf{ PyString_AsString(PyList_GetItem(curveCharacteristics, 1)) }; //wealth factor
+		QCHelperFunctions::lowerCase(curveWf);
+		string curveYf{ PyString_AsString(PyList_GetItem(curveCharacteristics, 2)) }; //year fraction
+		QCHelperFunctions::lowerCase(curveYf);
+		cout << "\tboot_zero_rates_fixed_legs: finished curve characteristics." << endl;
+
+		//Se construye un vector con los datos de las tasas cero iniciales
+		vector<QCDvePyBindHelperFunctions::ZeroRate> zeroRateVector;
+		QCDvePyBindHelperFunctions::buildZeroRateVector(zeroRates, valueDate, dateVector, zeroRateVector);
+		cout << "\tboot_zero_rates_fixed_legs: finished zero rates." << endl;
+
+		//Se construye un vector con las patas fijas iniciales
+		vector<QCDvePyBindHelperFunctions::SwapIndex> swapIndexVector;
+		QCDvePyBindHelperFunctions::buildFixedRateIndexVector(fixedLegs, valueDate, dateVector, swapIndexVector);
+		cout << "\tboot_zero_rates_fixed_legs: finished fixed rate legs." << endl;
+
+		size_t cuantasTasas = zeroRateVector.size();
+		vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+		inputRates.resize(cuantasTasas);
+		cout << "\tboot_zero_rates_fixed_legs: inputRates resized" << endl;
+
+		size_t cuantosSwaps = swapIndexVector.size();
+		vector<shared_ptr<QCFixedRatePayoff>> inputFixedLegs;
+		inputFixedLegs.resize(cuantosSwaps);
+		cout << "\tboot_zero_rates_fixed_legs: inputFixedLegs resized" << endl;
+
+		vector<long> tenors;
+		tenors.resize(cuantasTasas + cuantosSwaps);
+		for (unsigned int i = 0; i < cuantasTasas; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<1>(zeroRateVector.at(i)));
+		}
+
+		for (unsigned int i = cuantasTasas; i < cuantasTasas + cuantosSwaps; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(swapIndexVector.at(i - cuantasTasas)));
+		}
+		cout << "\tboot_zero_rates_fixed_legs: curve tenors ok" << endl;
+
+		vector<double> rates;
+		rates.resize(cuantasTasas + cuantosSwaps);
+		for (unsigned int i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+		{
+			rates.at(i) = 0.0;
+		}
+		cout << "\tboot_zero_rates_fixed_legs: curve rates ok" << endl;
+
+		QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, curveInterpol,
+			curveYf, curveWf);
+		cout << "\tboot_zero_rates_fixed_legs: curve initialized" << endl;
+
+		for (unsigned int i = 0; i < cuantasTasas; ++i)
+		{
+			QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+				"R",
+				get<0>(zeroRateVector.at(i)),
+				get<1>(zeroRateVector.at(i)),
+				1.0);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
+			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+				get<2>(zeroRateVector.at(i)),
+				get<3>(zeroRateVector.at(i)),
+				get<4>(zeroRateVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
+			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
+
+		}
+
+		vector<tuple<QCDate, double, double>> amortIfCustom;
+		for (unsigned int i = 0; i < cuantosSwaps; ++i)
+		{
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+				get<8>(swapIndexVector.at(i)),
+				get<10>(swapIndexVector.at(i)),
+				get<11>(swapIndexVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: swap interest rate " << i << " initialized" << endl;
+
+			//buildFixedRateLeg
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			QCInterestRateLeg tmpFixedLeg = QCFactoryFunctions::buildFixedRateLeg2(
+				get<0>(swapIndexVector.at(i)),			//receive or pay
+				get<1>(swapIndexVector.at(i)),			//start date
+				get<2>(swapIndexVector.at(i)),			//end date
+				dateVector,								//settlement calendar
+				get<3>(swapIndexVector.at(i)),			//settlement lag
+				get<4>(swapIndexVector.at(i)),			//stub period
+				get<5>(swapIndexVector.at(i)),			//periodicity
+				get<6>(swapIndexVector.at(i)),			//end date adjustment
+				get<7>(swapIndexVector.at(i)),			//amortization
+				amortIfCustom,							//amortization and notional by date
+				get<9>(swapIndexVector.at(i)));			//notional
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
+
+			//buildFixedRatePayoff
+			shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
+				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpFixedLeg), curve, valueDate,
+				nullptr });
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest payoff " << i << " initialized" << endl;
+
+			//Se agrega el payoff al vector de fixed legs
+			inputFixedLegs.at(i) = tmpIntRatePayoff;
+		}
+
+		//Se da de alta el objeto bootstrapeador
+		QCZeroCurveBootstrappingFromRatesAndFixedLegs boot{ valueDate, inputRates, inputFixedLegs, curve };
+		cout << "\tboot_zero_rates_fixed_legs: bootstrapping object initialized" << endl;
+
+		boot.generateCurve();
+		cout << "\tboot_zero_rates_fixed_legs: curve bootstrapped" << endl;
+
+		vector<tuple<long, double, vector<double>>> result;
+		result.resize(cuantasTasas + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+		{
+			get<2>(result.at(i)).resize(cuantasTasas + cuantosSwaps);
+			pair<long, double> temp = curve->getValuesAt(i);
+			get<0>(result.at(i)) = temp.first;
+			get<1>(result.at(i)) = temp.second;
+			for (size_t j = 0; j < cuantasTasas + cuantosSwaps; ++j)
+			{
+				get<2>(result.at(i)).at(j) = 0.0; // boot.getDerivativeAt(i, j);				cout << "here1" << endl;
+			}
+		}
+		cout << "\tboot_zero_rates_fixed_legs: results obtained" << endl;
+
+		PyObject* curveAndDeltas = PyList_New(cuantasTasas + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas + cuantosSwaps; ++i)
+		{
+			size_t columnas = 2 + cuantasTasas + cuantosSwaps;
+			PyObject* temp = PyList_New(columnas);
+			int success;
+			success = PyList_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
+			success = PyList_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
+			for (unsigned int j = 0; j < cuantasTasas + cuantosSwaps; ++j)
+			{
+				success = PyList_SetItem(temp, j + 2, PyFloat_FromDouble(get<2>(result.at(i)).at(j)));
+			}
+			success = PyList_SetItem(curveAndDeltas, i, temp);
+		}
+		cout << "\tboot_zero_rates_fixed_legs: output prepared" << endl;
+
+		return curveAndDeltas;
+
+	}
+	catch (exception& e)
+	{
+		string msg = "Error en el bootstrapping Rates&Fixed_Legs. " + string(e.what());
+		PyErr_SetString(qcDveError, msg.c_str());
+		return NULL;
+	}
+
+}
+
+PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
+{
+	cout << "Enter function boot_zero_rates_fwds_fixed_legs." << endl;
+	char* fecha;
+	double fx;
+	PyObject* holidays;
+	PyObject* curveCharacteristics;
+	PyObject* zeroRates;
+	PyObject* fxForwards;
+	PyObject* fixedLegs;
+	PyObject* auxCurveValues;
+	PyObject* auxCurveChars;
+
+	if (!PyArg_ParseTuple(args,
+		"sdO!O!O!O!O!O!O!",
+		&fecha,
+		&fx,
+		&PyList_Type, &holidays,
+		&PyList_Type, &curveCharacteristics,
+		&PyList_Type, &zeroRates,
+		&PyList_Type, &fxForwards,
+		&PyList_Type, &fixedLegs,
+		&PyList_Type, &auxCurveValues,
+		&PyList_Type, &auxCurveChars))
+	{
+		string msg = "boot_zero_rates_fwds_fixed_legs: error en los argumentos.";
+		PyErr_SetString(qcDveError, msg.c_str());
+		return NULL;
+	}
+	try
+	{
+		//Se construye la fecha de proceso
+		string strDate{ fecha };
+		QCDate valueDate{ strDate };
+
+		//Se construye el vector con las fechas de los feriados
+		vector<QCDate> dateVector;
+		QCDvePyBindHelperFunctions::buildQCDateVector(holidays, dateVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished holidays." << endl;
+
+		//Se dan de alta las caracteristicas de la curva a construir
+		string curveInterpol{ PyString_AsString(PyList_GetItem(curveCharacteristics, 0)) }; //Interpolacion
+		string curveWf{ PyString_AsString(PyList_GetItem(curveCharacteristics, 1)) }; //wealth factor
+		QCHelperFunctions::lowerCase(curveWf);
+		string curveYf{ PyString_AsString(PyList_GetItem(curveCharacteristics, 2)) }; //year fraction
+		QCHelperFunctions::lowerCase(curveYf);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished curve characteristics." << endl;
+
+		//Se dan de alta las caracteristicas de la curva auxiliar
+		string auxCurveInterpol{ PyString_AsString(PyList_GetItem(auxCurveChars, 0)) }; //Interpolacion
+		string auxCurveWf{ PyString_AsString(PyList_GetItem(auxCurveChars, 1)) }; //wealth factor
+		QCHelperFunctions::lowerCase(auxCurveWf);
+		string auxCurveYf{ PyString_AsString(PyList_GetItem(auxCurveChars, 2)) }; //year fraction
+		QCHelperFunctions::lowerCase(auxCurveYf);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished aux curve characteristics." << endl;
+
+		//Se construye el objeto curva auxiliar
+		vector<long> auxTenors;
+		vector<double> auxRates;
+		QCDvePyBindHelperFunctions::buildAuxTenorsAndRates(auxCurveValues, auxTenors, auxRates);
+
+		QCZrCpnCrvShrdPtr auxCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(auxTenors, auxRates, auxCurveInterpol,
+			auxCurveYf, auxCurveWf);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: aux curve initialized" << endl;
+
+		//Se construye un vector con los datos de las tasas cero iniciales
+		vector<QCDvePyBindHelperFunctions::ZeroRate> zeroRateVector;
+		QCDvePyBindHelperFunctions::buildZeroRateVector(zeroRates, valueDate, dateVector, zeroRateVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished zero rates." << endl;
+
+		//Se construye un vector con los datos de los fwds iniciales
+		vector<QCDvePyBindHelperFunctions::FwdIndex> fwdIndexVector;
+		QCDvePyBindHelperFunctions::buildFwdVector(fxForwards, fwdIndexVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished fx fwds." << endl;
+
+		//Se construye un vector con las patas fijas iniciales
+		vector<QCDvePyBindHelperFunctions::SwapIndex> swapIndexVector;
+		QCDvePyBindHelperFunctions::buildFixedRateIndexVector(fixedLegs, valueDate, dateVector, swapIndexVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished fixed rate legs." << endl;
+
+		size_t cuantasTasas = zeroRateVector.size();
+		vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+		inputRates.resize(cuantasTasas);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputRates resized" << endl;
+
+		size_t cuantosFwds = fwdIndexVector.size();
+		vector<shared_ptr<QCFXForward>> inputForwards;
+		inputForwards.resize(cuantosFwds);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputForwards resized" << endl;
+
+		size_t cuantosSwaps = swapIndexVector.size();
+		vector<shared_ptr<QCFixedRatePayoff>> inputFixedLegs;
+		inputFixedLegs.resize(cuantosSwaps);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputFixedLegs resized" << endl;
+
+		vector<long> tenors;
+		tenors.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<1>(zeroRateVector.at(i)));
+		}
+
+		for (size_t i = cuantasTasas; i < cuantasTasas + cuantosFwds; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(fwdIndexVector.at(i - cuantasTasas)));
+		}
+
+		for (size_t i = cuantasTasas + cuantosFwds; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(swapIndexVector.at(i - cuantasTasas - cuantosFwds)));
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve tenors ok" << endl;
+
+		vector<double> rates;
+		rates.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			rates.at(i) = 0.0;
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve rates ok" << endl;
+
+		QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, curveInterpol,
+			curveYf, curveWf);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve initialized" << endl;
+
+		for (unsigned int i = 0; i < cuantasTasas; ++i)
+		{
+			QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+				"R",
+				get<0>(zeroRateVector.at(i)),
+				get<1>(zeroRateVector.at(i)),
+				1.0);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
+			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+				get<2>(zeroRateVector.at(i)),
+				get<3>(zeroRateVector.at(i)),
+				get<4>(zeroRateVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
+			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
+
+		}
+
+		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		vector<shared_ptr<QCDiscountBondPayoff>> legs;
+		shared_ptr<map<QCDate, double>> fixings;
+		legs.resize(2);
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		for (unsigned int i = 0; i < cuantosFwds; ++i)
+		{
+			//strong currency
+			QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
+				"R", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, dateVector, dateVector, get<0>(fwdIndexVector.at(i)));
+
+			//weak currency
+			QCInterestRateLeg dbLeg1 = QCFactoryFunctions::buildDiscountBondLeg(
+				"P", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, dateVector, dateVector, get<1>(fwdIndexVector.at(i)));
+
+			//En este bloque estamos asumiendo que la curva a construir es la de la
+			//moneda fuerte del par de los fwds. Hay que insertar un if para distinguir
+			//si es asi o corresponde a la moneda debil.
+			auto dbPayoff0 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg0),
+				curve, valueDate, fixings,
+				get<4>(fwdIndexVector.at(i)), get<6>(fwdIndexVector.at(i)));
+			legs.at(0) = dbPayoff0;
+
+			auto dbPayoff1 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg1),
+				auxCrvPtr, valueDate, fixings,
+				get<5>(fwdIndexVector.at(i)), get<7>(fwdIndexVector.at(i)));
+			legs.at(1) = dbPayoff1;
+
+			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
+				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+			cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
+
+			inputForwards.at(i) = fxFwd;
+		}
+
+
+		vector<tuple<QCDate, double, double>> amortIfCustom;
+		for (unsigned int i = 0; i < cuantosSwaps; ++i)
+		{
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+				get<8>(swapIndexVector.at(i)),
+				get<10>(swapIndexVector.at(i)),
+				get<11>(swapIndexVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: swap interest rate " << i << " initialized" << endl;
+
+			//buildFixedRateLeg
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			QCInterestRateLeg tmpFixedLeg = QCFactoryFunctions::buildFixedRateLeg2(
+				get<0>(swapIndexVector.at(i)),			//receive or pay
+				get<1>(swapIndexVector.at(i)),			//start date
+				get<2>(swapIndexVector.at(i)),			//end date
+				dateVector,								//settlement calendar
+				get<3>(swapIndexVector.at(i)),			//settlement lag
+				get<4>(swapIndexVector.at(i)),			//stub period
+				get<5>(swapIndexVector.at(i)),			//periodicity
+				get<6>(swapIndexVector.at(i)),			//end date adjustment
+				get<7>(swapIndexVector.at(i)),			//amortization
+				amortIfCustom,							//amortization and notional by date
+				get<9>(swapIndexVector.at(i)));			//notional
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
+
+			//buildFixedRatePayoff
+			shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
+				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpFixedLeg), curve, valueDate,
+				nullptr });
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest payoff " << i << " initialized" << endl;
+
+			//Se agrega el payoff al vector de fixed legs
+			inputFixedLegs.at(i) = tmpIntRatePayoff;
+		}
+
+		//Se da de alta el objeto bootstrapeador
+		QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs boot{ valueDate, inputRates,
+			inputForwards, 0, inputFixedLegs, curve };
+		cout << "\tboot_zero_rates_fwds_fixed_legs: bootstrapping object initialized" << endl;
+
+		boot.generateCurve();
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve bootstrapped" << endl;
+		/*
+		for (size_t i = 0; i < curve->getLength(); ++i)
+		{
+			cout << curve->getValuesAt(i).first << " " << curve->getValuesAt(i).second << endl;
+		}
+		*/
+		vector<tuple<long, double, vector<double>>> result; //plazo, tasa, derivadas
+		size_t tamagno = curve->getLength();
+		result.resize(tamagno);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			get<2>(result.at(i)).resize(tamagno);
+			pair<long, double> temp = curve->getValuesAt(i);
+			get<0>(result.at(i)) = temp.first;
+			get<1>(result.at(i)) = temp.second;
+			for (size_t j = 0; j < tamagno; ++j)
+			{
+				get<2>(result.at(i)).at(j) = 0.0; // boot.getDerivativeAt(i, j);				
+			}
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: results obtained" << endl;
+
+		PyObject* curveAndDeltas = PyList_New(tamagno);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			size_t columnas = 2 + tamagno;
+			PyObject* temp = PyList_New(columnas);
+			int success;
+			success = PyList_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
+			success = PyList_SetItem(temp, 1, PyFloat_FromDouble(get<1>(result.at(i))));
+			for (unsigned int j = 0; j < tamagno; ++j)
+			{
+				success = PyList_SetItem(temp, j + 2, PyFloat_FromDouble(get<2>(result.at(i)).at(j)));
+			}
+			success = PyList_SetItem(curveAndDeltas, i, temp);
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: output prepared" << endl;
+
+		return curveAndDeltas;
+
+	}
+	catch (exception& e)
+	{
+		string msg = "Error en el bootstrapping Rates&Fwds&Fixed_Legs. " + string(e.what());
+		PyErr_SetString(qcDveError, msg.c_str());
+		return NULL;
+	}
+
+}
+
 
 PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 {
@@ -1980,6 +2452,34 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 	}
 }
 
+PyObject* next_business_date(PyObject* self, PyObject*  args)
+{
+	cout << "Enter next_business_date" << endl;
+
+	char* fecha;
+	PyObject* holidays;
+
+	if (!PyArg_ParseTuple(args, "sO!", &fecha, &PyList_Type, &holidays))
+	{
+		cout << "\tnext_business_date: argument error";
+		return NULL;
+	}
+
+	//Se construye la fecha de proceso
+	string strDate{ fecha };
+	QCDate valueDate{ strDate };
+	cout << "\tnext_business_date: finished constructing date";
+
+	//Se construye el vector con las fechas de los feriados
+	vector<QCDate> dateVector;
+	QCDvePyBindHelperFunctions::buildQCDateVector(holidays, dateVector);
+	cout << "\tnext_business_date: finished holidays" << endl;
+
+	QCDate result = valueDate.addDays(1).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
+	cout << "\tnext_business_date: finished calculation" << endl;
+
+	return Py_BuildValue("s", result.description().c_str());
+}
 
 //Tres funciones de prueba
 PyObject* qc_date_2_string(PyObject* self, PyObject*  args)
@@ -2187,6 +2687,9 @@ PyMethodDef QC_DVE_Methods[] =
 	{ "cashflow_fixed_swaps", (PyCFunction)cashflow_fixed_swaps, METH_VARARGS, 0 },
 	{ "cashflow_icp_clp_rate_legs", (PyCFunction)cashflow_icp_clp_rate_legs, METH_VARARGS, 0 },
 	{ "cashflow_floating_rate_legs", (PyCFunction)cashflow_floating_rate_legs, METH_VARARGS, 0 },
+	{ "boot_zero_rates_fixed_legs", (PyCFunction)boot_zero_rates_fixed_legs, METH_VARARGS, 0 },
+	{ "next_business_date", (PyCFunction)next_business_date, METH_VARARGS, 0 },
+	{ "boot_zero_rates_fwds_fixed_legs", (PyCFunction)boot_zero_rates_fwds_fixed_legs, METH_VARARGS, 0 },
 	{ 0, 0, 0, 0 }
 };
 

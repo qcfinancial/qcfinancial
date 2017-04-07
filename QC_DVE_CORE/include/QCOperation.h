@@ -4,8 +4,6 @@
 #include <vector>
 #include <memory>
 
-#include "QCInterestRatePayoff.h"
-
 using namespace std;
 
 /*!
@@ -15,13 +13,23 @@ using namespace std;
 class QCOperation
 {
 public:
+	/*!
+	* Constructor
+	*/
 	QCOperation()
 	{
 	}
 
+	/*!
+	* Retorna el valor de mercado de la operación.
+	*/
 	virtual double marketValue() = 0;
 
-	virtual ~QCOperation();
+	/*!
+	* Destructor.
+	*/
+	virtual ~QCOperation()
+	{}
 };
 
 #endif //QCOPERATION_H

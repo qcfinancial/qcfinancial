@@ -23,6 +23,29 @@ CellMatrix checkBoostrapping(int xlValueDate,
 	CellMatrix calendar,
 	string interpolator);
 
+CellMatrix checkBoostrappingFwds(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	int whichLeg,
+	CellMatrix xlInputFixedLegs,
+	CellMatrix calendar,
+	CellMatrix auxCurve,
+	double fx,
+	string interpolator);
+
+CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	int whichLeg,
+	CellMatrix xlInputFloatingLegs,
+	CellMatrix holidays,
+	CellMatrix intRateIndexChars,
+	CellMatrix auxCurveFwd,
+	CellMatrix auxCurveFloating,
+	double fx,
+	double fixing,
+	string interpolator);
+
 double qcFecha(string f);
 
 double //Devuelve la fraccion de agno entre dos fechas

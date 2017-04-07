@@ -27,35 +27,51 @@ public:
 	QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs(QCDate valueDate,
 		vector<shared_ptr<QCTimeDepositPayoff>> inputRates,
 		vector<shared_ptr<QCFXForward>> inputForwards,
+		unsigned int whichForwardLeg,
 		vector<shared_ptr<QCFixedRatePayoff>> inputFixedRateLegs,
 		QCZrCpnCrvShrdPtr newZeroCurve);
 
 	/*!
 	* Ejecuta el procedimiento que genera la curva.
 	*/
-	virtual void generateCurve() = 0;
+	virtual void generateCurve();
+
+	/*!
+	* Ejecuta el procedimiento que genera la curva y calcula todas las derivadas.
+	*/
+	virtual void generateCurveAndDerivatives() override;
 
 	/*!
 	* Calcula el largo de la curva.
 	* @return largo de la curva.
 	*/
-	virtual unsigned int getCurveLength() = 0;
+	virtual unsigned int getCurveLength();
 
 	/*!
 	* Devuelve la tasa en la posición i de la curva generada.
 	* @param i posición de la tasa deseada.
 	* @return valor de la tasa deseada.
 	*/
-	virtual double getRateAt(unsigned int index) = 0;
+	virtual double getRateAt(unsigned int index);
+
+	/*!
+	* Calculada la derivada de una tasa generada a partir de uno de los inputs.
+	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
+	* @param derivativeIndex índice del input que se quiere usar para derivar.
+	*/
+	virtual void calculateDerivativesAt(size_t derivativeIndex) override;
 
 	/*!
 	* Devuelve la derivada de una tasa generada a partir de uno de los inputs.
 	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
 	* @param derivativeIndex índice del input que se quiere usar para derivar.
 	*/
-	virtual double getDerivativeAt(unsigned int rateIndex, unsigned int derivativeIndex) = 0;
+	virtual double getDerivativeAt(unsigned int rateIndex, unsigned int derivativeIndex);
 
 	virtual ~QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs();
+
+protected:
+	unsigned int _whichForwardLeg;
 };
 
 #endif //QCZEROCURVEGENERATORFROMRATESFWDSANDFIXEDLEGS_H

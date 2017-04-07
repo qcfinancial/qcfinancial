@@ -101,6 +101,7 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCFactoryFunctions.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCFXForward.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCHelperFunctions.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp" />
@@ -113,10 +114,14 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCLinearWf.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCLogLinearInterpolator.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCProjectingInterestRateCurve.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCTimeDepositPayoff.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCWealthFactor.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponCurve.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponDiscountFactorCurve.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

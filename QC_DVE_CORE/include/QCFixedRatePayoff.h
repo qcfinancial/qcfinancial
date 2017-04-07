@@ -29,13 +29,6 @@ public:
 		QCTimeSeriesShrdPtr fixingData);
 
 	/*!
-	* Entrega período de tasa de interés en la posición n-sima 
-	* @param n índice de la posición
-	* @return QCInterestRatePeriod en la posición n-sima.
-	*/
-	QCInterestRateLeg::QCInterestRatePeriod getPeriodAt(unsigned int n) const;
-
-	/*!
 	* Sobrecarga del operador <. Se ordena por fecha final.
 	* @param rhs otro QCFixedRatePayoff para comparar (this < rhs)
 	*/

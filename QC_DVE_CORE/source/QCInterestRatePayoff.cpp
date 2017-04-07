@@ -37,8 +37,17 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 //Esta se implementa en las subclases
 void QCInterestRatePayoff::_setAllRates() {}
 
+void QCInterestRatePayoff::addToRateValue(double mov)
+{
+	double value = _rate->getValue();
+	_rate->setValue(value + mov);
+	_setAllRates();
+}
+
 void QCInterestRatePayoff::payoff()
 {
+	cout << "Enter QCInterestRatePayoff::payoff()" << endl;
+
 	_payoffs.clear();
 	int tempCurrentPeriod;
 	if (_currentPeriod == -1)
@@ -55,6 +64,7 @@ void QCInterestRatePayoff::payoff()
 	{
 		_pvProjCurveDerivatives.at(j) = 0.0;
 	}
+
 	for (int i = tempCurrentPeriod; i < _irLeg->size(); ++i)
 	{
 		QCInterestRateLeg::QCInterestRatePeriod prd = _irLeg->getPeriodAt(i);
@@ -75,7 +85,7 @@ void QCInterestRatePayoff::payoff()
 		_payoffs.push_back(make_tuple(get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd),
 			qcInterest, interest));
 		double yf = _rate->yf(startDate, endDate);
-		
+
 		//Aqui podemos calcular la derivada del flujo respecto a los vertices de la
 		//curva de proyeccion.
 		QCDate settDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(prd);
@@ -99,6 +109,11 @@ int QCInterestRatePayoff::payoffSize() const
 	return _payoffs.size();
 }
 
+QCInterestRateLeg::QCInterestRatePeriod QCInterestRatePayoff::getPeriodAt(size_t n) const
+{
+	return _irLeg->getPeriodAt(n);
+}
+
 unsigned int QCInterestRatePayoff::getLastPeriodIndex() const
 {
 	return _irLeg->lastPeriod();
@@ -116,6 +131,8 @@ tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsig
 
 double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 {
+	cout << "Enter QCInterestRatePayoff::presentValue(bool includeFirstCashflow)" << endl;
+
 	payoff();
 	double pv{ 0.0 };
 	_valueDateCashflow = 0.0;

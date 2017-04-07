@@ -37,6 +37,12 @@ public:
 	void payoff();
 
 	/*!
+	* Suma el valor mov al valor de la tasa de interés del payoff
+	* @param mov valor a sumar al valor de la tasa.
+	*/
+	void addToRateValue(double mov);
+
+	/*!
 	* Calcula y retorna el numero de flujos de caja
 	* @return (int) el numero de flujos
 	*/
@@ -47,6 +53,13 @@ public:
 	* @return índice
 	*/
 	unsigned int getLastPeriodIndex() const;
+
+	/*!
+	* Entrega período de tasa de interés en la posición n-sima
+	* @param n índice de la posición
+	* @return QCInterestRatePeriod en la posición n-sima.
+	*/
+	QCInterestRateLeg::QCInterestRatePeriod getPeriodAt(size_t n) const;
 
 	/*!
 	* Retorna el valor del flujo de caja de _valueDate
@@ -149,7 +162,7 @@ protected:
 	/* Aquí se almacenan los flujos calculados con el método payoff().*/
 	vector<tuple<QCDate, QCCashFlowLabel, double>> _payoffs;
 
-	/*! Este método calcula o determina todas las tasas neceserias para el cálculo
+	/*! Este método calcula o determina todas las tasas necesarias para el cálculo
 	* de intereses. */
 	virtual void _setAllRates();
 

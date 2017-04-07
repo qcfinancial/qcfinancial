@@ -17,11 +17,13 @@ QCTimeDepositPayoff::QCTimeDepositPayoff(QCIntrstRtShrdPtr rate,
 
 void QCTimeDepositPayoff::_setAllRates()
 {
+	cout << "Enter QCTimeDepositPayoff::_setAllRates" << endl;
+
 	unsigned int numPeriods = _irLeg->size();
 
 	_allRates.resize(numPeriods);
 	double rate{ _rate->getValue() };
-	for (unsigned int i = 0; i <numPeriods; ++i)
+	for (unsigned int i = 0; i < numPeriods; ++i)
 	{
 		_allRates.at(i) = rate;
 	}

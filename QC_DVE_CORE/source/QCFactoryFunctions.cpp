@@ -138,7 +138,8 @@ QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vect
 	return zrCrvPtr;
 }
 
-shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
+shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(vector<long>& tenors,
+	vector<double>& rates,
 	const string& interpolator, const string& wf, const string& yf,
 	QCInterestRateCurve::QCTypeInterestRateCurve typeCurve)
 {
@@ -158,26 +159,26 @@ shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(vector<long>
 	shared_ptr<QCYearFraction> yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
 	shared_ptr<QCWealthFactor> wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
 	QCInterestRate intRate{ 0, yfShrdPtr, wfShrdPtr };
-	shared_ptr<QCInterestRateCurve> result;
-	switch (typeCurve)
+	if (typeCurve == QCInterestRateCurve::qcProjectingCurve)
 	{
-	case QCInterestRateCurve::qcProjectingCurve:
-		result = make_shared<QCProjectingInterestRateCurve>(
+		auto result = make_shared<QCProjectingInterestRateCurve>(
 			QCProjectingInterestRateCurve{ interpol, intRate });
-		break;
-	case QCInterestRateCurve::qcZeroCouponCurve:
-		result = make_shared<QCZeroCouponInterestRateCurve>(
-			QCZeroCouponInterestRateCurve{ interpol, intRate });
-		break;
-	case QCInterestRateCurve::qcDiscountFactorCurve:
-		result = make_shared<QCZeroCouponDiscountFactorCurve>(
-			QCZeroCouponDiscountFactorCurve{ interpol, intRate });
-		break;
-	default:
-		break;
+		return result;
 	}
 
-	return result;
+	if (typeCurve == QCInterestRateCurve::qcZeroCouponCurve)
+	{
+		auto result = make_shared<QCZeroCouponInterestRateCurve>(
+			QCZeroCouponInterestRateCurve{ interpol, intRate });
+		return result;
+	}
+	
+	if (typeCurve == QCInterestRateCurve::qcDiscountFactorCurve)
+	{
+		auto result = make_shared<QCZeroCouponDiscountFactorCurve>(
+			QCZeroCouponDiscountFactorCurve{ interpol, intRate });
+		return result;
+	}
 }
 
 QCIntRtCrvShrdPtr QCFactoryFunctions::discFctrCrvShrdPtr(vector<long>& tenors, vector<double>& dfs,
@@ -235,7 +236,7 @@ QCInterestRateLeg QCFactoryFunctions::buildDiscountBondLeg(
 	if (receivePay == "R") { signo = 1; }
 	else { signo = -1; }
 
-	auto period = make_tuple(0.0, 0, signo * notional, 1, signo * notional, startDate, endDate,
+	auto period = make_tuple(0.0, false, signo * notional, true, signo * notional, startDate, endDate,
 		endDate.shift(settlementCalendar, settlementLag, QCDate::qcFollow),
 		endDate.shift(fixingCalendar, fixingLag, QCDate::qcPrev), startDate, startDate);
 	QCInterestRateLeg::QCInterestRatePeriods periods{ period };
