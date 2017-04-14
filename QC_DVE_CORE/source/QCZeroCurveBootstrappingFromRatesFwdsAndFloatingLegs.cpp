@@ -44,8 +44,10 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 			_curve->setOrdinateAtWithValue(rateCounter, rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
+			cout << rLast << endl;
 		}
 	}
+	cout << "bootstrapping: tasas calibradas " << endl;
 
 	//Loop sobre los forwards
 	rateCounter = _inputRates.size() - 1;
@@ -72,8 +74,11 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 			rLast = rNext;
 		}
 	}
+	
+	cout << "bootstrapping: forwards calibrados" << endl;
 
 	//Loop sobre las patas flotantes
+	
 	rateCounter = _inputRates.size() + _inputForwards.size() - 1;
 	QCDate swapsStartDate{ get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputFloatingRateLegs.at(0)->getPeriodAt(0)) };
 	plazo = _valueDate.dayDiff(swapsStartDate);
@@ -98,6 +103,8 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 			rLast = rNext;
 		}
 	}
+	
+	cout << "bootstrapping: patas flotantes calibradas" << endl;
 
 	return;
 }

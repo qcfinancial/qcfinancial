@@ -17,7 +17,7 @@ QCTimeDepositPayoff::QCTimeDepositPayoff(QCIntrstRtShrdPtr rate,
 
 void QCTimeDepositPayoff::_setAllRates()
 {
-	cout << "Enter QCTimeDepositPayoff::_setAllRates" << endl;
+	//cout << "Enter QCTimeDepositPayoff::_setAllRates" << endl;
 
 	unsigned int numPeriods = _irLeg->size();
 

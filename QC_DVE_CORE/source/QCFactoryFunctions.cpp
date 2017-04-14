@@ -1156,7 +1156,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 	QCInterestRateLeg::QCStubPeriod fixingStubPeriod,			//fixing stub period
 	string fixingPeriodicity,					//fixing periodicity
 	vector<QCDate> fixingCalendar,				//fixing calendar
-	pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
+	pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...) and fixing lag	
 	double notional								//notional
 	)
 {

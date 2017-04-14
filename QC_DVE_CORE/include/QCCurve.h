@@ -102,7 +102,9 @@ template<class T> QCCurve<T>::QCCurve(vector<T> &abscissa, vector<double>& ordin
 			if (abscissa[i] == abscissa[j])
 			{
 				string msg = "Error constructing curve: ";
-				msg += "Some values of abscissa coincide.";
+				msg += "Some values of abscissa coincide. ";
+				msg += "Values " + to_string(abscissa[i]) + " and " + to_string(abscissa[j]);
+				msg += " at positions " + to_string(i) + " and " + to_string(j);
 				throw invalid_argument(msg);
 			}
 		}
