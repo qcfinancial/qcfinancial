@@ -46,7 +46,7 @@ void QCInterestRatePayoff::addToRateValue(double mov)
 
 void QCInterestRatePayoff::payoff()
 {
-	cout << "Enter QCInterestRatePayoff::payoff()" << endl;
+	//cout << "Enter QCInterestRatePayoff::payoff()" << endl;
 
 	_payoffs.clear();
 	int tempCurrentPeriod;
@@ -119,6 +119,11 @@ unsigned int QCInterestRatePayoff::getLastPeriodIndex() const
 	return _irLeg->lastPeriod();
 }
 
+QCDate QCInterestRatePayoff::getEndDate() const
+{
+	return get<QCInterestRateLeg::intRtPrdElmntEndDate>(_irLeg->getPeriodAt(getLastPeriodIndex()));
+}
+
 double QCInterestRatePayoff::getValueDateCashflow()
 {
 	return _valueDateCashflow;
@@ -131,14 +136,14 @@ tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsig
 
 double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 {
-	cout << "Enter QCInterestRatePayoff::presentValue(bool includeFirstCashflow)" << endl;
+	//cout << "Enter QCInterestRatePayoff::presentValue(bool includeFirstCashflow)" << endl;
 
 	payoff();
 	double pv{ 0.0 };
 	_valueDateCashflow = 0.0;
 	//Tamagno del vector de derivadas
 	_pvRateDerivatives.resize(_discountCurve->getLength());
-	for (unsigned int i = 0; i < _pvRateDerivatives.size() - 1; ++i)
+	for (size_t i = 0; i < _pvRateDerivatives.size(); ++i)
 	{
 		_pvRateDerivatives.at(i) = 0;
 	}

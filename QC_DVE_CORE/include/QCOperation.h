@@ -4,8 +4,6 @@
 #include <vector>
 #include <memory>
 
-using namespace std;
-
 /*!
 * @brief Por ahora el único propósito de esta clase es proveer un mínimo de estructura para
 * modelar operaciones a partir de vectores de QCInterestRatePayoff.

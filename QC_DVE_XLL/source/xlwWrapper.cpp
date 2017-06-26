@@ -24,22 +24,13 @@ const char* LibraryName = "QC_DVE";
 
 namespace
 {
-XLRegistration::Arg
-checkBoostrappingArgs[]=
-{
-{ "xlValueDate","too lazy to comment this one ","B"},
-{ "xlInputRates","too lazy to comment this one ","XLF_OPER"},
-{ "xlInputFixedLegs","too lazy to comment this one ","XLF_OPER"},
-{ "calendar","too lazy to comment this one ","XLF_OPER"},
-{ "interpolator","too lazy to comment this one ","XLF_OPER"}
-};
   XLRegistration::XLFunctionRegistrationHelper
-registercheckBoostrapping("xlcheckBoostrapping",
-"checkBoostrapping",
+registerQCGetMacAddress("xlQCGetMacAddress",
+"QCGetMacAddress",
 "too lazy to comment this function ",
 LibraryName,
-checkBoostrappingArgs,
-5
+0,
+0
 ,false
 ,false
 ,""
@@ -55,12 +46,221 @@ checkBoostrappingArgs,
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
-xlcheckBoostrapping(
+xlQCGetMacAddress(
+)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+string result(
+	QCGetMacAddress());
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCSha256Args[]=
+{
+{ "input","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCSha256("xlQCSha256",
+"QCSha256",
+"too lazy to comment this function ",
+LibraryName,
+QCSha256Args,
+1
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCSha256(
+LPXLFOPER inputa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper inputb(
+	(inputa));
+string input(
+	inputb.AsString("input"));
+
+string result(
+	QCSha256(
+		input)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetAuthKey("xlQCGetAuthKey",
+"QCGetAuthKey",
+"too lazy to comment this function ",
+LibraryName,
+0,
+0
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetAuthKey(
+)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+string result(
+	QCGetAuthKey());
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGenerateKeyArgs[]=
+{
+{ "password","too lazy to comment this one ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGenerateKey("xlQCGenerateKey",
+"QCGenerateKey",
+"too lazy to comment this function ",
+LibraryName,
+QCGenerateKeyArgs,
+1
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGenerateKey(
+LPXLFOPER passworda)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper passwordb(
+	(passworda));
+string password(
+	passwordb.AsString("password"));
+
+string result(
+	QCGenerateKey(
+		password)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCBootZeroRatesFixedLegsArgs[]=
+{
+{ "xlValueDate","Fecha de calculo ","B"},
+{ "xlInputRates","Rango con datos de tasas ","XLF_OPER"},
+{ "xlInputFixedLegs","Rango con datos de patas fijas ","XLF_OPER"},
+{ "calendar","Rango con feriados a aplicar ","XLF_OPER"},
+{ "interpolator","Forma de interpolacion de la curva ","XLF_OPER"},
+{ "curveWf","Factor de capitalizacion de la curva ","XLF_OPER"},
+{ "curveYf","Fraccion de a o de las tasas de la curva ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCBootZeroRatesFixedLegs("xlQCBootZeroRatesFixedLegs",
+"QCBootZeroRatesFixedLegs",
+"Realiza el bootstrapping a partir de tasas cero y patas fijas ",
+LibraryName,
+QCBootZeroRatesFixedLegsArgs,
+7
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCBootZeroRatesFixedLegs(
 double xlValueDatea,
 LPXLFOPER xlInputRatesa,
 LPXLFOPER xlInputFixedLegsa,
 LPXLFOPER calendara,
-LPXLFOPER interpolatora)
+LPXLFOPER interpolatora,
+LPXLFOPER curveWfa,
+LPXLFOPER curveYfa)
 {
 EXCEL_BEGIN;
 
@@ -90,13 +290,383 @@ XlfOper interpolatorb(
 string interpolator(
 	interpolatorb.AsString("interpolator"));
 
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
 CellMatrix result(
-	checkBoostrapping(
+	QCBootZeroRatesFixedLegs(
 		xlValueDate,
 		xlInputRates,
 		xlInputFixedLegs,
 		calendar,
-		interpolator)
+		interpolator,
+		curveWf,
+		curveYf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCBootZeroRatesFwdsFixedLegsArgs[]=
+{
+{ "xlValueDate","Fecha de calculo ","B"},
+{ "fx","Tipo de cambio spot ","B"},
+{ "xlInputRates","Rango con input de tasas ","XLF_OPER"},
+{ "xlInputForwards","Rango con input de forwards ","XLF_OPER"},
+{ "whichLeg","Indica que pata de los forwards se usa ","B"},
+{ "xlInputFixedLegs","Input de patas fijas ","XLF_OPER"},
+{ "curveInterpolator","Interpolacion de la curva a construir ","XLF_OPER"},
+{ "curveYf","Fraccion de a o de las tasas de la curva a construir ","XLF_OPER"},
+{ "curveWf","Factor de capitalizacion de las tasas de la curva a construir ","XLF_OPER"},
+{ "holidays","Vector con feriados aplicables ","XLF_OPER"},
+{ "auxCurve","Plazos y tasas curva auxiliar (de los forwards) ","XLF_OPER"},
+{ "auxCurveInterpolator","Interpolacion de la curva auxiliar ","XLF_OPER"},
+{ "auxCurveYf","Fraccion de a o de las tasas de la curva auxiliar ","XLF_OPER"},
+{ "auxCurveWf","Factor de capitalizacion de las tasas de la curva auxiliar ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCBootZeroRatesFwdsFixedLegs("xlQCBootZeroRatesFwdsFixedLegs",
+"QCBootZeroRatesFwdsFixedLegs",
+"Realiza el bootstrapping a partir de tasas cero, fx fwds y patas fijas ",
+LibraryName,
+QCBootZeroRatesFwdsFixedLegsArgs,
+14
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCBootZeroRatesFwdsFixedLegs(
+double xlValueDate,
+double fx,
+LPXLFOPER xlInputRatesa,
+LPXLFOPER xlInputForwardsa,
+double whichLega,
+LPXLFOPER xlInputFixedLegsa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+LPXLFOPER holidaysa,
+LPXLFOPER auxCurvea,
+LPXLFOPER auxCurveInterpolatora,
+LPXLFOPER auxCurveYfa,
+LPXLFOPER auxCurveWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+
+XlfOper xlInputRatesb(
+	(xlInputRatesa));
+CellMatrix xlInputRates(
+	xlInputRatesb.AsCellMatrix("xlInputRates"));
+
+XlfOper xlInputForwardsb(
+	(xlInputForwardsa));
+CellMatrix xlInputForwards(
+	xlInputForwardsb.AsCellMatrix("xlInputForwards"));
+
+int whichLeg(
+	static_cast<int>(whichLega));
+
+XlfOper xlInputFixedLegsb(
+	(xlInputFixedLegsa));
+CellMatrix xlInputFixedLegs(
+	xlInputFixedLegsb.AsCellMatrix("xlInputFixedLegs"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper auxCurveb(
+	(auxCurvea));
+CellMatrix auxCurve(
+	auxCurveb.AsCellMatrix("auxCurve"));
+
+XlfOper auxCurveInterpolatorb(
+	(auxCurveInterpolatora));
+string auxCurveInterpolator(
+	auxCurveInterpolatorb.AsString("auxCurveInterpolator"));
+
+XlfOper auxCurveYfb(
+	(auxCurveYfa));
+string auxCurveYf(
+	auxCurveYfb.AsString("auxCurveYf"));
+
+XlfOper auxCurveWfb(
+	(auxCurveWfa));
+string auxCurveWf(
+	auxCurveWfb.AsString("auxCurveWf"));
+
+CellMatrix result(
+	QCBootZeroRatesFwdsFixedLegs(
+		xlValueDate,
+		fx,
+		xlInputRates,
+		xlInputForwards,
+		whichLeg,
+		xlInputFixedLegs,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		holidays,
+		auxCurve,
+		auxCurveInterpolator,
+		auxCurveYf,
+		auxCurveWf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCBootZeroRatesFwdsFloatingLegsArgs[]=
+{
+{ "xlValueDate","Fecha de calculo ","B"},
+{ "fx","Tipo de cambio spot ","B"},
+{ "fixing","Fixing de la primera tasa flotante ","B"},
+{ "xlInputRates","Rango con input de tasas ","XLF_OPER"},
+{ "xlInputForwards","Rango con input de forwards ","XLF_OPER"},
+{ "fwdPoints","Debe decir si o no. Indica si los precios son o no puntos fwd ","XLF_OPER"},
+{ "fwdsHolidays","Nombre del calendario de sett de fwds ","XLF_OPER"},
+{ "whichLeg","Indica que pata de los fwds se usa ","B"},
+{ "xlInputFloatingLegs","Rango con input de patas flotantes ","XLF_OPER"},
+{ "xlInputIndexChars","Rango con las caracteristicas del indice flotante ","XLF_OPER"},
+{ "curveInterpolator","Interpolacion de la curva a construir ","XLF_OPER"},
+{ "curveYf","Fraccion de a o de las tasas de la curva a construir ","XLF_OPER"},
+{ "curveWf","Factor de capitalizacion de las tasas de la curva a construir ","XLF_OPER"},
+{ "holidays","Rango con todos los feriados ","XLF_OPER"},
+{ "fwdsCurve","Plazos y tasas de la curva auxiliar de los fwds ","XLF_OPER"},
+{ "fwdsCurveInterpolator","Interpolacion de la curva de los fwds ","XLF_OPER"},
+{ "fwdsCurveYf","Fraccion de agno de las tasas de la curva de los fwds ","XLF_OPER"},
+{ "fwdsCurveWf","Factor de capitalizacion de las tasas de la curva de los fwds ","XLF_OPER"},
+{ "floatCurve","Plazos y tasas de la curva auxiliar de las patas flotantes ","XLF_OPER"},
+{ "floatCurveInterpolator","Interpolacion de la curva de proyeccion de las patas flotantes ","XLF_OPER"},
+{ "floatCurveYf","Fraccion de agno de las tasas de la curva de proyeccion de las patas flotantes ","XLF_OPER"},
+{ "floatCurveWf","Factor de capitalizacion de las tasas de la curva de proyeccion de las patas flotantes ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCBootZeroRatesFwdsFloatingLegs("xlQCBootZeroRatesFwdsFloatingLegs",
+"QCBootZeroRatesFwdsFloatingLegs",
+"Realiza el bootstrapping a partir de tasas cero, fx fwds y patas flotantes ",
+LibraryName,
+QCBootZeroRatesFwdsFloatingLegsArgs,
+22
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCBootZeroRatesFwdsFloatingLegs(
+double xlValueDate,
+double fx,
+double fixing,
+LPXLFOPER xlInputRatesa,
+LPXLFOPER xlInputForwardsa,
+LPXLFOPER fwdPointsa,
+LPXLFOPER fwdsHolidaysa,
+double whichLega,
+LPXLFOPER xlInputFloatingLegsa,
+LPXLFOPER xlInputIndexCharsa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+LPXLFOPER holidaysa,
+LPXLFOPER fwdsCurvea,
+LPXLFOPER fwdsCurveInterpolatora,
+LPXLFOPER fwdsCurveYfa,
+LPXLFOPER fwdsCurveWfa,
+LPXLFOPER floatCurvea,
+LPXLFOPER floatCurveInterpolatora,
+LPXLFOPER floatCurveYfa,
+LPXLFOPER floatCurveWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+
+
+XlfOper xlInputRatesb(
+	(xlInputRatesa));
+CellMatrix xlInputRates(
+	xlInputRatesb.AsCellMatrix("xlInputRates"));
+
+XlfOper xlInputForwardsb(
+	(xlInputForwardsa));
+CellMatrix xlInputForwards(
+	xlInputForwardsb.AsCellMatrix("xlInputForwards"));
+
+XlfOper fwdPointsb(
+	(fwdPointsa));
+string fwdPoints(
+	fwdPointsb.AsString("fwdPoints"));
+
+XlfOper fwdsHolidaysb(
+	(fwdsHolidaysa));
+string fwdsHolidays(
+	fwdsHolidaysb.AsString("fwdsHolidays"));
+
+int whichLeg(
+	static_cast<int>(whichLega));
+
+XlfOper xlInputFloatingLegsb(
+	(xlInputFloatingLegsa));
+CellMatrix xlInputFloatingLegs(
+	xlInputFloatingLegsb.AsCellMatrix("xlInputFloatingLegs"));
+
+XlfOper xlInputIndexCharsb(
+	(xlInputIndexCharsa));
+CellMatrix xlInputIndexChars(
+	xlInputIndexCharsb.AsCellMatrix("xlInputIndexChars"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper fwdsCurveb(
+	(fwdsCurvea));
+CellMatrix fwdsCurve(
+	fwdsCurveb.AsCellMatrix("fwdsCurve"));
+
+XlfOper fwdsCurveInterpolatorb(
+	(fwdsCurveInterpolatora));
+string fwdsCurveInterpolator(
+	fwdsCurveInterpolatorb.AsString("fwdsCurveInterpolator"));
+
+XlfOper fwdsCurveYfb(
+	(fwdsCurveYfa));
+string fwdsCurveYf(
+	fwdsCurveYfb.AsString("fwdsCurveYf"));
+
+XlfOper fwdsCurveWfb(
+	(fwdsCurveWfa));
+string fwdsCurveWf(
+	fwdsCurveWfb.AsString("fwdsCurveWf"));
+
+XlfOper floatCurveb(
+	(floatCurvea));
+CellMatrix floatCurve(
+	floatCurveb.AsCellMatrix("floatCurve"));
+
+XlfOper floatCurveInterpolatorb(
+	(floatCurveInterpolatora));
+string floatCurveInterpolator(
+	floatCurveInterpolatorb.AsString("floatCurveInterpolator"));
+
+XlfOper floatCurveYfb(
+	(floatCurveYfa));
+string floatCurveYf(
+	floatCurveYfb.AsString("floatCurveYf"));
+
+XlfOper floatCurveWfb(
+	(floatCurveWfa));
+string floatCurveWf(
+	floatCurveWfb.AsString("floatCurveWf"));
+
+CellMatrix result(
+	QCBootZeroRatesFwdsFloatingLegs(
+		xlValueDate,
+		fx,
+		fixing,
+		xlInputRates,
+		xlInputForwards,
+		fwdPoints,
+		fwdsHolidays,
+		whichLeg,
+		xlInputFloatingLegs,
+		xlInputIndexChars,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		holidays,
+		fwdsCurve,
+		fwdsCurveInterpolator,
+		fwdsCurveYf,
+		fwdsCurveWf,
+		floatCurve,
+		floatCurveInterpolator,
+		floatCurveYf,
+		floatCurveWf)
 	);
 return XlfOper(result);
 EXCEL_END
@@ -352,17 +922,20 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
-qcFechaArgs[]=
+QCAddTenorToDateArgs[]=
 {
-{ "f","too lazy to comment this one ","XLF_OPER"}
+{ "tenor","tenor 1M, 1Y, etc ","XLF_OPER"},
+{ "startDate","Fecha inicial ","B"},
+{ "holidays","Vector vertical con feriados ","XLF_OPER"},
+{ "adjRule","Regla para ajustar en caso de dias inhabiles ","XLF_OPER"}
 };
   XLRegistration::XLFunctionRegistrationHelper
-registerqcFecha("xlqcFecha",
-"qcFecha",
-"too lazy to comment this function ",
+registerQCAddTenorToDate("xlQCAddTenorToDate",
+"QCAddTenorToDate",
+"Suma un tenor a una fecha considerando feriados ",
 LibraryName,
-qcFechaArgs,
-1
+QCAddTenorToDateArgs,
+4
 ,false
 ,false
 ,""
@@ -378,22 +951,39 @@ qcFechaArgs,
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
-xlqcFecha(
-LPXLFOPER fa)
+xlQCAddTenorToDate(
+LPXLFOPER tenora,
+double startDate,
+LPXLFOPER holidaysa,
+LPXLFOPER adjRulea)
 {
 EXCEL_BEGIN;
 
 	if (XlfExcel::Instance().IsCalledByFuncWiz())
 		return XlfOper(true);
 
-XlfOper fb(
-	(fa));
-string f(
-	fb.AsString("f"));
+XlfOper tenorb(
+	(tenora));
+string tenor(
+	tenorb.AsString("tenor"));
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper adjRuleb(
+	(adjRulea));
+string adjRule(
+	adjRuleb.AsString("adjRule"));
 
 double result(
-	qcFecha(
-		f)
+	QCAddTenorToDate(
+		tenor,
+		startDate,
+		holidays,
+		adjRule)
 	);
 return XlfOper(result);
 EXCEL_END
@@ -407,18 +997,18 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
-qcYearFractionArgs[]=
+QCAddChileTenorToDateArgs[]=
 {
+{ "tenor","tenor 1M, 1Y, etc ","XLF_OPER"},
 { "startDate","Fecha inicial ","B"},
-{ "endDate","Fecha final ","B"},
-{ "yf","Nombre de la fraccion de agno ","XLF_OPER"}
+{ "holidays","Vector vertical con feriados ","XLF_OPER"}
 };
   XLRegistration::XLFunctionRegistrationHelper
-registerqcYearFraction("xlqcYearFraction",
-"qcYearFraction",
-"Devuelve la fraccion de agno entre dos fechas ",
+registerQCAddChileTenorToDate("xlQCAddChileTenorToDate",
+"QCAddChileTenorToDate",
+"Suma un tenor a la chilena (termina dia 9 PREV) a una fecha considerando feriados ",
 LibraryName,
-qcYearFractionArgs,
+QCAddChileTenorToDateArgs,
 3
 ,false
 ,false
@@ -435,7 +1025,196 @@ qcYearFractionArgs,
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
-xlqcYearFraction(
+xlQCAddChileTenorToDate(
+LPXLFOPER tenora,
+double startDate,
+LPXLFOPER holidaysa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tenorb(
+	(tenora));
+string tenor(
+	tenorb.AsString("tenor"));
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+double result(
+	QCAddChileTenorToDate(
+		tenor,
+		startDate,
+		holidays)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCBusinessDateArgs[]=
+{
+{ "startDate","Fecha inicial ","B"},
+{ "holidays","Vector vertical de feriados ","XLF_OPER"},
+{ "adjRule","Regla de ajuste ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCBusinessDate("xlQCBusinessDate",
+"QCBusinessDate",
+"Calcula proxima o previa fecha habil segun regla y calendarios ",
+LibraryName,
+QCBusinessDateArgs,
+3
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCBusinessDate(
+double startDate,
+LPXLFOPER holidaysa,
+LPXLFOPER adjRulea)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+
+XlfOper holidaysb(
+	(holidaysa));
+CellMatrix holidays(
+	holidaysb.AsCellMatrix("holidays"));
+
+XlfOper adjRuleb(
+	(adjRulea));
+string adjRule(
+	adjRuleb.AsString("adjRule"));
+
+double result(
+	QCBusinessDate(
+		startDate,
+		holidays,
+		adjRule)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetDateFromStringArgs[]=
+{
+{ "f","String que representa la fecha ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetDateFromString("xlQCGetDateFromString",
+"QCGetDateFromString",
+"Retorna una fecha como numero a partir de un string ",
+LibraryName,
+QCGetDateFromStringArgs,
+1
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetDateFromString(
+LPXLFOPER fa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper fb(
+	(fa));
+string f(
+	fb.AsString("f"));
+
+double result(
+	QCGetDateFromString(
+		f)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetYearFractionArgs[]=
+{
+{ "startDate","Fecha inicial ","B"},
+{ "endDate","Fecha final ","B"},
+{ "yf","Nombre de la fraccion de agno ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetYearFraction("xlQCGetYearFraction",
+"QCGetYearFraction",
+"Devuelve la fraccion de agno entre dos fechas ",
+LibraryName,
+QCGetYearFractionArgs,
+3
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetYearFraction(
 double startDatea,
 double endDatea,
 LPXLFOPER yfa)
@@ -457,7 +1236,7 @@ string yf(
 	yfb.AsString("yf"));
 
 double result(
-	qcYearFraction(
+	QCGetYearFraction(
 		startDate,
 		endDate,
 		yf)
@@ -474,20 +1253,123 @@ EXCEL_END
 namespace
 {
 XLRegistration::Arg
-qcWealthFactorArgs[]=
+QCGetFwdRateFromCurveArgs[]=
+{
+{ "curva","Plazos y tasas de la curva ","XLF_OPER"},
+{ "curveInterpolator","Tipo de interpolacion de la curva ","XLF_OPER"},
+{ "curveYf","Fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","Factor de capitalizacion de las tasas de la curva ","XLF_OPER"},
+{ "plazo1","Plazo corto en dias ","B"},
+{ "plazo2","Plazo largo en dias ","B"},
+{ "rateYf","Fraccion de a o de la tasa forward ","XLF_OPER"},
+{ "rateWf","Factor de capitalizacion de la tasa forward ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetFwdRateFromCurve("xlQCGetFwdRateFromCurve",
+"QCGetFwdRateFromCurve",
+"Devuelve tasa forward a partir de una curva ",
+LibraryName,
+QCGetFwdRateFromCurveArgs,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetFwdRateFromCurve(
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+double plazo1,
+double plazo2,
+LPXLFOPER rateYfa,
+LPXLFOPER rateWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+
+
+XlfOper rateYfb(
+	(rateYfa));
+string rateYf(
+	rateYfb.AsString("rateYf"));
+
+XlfOper rateWfb(
+	(rateWfa));
+string rateWf(
+	rateWfb.AsString("rateWf"));
+
+double result(
+	QCGetFwdRateFromCurve(
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		plazo1,
+		plazo2,
+		rateYf,
+		rateWf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetWealthFactorArgs[]=
 {
 { "rate","Valor de la tasa ","B"},
 { "stDt","Fecha inicial ","B"},
 { "endDt","Fecha final ","B"},
 { "yf","Tipo de fraccion de agno ","XLF_OPER"},
-{ "wf","Tipo de factor de capitalacion ","XLF_OPER"}
+{ "wf","Tipo de factor de capitalizacion ","XLF_OPER"}
 };
   XLRegistration::XLFunctionRegistrationHelper
-registerqcWealthFactor("xlqcWealthFactor",
-"qcWealthFactor",
+registerQCGetWealthFactor("xlQCGetWealthFactor",
+"QCGetWealthFactor",
 "Devuelve el factor de capitalizacion de una tasa entre 2 fechas ",
 LibraryName,
-qcWealthFactorArgs,
+QCGetWealthFactorArgs,
 5
 ,false
 ,false
@@ -504,10 +1386,10 @@ qcWealthFactorArgs,
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
-xlqcWealthFactor(
+xlQCGetWealthFactor(
 double rate,
-double stDta,
-double endDta,
+double stDt,
+double endDt,
 LPXLFOPER yfa,
 LPXLFOPER wfa)
 {
@@ -517,11 +1399,7 @@ EXCEL_BEGIN;
 		return XlfOper(true);
 
 
-int stDt(
-	static_cast<int>(stDta));
 
-int endDt(
-	static_cast<int>(endDta));
 
 XlfOper yfb(
 	(yfa));
@@ -534,12 +1412,269 @@ string wf(
 	wfb.AsString("wf"));
 
 double result(
-	qcWealthFactor(
+	QCGetWealthFactor(
 		rate,
 		stDt,
 		endDt,
 		yf,
 		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetDiscountFactorFromCurveArgs[]=
+{
+{ "curva","rango columna con plazos y tasas de la curva de descuento ","XLF_OPER"},
+{ "curveInterpolator","tipo de interpolacion para la curva ","XLF_OPER"},
+{ "curveYf","fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","factor de capitalizacion de las tasas de la curva ","XLF_OPER"},
+{ "plazo","plazo a interpolar ","B"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetDiscountFactorFromCurve("xlQCGetDiscountFactorFromCurve",
+"QCGetDiscountFactorFromCurve",
+"Devuelve el factor de descuento al plazo a partir de una curva cero ",
+LibraryName,
+QCGetDiscountFactorFromCurveArgs,
+5
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetDiscountFactorFromCurve(
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+double plazo)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+
+double result(
+	QCGetDiscountFactorFromCurve(
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		plazo)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetWealthFactorFwdFromCurveArgs[]=
+{
+{ "curva","rango columna con plazos y tasas de la curva de descuento ","XLF_OPER"},
+{ "curveInterpolator","tipo de interpolacion para la curva ","XLF_OPER"},
+{ "curveYf","fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","factor de capitalizacion de las tasas de la curva ","XLF_OPER"},
+{ "plazo1","plazo a interpolar 1 ","B"},
+{ "plazo2","plazo a interpolar 2 ","B"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetWealthFactorFwdFromCurve("xlQCGetWealthFactorFwdFromCurve",
+"QCGetWealthFactorFwdFromCurve",
+"Devuelve el factor de capitalizacion forward entre los plazos a partir de una curva cero ",
+LibraryName,
+QCGetWealthFactorFwdFromCurveArgs,
+6
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetWealthFactorFwdFromCurve(
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+double plazo1,
+double plazo2)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+
+
+double result(
+	QCGetWealthFactorFwdFromCurve(
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		plazo1,
+		plazo2)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCGetDiscountFactorFwdFromCurveArgs[]=
+{
+{ "curva","rango columna con plazos y tasas de la curva de descuento ","XLF_OPER"},
+{ "curveInterpolator","tipo de interpolacion para la curva ","XLF_OPER"},
+{ "curveYf","fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","factor de capitalizacion de las tasas de la curva ","XLF_OPER"},
+{ "plazo1","plazo a interpolar 1 ","B"},
+{ "plazo2","plazo a interpolar 2 ","B"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCGetDiscountFactorFwdFromCurve("xlQCGetDiscountFactorFwdFromCurve",
+"QCGetDiscountFactorFwdFromCurve",
+"Devuelve el factor de descuento forward entre los plazos a partir de una curva cero ",
+LibraryName,
+QCGetDiscountFactorFwdFromCurveArgs,
+6
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCGetDiscountFactorFwdFromCurve(
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa,
+double plazo1,
+double plazo2)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+
+
+double result(
+	QCGetDiscountFactorFwdFromCurve(
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf,
+		plazo1,
+		plazo2)
 	);
 return XlfOper(result);
 EXCEL_END
@@ -619,6 +1754,391 @@ CellMatrix result(
 		tablaDesarrollo,
 		tasa,
 		fecha,
+		yf,
+		wf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCPvFixedRateLegArgs[]=
+{
+{ "tablaDesarrollo","vector de QCInterestRatePeriods de la pata ","XLF_OPER"},
+{ "nominalAmortizacion","vector columna con nominal vigente y amortizacion ","XLF_OPER"},
+{ "tasa","valor de la tasa fija de la operacion ","B"},
+{ "fecha","fecha de valorizacion ","B"},
+{ "yf","fraccion de a o de la tasa fija ","XLF_OPER"},
+{ "wf","factor de capitalizacion de la tasa fija ","XLF_OPER"},
+{ "curva","rango columna con plazos y tasas de la curva de descuento ","XLF_OPER"},
+{ "curveInterpolator","tipo de interpolacion para la curva ","XLF_OPER"},
+{ "curveYf","fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","factor de capitalizacion de las tasas de la curva ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCPvFixedRateLeg("xlQCPvFixedRateLeg",
+"QCPvFixedRateLeg",
+"Calcula el valor presente de una pata fija ",
+LibraryName,
+QCPvFixedRateLegArgs,
+10
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCPvFixedRateLeg(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER nominalAmortizaciona,
+double tasa,
+double fecha,
+LPXLFOPER yfa,
+LPXLFOPER wfa,
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper nominalAmortizacionb(
+	(nominalAmortizaciona));
+CellMatrix nominalAmortizacion(
+	nominalAmortizacionb.AsCellMatrix("nominalAmortizacion"));
+
+
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+double result(
+	QCPvFixedRateLeg(
+		tablaDesarrollo,
+		nominalAmortizacion,
+		tasa,
+		fecha,
+		yf,
+		wf,
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCPvIcpClpArgs[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "nominalAmortizacion","vector columna con nominal vigente y amortizacion ","XLF_OPER"},
+{ "fecha","fecha de valorizacion ","B"},
+{ "addSpread","Spread aditivo ","B"},
+{ "curva","Curva de proyeccion ","XLF_OPER"},
+{ "curveInterpolator","tipo de interpolacion para la curva ","XLF_OPER"},
+{ "curveYf","fraccion de a o de las tasas de la curva ","XLF_OPER"},
+{ "curveWf","factor de capitalizacion de las tasas de la curva ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCPvIcpClp("xlQCPvIcpClp",
+"QCPvIcpClp",
+"too lazy to comment this function ",
+LibraryName,
+QCPvIcpClpArgs,
+8
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCPvIcpClp(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER nominalAmortizaciona,
+double fecha,
+double addSpread,
+LPXLFOPER curvaa,
+LPXLFOPER curveInterpolatora,
+LPXLFOPER curveYfa,
+LPXLFOPER curveWfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper nominalAmortizacionb(
+	(nominalAmortizaciona));
+CellMatrix nominalAmortizacion(
+	nominalAmortizacionb.AsCellMatrix("nominalAmortizacion"));
+
+
+
+XlfOper curvab(
+	(curvaa));
+CellMatrix curva(
+	curvab.AsCellMatrix("curva"));
+
+XlfOper curveInterpolatorb(
+	(curveInterpolatora));
+string curveInterpolator(
+	curveInterpolatorb.AsString("curveInterpolator"));
+
+XlfOper curveYfb(
+	(curveYfa));
+string curveYf(
+	curveYfb.AsString("curveYf"));
+
+XlfOper curveWfb(
+	(curveWfa));
+string curveWf(
+	curveWfb.AsString("curveWf"));
+
+double result(
+	QCPvIcpClp(
+		tablaDesarrollo,
+		nominalAmortizacion,
+		fecha,
+		addSpread,
+		curva,
+		curveInterpolator,
+		curveYf,
+		curveWf)
+	);
+return XlfOper(result);
+EXCEL_END
+}
+}
+
+
+
+//////////////////////////
+
+namespace
+{
+XLRegistration::Arg
+QCPvFloatingLegArgs[]=
+{
+{ "tablaDesarrollo","Tabla de desarrollo de la pata ","XLF_OPER"},
+{ "nominalAmortizacion","Rango con dos columnas con nominal vigente y amortizacion por periodo ","XLF_OPER"},
+{ "fecha","Fecha de valorizacion ","B"},
+{ "curvaProy","Rango con dos columnas con plazos y tasas curva proyeccion ","XLF_OPER"},
+{ "projCurveInterpolator","Metodo de interpolacion de la curva de proyeccion ","XLF_OPER"},
+{ "projCurveYf","Fraccion de ano de las tasas de la curva de proyeccion ","XLF_OPER"},
+{ "projCurveWf","Factor de capitalizacion de las tasas de la curva de proyeccion ","XLF_OPER"},
+{ "curvaDesc","Rango con dos columnas con plazos y tasas de la curva de descuento ","XLF_OPER"},
+{ "discCurveInterpolator","Metodo de interpolacion de la curva de descuento ","XLF_OPER"},
+{ "discCurveYf","Fraccion de ano de las tasas de la curva de descuento ","XLF_OPER"},
+{ "discCurveWf","Factor de capitalizacion de las tasas de la curva de descuento ","XLF_OPER"},
+{ "pastFixings","Rango con dos columnas con fechas y tasas para fixing ","XLF_OPER"},
+{ "addSpread","Valor del spread sobre tasa flotante ","B"},
+{ "multSpread","Valor del spread multiplicativo ","B"},
+{ "yf","Fraccion de ano de la tasa flotante ","XLF_OPER"},
+{ "wf","Factor de capitalizacion de la tasa flotante ","XLF_OPER"}
+};
+  XLRegistration::XLFunctionRegistrationHelper
+registerQCPvFloatingLeg("xlQCPvFloatingLeg",
+"QCPvFloatingLeg",
+"too lazy to comment this function ",
+LibraryName,
+QCPvFloatingLegArgs,
+16
+,false
+,false
+,""
+,""
+,false
+,false
+,false
+);
+}
+
+
+
+extern "C"
+{
+LPXLFOPER EXCEL_EXPORT
+xlQCPvFloatingLeg(
+LPXLFOPER tablaDesarrolloa,
+LPXLFOPER nominalAmortizaciona,
+double fecha,
+LPXLFOPER curvaProya,
+LPXLFOPER projCurveInterpolatora,
+LPXLFOPER projCurveYfa,
+LPXLFOPER projCurveWfa,
+LPXLFOPER curvaDesca,
+LPXLFOPER discCurveInterpolatora,
+LPXLFOPER discCurveYfa,
+LPXLFOPER discCurveWfa,
+LPXLFOPER pastFixingsa,
+double addSpread,
+double multSpread,
+LPXLFOPER yfa,
+LPXLFOPER wfa)
+{
+EXCEL_BEGIN;
+
+	if (XlfExcel::Instance().IsCalledByFuncWiz())
+		return XlfOper(true);
+
+XlfOper tablaDesarrollob(
+	(tablaDesarrolloa));
+CellMatrix tablaDesarrollo(
+	tablaDesarrollob.AsCellMatrix("tablaDesarrollo"));
+
+XlfOper nominalAmortizacionb(
+	(nominalAmortizaciona));
+CellMatrix nominalAmortizacion(
+	nominalAmortizacionb.AsCellMatrix("nominalAmortizacion"));
+
+
+XlfOper curvaProyb(
+	(curvaProya));
+CellMatrix curvaProy(
+	curvaProyb.AsCellMatrix("curvaProy"));
+
+XlfOper projCurveInterpolatorb(
+	(projCurveInterpolatora));
+string projCurveInterpolator(
+	projCurveInterpolatorb.AsString("projCurveInterpolator"));
+
+XlfOper projCurveYfb(
+	(projCurveYfa));
+string projCurveYf(
+	projCurveYfb.AsString("projCurveYf"));
+
+XlfOper projCurveWfb(
+	(projCurveWfa));
+string projCurveWf(
+	projCurveWfb.AsString("projCurveWf"));
+
+XlfOper curvaDescb(
+	(curvaDesca));
+CellMatrix curvaDesc(
+	curvaDescb.AsCellMatrix("curvaDesc"));
+
+XlfOper discCurveInterpolatorb(
+	(discCurveInterpolatora));
+string discCurveInterpolator(
+	discCurveInterpolatorb.AsString("discCurveInterpolator"));
+
+XlfOper discCurveYfb(
+	(discCurveYfa));
+string discCurveYf(
+	discCurveYfb.AsString("discCurveYf"));
+
+XlfOper discCurveWfb(
+	(discCurveWfa));
+string discCurveWf(
+	discCurveWfb.AsString("discCurveWf"));
+
+XlfOper pastFixingsb(
+	(pastFixingsa));
+CellMatrix pastFixings(
+	pastFixingsb.AsCellMatrix("pastFixings"));
+
+
+
+XlfOper yfb(
+	(yfa));
+string yf(
+	yfb.AsString("yf"));
+
+XlfOper wfb(
+	(wfa));
+string wf(
+	wfb.AsString("wf"));
+
+double result(
+	QCPvFloatingLeg(
+		tablaDesarrollo,
+		nominalAmortizacion,
+		fecha,
+		curvaProy,
+		projCurveInterpolator,
+		projCurveYf,
+		projCurveWf,
+		curvaDesc,
+		discCurveInterpolator,
+		discCurveYf,
+		discCurveWf,
+		pastFixings,
+		addSpread,
+		multSpread,
 		yf,
 		wf)
 	);

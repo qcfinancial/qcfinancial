@@ -7,6 +7,7 @@
 #include "QCTimeDepositPayoff.h"
 #include "QCFixedRatePayoff.h"
 #include "QCFloatingRatePayoff.h"
+//#include "QCInterestRateBasisSwap.h"
 #include "QCFXForward.h"
 
 /*!
@@ -126,6 +127,17 @@ public:
 	}
 
 	/*!
+	* Método utilitario que devuelve un vector vacío de shared_ptr<QCInterestRateBasisSwap>. Se utilizará
+	* en las subclases que no utilicen este input.
+	* @return vector<shared_ptr<QCInterestRateBasisSwap>> con size() = 0.
+	*/
+	/*static vector<shared_ptr<QCInterestRateBasisSwap>> emptyBasisSwaps()
+	{
+		vector<shared_ptr<QCInterestRateBasisSwap>> result;
+		return result;
+	}*/
+
+	/*!
 	* Ejecuta el procedimiento que genera la curva.
 	*/
 	virtual void generateCurve() = 0;
@@ -194,6 +206,11 @@ protected:
 	* Se almacenan las patas flotantes utilizadas como input.
 	*/
 	vector<shared_ptr<QCFloatingRatePayoff>> _inputFloatingRateLegs;
+
+	/*!
+	* Se almacenan los basis swaps utilizados como input.
+	*/
+	//vector<shared_ptr<QCInterestRateBasisSwap>> _inputBasisSwaps;
 
 	/*!
 	* Se almacena los curva que se va a construir.

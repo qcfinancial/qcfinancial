@@ -121,6 +121,7 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRates.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp" />
+    <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp" />
     <ClCompile Include="main.cpp" />

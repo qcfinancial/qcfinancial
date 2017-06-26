@@ -33,7 +33,6 @@ double QCInterestRate::yf(QCDate& startDate, QCDate& endDate)
 	return _yf->yf(startDate, endDate);
 }
 
-
 double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate)
 {
 	return _dwf;

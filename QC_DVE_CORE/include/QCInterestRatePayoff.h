@@ -55,6 +55,12 @@ public:
 	unsigned int getLastPeriodIndex() const;
 
 	/*!
+	* Retorna la fecha final del último período
+	* @return fecha final
+	*/
+	QCDate getEndDate() const;
+
+	/*!
 	* Entrega período de tasa de interés en la posición n-sima
 	* @param n índice de la posición
 	* @return QCInterestRatePeriod en la posición n-sima.

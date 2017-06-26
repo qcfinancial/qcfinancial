@@ -198,6 +198,7 @@ namespace QCFactoryFunctions
 		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
 		double notional								//notional
 		);
+
 	QCInterestRateLeg buildFloatingRateLeg3(
 		QCDate valueDate,
 		string receivePay,					//receive or pay
@@ -216,5 +217,7 @@ namespace QCFactoryFunctions
 		pair<string, string> interestRateIndexChars,	//interest rate index tenor (3M, 6M ...)	
 		double notional								//notional
 		);
+
 };
+
 #endif //QCFACTORYFUNCTIONS_H

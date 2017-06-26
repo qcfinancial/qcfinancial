@@ -269,9 +269,13 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 		{
 			result = result.addDays(1);
 		}
-		while (binary_search(calendar.begin(), calendar.end(), result))
+		while (find(calendar.begin(), calendar.end(), result) != calendar.end())
 		{
 			result = result.addDays(1);
+			if (result.weekDay() == 6)
+			{
+				result = result.addDays(2);
+			}
 		}
 		break;
 
@@ -290,7 +294,7 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 			if (result.month() != month)
 				result = result.addDays(-2);
 		}
-		while (binary_search(calendar.begin(), calendar.end(), result))
+		while (find(calendar.begin(), calendar.end(), result) != calendar.end())
 		{
 			result = result.addDays(-1);
 		}
@@ -305,7 +309,7 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 		{
 			result = result.addDays(-2);
 		}
-		while (binary_search(calendar.begin(), calendar.end(), result))
+		while (find(calendar.begin(), calendar.end(), result) != calendar.end())
 		{
 			result = result.addDays(-1);
 			if (result.weekDay() == 6)
@@ -347,9 +351,13 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 		{
 			result = result.addDays(1);
 		}
-		while (binary_search(calendar->begin(), calendar->end(), result))
+		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
 		{
 			result = result.addDays(1);
+			if (result.weekDay() == 6)
+			{
+				result = result.addDays(2);
+			}
 		}
 		break;
 
@@ -368,7 +376,7 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 			if (result.month() != month)
 				result = result.addDays(-2);
 		}
-		while (binary_search(calendar->begin(), calendar->end(), result))
+		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
 		{
 			result = result.addDays(-1);
 		}
@@ -383,7 +391,7 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 		{
 			result = result.addDays(-2);
 		}
-		while (binary_search(calendar->begin(), calendar->end(), result))
+		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
 		{
 			result = result.addDays(-1);
 			if (result.weekDay() == 6)

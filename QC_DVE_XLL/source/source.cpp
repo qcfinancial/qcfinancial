@@ -41,13 +41,19 @@
 using namespace std;
 
 #define BASIS_POINT .0001
+const string LICENSE_MSG = "Creasys Front Desk: producto no licenciado.";
 
-CellMatrix checkBoostrapping(int xlValueDate,
+CellMatrix QCBootZeroRatesFixedLegs(int xlValueDate,
 	CellMatrix xlInputRates,
 	CellMatrix xlInputFixedLegs,
 	CellMatrix calendar,
-	string interpolator)
+	string interpolator,
+	string curveWf,
+	string curveYf)
 {
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
 	//Define fecha
 	QCDate valueDate{ xlValueDate };
 
@@ -89,7 +95,11 @@ CellMatrix checkBoostrapping(int xlValueDate,
 		rates.at(i) = 0.0;
 	}
 	
-	QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, "LINEAR", "act/365", "com");
+	QCHelperFunctions::lowerCase(curveYf);
+	QCHelperFunctions::lowerCase(curveWf);
+
+	QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, interpolator,
+		curveYf, curveWf);
 
 	for (unsigned int i = 0; i < cuantasTasas; ++i)
 	{
@@ -163,6 +173,546 @@ CellMatrix checkBoostrapping(int xlValueDate,
 
 }
 
+CellMatrix QCBootZeroRatesFwdsFixedLegs(double xlValueDate,
+	double fx,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	int whichLeg,
+	CellMatrix xlInputFixedLegs,
+	string curveInterpolator,
+	string curveYf,
+	string curveWf,
+	CellMatrix holidays,
+	CellMatrix auxCurve,
+	string auxCurveInterpolator,
+	string auxCurveYf,
+	string auxCurveWf)
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	try
+	{
+		//Se construye la fecha de proceso
+		QCDate valueDate{ static_cast<long>(xlValueDate) };
+
+		//Se construye el vector con las fechas de los feriados
+		vector<QCDate> dateVector;
+		HelperFunctions::buildVectorHolidays(holidays, dateVector);
+
+		//Se construye el objeto curva auxiliar
+		size_t puntosAuxCurva = auxCurve.RowsInStructure();
+		vector<long> auxTenors;
+		auxTenors.resize(puntosAuxCurva);
+		vector<double> auxRates;
+		auxRates.resize(puntosAuxCurva);
+		for (size_t i = 0; i < puntosAuxCurva; ++i)
+		{
+			auxTenors.at(i) = static_cast<long>(auxCurve(i, 0).NumericValue());
+			auxRates.at(i) = auxCurve(i, 1).NumericValue();
+		}
+
+		QCHelperFunctions::lowerCase(auxCurveInterpolator);
+		QCHelperFunctions::lowerCase(auxCurveYf);
+		QCHelperFunctions::lowerCase(auxCurveWf);
+		auto auxZrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(auxTenors,
+			auxRates, auxCurveInterpolator, auxCurveYf, auxCurveWf);
+
+		//Se construye un vector con los datos de las tasas cero iniciales
+		vector<HelperFunctions::ZeroRate> zeroRateVector;
+		HelperFunctions::buildZeroRateVector(xlInputRates, zeroRateVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished zero rates." << endl;
+
+		//Se construye un vector con los datos de los fwds iniciales
+		vector<HelperFunctions::FwdIndex> fwdIndexVector;
+		HelperFunctions::buildFwdVector(xlInputForwards, fwdIndexVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished fx fwds." << endl;
+
+		//Se construye un vector con las patas fijas iniciales
+		vector<HelperFunctions::SwapIndex> swapIndexVector;
+		HelperFunctions::buildFixedRateIndexVector(xlInputFixedLegs, valueDate, dateVector, swapIndexVector);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: finished fixed rate legs." << endl;
+
+		size_t cuantasTasas = zeroRateVector.size();
+		vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+		inputRates.resize(cuantasTasas);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputRates resized" << endl;
+
+		size_t cuantosFwds = fwdIndexVector.size();
+		vector<shared_ptr<QCFXForward>> inputForwards;
+		inputForwards.resize(cuantosFwds);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputForwards resized" << endl;
+
+		size_t cuantosSwaps = swapIndexVector.size();
+		vector<shared_ptr<QCFixedRatePayoff>> inputFixedLegs;
+		inputFixedLegs.resize(cuantosSwaps);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: inputFixedLegs resized" << endl;
+
+		vector<long> tenors;
+		tenors.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<1>(zeroRateVector.at(i)));
+		}
+
+		for (size_t i = cuantasTasas; i < cuantasTasas + cuantosFwds; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(fwdIndexVector.at(i - cuantasTasas)));
+		}
+
+		for (size_t i = cuantasTasas + cuantosFwds; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(swapIndexVector.at(i - cuantasTasas - cuantosFwds)));
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve tenors ok" << endl;
+
+		vector<double> rates;
+		rates.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			rates.at(i) = 0.0;
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve rates ok" << endl;
+
+		QCHelperFunctions::lowerCase(curveInterpolator);
+		QCHelperFunctions::lowerCase(curveYf);
+		QCHelperFunctions::lowerCase(curveWf);
+		QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, curveInterpolator,
+			curveYf, curveWf);
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve initialized" << endl;
+
+		for (unsigned int i = 0; i < cuantasTasas; ++i)
+		{
+			QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+				"R",
+				get<0>(zeroRateVector.at(i)),
+				get<1>(zeroRateVector.at(i)),
+				1.0);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
+			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+				get<2>(zeroRateVector.at(i)),
+				get<3>(zeroRateVector.at(i)),
+				get<4>(zeroRateVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
+			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
+
+		}
+
+		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		vector<shared_ptr<QCDiscountBondPayoff>> legs;
+		shared_ptr<map<QCDate, double>> fixings;
+		legs.resize(2);
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		for (unsigned int i = 0; i < cuantosFwds; ++i)
+		{
+			//strong currency
+			QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
+				"R", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, dateVector, dateVector, get<0>(fwdIndexVector.at(i)));
+
+			//weak currency
+			QCInterestRateLeg dbLeg1 = QCFactoryFunctions::buildDiscountBondLeg(
+				"P", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, dateVector, dateVector, get<1>(fwdIndexVector.at(i)));
+
+			//En este bloque estamos asumiendo que la curva a construir es la de la
+			//moneda fuerte del par de los fwds. Hay que insertar un if para distinguir
+			//si es asi o corresponde a la moneda debil.
+			auto dbPayoff0 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg0),
+				curve, valueDate, fixings,
+				get<4>(fwdIndexVector.at(i)), get<6>(fwdIndexVector.at(i)));
+			legs.at(0) = dbPayoff0;
+
+			auto dbPayoff1 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg1),
+				auxZrCrvPtr, valueDate, fixings,
+				get<5>(fwdIndexVector.at(i)), get<7>(fwdIndexVector.at(i)));
+			legs.at(1) = dbPayoff1;
+
+			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
+				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+			cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
+
+			inputForwards.at(i) = fxFwd;
+		}
+
+
+		vector<tuple<QCDate, double, double>> amortIfCustom;
+		for (unsigned int i = 0; i < cuantosSwaps; ++i)
+		{
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+				get<8>(swapIndexVector.at(i)),
+				get<10>(swapIndexVector.at(i)),
+				get<11>(swapIndexVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: swap interest rate " << i << " initialized" << endl;
+
+			//buildFixedRateLeg
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			QCInterestRateLeg tmpFixedLeg = QCFactoryFunctions::buildFixedRateLeg2(
+				get<0>(swapIndexVector.at(i)),			//receive or pay
+				get<1>(swapIndexVector.at(i)),			//start date
+				get<2>(swapIndexVector.at(i)),			//end date
+				dateVector,								//settlement calendar
+				get<3>(swapIndexVector.at(i)),			//settlement lag
+				get<4>(swapIndexVector.at(i)),			//stub period
+				get<5>(swapIndexVector.at(i)),			//periodicity
+				get<6>(swapIndexVector.at(i)),			//end date adjustment
+				get<7>(swapIndexVector.at(i)),			//amortization
+				amortIfCustom,							//amortization and notional by date
+				get<9>(swapIndexVector.at(i)));			//notional
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
+
+			//buildFixedRatePayoff
+			shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
+				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpFixedLeg), curve, valueDate,
+				nullptr });
+			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest payoff " << i << " initialized" << endl;
+
+			//Se agrega el payoff al vector de fixed legs
+			inputFixedLegs.at(i) = tmpIntRatePayoff;
+		}
+
+		//Se da de alta el objeto bootstrapeador
+		QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs boot{ valueDate, inputRates,
+			inputForwards, 0, inputFixedLegs, curve };
+		cout << "\tboot_zero_rates_fwds_fixed_legs: bootstrapping object initialized" << endl;
+
+		boot.generateCurveAndDerivatives();
+		cout << "\tboot_zero_rates_fwds_fixed_legs: curve bootstrapped" << endl;
+
+		vector<tuple<long, double, vector<double>>> result; //plazo, tasa, derivadas
+		size_t tamagno = curve->getLength();
+		result.resize(tamagno);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			get<2>(result.at(i)).resize(tamagno);
+			pair<long, double> temp = curve->getValuesAt(i);
+			get<0>(result.at(i)) = temp.first;
+			get<1>(result.at(i)) = temp.second;
+			for (size_t j = 0; j < tamagno; ++j)
+			{
+				get<2>(result.at(i)).at(j) = boot.getDerivativeAt(i, j);
+			}
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: results obtained" << endl;
+
+		CellMatrix curveAndDeltas(tamagno, tamagno + 2);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			curveAndDeltas(i, 0) = get<0>(result.at(i));
+			curveAndDeltas(i, 1) = get<1>(result.at(i));
+			for (size_t j = 0; j < tamagno; ++j)
+			{
+				curveAndDeltas(i, j + 2) = get<2>(result.at(i)).at(j);
+			}
+		}
+		cout << "\tboot_zero_rates_fwds_fixed_legs: output prepared" << endl;
+
+		return curveAndDeltas;
+
+	}
+	catch (exception& e)
+	{
+		string msg = "Error en el bootstrapping Rates&Fwds&Fixed_Legs. " + string(e.what());
+		throw runtime_error(msg);
+	}
+}
+
+CellMatrix QCBootZeroRatesFwdsFloatingLegs(double xlValueDate,
+	double fx,
+	double fixing,
+	CellMatrix xlInputRates,
+	CellMatrix xlInputForwards,
+	string fwdPoints,
+	string fwdsHolidays,
+	int whichLeg,
+	CellMatrix xlInputFloatingLegs,
+	CellMatrix xlInputIndexChars,
+	string curveInterpolator,
+	string curveYf,
+	string curveWf,
+	CellMatrix holidays,
+	CellMatrix fwdsCurve,
+	string fwdsCurveInterpolator,
+	string fwdsCurveYf,
+	string fwdsCurveWf,
+	CellMatrix floatCurve,
+	string floatCurveInterpolator,
+	string floatCurveYf,
+	string floatCurveWf)
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+	try
+	{
+		//Se construye la fecha de proceso
+		QCDate valueDate{ static_cast<long>(xlValueDate) };
+
+		//Se construye el vector con las fechas de los feriados
+		map<string, vector<QCDate>> holidayMap;
+		HelperFunctions::buildHolidays(holidays, holidayMap);
+
+		//Vector de fixings con el fixing inicial de las patas flotantes
+		map<QCDate, double> tsFixing;
+		tsFixing.insert(pair<QCDate, double>(valueDate, fixing));
+
+		//Se construye el objeto curva auxiliar de los fwds
+		size_t puntosFwdsCurva = fwdsCurve.RowsInStructure();
+		vector<long> fwdsTenors;
+		fwdsTenors.resize(puntosFwdsCurva);
+		vector<double> fwdsRates;
+		fwdsRates.resize(puntosFwdsCurva);
+		for (size_t i = 0; i < puntosFwdsCurva; ++i)
+		{
+			fwdsTenors.at(i) = static_cast<long>(fwdsCurve(i, 0).NumericValue());
+			fwdsRates.at(i) = fwdsCurve(i, 1).NumericValue();
+		}
+
+		QCHelperFunctions::lowerCase(fwdsCurveInterpolator);
+		QCHelperFunctions::lowerCase(fwdsCurveYf);
+		QCHelperFunctions::lowerCase(fwdsCurveWf);
+		auto fwdZrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(fwdsTenors,
+			fwdsRates, fwdsCurveInterpolator, fwdsCurveYf, fwdsCurveWf);
+
+		//Se construye el objeto curva auxiliar de las patas flotantes
+		size_t puntosFloatCurva = floatCurve.RowsInStructure();
+		vector<long> floatTenors;
+		floatTenors.resize(puntosFloatCurva);
+		vector<double> floatRates;
+		floatRates.resize(puntosFloatCurva);
+		for (size_t i = 0; i < puntosFloatCurva; ++i)
+		{
+			floatTenors.at(i) = static_cast<long>(floatCurve(i, 0).NumericValue());
+			floatRates.at(i) = floatCurve(i, 1).NumericValue();
+		}
+
+		QCHelperFunctions::lowerCase(floatCurveInterpolator);
+		QCHelperFunctions::lowerCase(floatCurveYf);
+		QCHelperFunctions::lowerCase(floatCurveWf);
+		auto floatZrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(floatTenors,
+			floatRates, floatCurveInterpolator, floatCurveYf, floatCurveWf);
+
+
+		//Se construye un vector con los datos de las tasas cero iniciales
+		vector<HelperFunctions::ZeroRate> zeroRateVector;
+		HelperFunctions::buildZeroRateVector(xlInputRates, zeroRateVector);
+
+		//Se construye un vector con los datos de los fwds iniciales
+		vector<HelperFunctions::FwdIndex> fwdIndexVector;
+		QCHelperFunctions::lowerCase(fwdPoints);
+		if (fwdPoints == "si")
+		{
+			HelperFunctions::buildFwdVector(xlInputForwards, fwdIndexVector, fx);
+		}
+		else
+		{
+			HelperFunctions::buildFwdVector(xlInputForwards, fwdIndexVector);
+		}
+
+		//Se construye un vector con las patas flotantes iniciales
+		vector<HelperFunctions::FloatIndex> floatIndexVector;
+		HelperFunctions::buildFloatingRateIndexVector(xlInputFloatingLegs, fixing, floatIndexVector);
+
+		//Se construye un mapa con las caracteristicas del indice flotante
+		map<string, pair<string, string>> mapIndexChars;
+		HelperFunctions::buildStringPairStringMap(xlInputIndexChars, mapIndexChars);
+
+		//se construye la curva que se quiere bootstrapear
+		size_t cuantasTasas = zeroRateVector.size();
+		vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
+		inputRates.resize(cuantasTasas);
+
+		size_t cuantosFwds = fwdIndexVector.size();
+		vector<shared_ptr<QCFXForward>> inputForwards;
+		inputForwards.resize(cuantosFwds);
+
+		size_t cuantosSwaps = floatIndexVector.size();
+		vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingLegs;
+		inputFloatingLegs.resize(cuantosSwaps);
+
+		vector<long> tenors;
+		tenors.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<1>(zeroRateVector.at(i)));
+		}
+
+		for (size_t i = cuantasTasas; i < cuantasTasas + cuantosFwds; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(fwdIndexVector.at(i - cuantasTasas)));
+		}
+
+		for (size_t i = cuantasTasas + cuantosFwds; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			tenors.at(i) = valueDate.dayDiff(get<2>(floatIndexVector.at(i - cuantasTasas - cuantosFwds)));
+		}
+
+		vector<double> rates;
+		rates.resize(cuantasTasas + cuantosFwds + cuantosSwaps);
+		for (size_t i = 0; i < cuantasTasas + cuantosFwds + cuantosSwaps; ++i)
+		{
+			rates.at(i) = 0.0;
+		}
+
+		QCHelperFunctions::lowerCase(curveInterpolator);
+		QCHelperFunctions::lowerCase(curveYf);
+		QCHelperFunctions::lowerCase(curveWf);
+		QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, curveInterpolator,
+			curveYf, curveWf);
+
+		//Se construyen las tasas
+		for (unsigned int i = 0; i < cuantasTasas; ++i)
+		{
+			QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
+				"R",
+				get<0>(zeroRateVector.at(i)),
+				get<1>(zeroRateVector.at(i)),
+				1.0);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
+			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
+				get<2>(zeroRateVector.at(i)),
+				get<3>(zeroRateVector.at(i)),
+				get<4>(zeroRateVector.at(i)));
+			cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
+			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
+			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
+			cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
+
+		}
+
+		//Se construyen los fwds
+		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		vector<shared_ptr<QCDiscountBondPayoff>> legs;
+		shared_ptr<map<QCDate, double>> fixings;
+		legs.resize(2);
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		for (unsigned int i = 0; i < cuantosFwds; ++i)
+		{
+			//strong currency
+			QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
+				"R", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, HelperFunctions::getHolidays(holidayMap, fwdsHolidays),
+				HelperFunctions::getHolidays(holidayMap, fwdsHolidays), get<0>(fwdIndexVector.at(i)));
+
+			//weak currency
+			QCInterestRateLeg dbLeg1 = QCFactoryFunctions::buildDiscountBondLeg(
+				"P", valueDate, get<2>(fwdIndexVector.at(i)),
+				0, 0, HelperFunctions::getHolidays(holidayMap, fwdsHolidays),
+				HelperFunctions::getHolidays(holidayMap, fwdsHolidays), get<1>(fwdIndexVector.at(i)));
+
+			//En este bloque estamos asumiendo que la curva a construir es la de la
+			//moneda fuerte del par de los fwds. Hay que insertar un if para distinguir
+			//si es asi o corresponde a la moneda debil.
+			auto dbPayoff0 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg0),
+				curve, valueDate, fixings,
+				get<4>(fwdIndexVector.at(i)), get<6>(fwdIndexVector.at(i)));
+			legs.at(0) = dbPayoff0;
+
+			auto dbPayoff1 = make_shared<QCDiscountBondPayoff>(
+				make_shared<QCInterestRateLeg>(dbLeg1),
+				fwdZrCrvPtr, valueDate, fixings,
+				get<5>(fwdIndexVector.at(i)), get<7>(fwdIndexVector.at(i)));
+			legs.at(1) = dbPayoff1;
+
+			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
+				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+
+			inputForwards.at(i) = fxFwd;
+		}
+
+		vector<tuple<QCDate, double, double>> amortIfCustom;
+		for (unsigned int i = 0; i < cuantosSwaps; ++i)
+		{
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
+				get<HelperFunctions::QCFloatIndex::qcRate>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcYearFraction>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcWealthFactor>(floatIndexVector.at(i)));
+
+			//buildFloatingRateLeg
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			string settCalendar = get<HelperFunctions::QCFloatIndex::qcSettlementCalendar>(floatIndexVector.at(i));
+			string fixCalendar = get<HelperFunctions::QCFloatIndex::qcFixingCalendar>(floatIndexVector.at(i));
+			cout << "A" << endl;
+			QCInterestRateLeg tmpFloatingLeg = QCFactoryFunctions::buildFloatingRateLeg2(
+				get<HelperFunctions::QCFloatIndex::qcReceivePay>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcStartDate>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcEndDate>(floatIndexVector.at(i)),
+				HelperFunctions::getHolidays(holidayMap, settCalendar),
+				get<HelperFunctions::QCFloatIndex::qcSettlementLag>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcStubPeriod>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcPeriodicity>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcEndDateAdjustment>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcAmortization>(floatIndexVector.at(i)),
+				amortIfCustom,
+				get<HelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcFixingStubPeriod>(floatIndexVector.at(i)),
+				get<HelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector.at(i)),
+				HelperFunctions::getHolidays(holidayMap, fixCalendar),
+				HelperFunctions::getIndexChars(mapIndexChars, get<HelperFunctions::QCFloatIndex::qcInterestRateIndex>(floatIndexVector.at(i))),
+				get<HelperFunctions::QCFloatIndex::qcNotional>(floatIndexVector.at(i)));
+
+			//buildFloatingRatePayoff
+			shared_ptr<QCFloatingRatePayoff> tmpIntRatePayoff = shared_ptr<QCFloatingRatePayoff>(
+				new QCFloatingRatePayoff{ tmpIntRate,
+				get<HelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector.at(i)), 1.0,
+				make_shared<QCInterestRateLeg>(tmpFloatingLeg), floatZrCrvPtr, curve, valueDate,
+				make_shared<map<QCDate, double>>(tsFixing) });
+
+			//Se agrega el payoff al vector de fixed legs
+			inputFloatingLegs.at(i) = tmpIntRatePayoff;
+		}
+
+		//Se da de alta el objeto bootstrapeador
+		QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs boot{ valueDate, inputRates, inputForwards,
+			0, inputFloatingLegs, curve };
+
+		boot.generateCurveAndDerivatives();
+
+		vector<tuple<long, double, vector<double>>> result; //plazo, tasa, derivadas
+		size_t tamagno = curve->getLength();
+		result.resize(tamagno);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			get<2>(result.at(i)).resize(tamagno);
+			pair<long, double> temp = curve->getValuesAt(i);
+			get<0>(result.at(i)) = temp.first;
+			get<1>(result.at(i)) = temp.second;
+			for (size_t j = 0; j < tamagno; ++j)
+			{
+				get<2>(result.at(i)).at(j) = boot.getDerivativeAt(i, j);
+			}
+		}
+
+		CellMatrix curveAndDeltas(tamagno, tamagno + 2);
+		for (size_t i = 0; i < tamagno; ++i)
+		{
+			curveAndDeltas(i, 0) = get<0>(result.at(i));
+			curveAndDeltas(i, 1) = get<1>(result.at(i));
+			for (size_t j = 0; j < tamagno; ++j)
+			{
+				curveAndDeltas(i, j + 2) = get<2>(result.at(i)).at(j);
+			}
+		}
+
+		return curveAndDeltas;
+
+	}
+	catch (exception& e)
+	{
+		string msg = "Error en el bootstrapping Rates&Fwds&Fixed_Legs. " + string(e.what());
+		throw runtime_error(msg);
+	}
+}
+
+
 CellMatrix checkBoostrappingFwds(int xlValueDate,
 	CellMatrix xlInputRates,
 	CellMatrix xlInputForwards,
@@ -193,7 +743,7 @@ CellMatrix checkBoostrappingFwds(int xlValueDate,
 	auxRates.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		auxTenors.at(i) = auxCurve(i, 0).NumericValue();
+		auxTenors.at(i) = static_cast<long>(auxCurve(i, 0).NumericValue());
 		auxRates.at(i) = auxCurve(i, 1).NumericValue();
 	}
 
@@ -386,7 +936,7 @@ CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
 	auxRatesFwd.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		auxTenorsFwd.at(i) = auxCurveFwd(i, 0).NumericValue();
+		auxTenorsFwd.at(i) = static_cast<long>(auxCurveFwd(i, 0).NumericValue());
 		auxRatesFwd.at(i) = auxCurveFwd(i, 1).NumericValue();
 	}
 
@@ -402,7 +952,7 @@ CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
 	auxRatesFloating.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		auxTenorsFloating.at(i) = auxCurveFloating(i, 0).NumericValue();
+		auxTenorsFloating.at(i) = static_cast<long>(auxCurveFloating(i, 0).NumericValue());
 		auxRatesFloating.at(i) = auxCurveFloating(i, 1).NumericValue();
 	}
 
@@ -571,13 +1121,65 @@ CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
 
 }
 
-double qcFecha(string f)
+double QCAddTenorToDate(string tenor, double startDate, CellMatrix holidays, string adjRule)
 {
-	QCDate fecha{ f };
-	return (double)fecha.excelSerial();
+	long months{ QCHelperFunctions::tenor(tenor) };
+	QCDate startDateOk{ static_cast<long>(startDate) };
+	QCDate endDate{ startDateOk.addMonths(months) };
+	vector<QCDate> holidaysOk;
+	size_t numHolidays{ holidays.RowsInStructure() };
+	holidaysOk.resize(numHolidays);
+	for (size_t i = 0; i < numHolidays; ++i)
+	{
+		holidaysOk.at(i) = QCDate((long)holidays(i, 0).NumericValue());
+	}
+	QCDate::QCBusDayAdjRules rule{ QCHelperFunctions::stringToQCBusDayAdjRule(adjRule) };
+	endDate = endDate.businessDay(holidaysOk, rule);
+	return (double)endDate.excelSerial();
 }
 
-double qcYearFraction(int startDate, int endDate, string yf)
+double QCAddChileTenorToDate(string tenor, double startDate, CellMatrix holidays)
+{
+	string adjRule{ "PREV" };
+	long months{ QCHelperFunctions::tenor(tenor) };
+	QCDate startDateOk{ static_cast<long>(startDate) };
+	QCDate endDate{ startDateOk.addMonths(months) };
+	vector<QCDate> holidaysOk;
+	size_t numHolidays{ holidays.RowsInStructure() };
+	holidaysOk.resize(numHolidays);
+	for (size_t i = 0; i < numHolidays; ++i)
+	{
+		holidaysOk.at(i) = QCDate((long)holidays(i, 0).NumericValue());
+	}
+	QCDate::QCBusDayAdjRules rule{ QCHelperFunctions::stringToQCBusDayAdjRule(adjRule) };
+	endDate.setDay(9);
+	endDate = endDate.businessDay(holidaysOk, rule);
+	return (double)endDate.excelSerial();
+}
+
+double QCBusinessDate(double startDate, CellMatrix holidays, string adjRule)
+{
+	QCDate startDateOk{ static_cast<long>(startDate) };
+	vector<QCDate> holidaysOk;
+	size_t numHolidays{ holidays.RowsInStructure() };
+	holidaysOk.resize(numHolidays);
+	for (size_t i = 0; i < numHolidays; ++i)
+	{
+		holidaysOk.at(i) = QCDate((long)holidays(i, 0).NumericValue());
+	}
+	QCDate::QCBusDayAdjRules rule{ QCHelperFunctions::stringToQCBusDayAdjRule(adjRule) };
+	startDateOk = startDateOk.businessDay(holidaysOk, rule);
+	return static_cast<double>(startDateOk.excelSerial());
+
+}
+
+double QCGetDateFromString(string f)
+{
+	QCDate fecha{ f };
+	return static_cast<double>(fecha.excelSerial());
+}
+
+double QCGetYearFraction(int startDate, int endDate, string yf)
 {
 	QCDate stDate{ startDate };
 	QCDate eDate{ endDate };
@@ -604,69 +1206,64 @@ double qcYearFraction(int startDate, int endDate, string yf)
 	}
 }
 
-double qcWealthFactor(double rate, int stDt, int endDt, string yf, string wf)
+double QCGetWealthFactor(double rate, double stDt, double endDt, string yf, string wf)
 {
-	QCDate startDate{ stDt };
-	QCDate endDate{ endDt };
-	transform(yf.begin(), yf.end(), yf.begin(), ::toupper);
-	transform(wf.begin(), wf.end(), wf.begin(), ::toupper);
+	QCDate startDate{ static_cast<long>(stDt) };
+	QCDate endDate{ static_cast<long>(endDt) };
 
-	shared_ptr<QCWealthFactor> comp(new QCCompoundWf);
-	shared_ptr<QCWealthFactor> lin(new QCLinearWf);
-	shared_ptr<QCWealthFactor> cont(new QCContinousWf);
+	QCHelperFunctions::lowerCase(yf);
+	QCHelperFunctions::lowerCase(wf);
+	auto ratePtr = QCFactoryFunctions::intRateSharedPtr(rate, yf, wf);
+	return ratePtr->wf(startDate, endDate);
+}
 
-	shared_ptr<QCYearFraction> act360(new QCAct360);
-	shared_ptr<QCYearFraction> act365(new QCAct365);
-	shared_ptr<QCYearFraction> _30360(new QC30360);
-	shared_ptr<QCYearFraction> actAct(new QCActAct);
+double QCGetDiscountFactorFromCurve(CellMatrix curva,
+	string curveInterpolator,
+	string yf,
+	string wf,
+	double plazo)
+{
+	auto curvaCero = HelperFunctions::buildZeroCouponCurve(curva, curveInterpolator, yf, wf);
+	return curvaCero->getDiscountFactorAt(static_cast<long>(plazo));
+}
 
-	string aux{ wf + yf };
-	if (aux == "COMACT360")
-	{
-		QCInterestRate ir{ rate, act360, comp };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "COMACT365")
-	{
-		QCInterestRate ir{ rate, act365, comp };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "COM30360")
-	{
-		QCInterestRate ir{ rate, _30360, comp };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "COMACTACT")
-	{
-		QCInterestRate ir{ rate, actAct, comp };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "LINACT360")
-	{
-		QCInterestRate ir{ rate, act360, lin };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "LINACT365")
-	{
-		QCInterestRate ir{ rate, act365, lin };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "LIN30360")
-	{
-		QCInterestRate ir{ rate, _30360, lin };
-		return ir.wf(startDate, endDate);
-	}
-	else if (aux == "LINACTACT")
-	{
-		QCInterestRate ir{ rate, actAct, lin };
-		return ir.wf(startDate, endDate);
-	}
-	else
-	{
-		QCInterestRate ir{ rate, act365, cont };
-		return ir.wf(startDate, endDate);
-	}
+double QCGetDiscountFactorFwdFromCurve(CellMatrix curva,
+	string curveInterpolator,
+	string yf,
+	string wf,
+	double plazo1,
+	double plazo2)
+{
+	auto curvaCero = HelperFunctions::buildZeroCouponCurve(curva, curveInterpolator, yf, wf);
+	return curvaCero->getDiscountFactorFwd(static_cast<long>(plazo1), static_cast<long>(plazo2));
+}
 
+double QCGetWealthFactorFwdFromCurve(CellMatrix curva,
+	string curveInterpolator,
+	string yf,
+	string wf,
+	double plazo1,
+	double plazo2)
+{
+	auto curvaCero = HelperFunctions::buildZeroCouponCurve(curva, curveInterpolator, yf, wf);
+	return curvaCero->getForwardWf(static_cast<long>(plazo1), static_cast<long>(plazo2));
+}
+
+double QCGetFwdRateFromCurve(CellMatrix curva,
+	string curveInterpolator,
+	string curveYf,
+	string curveWf,
+	double plazo1,
+	double plazo2,
+	string rateYf,
+	string rateWf)
+{
+	auto curvaCero = HelperFunctions::buildZeroCouponCurve(curva, curveInterpolator, curveYf, curveWf);
+	double wf = curvaCero->getForwardWf(static_cast<long>(plazo1), static_cast<long>(plazo2));
+	QCHelperFunctions::lowerCase(rateYf);
+	QCHelperFunctions::lowerCase(rateWf);
+	auto ir = QCFactoryFunctions::intRateSharedPtr(0, rateYf, rateWf);
+	return ir->getRateFromWf(wf, static_cast<long>(plazo2 - plazo1));
 }
 
 CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, int fecha, string yf, string wf)
@@ -678,7 +1275,7 @@ CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, int fecha, string y
 	{
 		periods.push_back(
 			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
-			(bool)tablaDesarrollo(i, 1).NumericValue(),
+			static_cast<bool>(tablaDesarrollo(i, 1).NumericValue()),
 			tablaDesarrollo(i, 2).NumericValue(),
 			(bool)tablaDesarrollo(i, 3).NumericValue(),
 			tablaDesarrollo(i, 4).NumericValue(),
@@ -741,12 +1338,15 @@ CellMatrix cashFlow(CellMatrix tablaDesarrollo, double tasa, int fecha, string y
 
 double pvFixed1(CellMatrix tablaDesarrollo,
 	CellMatrix curva,
-	double tasa, int fecha, string yf, string wf)
+	double tasa,
+	int fecha,
+	string yf,
+	string wf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int filas = tablaDesarrollo.RowsInStructure();
+	size_t filas = tablaDesarrollo.RowsInStructure();
 
-	for (int i = 0; i < filas; ++i)
+	for (size_t i = 0; i < filas; ++i)
 	{
 		periods.push_back(
 			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -787,13 +1387,13 @@ double pvFixed1(CellMatrix tablaDesarrollo,
 	rates.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		tenors.at(i) = curva(i, 0).NumericValue();
+		tenors.at(i) = static_cast<long>(curva(i, 0).NumericValue());
 		rates.at(i) = curva(i, 1).NumericValue();
 	}
 
 	shared_ptr<QCCurve<long>> crvPtr(new QCCurve<long>{ tenors, rates });
 	shared_ptr<QCInterpolator> interpol(new QCLinearInterpolator{ crvPtr });
-	//definir un interest rate y meterlo al constructior
+	//definir un interest rate y meterlo al constructor
 	QCZrCpnCrvShrdPtr zrCrvPtr(new QCZeroCouponInterestRateCurve{ interpol, intRate });
 
 	//El shared_ptr de QCTimeSeries lo dejamos nulo
@@ -819,9 +1419,9 @@ double pvFixed(CellMatrix tablaDesarrollo,
 	string curveWf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int filas = tablaDesarrollo.RowsInStructure();
+	size_t filas = tablaDesarrollo.RowsInStructure();
 
-	for (int i = 0; i < filas; ++i)
+	for (size_t i = 0; i < filas; ++i)
 	{
 		periods.push_back(
 			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -863,7 +1463,7 @@ double pvFixed(CellMatrix tablaDesarrollo,
 	rates.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		tenors.at(i) = curva(i, 0).NumericValue();
+		tenors.at(i) = static_cast<long>(curva(i, 0).NumericValue());
 		rates.at(i) = curva(i, 1).NumericValue();
 	}
 
@@ -884,6 +1484,299 @@ double pvFixed(CellMatrix tablaDesarrollo,
 	return fxRtPffPtr->presentValue();
 }
 
+//Ultima version para pricing
+double QCPvFixedRateLeg(CellMatrix tablaDesarrollo,
+	CellMatrix nominalAmortizacion,
+	double tasa,
+	double fecha,
+	string yf,
+	string wf,
+	CellMatrix curva,
+	string curveInterpolator,
+	string curveYf,
+	string curveWf)
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+	size_t filas = tablaDesarrollo.RowsInStructure();
+
+	periods.resize(filas);
+	for (size_t i = 0; i < filas; ++i)
+	{
+		periods.at(i) = make_tuple(tablaDesarrollo(i, 0).NumericValue(),
+			(bool)tablaDesarrollo(i, 1).NumericValue(),
+			nominalAmortizacion(i, 1).NumericValue(),
+			(bool)tablaDesarrollo(i, 3).NumericValue(),
+			nominalAmortizacion(i, 0).NumericValue(),
+			QCDate{ (long)tablaDesarrollo(i, 5).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 6).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 7).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 8).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 9).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 10).NumericValue() }
+		);
+	}
+
+	//QCInterestRate, QCInterestRateLeg, QCDate, QCZeroCouponCurve y QCTimeSeriesShrdPointer
+
+	//Construimos un shared pointer de QCInterestRateLeg
+	QCInterestRateLeg intLeg{ periods, filas - 1 };
+	auto intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
+
+	//Contruimos shared_ptr de QCYearFraction.
+	QCHelperFunctions::lowerCase(yf);
+	auto yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
+
+	//Construimos un shared pointer de QCWealthFactor.
+	QCHelperFunctions::lowerCase(wf);
+	auto wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
+
+	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
+	//Este se usara para instanciar la QCFixedRateLeg
+	QCInterestRate intRate{ tasa, yfShrdPtr, wfShrdPtr };
+	auto intRatePtr = make_shared<QCInterestRate>(intRate);
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve
+	size_t puntosCurva = curva.RowsInStructure();
+	vector<long> tenors;
+	tenors.resize(puntosCurva);
+	vector<double> rates;
+	rates.resize(puntosCurva);
+	for (size_t i = 0; i < puntosCurva; ++i)
+	{
+		tenors.at(i) = static_cast<long>(curva(i, 0).NumericValue());
+		rates.at(i) = curva(i, 1).NumericValue();
+	}
+
+	//Definir la curva cero cupon de descuento
+	QCHelperFunctions::lowerCase(curveInterpolator);
+	QCHelperFunctions::lowerCase(curveYf);
+	QCHelperFunctions::lowerCase(curveWf);
+	auto zrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors,
+		rates, curveInterpolator, curveYf, curveWf);
+
+	//El shared_ptr de QCTimeSeries lo dejamos nulo
+	QCTimeSeriesShrdPtr timeSrsPtr;
+
+	//Construimos el objeto QCDate con la fecha de valorizacion
+	QCDate valDate{ (long)fecha }; //constructor que toma un Excel serial
+
+	//Finalmente contruimos el payoff
+	QCFixedRatePayoff fxRtPff{ intRatePtr, intLegPtr, zrCrvPtr, valDate, timeSrsPtr };
+
+	return fxRtPff.presentValue();
+}
+
+double QCPvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix nominalAmortizacion //rango con dos columnas con nominal vigente y amortizacion por periodo
+	, double fecha				//fecha de valorizacion
+	, double addSpread			//Spread aditivo
+	, CellMatrix curva			//Curva de proyeccion
+	, string curveInterpolator	//tipo de interpolacion para la curva
+	, string curveYf					//fraccion de año de las tasas de la curva
+	, string curveWf					//factor de capitalizacion de las tasas de la curva
+	)
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+	size_t filas = tablaDesarrollo.RowsInStructure();
+	periods.resize(filas);
+
+	for (size_t i = 0; i < filas; ++i)
+	{
+		periods.at(i) = make_tuple(tablaDesarrollo(i, 0).NumericValue(),
+			(bool)tablaDesarrollo(i, 1).NumericValue(),
+			nominalAmortizacion(i, 1).NumericValue(),
+			(bool)tablaDesarrollo(i, 3).NumericValue(),
+			nominalAmortizacion(i, 0).NumericValue(),
+			QCDate{ (long)tablaDesarrollo(i, 5).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 6).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 7).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 8).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 9).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 10).NumericValue() }
+		);
+	}
+
+	/*QCInterestRate, QCInterestRateLeg, QCDate, QCZeroCouponCurve y QCTimeSeriesShrdPointer*/
+
+	//Construimos un shared pointer de QCInterestRateLeg
+	QCInterestRateLeg intLeg{ periods, filas - 1 };
+	auto intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
+
+	//Contruimos shared_ptr de QCYearFraction.
+	string yf{ "act/360" };
+	QCHelperFunctions::lowerCase(yf);
+	auto yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
+
+	//Construimos un shared pointer de QCWealthFactor.
+	string wf{ "lin" };
+	QCHelperFunctions::lowerCase(wf);
+	auto wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
+
+	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
+	//Este se usara para instanciar la QCFixedRateLeg
+	double valorTasa{ 0.0 };
+	QCInterestRate intRate{ valorTasa, yfShrdPtr, wfShrdPtr };
+	auto intRatePtr = make_shared<QCInterestRate>(intRate);
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve
+	size_t puntosCurva = curva.RowsInStructure();
+	vector<long> tenors;
+	tenors.resize(puntosCurva);
+	vector<double> rates;
+	rates.resize(puntosCurva);
+	for (size_t i = 0; i < puntosCurva; ++i)
+	{
+		tenors.at(i) = static_cast<long>(curva(i, 0).NumericValue());
+		rates.at(i) = curva(i, 1).NumericValue();
+	}
+
+	//Definir la curva cero cupon de descuento
+	QCHelperFunctions::lowerCase(curveInterpolator);
+	QCHelperFunctions::lowerCase(curveYf);
+	QCHelperFunctions::lowerCase(curveWf);
+	auto zrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors,
+		rates, curveInterpolator, curveYf, curveWf);
+
+	//El shared_ptr de QCTimeSeries lo dejamos nulo
+	QCTimeSeriesShrdPtr timeSrsPtr;
+
+	//Construimos el objeto QCDate con la fecha de valorizacion
+	QCDate valDate{ (long)fecha }; //constructor que toma un Excel serial
+
+	//Finalmente contruimos el payoff
+	double multSpread = 1.0;
+	QCIcpClpPayoff icpClpPayoff{ intRatePtr, addSpread, multSpread, intLegPtr,
+		zrCrvPtr, zrCrvPtr, valDate, timeSrsPtr };
+
+	return  icpClpPayoff.presentValue();
+}
+
+double QCPvFloatingLeg(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
+	, CellMatrix nominalAmortizacion //Rango con dos columnas con nominal vigente y amortizacion por periodo
+	, double fecha			//Fecha de valorizacion
+	, CellMatrix curvaProy	//Rango con dos columnas con plazos y tasas curva proyeccion
+	, string projCurveInterpolator	//Metodo de interpolacion de la curva de proyeccion
+	, string projCurveYf	//Fraccion de ano de las tasas de la curva de proyeccion
+	, string projCurveWf	//Factor de capitalizacion de las tasas de la curva de proyeccion
+	, CellMatrix curvaDesc	//Rango con dos columnas con plazos y tasas de la curva de descuento
+	, string discCurveInterpolator	//Metodo de interpolacion de la curva de descuento
+	, string discCurveYf	//Fraccion de ano de las tasas de la curva de descuento
+	, string discCurveWf	//Factor de capitalizacion de las tasas de la curva de descuento
+	, CellMatrix pastFixings//Rango con dos columnas con fechas y tasas para fixing
+	, double addSpread		//Valor del spread sobre tasa flotante
+	, double multSpread		//Valor del spread multiplicativo
+	, string yf				//Fraccion de ano de la tasa flotante
+	, string wf)			//Factor de capitalizacion de la tasa flotante
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	QCInterestRateLeg::QCInterestRatePeriods periods;
+	size_t filas = tablaDesarrollo.RowsInStructure();
+
+	for (size_t i = 0; i < filas; ++i)
+	{
+		periods.push_back(
+			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
+			(bool)tablaDesarrollo(i, 1).NumericValue(),
+			nominalAmortizacion(i, 1).NumericValue(),
+			(bool)tablaDesarrollo(i, 3).NumericValue(),
+			nominalAmortizacion(i, 0).NumericValue(),
+			QCDate{ (long)tablaDesarrollo(i, 5).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 6).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 7).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 8).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 9).NumericValue() },
+			QCDate{ (long)tablaDesarrollo(i, 10).NumericValue() }
+		));
+	}
+
+	/*QCInterestRate, QCInterestRateLeg, QCDate, QCZeroCouponCurve y QCTimeSeriesShrdPointer*/
+
+	//Construimos un shared pointer de QCInterestRateLeg
+	QCInterestRateLeg intLeg{ periods, filas - 1 };
+	auto intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
+
+	//Contruimos shared_ptr de QCYearFraction.
+	QCHelperFunctions::lowerCase(yf);
+	auto rateYearFraction = QCFactoryFunctions::yfSharedPtr(yf);
+
+	//Construimos un shared pointer de QCWealthFactor.
+	QCHelperFunctions::lowerCase(wf);
+	auto rateWealthFactor = QCFactoryFunctions::wfSharedPtr(wf);
+
+	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
+	QCInterestRate intRate{ 0.0, rateYearFraction, rateWealthFactor };
+	QCIntrstRtShrdPtr intRatePtr = make_shared<QCInterestRate>(intRate);
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve para la curva de descuento
+	int puntosCurva = curvaDesc.RowsInStructure();
+	vector<long> tenors;
+	tenors.resize(puntosCurva);
+	vector<double> rates;
+	rates.resize(puntosCurva);
+	for (int i = 0; i < puntosCurva; ++i)
+	{
+		tenors.at(i) = static_cast<long>(curvaDesc(i, 0).NumericValue());
+		rates.at(i) = curvaDesc(i, 1).NumericValue();
+	}
+
+	//Definir la curva cero cupon de descuento
+	QCHelperFunctions::lowerCase(discCurveInterpolator);
+	QCHelperFunctions::lowerCase(discCurveYf);
+	QCHelperFunctions::lowerCase(discCurveWf);
+	auto discZrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors,
+		rates, discCurveInterpolator, discCurveYf, discCurveWf);
+
+	//Vamos a construir el shared_ptr de QCZeroCouponCurve para la curva de proyeccion
+	int puntosCurva2 = curvaProy.RowsInStructure();
+	vector<long> tenors2;
+	tenors2.resize(puntosCurva2);
+	vector<double> rates2;
+	rates2.resize(puntosCurva2);
+	for (int i = 0; i < puntosCurva2; ++i)
+	{
+		tenors2.at(i) = static_cast<long>(curvaProy(i, 0).NumericValue());
+		rates2.at(i) = curvaProy(i, 1).NumericValue();
+	}
+
+	//Definir la curva cero cupon de descuento
+	QCHelperFunctions::lowerCase(projCurveInterpolator);
+	QCHelperFunctions::lowerCase(projCurveYf);
+	QCHelperFunctions::lowerCase(projCurveWf);
+	auto projZrCrvPtr = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors2,
+		rates2, projCurveInterpolator, projCurveYf, projCurveWf);
+
+	//El shared_ptr de QCTimeSeries lo dejamos nulo
+	QCTimeSeriesShrdPtr timeSrsPtr;
+
+	//Construimos el objeto QCDate con la fecha de valorizacion
+	QCDate valDate{ static_cast<long>(fecha) }; //constructor que toma un Excel serial
+
+	//Construimos el objeto con los fixing dates
+	//typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
+	size_t puntosFixing = pastFixings.RowsInStructure();
+	map<QCDate, double> fixings;
+	for (size_t i = 0; i < puntosFixing; ++i)
+	{
+		QCDate fch = QCDate{ (long)pastFixings(i, 0).NumericValue() };
+		fixings.insert(pair<QCDate, double>(fch, pastFixings(i, 1).NumericValue()));
+	}
+	QCTimeSeriesShrdPtr fixingsShrdPtr = make_shared<map<QCDate, double>>(fixings);
+
+	//Finalmente contruimos el payoff
+	QCFloatingRatePayoff fltRtPff{ intRatePtr, addSpread, multSpread, intLegPtr,
+		projZrCrvPtr, discZrCrvPtr, valDate, fixingsShrdPtr };
+
+	return  fltRtPff.presentValue();
+}
+
 double pvFloat1(CellMatrix tablaDesarrollo,
 	CellMatrix curvaProy,
 	CellMatrix curvaDesc,
@@ -892,9 +1785,9 @@ double pvFloat1(CellMatrix tablaDesarrollo,
 	int fecha, string yf, string wf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int filas = tablaDesarrollo.RowsInStructure();
+	size_t filas = tablaDesarrollo.RowsInStructure();
 
-	for (int i = 0; i < filas; ++i)
+	for (size_t i = 0; i < filas; ++i)
 	{
 		periods.push_back(
 			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -935,13 +1828,13 @@ double pvFloat1(CellMatrix tablaDesarrollo,
 	rates.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		tenors.at(i) = curvaDesc(i, 0).NumericValue();
+		tenors.at(i) = static_cast<long>(curvaDesc(i, 0).NumericValue());
 		rates.at(i) = curvaDesc(i, 1).NumericValue();
 	}
 
 	shared_ptr<QCCurve<long>> crvPtr(new QCCurve<long>{ tenors, rates });
 	shared_ptr<QCInterpolator> interpol(new QCLinearInterpolator{ crvPtr });
-	//definir un interest rate y meterlo al constructior
+	//definir un interest rate y meterlo al constructor
 	QCZrCpnCrvShrdPtr discZrCrvPtr(new QCZeroCouponInterestRateCurve{ interpol, intRate });
 
 	//Vamos a construir el shared_ptr de QCZeroCouponCurve para la curva de proyeccion
@@ -952,7 +1845,7 @@ double pvFloat1(CellMatrix tablaDesarrollo,
 	rates2.resize(puntosCurva2);
 	for (int i = 0; i < puntosCurva2; ++i)
 	{
-		tenors2.at(i) = curvaProy(i, 0).NumericValue();
+		tenors2.at(i) = static_cast<long>(curvaProy(i, 0).NumericValue());
 		rates2.at(i) = curvaProy(i, 1).NumericValue();
 	}
 	
@@ -986,131 +1879,6 @@ double pvFloat1(CellMatrix tablaDesarrollo,
 	return  fltRtPffPtr->presentValue();
 }
 
-/*double //Valor presente de una pata a tasa flotante
-	pvFloat(CellMatrix schedule	//Tabla de desarrollo de la pata
-	, CellMatrix projCurve		//Curva de proyeccion
-	, string projYf				//Nombre de la fraccion de agno de la curva de proyeccion
-	, string projWf				//Nombre del factor de capitalizacion de la curva de proyeccion
-	, CellMatrix discCurve		//Curva de descuento
-	, string discYf				//Nombre de la fraccion de agno de la curva de descuento
-	, string discWf				//Nombre del factor de capitalizacion de la curva de descuento
-	, CellMatrix pastFixings	//Fixings anteriores
-	, double addSpread			//Spread aditivo
-	, double multSpread			//Spread multiplicativo
-	, int valueDate				//Fecha de valorizacion
-	, string floatRateYf		//Yf de la tasa flotante
-	, string floatRateWf		//Wf de la tasa flotante
-	)
-{
-	//Se construye un shared pointer de QCInterestRateLeg
-	//Primero se registran los contenidos de la CellMatrix schedule en un 
-	//objeto periods.
-
-	QCInterestRatePeriods periods;
-	int filas = schedule.RowsInStructure();
-
-	for (int i = 0; i < filas; ++i)
-	{
-		periods.push_back(
-			make_tuple(schedule(i, 0).NumericValue(),
-			(bool)schedule(i, 1).NumericValue(),
-			schedule(i, 2).NumericValue(),
-			(bool)schedule(i, 3).NumericValue(),
-			schedule(i, 4).NumericValue(),
-			QCDate{ (long)schedule(i, 5).NumericValue() },
-			QCDate{ (long)schedule(i, 6).NumericValue() },
-			QCDate{ (long)schedule(i, 7).NumericValue() },
-			QCDate{ (long)schedule(i, 8).NumericValue() },
-			QCDate{ (long)schedule(i, 9).NumericValue() },
-			QCDate{ (long)schedule(i, 10).NumericValue() }
-		));
-	}
-
-	QCIntrstRtPrdsShrdPntr periodsPtr = make_shared<QCInterestRatePeriods>(periods);
-	QCInterestRateLeg intLeg{ periodsPtr, filas - 1 };
-	QCIntrstRtLgShrdPtr intLegPtr = make_shared<QCInterestRateLeg>(intLeg);
-
-	//Se construye la curvas de descuento
-	//Contruimos shared_ptr de QCYearFraction
-	shared_ptr<QCYearFraction> projCurveYfShrdPtr = QCFactoryFunctions::yfSharedPtr(projYf);
-	//Construimos un shared pointer de QCWealthFactor.
-	shared_ptr<QCWealthFactor> projCurveWfShrdPtr = QCFactoryFunctions::wfSharedPtr(projWf);
-
-	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
-	QCInterestRate projIntRate{ 0.0, projCurveYfShrdPtr, projCurveWfShrdPtr };
-	QCIntrstRtShrdPtr projIntRatePtr = make_shared<QCInterestRate>(projIntRate);
-
-	//ESTOY AQUI TRABAJANDO 
-
-	int puntosCurva2 = projCurve.RowsInStructure();
-	vector<long> tenors2;
-	tenors2.resize(puntosCurva2);
-	vector<double> rates2;
-	rates2.resize(puntosCurva2);
-	for (int i = 0; i < puntosCurva2; ++i)
-	{
-		tenors2.at(i) = projCurve(i, 0).NumericValue();
-		rates2.at(i) = projCurve(i, 1).NumericValue();
-	}
-
-	shared_ptr<QCCurve<long>> crvPtr2(new QCCurve<long>{ tenors2, rates2 });
-	shared_ptr<QCInterpolator> interpol2(new QCLinearInterpolator{ crvPtr2 });
-	//definir un interest rate y meterlo al constructior
-	QCIntRtCrvShrdPtr intRtProjCrvPtr(new QCZeroCouponInterestRateCurve{ interpol2, intRate });
-
-	//Para el intRateLeg
-	//Contruimos shared_ptr de QCYearFraction.
-	shared_ptr<QCYearFraction> yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
-
-	//Construimos un shared pointer de QCWealthFactor.
-	shared_ptr<QCWealthFactor> wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
-
-	//Construimos un shared pointer de QCInterestRate con la yf y wf anteriores
-	QCInterestRate intRate2{ 0.0, yfShrdPtr, wfShrdPtr };
-	QCIntrstRtShrdPtr intRate2Ptr = make_shared<QCInterestRate>(intRate2);
-
-	//Vamos a construir el shared_ptr de QCZeroCouponCurve para la curva de descuento
-	int puntosCurva = discCurve.RowsInStructure();
-	vector<long> tenors;
-	tenors.resize(puntosCurva);
-	vector<double> rates;
-	rates.resize(puntosCurva);
-	for (int i = 0; i < puntosCurva; ++i)
-	{
-		tenors.at(i) = discCurve(i, 0).NumericValue();
-		rates.at(i) = discCurve(i, 1).NumericValue();
-	}
-
-	shared_ptr<QCCurve<long>> crvPtr(new QCCurve<long>{ tenors, rates });
-	shared_ptr<QCInterpolator> interpol(new QCLinearInterpolator{ crvPtr });
-	//definir un interest rate y meterlo al constructior
-	QCZrCpnCrvShrdPtr discZrCrvPtr(new QCZeroCouponInterestRateCurve{ interpol, intRate });
-	
-	//El shared_ptr de QCTimeSeries lo dejamos nulo
-	QCTimeSeriesShrdPtr timeSrsPtr;
-
-	//Construimos el objeto QCDate con la fecha de valorizacion
-	QCDate valDate{ valueDate }; //constructor que toma un Excel serial
-
-	//Construimos el objeto con los fixing dates
-	//typedef shared_ptr<map<QCDate, double>> QCTimeSeriesShrdPtr;
-	int puntosFixing = pastFixings.RowsInStructure();
-	map<QCDate, double> fixings;
-	for (int i = 0; i < puntosFixing; ++i)
-	{
-	QCDate fch = QCDate{ (long)pastFixings(i, 0).NumericValue() };
-	fixings.insert(pair<QCDate, double>(fch, pastFixings(i, 1).NumericValue()));
-	}
-	QCTimeSeriesShrdPtr fixingsShrdPtr; // = make_shared<map<QCDate, double>>(fixings);
-
-	//Finalmente contruimos el payoff
-	QCIcpClpPayoff fltRtPff{ intRate2Ptr, addSpread, multSpread, intLegPtr,
-		intRtProjCrvPtr, discZrCrvPtr, valDate, fixingsShrdPtr };
-	QCIntrstRtPffShrdPtr fltRtPffPtr = make_shared<QCIcpClpPayoff>(fltRtPff);
-	return  fltRtPffPtr->presentValue();
-
-	return 0.0;
-}*/
 
 double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	, CellMatrix curvaProy		//Curva de proyeccion
@@ -1124,9 +1892,9 @@ double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 	{
 		QCInterestRateLeg::QCInterestRatePeriods periods;
-		unsigned int filas = tablaDesarrollo.RowsInStructure();
+		size_t filas = tablaDesarrollo.RowsInStructure();
 
-		for (int i = 0; i < filas; ++i)
+		for (size_t i = 0; i < filas; ++i)
 		{
 			periods.push_back(
 				make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -1178,7 +1946,7 @@ double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		rates.resize(puntosCurva);
 		for (int i = 0; i < puntosCurva; ++i)
 		{
-			tenors.at(i) = curvaDesc(i, 0).NumericValue();
+			tenors.at(i) = static_cast<long>(curvaDesc(i, 0).NumericValue());
 			rates.at(i) = curvaDesc(i, 1).NumericValue();
 		}
 
@@ -1195,7 +1963,7 @@ double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		rates2.resize(puntosCurva2);
 		for (int i = 0; i < puntosCurva2; ++i)
 		{
-			tenors2.at(i) = curvaProy(i, 0).NumericValue();
+			tenors2.at(i) = static_cast<long>(curvaProy(i, 0).NumericValue());
 			rates2.at(i) = curvaProy(i, 1).NumericValue();
 		}
 
@@ -1229,6 +1997,7 @@ double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		return  fltRtPffPtr->presentValue();
 	}
 
+
 double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	, CellMatrix curvaProy		//Curva de proyeccion
 	, CellMatrix curvaDesc		//Curva de descuento
@@ -1243,9 +2012,9 @@ double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int filas = tablaDesarrollo.RowsInStructure();
+	size_t filas = tablaDesarrollo.RowsInStructure();
 
-	for (int i = 0; i < filas; ++i)
+	for (size_t i = 0; i < filas; ++i)
 	{
 		periods.push_back(
 			make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -1298,7 +2067,7 @@ double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	rates.resize(puntosCurva);
 	for (int i = 0; i < puntosCurva; ++i)
 	{
-		tenors.at(i) = curvaDesc(i, 0).NumericValue();
+		tenors.at(i) = static_cast<long>(curvaDesc(i, 0).NumericValue());
 		rates.at(i) = curvaDesc(i, 1).NumericValue();
 	}
 
@@ -1315,7 +2084,7 @@ double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	rates2.resize(puntosCurva2);
 	for (int i = 0; i < puntosCurva2; ++i)
 	{
-		tenors2.at(i) = curvaProy(i, 0).NumericValue();
+		tenors2.at(i) = static_cast<long>(curvaProy(i, 0).NumericValue());
 		rates2.at(i) = curvaProy(i, 1).NumericValue();
 	}
 
@@ -1360,9 +2129,9 @@ double pvIcpClf(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 	{
 		QCInterestRateLeg::QCInterestRatePeriods periods;
-		unsigned int filas = tablaDesarrollo.RowsInStructure();
+		size_t filas = tablaDesarrollo.RowsInStructure();
 
-		for (int i = 0; i < filas; ++i)
+		for (size_t i = 0; i < filas; ++i)
 		{
 			periods.push_back(
 				make_tuple(tablaDesarrollo(i, 0).NumericValue(),
@@ -1414,7 +2183,7 @@ double pvIcpClf(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		rates.resize(puntosCurva);
 		for (int i = 0; i < puntosCurva; ++i)
 		{
-			tenors.at(i) = curvaDesc(i, 0).NumericValue();
+			tenors.at(i) = static_cast<long>(curvaDesc(i, 0).NumericValue());
 			rates.at(i) = curvaDesc(i, 1).NumericValue();
 		}
 
@@ -1431,7 +2200,7 @@ double pvIcpClf(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		rates2.resize(puntosCurva2);
 		for (int i = 0; i < puntosCurva2; ++i)
 		{
-			tenors2.at(i) = curvaProy(i, 0).NumericValue();
+			tenors2.at(i) = static_cast<long>(curvaProy(i, 0).NumericValue());
 			rates2.at(i) = curvaProy(i, 1).NumericValue();
 		}
 
@@ -2104,12 +2873,12 @@ CellMatrix pvIcpClpLegs2(double valueDate,
 			mapHolidays.at(legCharacteristics(i, 4).StringValue()),  //settlement calendar
 			(int)legCharacteristics(i, 5).NumericValue(),			 //settlement lag
 			QCHelperFunctions::stringToQCStubPeriod(
-			legCharacteristics(i, 6).StringValue()),					 //stub period
+			legCharacteristics(i, 6).StringValue()),				 //stub period
 			legCharacteristics(i, 7).StringValue(),					 //periodicity
 			QCHelperFunctions::stringToQCBusDayAdjRule(
 			legCharacteristics(i, 8).StringValue()),				 //end date adjustment
 			QCHelperFunctions::stringToQCAmortization(
-			legCharacteristics(i, 9).StringValue()),					 //amortization
+			legCharacteristics(i, 9).StringValue()),				 //amortization
 			amortIfCustom,											 //amortization and notional by end date
 			(double)legCharacteristics(i, 14).NumericValue()		 //notional
 			);
@@ -2983,11 +3752,20 @@ CellMatrix pvFloatingRateLegs2(double valueDate,
 
 }
 
-CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix calendars,
-	string settlementStubPeriod, string settlementPeriodicity, string endDateAdjustment,
-	string settlementCalendar, int settlementLag,
-	string fixingStubPeriod, string fixingPeriodicity, int fixingLag,
-	string fixingCalendar, int fixingStartDateRule, string fixingTenor)
+CellMatrix buildInterestRateLeg(double startDate,
+	double endDate,
+	CellMatrix calendars,
+	string settlementStubPeriod,
+	string settlementPeriodicity,
+	string endDateAdjustment,
+	string settlementCalendar,
+	int settlementLag,
+	string fixingStubPeriod,
+	string fixingPeriodicity,
+	int fixingLag,
+	string fixingCalendar,
+	int fixingStartDateRule,
+	string fixingTenor)
 {
 	//holidays: nombre, fecha. Se construye un map<string, vector<QCDate>> que para cada nombre de calendario
 	//tenga todas las fechas
@@ -3023,4 +3801,45 @@ CellMatrix buildInterestRateLeg(double startDate, double endDate, CellMatrix cal
 	}
 
 	return result;
+}
+
+string QCGetMacAddress()
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	char* result = HelperFunctions::getMAC();
+	return string(result);
+}
+
+string QCSha256(string input)
+{	
+	char* cstr = &input[0u];;
+	return Sha256::SHA256(cstr);
+}
+
+string QCGetAuthKey()
+{
+	return HelperFunctions::getAuthKey();
+}
+
+string QCGenerateKey(string password)
+{
+	if (password != "3141-YYZ-217-APDV")
+		return "Password invalida.";
+
+	string paddedMac = "rockandroll" + string(HelperFunctions::getMAC()) + "heavymetal";
+	char* cstr = &paddedMac[0u];
+	string key = Sha256::SHA256(cstr);
+	ofstream keyFile("C:\\Creasys\\FrontDesk\\XLL\\auth_key.txt");
+	if (keyFile.is_open())
+	{
+		keyFile << key << endl;
+		keyFile.close();
+		return "Archivo de licencia creado.";
+	}
+	else
+	{
+		return "No se pudo crear el archivo de licencia.";
+	}
 }

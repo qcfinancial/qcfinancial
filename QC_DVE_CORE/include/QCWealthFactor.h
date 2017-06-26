@@ -25,7 +25,7 @@ public:
 	* @param yf es el valor de la fracción de año
 	* @return (double) valor del factor de capitalización
 	*/
-	virtual double wf(double rate, double yf) = 0;
+	virtual double wf(double rate, double yf);
 
 	/*!
 	* La función rate devuelve el valor de la tasa asociada al valor del factor de capitalización
@@ -34,7 +34,7 @@ public:
 	* @param yf es el valor de la fracción de año
 	* @return (double) valor de la tasa asociada
 	*/
-	virtual double rate(double wf, double yf) = 0;
+	virtual double rate(double wf, double yf);
 
 	/*!
 	* La función dwf es un getter que devuelve el valor de la derivada del último factor de capitalización

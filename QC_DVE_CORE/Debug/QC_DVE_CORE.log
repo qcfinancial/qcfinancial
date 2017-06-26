@@ -1,8 +1,11 @@
-﻿Build started 28/03/2017 20:29:12.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 3 (Build target(s)).
+﻿Build started 18/06/2017 8:08:11.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
-         QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
+         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCouponCurve.cpp
+         Skipping... (no relevant changes detected)
+         QCZeroCouponCurve.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib" /NOLOGO Debug\QC30360.obj
          Debug\QCAct360.obj
@@ -36,12 +39,14 @@
          Debug\QCZeroCouponDiscountFactorCurve.obj
          Debug\QCZeroCouponInterestRateCurve.obj
          Debug\QCZeroCurveBootstrappingFromRatesAndFixedLegs.obj
+         Debug\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.obj
          Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.obj
          Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.obj
+         Debug\QCZeroCurveBootstrappingFromRates.obj
          Debug\QCZeroCouponCurve.obj
          QC_DVE_CORE.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib
      1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.79
+Time Elapsed 00:00:02.92

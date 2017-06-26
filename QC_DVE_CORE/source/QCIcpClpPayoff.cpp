@@ -44,7 +44,9 @@ void QCIcpClpPayoff::_setAllRates()
 		if (_valueDate >= startDate)
 		{
 			//Trae ICP a startDate
+			cout << "Start date: " << startDate.description() << endl;
 			double icpStart = _fixingData->at(startDate);
+			cout << "Ok start date" << endl;
 			
 			//Trae ICP _valueDate
 			double icpValue = _fixingData->at(_valueDate);
@@ -103,8 +105,8 @@ void QCIcpClpPayoff::_setAllRates()
 		else
 		{
 			//Si no calcula el factor de descuento fwd segun los parametros del periodo
-			QCDate date1 = get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(per);
-			QCDate date2 = get<QCInterestRateLeg::intRtPrdElmntFxngEndDate>(per);
+			QCDate date1 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(per);
+			QCDate date2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(per);
 			long d1 = _valueDate.dayDiff(date1);
 			long d2 = _valueDate.dayDiff(date2);
 

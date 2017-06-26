@@ -61,6 +61,13 @@ public:
 	double getForwardRateAt(size_t n);
 
 	/*!
+	* Suma el valor mov al valor del spread aditivo del payoff
+	* @param mov valor a sumar al valor del spread.
+	*/
+	void addToAdditiveSpreadValue(double mov);
+
+
+	/*!
 	* Destructor.
 	*/
 	virtual ~QCFloatingRatePayoff();
