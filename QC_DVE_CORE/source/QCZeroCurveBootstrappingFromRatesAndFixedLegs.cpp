@@ -13,8 +13,13 @@ QCZeroCurveBootstrappingFromRatesAndFixedLegs::QCZeroCurveBootstrappingFromRates
 	vector<shared_ptr<QCTimeDepositPayoff>> inputRates,
 	vector<shared_ptr<QCFixedRatePayoff>> inputFixedRateLegs,
 	QCZrCpnCrvShrdPtr curve) : QCInterestRateCurveGenerator(
-	valueDate,inputRates, inputFixedRateLegs,
-	QCInterestRateCurveGenerator::emptyForward(), QCInterestRateCurveGenerator::emptyFloatingLegs(), curve)
+	valueDate,
+	inputRates,
+	inputFixedRateLegs,
+	QCInterestRateCurveGenerator::emptyForward(),
+	QCInterestRateCurveGenerator::emptyFloatingLegs(),
+	QCInterestRateCurveGenerator::emptyBasisSwaps(),
+	curve)
 {
 
 }
@@ -119,7 +124,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 		}
 		generateCurve();
 
-		cout << "curva: " << i << endl;
+		cout << "curva+: " << i << endl;
 		for (size_t j = 0; j < numRates + numSwaps; ++j)
 		{
 			temp.at(j) = _curve->getRateAtIndex(j);

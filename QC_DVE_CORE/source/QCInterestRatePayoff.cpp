@@ -35,7 +35,10 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 }
 
 //Esta se implementa en las subclases
-void QCInterestRatePayoff::_setAllRates() {}
+void QCInterestRatePayoff::_setAllRates()
+{
+	cout << "Set all rates clase parent" << endl;
+}
 
 void QCInterestRatePayoff::addToRateValue(double mov)
 {
@@ -119,6 +122,11 @@ unsigned int QCInterestRatePayoff::getLastPeriodIndex() const
 	return _irLeg->lastPeriod();
 }
 
+QCDate QCInterestRatePayoff::getStartDate() const
+{
+	return get<QCInterestRateLeg::intRtPrdElmntStartDate>(_irLeg->getPeriodAt(0));
+}
+
 QCDate QCInterestRatePayoff::getEndDate() const
 {
 	return get<QCInterestRateLeg::intRtPrdElmntEndDate>(_irLeg->getPeriodAt(getLastPeriodIndex()));
@@ -137,7 +145,7 @@ tuple<QCDate, QCCashFlowLabel, double> QCInterestRatePayoff::getCashflowAt(unsig
 double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 {
 	//cout << "Enter QCInterestRatePayoff::presentValue(bool includeFirstCashflow)" << endl;
-
+	_setAllRates();
 	payoff();
 	double pv{ 0.0 };
 	_valueDateCashflow = 0.0;

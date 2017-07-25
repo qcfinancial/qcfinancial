@@ -1859,26 +1859,33 @@ PyObject* boot_zero_rates_fwds_floating_legs(PyObject* self, PyObject* args)
 
 PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* args)
 {
-	cout << "Enter function boot_zero_rates_fwds_floating_legs." << endl;
+	//En la pata 0 vienen los spreads. La pata 1 es la pata Flot sin spread.
+	cout << endl << "Enter function boot_zero_rates_floating_legs_proj_curve." << endl;
 	char* fecha;
-	double fixing;
+	double fixing0;
+	double fixing1;
+	int whichLeg;
 	PyObject* holidays;
 	PyObject* curveCharacteristics;
 	PyObject* zeroRates;
-	PyObject* floatingLegs;
+	PyObject* floatingLegs0;
+	PyObject* floatingLegs1;
 	PyObject* auxCurveValues;
 	PyObject* auxCurveChars;
 
-	string nombreFuncion{ "\tboot_zero_rates_fwds_floating_legs: " };
+	string nombreFuncion{ "\tboot_zero_rates_floating_legs_proj_curve: " };
 
 	if (!PyArg_ParseTuple(args,
-		"sddO!O!O!O!O!O!O!",
+		"sddiO!O!O!O!O!O!O!",
 		&fecha,
-		&fixing,
+		&fixing0,
+		&fixing1,
+		&whichLeg,
 		&PyList_Type, &holidays,
 		&PyList_Type, &curveCharacteristics,
 		&PyList_Type, &zeroRates,
-		&PyList_Type, &floatingLegs,
+		&PyList_Type, &floatingLegs0,
+		&PyList_Type, &floatingLegs1,
 		&PyList_Type, &auxCurveValues,
 		&PyList_Type, &auxCurveChars))
 	{
@@ -1888,14 +1895,20 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 	}
 	try
 	{
+		//Se establece en true para enviar mensajes a la consola
+		bool verbose = true;
+
 		//Se construye la fecha de proceso
 		string strDate{ fecha };
 		QCDate valueDate{ strDate };
+		if (verbose)
+			cout << nombreFuncion << "fecha de proceso: " << valueDate.description() << endl;
 
 		//Se construye el mapa con los feriados de cada calendario
 		map<string, vector<QCDate>> mapHolidays;
 		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
-		cout << nombreFuncion + "finished map holidays" << endl;
+		if (verbose)
+			cout << nombreFuncion + "finished map holidays" << endl;
 
 		//Se dan de alta las caracteristicas de la curva a construir
 		string curveInterpol{ PyString_AsString(PyList_GetItem(curveCharacteristics, 0)) }; //Interpolacion
@@ -1903,7 +1916,8 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 		QCHelperFunctions::lowerCase(curveWf);
 		string curveYf{ PyString_AsString(PyList_GetItem(curveCharacteristics, 2)) }; //year fraction
 		QCHelperFunctions::lowerCase(curveYf);
-		cout << nombreFuncion + "finished curve characteristics." << endl;
+		if (verbose)
+			cout << nombreFuncion + "finished curve characteristics." << endl;
 
 		//Se dan de alta las caracteristicas de las curvas auxiliares
 		size_t numAuxCurves = PyList_Size(auxCurveChars);
@@ -1929,31 +1943,55 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 			string whichInput{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(auxCurveChars, i), 1)) };
 			auxCurvesMap.insert(make_pair(whichInput, auxCrvPtr));
 		}
-		cout << nombreFuncion + "aux curve initialized" << endl;
+		if (verbose)
+			cout << nombreFuncion + "aux curve initialized" << endl;
 
 		//Se construye un vector con los datos de las tasas cero iniciales
 		vector<QCDvePyBindHelperFunctions::ZeroRate> zeroRateVector;
 		string zeroRateCalendar{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(zeroRates, 0), 3)) };
 		QCDvePyBindHelperFunctions::buildZeroRateVector(zeroRates, valueDate,
 			mapHolidays.at(zeroRateCalendar), zeroRateVector);
-		cout << nombreFuncion + "finished zero rates." << endl;
-
-		//Se construye un vector con las patas flotantes iniciales
-		vector<QCDvePyBindHelperFunctions::FloatIndex> floatIndexVector;
-		string floatLegSettlementCalendar{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs, 0), 6)) };
-		QCDvePyBindHelperFunctions::buildFloatingRateIndexVector(floatingLegs, valueDate,
-			mapHolidays.at(floatLegSettlementCalendar), floatIndexVector);
-		cout << nombreFuncion + "finished floating rate legs." << endl;
+		if (verbose)
+			cout << nombreFuncion + "finished zero rates." << endl;
 
 		size_t cuantasTasas = zeroRateVector.size();
+		cout << "cuantas tasas: " << cuantasTasas << endl;
 		vector<shared_ptr<QCTimeDepositPayoff>> inputRates;
 		inputRates.resize(cuantasTasas);
-		cout << nombreFuncion + "inputRates resized" << endl;
+		if (verbose)
+			cout << nombreFuncion + "inputRates resized." << endl;
 
-		size_t cuantosSwaps = floatIndexVector.size();
-		vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingLegs;
-		inputFloatingLegs.resize(cuantosSwaps);
-		cout << nombreFuncion + "inputFloatingLegs resized" << endl;
+		//Se construye un vector con las patas flotantes iniciales 0
+		vector<QCDvePyBindHelperFunctions::FloatIndex> floatIndexVector0;
+		string floatLegSettlementCalendar0{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs0, 0), 6)) };
+		QCDvePyBindHelperFunctions::buildFloatingRateIndexVector(floatingLegs0, valueDate,
+			mapHolidays.at(floatLegSettlementCalendar0), floatIndexVector0);
+		if (verbose)
+			cout << nombreFuncion + "finished floating rate legs 0." << endl;
+
+		//Se construye un vector con las patas flotantes iniciales 1
+		vector<QCDvePyBindHelperFunctions::FloatIndex> floatIndexVector1;
+		string floatLegSettlementCalendar1{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs1, 0), 6)) };
+		QCDvePyBindHelperFunctions::buildFloatingRateIndexVector(floatingLegs1, valueDate,
+			mapHolidays.at(floatLegSettlementCalendar1), floatIndexVector1, "P");
+		if (verbose)
+			cout << nombreFuncion + "finished floating rate legs 1." << endl;
+
+		size_t cuantosSwaps = floatIndexVector0.size();
+		vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingLegs0;
+		inputFloatingLegs0.resize(cuantosSwaps);
+		if (verbose)
+			cout << nombreFuncion + "inputFloatingLegs0 resized" << endl;
+
+		vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingLegs1;
+		inputFloatingLegs1.resize(cuantosSwaps);
+		if (verbose)
+			cout << nombreFuncion + "inputFloatingLegs1 resized" << endl;
+
+		vector<shared_ptr<QCInterestRateBasisSwap>> inputBasisSwaps;
+		inputBasisSwaps.resize(cuantosSwaps);
+		if (verbose)
+			cout << nombreFuncion + "inputBasisSwaps resized" << endl;
 
 		vector<long> tenors;
 		tenors.resize(cuantasTasas + cuantosSwaps);
@@ -1962,25 +2000,175 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 			tenors.at(i) = valueDate.dayDiff(get<1>(zeroRateVector.at(i)));
 		}
 
-
 		for (size_t i = cuantasTasas; i < cuantasTasas + cuantosSwaps; ++i)
 		{
-			tenors.at(i) = valueDate.dayDiff(get<2>(floatIndexVector.at(i - cuantasTasas)));
+			tenors.at(i) = valueDate.dayDiff(get<2>(floatIndexVector0.at(i - cuantasTasas)));
 		}
-		cout << nombreFuncion + "curve tenors ok" << endl;
+		if (verbose)
+			cout << nombreFuncion + "curve tenors ok" << endl;
 
 		vector<double> rates;
 		rates.resize(cuantasTasas + cuantosSwaps);
+		//Hay que ordenar por fecha final ascendente el vector de zero rates. 
 		for (size_t i = 0; i < cuantasTasas + cuantosSwaps; ++i)
 		{
-			rates.at(i) = 0.0;
+			if (i < cuantasTasas)
+			{
+				rates.at(i) = get<2>(zeroRateVector.at(i));
+				//Esto hay que arreglarlo para que entre el valor en la convencion correcta
+				//Hay que hacer un helper function que tome la tupla y la yf y wf deseada y devuelva
+				//el valor transformado.
+			}
+			else
+			{
+				rates.at(i) = get<2>(zeroRateVector.at(0)); // 0.0;
+			}
 		}
-		cout << nombreFuncion + "curve rates ok" << endl;
+		if (verbose)
+			cout << nombreFuncion + "curve rates ok" << endl;
 
 		QCZrCpnCrvShrdPtr curve = QCFactoryFunctions::zrCpnCrvShrdPtr(tenors, rates, curveInterpol,
 			curveYf, curveWf);
-		cout << nombreFuncion + "curve initialized" << endl;
+		if (verbose)
+			cout << nombreFuncion + "curve initialized" << endl;
 
+		vector<tuple<QCDate, double, double>> amortIfCustom;
+		string floatLegFixingCalendar0{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs0, 0), 16)) };
+		map<QCDate, double> fixingMap0;
+		fixingMap0.insert(make_pair(valueDate, fixing0));
+
+		string floatLegFixingCalendar1{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs1, 0), 16)) };
+		map<QCDate, double> fixingMap1;
+		fixingMap1.insert(make_pair(valueDate, fixing1));
+		for (unsigned int i = 0; i < cuantosSwaps; ++i)
+		{
+			vector<shared_ptr<QCFloatingRatePayoff>> tempFloatingLegs;
+			tempFloatingLegs.resize(2);
+
+			//************** Primero Pata 0 ***********************
+
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate0 = QCFactoryFunctions::intRateSharedPtr(
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcRate>(floatIndexVector0.at(i)),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcYearFraction>(floatIndexVector0.at(i)),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcWealthFactor>(floatIndexVector0.at(i)));
+			if (verbose)
+				cout << nombreFuncion + "swap interest rate 0" << i << " initialized" << endl;
+
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			QCInterestRateLeg tmpFloatingLeg0 = QCFactoryFunctions::buildFloatingRateLeg2(
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcReceivePay>(floatIndexVector0.at(i)),//receive or pay
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStartDate>(floatIndexVector0.at(i)),	//start date
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDate>(floatIndexVector0.at(i)),	//end date
+				mapHolidays.at(floatLegSettlementCalendar0),											//settlement calendar
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSettlementLag>(floatIndexVector0.at(i)),//settlement lag
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStubPeriod>(floatIndexVector0.at(i)),//stub period
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcPeriodicity>(floatIndexVector0.at(i)),//periodicity
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDateAdjustment>(floatIndexVector0.at(i)),//end date adjustment
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcAmortization>(floatIndexVector0.at(i)),//amortization
+				amortIfCustom,							//amortization and notional by date
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector0.at(i)),//fixing lag
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingStubPeriod>(floatIndexVector0.at(i)),//fixing stub period
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector0.at(i)),//fixing periodicity
+				mapHolidays.at(floatLegFixingCalendar0), //fixing calendar
+				make_pair(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector0.at(i)),
+				to_string(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector0.at(i))) + "D"),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcNotional>(floatIndexVector0.at(i)));	//notional
+			if (verbose)
+				cout << nombreFuncion + "floating rate interest leg 0" << i << " initialized" << endl;
+
+			//buildFloatingRatePayoff
+			shared_ptr<QCFloatingRatePayoff> tmpIntRatePayoff0;
+			if (whichLeg == 0)
+			{
+				tmpIntRatePayoff0 = shared_ptr<QCFloatingRatePayoff>(
+					new QCFloatingRatePayoff{ tmpIntRate0,
+					get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector0.at(i)),
+					1.0,
+					make_shared<QCInterestRateLeg>(tmpFloatingLeg0),
+					curve, auxCurvesMap.at("BASIS_SWAPS"), valueDate,
+					make_shared<map<QCDate, double>>(fixingMap0) });
+			}
+			else
+			{
+				tmpIntRatePayoff0 = shared_ptr<QCFloatingRatePayoff>(
+					new QCFloatingRatePayoff{ tmpIntRate0,
+					get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector0.at(i)),
+					1.0,
+					make_shared<QCInterestRateLeg>(tmpFloatingLeg0),
+					auxCurvesMap.at("BASIS_SWAPS"), auxCurvesMap.at("BASIS_SWAPS"), valueDate,
+					make_shared<map<QCDate, double>>(fixingMap0) });
+
+			}
+			if (verbose)
+				cout << nombreFuncion + "floating rate interest payoff 0" << i << " initialized" << endl;
+			//Se agrega el payoff al vector de floating legs 0
+			tempFloatingLegs.at(0) = tmpIntRatePayoff0;
+
+			//****************** Ahora Pata 1 *************************
+
+			//Se construye el interest rate
+			shared_ptr<QCInterestRate> tmpIntRate1 = QCFactoryFunctions::intRateSharedPtr(
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcRate>(floatIndexVector1.at(i)),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcYearFraction>(floatIndexVector1.at(i)),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcWealthFactor>(floatIndexVector1.at(i)));
+			cout << nombreFuncion + "swap interest rate 1" << i << " initialized" << endl;
+
+			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
+			QCInterestRateLeg tmpFloatingLeg1 = QCFactoryFunctions::buildFloatingRateLeg2(
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcReceivePay>(floatIndexVector1.at(i)),//receive or pay
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStartDate>(floatIndexVector1.at(i)),	//start date
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDate>(floatIndexVector1.at(i)),	//end date
+				mapHolidays.at(floatLegSettlementCalendar1),											//settlement calendar
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSettlementLag>(floatIndexVector1.at(i)),//settlement lag
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStubPeriod>(floatIndexVector1.at(i)),//stub period
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcPeriodicity>(floatIndexVector1.at(i)),//periodicity
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDateAdjustment>(floatIndexVector1.at(i)),//end date adjustment
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcAmortization>(floatIndexVector1.at(i)),//amortization
+				amortIfCustom,							//amortization and notional by date
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector1.at(i)),//fixing lag
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingStubPeriod>(floatIndexVector1.at(i)),//fixing stub period
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector1.at(i)),//fixing periodicity
+				mapHolidays.at(floatLegFixingCalendar1), //fixing calendar
+				make_pair(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector1.at(i)),
+				to_string(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector1.at(i))) + "D"),
+				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcNotional>(floatIndexVector1.at(i)));	//notional
+			if (verbose)
+				cout << nombreFuncion + "floating rate interest leg 0" << i << " initialized" << endl;
+
+			//buildFloatingRatePayoff
+			shared_ptr<QCFloatingRatePayoff> tmpIntRatePayoff1;
+			if (whichLeg == 1)
+			{
+				tmpIntRatePayoff1 = shared_ptr<QCFloatingRatePayoff>(
+					new QCFloatingRatePayoff{ tmpIntRate1,
+					get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector1.at(i)),
+					1.0,
+					make_shared<QCInterestRateLeg>(tmpFloatingLeg1),
+					curve, auxCurvesMap.at("BASIS_SWAPS"), valueDate,
+					make_shared<map<QCDate, double>>(fixingMap1) });
+			}
+			else
+			{
+				tmpIntRatePayoff1 = shared_ptr<QCFloatingRatePayoff>(
+					new QCFloatingRatePayoff{ tmpIntRate1,
+					get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector1.at(i)),
+					1.0,
+					make_shared<QCInterestRateLeg>(tmpFloatingLeg1),
+					auxCurvesMap.at("BASIS_SWAPS"), auxCurvesMap.at("BASIS_SWAPS"), valueDate,
+					make_shared<map<QCDate, double>>(fixingMap1) });
+			}
+			if (verbose)
+				cout << nombreFuncion + "floating rate interest payoff 1" << i << " initialized" << endl;
+
+			//Se agrega el payoff al vector de floating legs 1
+			tempFloatingLegs.at(1) = tmpIntRatePayoff1;
+
+			QCInterestRateBasisSwap tempBasisSwap{ tempFloatingLegs };
+			inputBasisSwaps.at(i) = make_shared<QCInterestRateBasisSwap>(tempBasisSwap);
+		}
+
+		//Se construye el vector con los Time Deposit asociados a los zero rate
 		for (unsigned int i = 0; i < cuantasTasas; ++i)
 		{
 			QCInterestRateLeg tdLeg = QCFactoryFunctions::buildTimeDepositLeg(
@@ -1988,81 +2176,27 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 				get<0>(zeroRateVector.at(i)),
 				get<1>(zeroRateVector.at(i)),
 				1.0);
-			//cout << "\tboot_zero_rates_floating_legs: time deposit leg " << i << " initialized" << endl;
+			cout << nombreFuncion + "time deposit leg " << i << " initialized" << endl;
 			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
 				get<2>(zeroRateVector.at(i)),
 				get<3>(zeroRateVector.at(i)),
 				get<4>(zeroRateVector.at(i)));
-			//cout << "\tboot_zero_rates_floating_legs: interest rate " << i << " initialized" << endl;
+			cout << nombreFuncion + "interest rate " << i << " initialized" << endl;
 			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
 			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
-			//cout << "\tboot_zero_rates_floating_legs: time deposit payoff " << i << " initialized" << endl;
+			cout << nombreFuncion + "time deposit payoff " << i << " initialized" << endl;
+
 		}
-		cout << nombreFuncion + "time deposit payoffs initialized" << endl;
-
-		map<QCCurrencyConverter::QCFxRate, double> fxRate;
-		vector<shared_ptr<QCDiscountBondPayoff>> legs;
-		shared_ptr<map<QCDate, double>> fixings;
-		legs.resize(2);
-
-		vector<tuple<QCDate, double, double>> amortIfCustom;
-		string floatLegFixingCalendar{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs, 0), 16)) };
-		map<QCDate, double> fixingMap;
-		fixingMap.insert(make_pair(valueDate, fixing));
-		for (unsigned int i = 0; i < cuantosSwaps; ++i)
-		{
-			//Se construye el interest rate
-			shared_ptr<QCInterestRate> tmpIntRate = QCFactoryFunctions::intRateSharedPtr(
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcRate>(floatIndexVector.at(i)),
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcYearFraction>(floatIndexVector.at(i)),
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcWealthFactor>(floatIndexVector.at(i)));
-			cout << nombreFuncion + "swap interest rate " << i << " initialized" << endl;
-
-			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
-			QCInterestRateLeg tmpFloatingLeg = QCFactoryFunctions::buildFloatingRateLeg2(
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcReceivePay>(floatIndexVector.at(i)),//receive or pay
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStartDate>(floatIndexVector.at(i)),	//start date
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDate>(floatIndexVector.at(i)),	//end date
-				mapHolidays.at(floatLegSettlementCalendar),											//settlement calendar
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSettlementLag>(floatIndexVector.at(i)),//settlement lag
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcStubPeriod>(floatIndexVector.at(i)),//stub period
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcPeriodicity>(floatIndexVector.at(i)),//periodicity
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcEndDateAdjustment>(floatIndexVector.at(i)),//end date adjustment
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcAmortization>(floatIndexVector.at(i)),//amortization
-				amortIfCustom,							//amortization and notional by date
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector.at(i)),//fixing lag
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingStubPeriod>(floatIndexVector.at(i)),//fixing stub period
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector.at(i)),//fixing periodicity
-				mapHolidays.at(floatLegFixingCalendar), //fixing calendar
-				make_pair(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingPeriodicity>(floatIndexVector.at(i)),
-				to_string(get<QCDvePyBindHelperFunctions::QCFloatIndex::qcFixingLag>(floatIndexVector.at(i))) + "D"),
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcNotional>(floatIndexVector.at(i)));	//notional
-			cout << nombreFuncion + "floating rate interest leg " << i << " initialized" << endl;
-
-			//buildFloatingRatePayoff
-			shared_ptr<QCFloatingRatePayoff> tmpIntRatePayoff = shared_ptr<QCFloatingRatePayoff>(
-				new QCFloatingRatePayoff{ tmpIntRate,
-				get<QCDvePyBindHelperFunctions::QCFloatIndex::qcSpread>(floatIndexVector.at(i)),
-				1.0,
-				make_shared<QCInterestRateLeg>(tmpFloatingLeg),
-				curve, auxCurvesMap.at("FLOATING_RATE_LEGS"), valueDate,
-				make_shared<map<QCDate, double>>(fixingMap) });
-			cout << nombreFuncion + "floating rate interest payoff " << i << " initialized" << endl;
-
-			//Se agrega el payoff al vector de fixed legs
-			inputFloatingLegs.at(i) = tmpIntRatePayoff;
-		}
-
-		//PyObject* temp = PyList_New(1);
-		//return temp;
-
+		
 		//Se da de alta el objeto bootstrapeador
 		QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve boot{ valueDate, inputRates,
-			inputFloatingLegs, curve };
-		cout << nombreFuncion + "bootstrapping object initialized" << endl;
+			inputBasisSwaps, static_cast<unsigned int>(whichLeg), curve };
+		if (verbose)
+			cout << nombreFuncion + "bootstrapping object initialized" << endl;
 
 		boot.generateCurveAndDerivatives();
-		cout << nombreFuncion + "curve bootstrapped" << endl;
+		if (verbose)
+			cout << nombreFuncion + "curve bootstrapped" << endl;
 
 		vector<tuple<long, double, vector<double>>> result; //plazo, tasa, derivadas
 		size_t tamagno = curve->getLength();
@@ -2107,7 +2241,6 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 	}
 
 }
-
 
 PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 {
@@ -2259,7 +2392,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpIntRateLeg),
 				allCurves.at(string(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14)))),
 				allValueDate, nullptr });
-			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 		cout << "	Finished constructing payoffs" << endl;
 
@@ -2455,8 +2588,6 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 			{
 				amortIfCustom = dateNotionalAndAmortByIdLeg.at(numOp);
 			}
-
-			//cout << "XXX" << endl;
 			QCInterestRateLeg tmpIntRateLeg = QCFactoryFunctions::buildFloatingRateLeg2(
 				PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 1)),					 //receive or pay
 				QCDate{ string(PyString_AsString(PyList_GetItem(
@@ -2501,7 +2632,7 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 				allValueDate,
 				make_shared<map<QCDate, double>>(mapManyFixings.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)))) });
 
-			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 		cout << "\tFinished constructing payoffs" << endl;
 
@@ -2734,7 +2865,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 				legCharacteristics, i), 18))), allValueDate,
 				make_shared<map<QCDate, double>>(mapIcpFixings),
 				make_shared<map<QCDate, double>>(mapUfFixings) });
-			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
 		//Calcular los valores presentes
@@ -2962,7 +3093,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				allValueDate,
 				make_shared<map<QCDate, double>>(mapIcpFixings) });
 			cout << "payoff ok" << endl;
-			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
 		//Calcular los valores presentes
@@ -3167,7 +3298,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 				PyList_GetItem(legCharacteristics, i), 8)))) }
 			);
 			cout << "\tpayoff ok" << endl;
-			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(numOp, tmpIntRatePayoff));
+			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
 		cout << "\tFinished constructing payoffs" << endl;
@@ -3465,6 +3596,7 @@ PyMethodDef QC_DVE_Methods[] =
 	{ "boot_zero_rates_fwds_fixed_legs", (PyCFunction)boot_zero_rates_fwds_fixed_legs, METH_VARARGS, 0 },
 	{ "boot_zero_rates_fwds_floating_legs", (PyCFunction)boot_zero_rates_fwds_floating_legs, METH_VARARGS, 0 },
 	{ "boot_zero_rates_zero_coupon_spreads", (PyCFunction)boot_zero_rates_zero_coupon_spreads, METH_VARARGS, 0 },
+	{ "boot_zero_rates_floating_legs_proj_curve", (PyCFunction)boot_zero_rates_floating_legs_proj_curve, METH_VARARGS, 0 },
 	{ 0, 0, 0, 0 }
 };
 

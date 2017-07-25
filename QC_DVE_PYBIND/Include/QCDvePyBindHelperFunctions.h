@@ -413,7 +413,7 @@ namespace QCDvePyBindHelperFunctions
 	}
 
 	void buildFloatingRateIndexVector(PyObject* input, QCDate& processDate, vector<QCDate>& dateVector,
-		vector<FloatIndex>& floatIndexVector)
+		vector<FloatIndex>& floatIndexVector, string receivePay = "R")
 	{
 		cout << "Enter buildFloatingRateIndexVector" << endl;
 		//Esto es un ejemplo de lo que entra:
@@ -437,9 +437,11 @@ namespace QCDvePyBindHelperFunctions
 		{
 			FloatIndex temp;
 			cout << endl;
+			
+			size_t numFields = PyTuple_Size(PyList_GetItem(input, i));
 
 			//Receive or pay
-			get<qcReceivePay>(temp) = "R";
+			get<qcReceivePay>(temp) = receivePay;
 			cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
 
 			//Build start date (start_date_lag 2)
@@ -506,7 +508,14 @@ namespace QCDvePyBindHelperFunctions
 			cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
 
 			//Build spread (24)
-			get<qcSpread>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 24));
+			if (numFields == 25)
+			{
+				get<qcSpread>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 24));
+			}
+			else
+			{
+				get<qcSpread>(temp) = 0.0;
+			}
 			cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
 
 			//Build notional (18)

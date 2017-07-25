@@ -7,7 +7,7 @@
 #include "QCTimeDepositPayoff.h"
 #include "QCFixedRatePayoff.h"
 #include "QCFloatingRatePayoff.h"
-//#include "QCInterestRateBasisSwap.h"
+#include "QCInterestRateBasisSwap.h"
 #include "QCFXForward.h"
 
 /*!
@@ -36,9 +36,14 @@ public:
 		vector<shared_ptr<QCFixedRatePayoff>> inputFixedRateLegs,
 		vector<shared_ptr<QCFXForward>> inputForwards,
 		vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingRateLegs,
-		QCZrCpnCrvShrdPtr curve) :_valueDate(valueDate), _inputRates(inputRates),
-		_inputFixedRateLegs(inputFixedRateLegs), _inputForwards(inputForwards),
-		_inputFloatingRateLegs(inputFloatingRateLegs), _curve(curve)
+		vector<shared_ptr<QCInterestRateBasisSwap>> inputBasisSwaps,
+		QCZrCpnCrvShrdPtr curve) :_valueDate(valueDate),
+		_inputRates(inputRates),
+		_inputFixedRateLegs(inputFixedRateLegs),
+		_inputForwards(inputForwards),
+		_inputFloatingRateLegs(inputFloatingRateLegs),
+		_inputBasisSwaps(inputBasisSwaps),
+		_curve(curve)
 	{
 		//Si este input se utiliza
 		if (_inputRates.size() > 0)
@@ -77,6 +82,16 @@ public:
 			if (!_checkInputFloatingRateLegs())
 			{
 				throw invalid_argument(_checkInputFloatingRateLegsMsg);
+			}
+		}
+
+		//Si este input se utiliza
+		if (_inputBasisSwaps.size() > 0)
+		{
+			//Verificar que es válido
+			if (!_checkInputBasisSwaps())
+			{
+				throw invalid_argument(_checkInputBasisSwapsMsg);
 			}
 		}
 
@@ -131,11 +146,11 @@ public:
 	* en las subclases que no utilicen este input.
 	* @return vector<shared_ptr<QCInterestRateBasisSwap>> con size() = 0.
 	*/
-	/*static vector<shared_ptr<QCInterestRateBasisSwap>> emptyBasisSwaps()
+	static vector<shared_ptr<QCInterestRateBasisSwap>> emptyBasisSwaps()
 	{
 		vector<shared_ptr<QCInterestRateBasisSwap>> result;
 		return result;
-	}*/
+	}
 
 	/*!
 	* Ejecuta el procedimiento que genera la curva.
@@ -210,7 +225,7 @@ protected:
 	/*!
 	* Se almacenan los basis swaps utilizados como input.
 	*/
-	//vector<shared_ptr<QCInterestRateBasisSwap>> _inputBasisSwaps;
+	vector<shared_ptr<QCInterestRateBasisSwap>> _inputBasisSwaps;
 
 	/*!
 	* Se almacena los curva que se va a construir.
@@ -435,6 +450,76 @@ protected:
 	* Eventual mensaje de error que genera _checkInputRates()
 	*/
 	string _checkInputForwardsMsg;
+
+	/*!
+	* Método privado que verifica si el parámetro inputBasisSwaps pasado al constructor
+	* es admisible.
+	* @return verdadero o falso
+	*/
+	bool _checkInputBasisSwaps()
+	{
+		//Se ordena el vector de basis swaps por orden de fecha final ascendente
+		//El orden está definido en la sobrecarga del operador < en QCInterestRateBasisSwap
+		sort(_inputBasisSwaps.begin(), _inputBasisSwaps.end(), QCInterestRateBasisSwap::lessThan);
+
+		//Primero se verifica si los endDate son estrictamente crecientes
+		//Si no lo son se retorna false .
+		cout << "Basis " << 0 << " end date " << _inputBasisSwaps.at(0)->getEndDate().description() << endl;
+		for (size_t i = 1; i < _inputBasisSwaps.size(); ++i)
+		{
+			cout << "Basis " << i << " end date " << _inputBasisSwaps.at(i)->getEndDate().description() << endl;
+
+			if (!(_inputBasisSwaps.at(i - 1)->getEndDate() <_inputBasisSwaps.at(i)->getEndDate()))
+			{
+				_checkInputBasisSwapsMsg = "Los basis swaps iniciales deben tener fechas finales estrictamente crecientes";
+				return false;
+			}
+		}
+
+		//Luego se chequea si todos los start date son iguales.
+		//Si no lo son se retorna falso.
+		for (size_t i = 1; i < _inputBasisSwaps.size(); ++i)
+		{
+			if (_inputBasisSwaps.at(i - 1)->getStartDate() != _inputBasisSwaps.at(i)->getStartDate())
+			{
+				_checkInputBasisSwapsMsg = "Las fechas iniciales de los basis swaps no son iguales.";
+				return false;
+			}
+		}
+
+		//Se verifica que el start date de los basis swaps sea <= que el end date de la tasa más larga.
+		if (_inputRates.size() > 0)
+		{
+			unsigned int temp = _inputRates.size();
+			QCDate fecha1 = _inputBasisSwaps.at(0)->getStartDate();
+			QCDate fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(
+				_inputRates.at(temp - 1)->getPeriodAt(0));
+			if (fecha1 > fecha2)
+			{
+				_checkInputBasisSwapsMsg = "El start date de los basis swaps es mayor que el end date de la ";
+				_checkInputBasisSwapsMsg += "tasa mas larga.";
+				return false;
+			}
+
+			//Finalmente se verifica que la fecha final del forward más corto sea superior a la fecha final
+			//de la tasa más larga.
+			fecha1 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(temp - 1)->getPeriodAt(0));
+			fecha2 = _inputBasisSwaps.at(0)->getEndDate();
+			if (fecha2 <= fecha1)
+			{
+				_checkInputBasisSwapsMsg = "La end date del basis swap más corto es inferior a la end date ";
+				_checkInputBasisSwapsMsg += "de la tasa más larga.";
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/*!
+	* Eventual mensaje de error que genera _checkInputBasisSwaps()
+	*/
+	string _checkInputBasisSwapsMsg;
 
 	/*!
 	* Método privado que verifica si el parámetro inputFloatingRateLegs pasado al constructor

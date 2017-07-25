@@ -12,8 +12,13 @@ QCZeroCurveBootstrappingFromRates::QCZeroCurveBootstrappingFromRates(
 	QCDate valueDate,
 	vector<shared_ptr<QCTimeDepositPayoff>> inputRates,
 	QCZrCpnCrvShrdPtr curve) : QCInterestRateCurveGenerator(
-	valueDate, inputRates, QCInterestRateCurveGenerator::emptyFixedLegs(),
-	QCInterestRateCurveGenerator::emptyForward(), QCInterestRateCurveGenerator::emptyFloatingLegs(), curve)
+	valueDate,
+	inputRates,
+	QCInterestRateCurveGenerator::emptyFixedLegs(),
+	QCInterestRateCurveGenerator::emptyForward(),
+	QCInterestRateCurveGenerator::emptyFloatingLegs(),
+	QCInterestRateCurveGenerator::emptyBasisSwaps(),
+	curve)
 {
 
 }

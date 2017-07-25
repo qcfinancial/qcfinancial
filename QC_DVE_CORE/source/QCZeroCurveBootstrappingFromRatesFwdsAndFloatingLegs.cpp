@@ -9,9 +9,14 @@ QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::QCZeroCurveBootstrappingFr
 	vector<shared_ptr<QCFXForward>> inputForwards,
 	unsigned int whichForwardLeg,
 	vector<shared_ptr<QCFloatingRatePayoff>> inputFloatingRateLegs,
-	shared_ptr<QCZeroCouponCurve> newZeroCurve) : QCInterestRateCurveGenerator(valueDate,
-	inputRates, QCInterestRateCurveGenerator::emptyFixedLegs(), inputForwards,
-	inputFloatingRateLegs, newZeroCurve)
+	shared_ptr<QCZeroCouponCurve> newZeroCurve) : QCInterestRateCurveGenerator(
+	valueDate,
+	inputRates,
+	QCInterestRateCurveGenerator::emptyFixedLegs(),
+	inputForwards,
+	inputFloatingRateLegs,
+	QCInterestRateCurveGenerator::emptyBasisSwaps(),
+	newZeroCurve)
 {
 	if (whichForwardLeg > 1)
 	{

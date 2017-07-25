@@ -26,12 +26,14 @@ public:
 	* usan como input en el bootstrapping
 	* @param inputFixedRateLegs vector<shared_ptr<QCFloatingRatePayoff>> que representan las patas flotantes
 	* de los swaps que se usan como input del bootstrapping.
+	* @param whichBasisLeg indica cual de las dos patas de los basis swaps tiene la curva que hay que calibrar
 	* @param zeroCurve es un puntero a un objeto de tipo QCZeroCouponCurve que contiene los valores de curva
 	* que se van a construir. La curva debe venir inicializada con las dimensiones apropiadas.
 	*/
 	QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve(QCDate valueDate,
 		vector<shared_ptr<QCTimeDepositPayoff>> inputRates,
 		vector<shared_ptr<QCInterestRateBasisSwap>> inputBasisSwaps,
+		unsigned int whichBasisLeg,
 		QCZrCpnCrvShrdPtr newZeroCurve);
 
 	/*!
@@ -74,6 +76,7 @@ public:
 	virtual ~QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve();
 
 protected:
+	unsigned int _whichBasisLeg;
 
 };
 

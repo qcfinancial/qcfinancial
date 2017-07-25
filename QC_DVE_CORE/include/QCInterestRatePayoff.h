@@ -55,6 +55,13 @@ public:
 	unsigned int getLastPeriodIndex() const;
 
 	/*!
+	* Retorna la fecha inicial del primer período
+	* @return fecha inicial
+	*/
+	QCDate getStartDate() const;
+
+
+	/*!
 	* Retorna la fecha final del último período
 	* @return fecha final
 	*/

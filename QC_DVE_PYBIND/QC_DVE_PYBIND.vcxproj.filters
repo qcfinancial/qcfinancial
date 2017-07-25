@@ -128,5 +128,8 @@
     <ClCompile Include="..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRateBasisSwap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 
+using namespace std;
+
 /*!
 * @brief Esta es una clase auxiliar que se utiliza para transformar un monto en una
 * moneda a un monto en otra moneda, dado el fx_rate de conversión.

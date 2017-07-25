@@ -19,10 +19,13 @@
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qcact365.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qcact360.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qc30360.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qcinterestratebasisswap.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\main.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromratesfwdsandfloatinglegs.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromratesfwdsandfixedlegs.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromratesandfloatinglegsprojcurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromratesandfixedlegs.obj
+\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromrates.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocouponinterestratecurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocoupondiscountfactorcurve.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocouponcurve.obj
@@ -32,7 +35,6 @@
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qcloglinearinterpolator.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qclinearwf.obj
 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qclinearinterpolator.obj
-\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\release\qczerocurvebootstrappingfromrates.obj
 c:\users\soporte\anaconda2\qc_dve_pybind.pyd
 c:\users\soporte\anaconda2\qc_dve_pybind.pdb
 c:\users\soporte\anaconda2\qc_dve_pybind.lib

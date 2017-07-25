@@ -113,9 +113,10 @@ template<class T> QCCurve<T>::QCCurve(vector<T> &abscissa, vector<double>& ordin
 	//Se inicializa el vector _values
 	if (abscissa.size() > 0)
 	{
-		for (unsigned long i = 0; i < abscissa.size(); ++i)
+		_values.resize(abscissa.size());
+		for (size_t i = 0; i < abscissa.size(); ++i)
 		{
-			_values.push_back(make_pair(abscissa[i], ordinate[i]));
+			_values.at(i) = make_pair(abscissa[i], ordinate[i]);
 		}
 	}
 	else

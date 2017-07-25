@@ -6,6 +6,7 @@
 
 class QCInterestRateBasisSwap : public QCOperation
 {
+public:
 	/*!
 	* Constructor
 	*/
@@ -19,19 +20,24 @@ class QCInterestRateBasisSwap : public QCOperation
 	/*!
 	* Ordena por fecha de vencimiento.
 	*/
-	bool operator<(const QCFloatingRatePayoff& other);
+	bool operator<(const QCInterestRateBasisSwap& other);
+
+	/*!
+	* Devuelve la menor fecha de vencimiento considerando las dos patas.
+	*/
+	QCDate getStartDate() const;
 
 	/*!
 	* Devuelve la mayor fecha de vencimiento considerando las dos patas.
 	*/
-	QCDate getEndDate();
+	QCDate getEndDate() const;
 
 	/*!
-	* Similar al operador < pero actúa sobre shared_ptr<QCFXForward>.
+	* Similar al operador < pero actúa sobre shared_ptr<QCInterestRateBasisSwap>.
 	* @param lhs lado izquierdo de la comparación.
 	* @param rhs lado derecho de la comparación.
 	*/
-	static bool lessThan(shared_ptr<QCFloatingRatePayoff> lhs, shared_ptr<QCFloatingRatePayoff> rhs);
+	static bool lessThan(shared_ptr<QCInterestRateBasisSwap> lhs, shared_ptr<QCInterestRateBasisSwap> rhs);
 
 	/*!
 	* Devuelve uno de los dos payoffs del forward
@@ -65,6 +71,6 @@ class QCInterestRateBasisSwap : public QCOperation
 private:
 	vector<shared_ptr<QCFloatingRatePayoff>> _basisSwaps;
 
-}
+};
 
 #endif //QCINTERESTRATEBASISSWAP_H
