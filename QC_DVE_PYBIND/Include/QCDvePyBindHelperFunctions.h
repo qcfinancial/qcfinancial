@@ -538,6 +538,135 @@ namespace QCDvePyBindHelperFunctions
 		}
 	}
 
+	void buildFloatingRateIndexVector2(PyObject* input, QCDate& processDate, vector<QCDate>& dateVector,
+		vector<FloatIndex>& floatIndexVector)
+	{
+		cout << "Enter buildFloatingRateIndexVector" << endl;
+		//Esto es un ejemplo de lo que entra:
+		//('BasisCamCLPLibor3MUSD10Y' 0, False 1, 2 2, '10Y' 3, None 4, None 5, 'NEW YORK' 6,
+		//0 7, 'CORTO INICIO' 8, '3M' 9, 'FOLLOW' 10, 'BULLET' 11, 0.0 12, 0.0 13, '3M' 14,
+		//'CORTO INICIO' 15, 'LONDON' 16, 2 17, 1.0 18, 'LIN' 19, '30/360' 20,
+		//'CLD' 21, 'LIBORUSD3MCLASSIC' 22, 0.006 23)
+
+		//Se quiere obtener:
+		//string (0) receive or pay, QCDate (1) start_date, QCDate (2) end_date,
+		//unsigned int (3) settlement_lag, QCInterestRateLeg::QCStubPeriod (4) stub period
+		//string (5) periodicity, QCDate::QCBusDayAdjRules (6) end_date_adjustment
+		//string (7) fixing periodicity, QCInterestRateLeg::QCStubPeriod (8) fixing stub period
+		//unsigned int (9) fixing lag, string (10) fixing calendar,
+		//QCInterestRateLeg::QCAmortization (10) amortization, double (11) rate,
+		//double (12) spread, double (13) notional, string (14) yf, string (15) wf
+
+		size_t numSwaps = PyList_Size(input);
+		floatIndexVector.resize(numSwaps);
+		for (size_t i = 0; i < numSwaps; ++i)
+		{
+			FloatIndex temp;
+			cout << endl;
+
+			size_t numFields = PyTuple_Size(PyList_GetItem(input, i));
+			
+			string receivePay = "P";
+			
+			//Receive or pay
+			get<qcReceivePay>(temp) = receivePay;
+			cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
+
+			//Build start date (start_date_lag 2)
+			unsigned int lag = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 2));
+			get<qcStartDate>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
+			cout << "\tbuildFloatingRateIndexVector: start date " << get<qcStartDate>(temp).description() << endl;
+
+			//Build end date (5)
+			long condition = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 1));
+			if (condition)
+			{
+				string tempDate = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 5));
+				get<qcEndDate>(temp) = QCDate{ tempDate };
+				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+			}
+			else
+			{
+				unsigned int m = QCHelperFunctions::tenor(
+					PyString_AsString(
+					PyTuple_GetItem(
+					PyList_GetItem(input, i), 3)));
+				get<qcEndDate>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
+				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+			}
+
+			//Build settlement lag (7)
+			get<qcSettlementLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 7));
+			cout << "\tbuildFloatingRateIndexVector: settlement lag " << get<qcSettlementLag>(temp) << endl;
+
+			//Build enum stub (8)
+			string stub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 8));
+			get<qcStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(stub);
+			cout << "\tbuildFloatingRateIndexVector: enum stub " << get<qcStubPeriod>(temp) << endl;
+
+			//Build periodicity (9)
+			get<qcPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 9)));
+			cout << "\tbuildFloatingRateIndexVector: periodicity " << get<qcPeriodicity>(temp) << endl;
+
+			//Build enum end date adjustment (10)
+			string endDatAdj = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 10));
+			get<qcEndDateAdjustment>(temp) = QCHelperFunctions::stringToQCBusDayAdjRule(endDatAdj);
+			cout << "\tbuildFloatingRateIndexVector: enum end date adj " << get<qcEndDateAdjustment>(temp) << endl;
+
+			//Build fixing periodicity (14)
+			get<qcFixingPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 14)));
+			cout << "\tbuildFloatingRateIndexVector: fixing periodicity " << get<qcFixingPeriodicity>(temp) << endl;
+
+			//Build fixing stub period (15) 
+			string fixingStub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 15));
+			get<qcFixingStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(fixingStub);
+			cout << "\tbuildFloatingRateIndexVector: enum fixing stub " << get<qcFixingStubPeriod>(temp) << endl;
+
+			//Build fixing lag (17)
+			get<qcFixingLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 17));
+			cout << "\tbuildFloatingRateIndexVector: fixing lag " << get<qcFixingLag>(temp) << endl;
+
+			//Build enum amort (11)
+			string amort = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 11));
+			get<qcAmortization>(temp) = QCHelperFunctions::stringToQCAmortization(amort);
+			cout << "\tbuildFloatingRateIndexVector: enum amort " << get<qcAmortization>(temp) << endl;
+
+			//Build rate (12)
+			get<qcRate>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 12));
+			cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
+
+			//Build spread (24)
+			if (numFields == 25)
+			{
+				get<qcSpread>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 24));
+			}
+			else
+			{
+				get<qcSpread>(temp) = 0.0;
+			}
+			cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
+
+			//Build notional (18)
+			get<qcNotional>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 18));
+			cout << "\tbuildFloatingRateIndexVector: notional " << get<qcNotional>(temp) << endl;
+
+			//Build enum wf (19)
+			string wf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 19));
+			QCHelperFunctions::lowerCase(wf);
+			get<qcWealthFactor>(temp) = wf;
+			cout << "\tbuildFloatingRateIndexVector: enum wf " << get<qcWealthFactor>(temp) << endl;
+
+			//Build enum yf (20)
+			string yf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 20));
+			QCHelperFunctions::lowerCase(yf);
+			get<qcYearFraction>(temp) = yf;
+			cout << "\tbuildFloatingRateIndexVector: enum yf " << get<qcYearFraction>(temp) << endl;
+
+			floatIndexVector.at(i) = temp;
+		}
+	}
+
+
 	void buildQCDateVector(PyObject* input, vector<QCDate>& dateVector)
 	{
 		size_t sizeInput = PyList_Size(input);

@@ -22,7 +22,7 @@ QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::QCZeroCurveBootstrapp
 
 void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurve()
 {
-	cout << "Enter QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurve()" << endl;
+	//cout << "Enter QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurve()" << endl;
 	//Loop sobre las tasas
 	int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
 	QCDate startDate{ get<QCInterestRateLeg::intRtPrdElmntStartDate>(
@@ -48,7 +48,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurve()
 		}
 	}
 
-	cout << "bootstrapping: tasas calibrados" << endl;
+	//cout << "bootstrapping: tasas calibrados" << endl;
 
 	//Loop sobre los basis swaps
 	for (auto& fr : _inputBasisSwaps)
@@ -73,7 +73,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurve()
 		}
 	}
 
-	cout << "bootstrapping: basis swaps calibrados" << endl;
+	//cout << "bootstrapping: basis swaps calibrados" << endl;
 
 	return;
 }
@@ -98,7 +98,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 
 	for (size_t i = 0; i < numRates + numSwaps; ++i)
 	{
-		cout << "iteracion i = " << i << endl;
+		//cout << "iteracion i = " << i << endl;
 		//Bumpear solamente los basis
 		if (i < numRates)
 		{
@@ -116,7 +116,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 		}
 		generateCurve();
 
-		cout << "curva+: " << i << " generada." << endl;
+		//cout << "curva+: " << i << " generada." << endl;
 		for (size_t j = 0; j < numRates + numSwaps; ++j)
 		{
 			temp.at(j) = _curve->getRateAtIndex(j);
@@ -139,7 +139,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 		}
 
 		generateCurve();
-		cout << "curva -: " << i << " generada." << endl;
+		//cout << "curva -: " << i << " generada." << endl;
 
 		for (size_t j = 0; j < numRates + numSwaps; ++j)
 		{
@@ -159,7 +159,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 	}
 
 	generateCurve();
-	cout << "curva sin bumpear generada." << endl;
+	//cout << "curva sin bumpear generada." << endl;
 
 	//Finalmente se calculan las derivadas
 	_derivatives.resize(numRates + numSwaps);

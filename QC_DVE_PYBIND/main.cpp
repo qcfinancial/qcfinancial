@@ -1971,7 +1971,10 @@ PyObject* boot_zero_rates_floating_legs_proj_curve(PyObject* self, PyObject* arg
 
 		//Se construye un vector con las patas flotantes iniciales 1
 		vector<QCDvePyBindHelperFunctions::FloatIndex> floatIndexVector1;
-		string floatLegSettlementCalendar1{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs1, 0), 6)) };
+		size_t numSwaps = PyList_Size(floatingLegs1);
+		//cout << "numFloatingLegs1: " << numSwaps << endl;
+		string floatLegSettlementCalendar1 = { PyString_AsString(PyTuple_GetItem(PyList_GetItem(floatingLegs1, 0), 6)) };
+		//cout << "floatLegSettlementCalendar1: " << floatLegSettlementCalendar1 << endl;
 		QCDvePyBindHelperFunctions::buildFloatingRateIndexVector(floatingLegs1, valueDate,
 			mapHolidays.at(floatLegSettlementCalendar1), floatIndexVector1, "P");
 		if (verbose)
