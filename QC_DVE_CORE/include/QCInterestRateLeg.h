@@ -27,8 +27,7 @@ public:
 		//Las siguientes 3 son para patas flotantes
 		intRtPrdElmntFxngDate,		/*!< Fecha de fixing del índice */
 		intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo (fecha de valor) del índice */
-		intRtPrdElmntFxngEndDate	/*!< Fecha final de devengo del índice */
-		//Las siguientes 3 son para patas multicurrency
+		intRtPrdElmntFxngEndDate,	/*!< Fecha final de devengo del índice */
 	};
 
 	/*!

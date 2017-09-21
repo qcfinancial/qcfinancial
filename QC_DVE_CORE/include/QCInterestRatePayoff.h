@@ -37,6 +37,12 @@ public:
 	void payoff();
 
 	/*!
+	* Guarda los flujos de caja en un archivo csv (fechas YYYY-MM-DD números con decimal en .)
+	* @return (void)
+	*/
+	void exportPayoff2Csv(std::string pathToFile);
+
+	/*!
 	* Suma el valor mov al valor de la tasa de interés del payoff
 	* @param mov valor a sumar al valor de la tasa.
 	*/
@@ -44,9 +50,9 @@ public:
 
 	/*!
 	* Calcula y retorna el numero de flujos de caja
-	* @return (int) el numero de flujos
+	* @return (size_t) el numero de flujos
 	*/
-	int payoffSize() const;
+	size_t payoffSize() const;
 
 	/*!
 	* Retorna el índice del último flujo

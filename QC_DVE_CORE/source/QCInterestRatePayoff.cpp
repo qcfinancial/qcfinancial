@@ -1,4 +1,6 @@
 #include "QCInterestRatePayoff.h"
+#include <fstream>
+#include <string>
 
 QCInterestRatePayoff::QCInterestRatePayoff(
 	QCIntrstRtShrdPtr rate,
@@ -107,7 +109,24 @@ void QCInterestRatePayoff::payoff()
 	}
 }
 
-int QCInterestRatePayoff::payoffSize() const 
+void QCInterestRatePayoff::exportPayoff2Csv(std::string pathToFile)
+{
+	std::ofstream payoff;
+	payoff.open(pathToFile);
+	std::string titles{ "disp_inicial,disp_es_flujo,amort_final,amort_es_flujo," };
+	titles += "notional,start_date,end_date,sett_date,fixing_date,index_start_date,index_end_date";
+	payoff << titles << std::endl;
+
+	payoff << "a,b,c,\n";
+	payoff << "c,s,v,\n";
+	payoff << "1,2,3.456\n";
+	payoff << "semi;colon";
+	payoff.close();
+	return;
+}
+
+
+size_t QCInterestRatePayoff::payoffSize() const 
 {
 	return _payoffs.size();
 }
