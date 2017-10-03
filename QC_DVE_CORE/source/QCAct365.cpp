@@ -20,3 +20,8 @@ long QCAct365::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
     return firstDate.dayDiff(secondDate);
 }
+
+std::string QCAct365::description()
+{
+	return "Act365";
+}

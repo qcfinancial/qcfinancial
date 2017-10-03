@@ -1,7 +1,9 @@
 #include "QCInterestRatePeriodsFactory.h"
 #include "QCHelperFunctions.h"
 
-QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(QCDate startDate, QCDate endDate,
+QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
+	QCDate startDate,
+	QCDate endDate,
 	QCDate::QCBusDayAdjRules endDateAdjustment,
 	string settlementPeriodicity,
 	QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
@@ -13,12 +15,20 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(QCDate startDate, QCD
 	unsigned int fixingLag,
 	unsigned int indexStartDateLag,
 	string indexTenor
-	) : _startDate(startDate), _endDate(endDate), _endDateAdjustment(endDateAdjustment),
-	_settlementPeriodicity(settlementPeriodicity), _settlementStubPeriod(settlementStubPeriod),
-	_settlementCalendar(settlementCalendar), _settlementLag(settlementLag),
-	_fixingPeriodicity(fixingPeriodicity), _fixingStubPeriod(fixingStubPeriod),
-	_fixingCalendar(fixingCalendar), _fixingLag(fixingLag),
-	_indexStartDateLag(indexStartDateLag), _indexTenor(indexTenor)
+	) :
+	_startDate(startDate),
+	_endDate(endDate),
+	_endDateAdjustment(endDateAdjustment),
+	_settlementPeriodicity(settlementPeriodicity),
+	_settlementStubPeriod(settlementStubPeriod),
+	_settlementCalendar(settlementCalendar),
+	_settlementLag(settlementLag),
+	_fixingPeriodicity(fixingPeriodicity),
+	_fixingStubPeriod(fixingStubPeriod),
+	_fixingCalendar(fixingCalendar),
+	_fixingLag(fixingLag),
+	_indexStartDateLag(indexStartDateLag),
+	_indexTenor(indexTenor)
 {}
 
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::getPeriods()
@@ -265,7 +275,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
 vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(string periodicity,
 	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar)
 {
-	//Aqui se almancena el resultado
+	//Aqui se almacena el resultado
 	vector<tuple<QCDate, QCDate>> periods; 
 
 	//La distancia en meses y dias entre startDate y endDate

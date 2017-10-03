@@ -1,8 +1,14 @@
+#include <memory>
 #include "QCInterestRate.h"
 
-QCInterestRate::QCInterestRate(double value, QCYrFrctnShrdPtr yearFraction,
-	QCWlthFctrShrdPtr wealthFactor) : _value(value),
-	_yf(yearFraction), _wf(wealthFactor) {}
+QCInterestRate::QCInterestRate(double value,
+							   QCYrFrctnShrdPtr yearFraction,
+							   QCWlthFctrShrdPtr wealthFactor) :
+							   _value(value),
+							   _yf(yearFraction),
+							   _wf(wealthFactor)
+{
+}
 
 double QCInterestRate::getValue()
 {
@@ -53,6 +59,16 @@ double QCInterestRate::getRateFromWf(double wf, long days)
 {
 	double yf = _yf->yf(days);
 	return _wf->rate(wf, yf);
+}
+
+shared_ptr<QCWealthFactor> QCInterestRate::getWealthFactor()
+{
+	return _wf;
+}
+
+shared_ptr<QCYearFraction> QCInterestRate::getYearFraction()
+{
+	return _yf;
 }
 
 QCInterestRate::~QCInterestRate()

@@ -20,6 +20,11 @@ double QCWealthFactor::dwf()
 	return _dwf;
 }
 
+std::string QCWealthFactor::description()
+{
+	return "";
+}
+
 QCWealthFactor::~QCWealthFactor()
 {
 }

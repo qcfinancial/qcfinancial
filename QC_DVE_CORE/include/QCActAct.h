@@ -40,6 +40,18 @@ public:
      * @return un long con el número de días calculados
      */
     long countDays(const QCDate& firstDate, const QCDate& secondDate);
+
+	/**
+	* @fn	std::string QCAct360::description();
+	*
+	* @brief	Gets the description. In this case "ActAct"
+	*
+	* @author	Alvaro Díaz V.
+	* @date	28/09/2017
+	*
+	* @return	A std::string.
+	*/
+	std::string description();
 };
 
 #endif //QCACTACT_H

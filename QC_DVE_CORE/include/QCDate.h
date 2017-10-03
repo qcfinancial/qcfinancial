@@ -311,4 +311,6 @@ class QCDate
         bool _validate(int d, int m, int y);
 };
 
+std::ostream &operator<<(std::ostream &ostr, const QCDate& date);
+
 #endif //QCDATE_H

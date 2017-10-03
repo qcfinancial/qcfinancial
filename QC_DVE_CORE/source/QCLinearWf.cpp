@@ -15,6 +15,11 @@ double QCLinearWf::rate(double wf, double yf)
 	return (wf - 1) * 1 / yf;
 }
 
+std::string QCLinearWf::description()
+{
+	return "Lin";
+}
+
 QCLinearWf::~QCLinearWf()
 {
 }

@@ -40,6 +40,18 @@ public:
      */
     long countDays(const QCDate& firstDate, const QCDate& secondDate);
 
+	/**
+	 * @fn	std::string QCAct360::description();
+	 *
+	 * @brief	Gets the description. In this case "Act360"
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	28/09/2017
+	 *
+	 * @return	A std::string.
+	 */
+	std::string description();
+
 private:
 	/*!
 	* En esta variable se guarda la base de la tasa que, en este caso, es un número fijo.

@@ -35,3 +35,8 @@ long QC30360::countDays(const QCDate &firstDate, const QCDate &secondDate)
                     + 360 * (secondYear - firstYear);
     return result;
 }
+
+std::string QC30360::description()
+{
+	return "30360";
+}

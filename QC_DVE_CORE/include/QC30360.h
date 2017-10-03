@@ -42,6 +42,18 @@ public:
 	*/
 	virtual double yf(long days);
 
+	/**
+	* @fn	std::string QCAct360::description();
+	*
+	* @brief	Gets the description. In this case "30360"
+	*
+	* @author	Alvaro Díaz V.
+	* @date	28/09/2017
+	*
+	* @return	A std::string.
+	*/
+	std::string description();
+
 private:
     const double _basis = 360.0;
 };

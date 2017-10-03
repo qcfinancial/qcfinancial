@@ -1,6 +1,8 @@
 #ifndef QWEALTHFACTOR_H
 #define QWEALTHFACTOR_H
 
+#include<string>
+
 /*!
 * @author Alvaro Díaz
 * @brief La clase QCWealthFactor es una clase base. Al subclasearla se implementa
@@ -42,6 +44,18 @@ public:
 	* @return (double) valor de la derivada respecto a la tasa
 	*/
 	double dwf();
+
+	/**
+	 * @fn	virtual std::string QCWealthFactor::description();
+	 *
+	 * @brief	Gets the description. "Com", "Lin", ...
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	28/09/2017
+	 *
+	 * @return	A std::string.
+	 */
+	virtual std::string description();
 
 	/*!
 	* Destructor de la clase

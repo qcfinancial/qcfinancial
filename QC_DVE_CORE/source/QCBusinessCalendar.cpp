@@ -5,8 +5,11 @@
 #include <algorithm>
 #include "QCBusinessCalendar.h"
 
-QCBusinessCalendar::QCBusinessCalendar(QCDate& startDate, int length) : _startDate(startDate),
-                                                                       _length(length)
+QCBusinessCalendar::QCBusinessCalendar(
+	const QCDate& startDate,
+	int length) :
+	_startDate(startDate),
+	_length(length)
 {
     insertNewYear();
     _firstDayOfWeekend = QCDate::QCWeekDay ::qcSaturday;
@@ -126,6 +129,11 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
     }
 
     return result;
+}
+
+DateList QCBusinessCalendar::getHolidays()
+{
+	return _holydays;
 }
 
 

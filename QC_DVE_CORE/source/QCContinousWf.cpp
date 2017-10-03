@@ -16,6 +16,11 @@ double QCContinousWf::rate(double wf, double yf)
 	return log(wf) / yf;
 }
 
+std::string QCContinousWf::description()
+{
+	return "Exp";
+}
+
 QCContinousWf::~QCContinousWf()
 {
 }

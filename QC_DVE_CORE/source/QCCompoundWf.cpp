@@ -16,6 +16,10 @@ double QCCompoundWf::rate(double wf, double yf)
 	return pow(wf, 1 / yf) - 1;
 }
 
+std::string QCCompoundWf::description()
+{
+	return "Com";
+}
 
 QCCompoundWf::~QCCompoundWf()
 {

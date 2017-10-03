@@ -678,3 +678,8 @@ void QCDate::setDayMonthYear(int d, int m, int y)
     };
 }
 
+std::ostream& operator<<(std::ostream& ostr, const QCDate& date)
+{
+	ostr << date.day() << "-" << date.month() << "-" << date.year();
+	return ostr;
+}

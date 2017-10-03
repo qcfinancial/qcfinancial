@@ -6,9 +6,18 @@
 #define QCBUSINESSCALENDAR_H
 
 #include <vector>
+#include <memory>
+
 #include "QCDate.h"
 
 using namespace std;
+
+/**
+ * @typedef	std::vector<QCDate> DateList
+ *
+ * @brief	Defines an alias representing a list (std::vector) of dates.
+ */
+typedef std::vector<QCDate> DateList;
 
 /*!
  * @brief La clase QCBusinessCalendar representa días feriados de una jurisdicción.
@@ -22,7 +31,7 @@ class QCBusinessCalendar
          * @param length (int) largo en años del calendario
          * @return objeto construido
          */
-        QCBusinessCalendar(QCDate& startDate, int length);
+        QCBusinessCalendar(const QCDate& startDate, int length);
 
         /*!
          * Agrega una fecha (QCDate) al calendario (que representa un feriado)
@@ -39,7 +48,7 @@ class QCBusinessCalendar
         QCDate nextBusinessDay(const QCDate& fecha);
 
         /*!
-         * Calcula el día hábil siguiente a la fecha ingresada en comvención
+         * Calcula el día hábil siguiente a la fecha ingresada en convención
          * modificada. Si el día hábil siguiente cambia de mes respecto a la
          * fecha ingresada, entonces retorna el día hábil anterior.
          * Si la fecha ingresada es hábil se retorna la misma fecha.
@@ -63,10 +72,22 @@ class QCBusinessCalendar
          */
         QCDate shift(const QCDate& fecha, int nDays);
 
+		/**
+		 * @fn	DateList QCBusinessCalendar::getHolidays();
+		 *
+		 * @brief	Gets all the holidays in the calendar, not including weekends.
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	02/10/2017
+		 *
+		 * @return	The holidays.
+		 */
+		DateList getHolidays();
+
     private:
         QCDate _startDate;
         int _length;
-        vector<QCDate> _holydays;
+        DateList _holydays;
         QCDate::QCWeekDay _firstDayOfWeekend;
         QCDate::QCWeekDay _secondDayOfweekEnd;
         void insertNewYear();
