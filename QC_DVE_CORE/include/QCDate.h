@@ -302,7 +302,7 @@ class QCDate
          * Retorna a si misma como string legible y printer friendly
          * @return (std::string)
          */
-        string description();
+        string description(bool dmy = true);
 
     private:
         int _day;

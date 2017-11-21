@@ -85,6 +85,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateCashflow.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IborCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClpCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\InterestRateIndex.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Leg.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\LegFactory.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QC30360.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct360.cpp" />
@@ -99,6 +102,9 @@
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCLinearWf.cpp" />
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCWealthFactor.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Tenor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include\Wrappers.h" />

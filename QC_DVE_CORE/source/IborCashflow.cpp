@@ -6,7 +6,7 @@ namespace QCode
 {
 	namespace Financial
 	{
-		IborCashflow::IborCashflow(InterestRateIndex iborIndexCode,
+		IborCashflow::IborCashflow(std::shared_ptr<InterestRateIndex> index,
 								   const QCDate& startDate,
 								   const QCDate& endDate,
 								   const QCDate& fixingDate,
@@ -14,11 +14,10 @@ namespace QCode
 								   double nominal,
 								   double amortizationn,
 								   bool doesAmortize,
-								   const QCInterestRate& rate,
 								   shared_ptr<QCCurrency> currency,
 								   double spread,
 								   double gearing) :
-								   _iborIndexCode(iborIndexCode),
+								   _index(index),
 								   _startDate(startDate),
 								   _endDate(endDate),
 								   _fixingDate(fixingDate),
@@ -26,13 +25,11 @@ namespace QCode
 								   _nominal(nominal),
 								   _amortization(amortization),
 								   _doesAmortize(doesAmortize),
-								   _rate(rate),
 								   _currency(currency),
 								   _spread(spread),
 								   _gearing(gearing)
 		{
 			_calculateInterest();
-
 		}
 
 		double IborCashflow::amount()
@@ -55,9 +52,18 @@ namespace QCode
 			return _settlementDate;
 		}
 
+		void IborCashflow::setNominal(double nominal)
+		{
+			_nominal = nominal;
+		}
+
+		void IborCashflow::setAmortization(double amortization)
+		{
+			_amortization = amortization;
+		}
+
 		shared_ptr<IborCashflowWrapper> IborCashflow::wrap()
 		{
-			std::string code = irIndexCode(_iborIndexCode);
 			IborCashflowWrapper tup = std::make_tuple(_startDate,
 													  _endDate,
 													  _fixingDate,
@@ -67,8 +73,8 @@ namespace QCode
 													  _interest,
 													  _doesAmortize,
 													  _currency,
-													  code,
-													  _rate,
+													  _index->getCode(),
+													  _index->getRate(),
 													  _spread,
 													  _gearing);
 
@@ -77,14 +83,14 @@ namespace QCode
 
 		void IborCashflow::_calculateInterest()
 		{
-			double rateValue = _rate.getValue();
-			_rate.setValue(rateValue * _gearing + _spread);
+			double rateValue = _index->getRate().getValue();
+			_index->setRateValue(rateValue * _gearing + _spread);
 			// Con este procedimiento vamos a tener un problema al momento de calcular
 			// derivadas. Se dará de alta una sobrecarga de QCInterestRate.wf que considere
 			// también gearing y spread (o se agregan como parámetros opcionales en el
 			// método ya existente).
-			_interest = _nominal * (_rate.wf(_startDate, _endDate) - 1.0);
-			_rate.setValue(rateValue);
+			_interest = _nominal * (_index->getRate().wf(_startDate, _endDate) - 1.0);
+			_index->setRateValue(rateValue);
 		}
 
 		IborCashflow::~IborCashflow()

@@ -43,6 +43,16 @@ namespace QCode
 		{
 			return _settlementDate;
 		}
+
+		void FixedRateCashflow::setNominal(double nominal)
+		{
+			_nominal = nominal;
+		}
+
+		void FixedRateCashflow::setAmortization(double amortization)
+		{
+			_amortization = amortization;
+		}
 		
 		shared_ptr<FixedRateCashflowWrapper> FixedRateCashflow::wrap()
 		{

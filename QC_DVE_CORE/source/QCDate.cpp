@@ -240,14 +240,21 @@ QCDate::QCWeekDay QCDate::weekDay() const
     return QCWeekDay((auxYear + auxYear/4 - auxYear/100 + auxYear/400 + t[_month-1] + _day) % 7);
 }
 
-std::string QCDate::description()
+std::string QCDate::description(bool dmy)
 {
     std::stringstream ss;
     std::string auxDay = "";
     std::string auxMonth = "";
     if (_day < 10) { auxDay = "0"; }
     if (_month < 10) { auxMonth = "0"; }
-    ss << auxDay << _day << "-" << auxMonth << _month << "-" << _year;
+	if (dmy)
+	{
+		ss << auxDay << _day << "-" << auxMonth << _month << "-" << _year;
+	}
+	else
+	{
+		ss << _year << "-" << auxMonth << _month << "-" << auxDay << _day;
+	}
     return ss.str();
 }
 

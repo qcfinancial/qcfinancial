@@ -13,6 +13,11 @@ namespace QCode
 {
 	namespace Financial
 	{
+		/**
+		 * @typedef	std::tuple<QCDate, QCDate, QCDate, double, double, double, bool, shared_ptr<QCCurrency>, QCInterestRate> FixedRateCashflowWrapper
+		 *
+		 * @brief	Defines an alias representing a FixedRateCashflow wrapper
+		 */
 		typedef std::tuple<QCDate, QCDate, QCDate,
 			double, double, double, bool,
 			shared_ptr<QCCurrency>,
@@ -127,6 +132,30 @@ namespace QCode
 			QCDate date();
 
 			/**
+			 * @fn	void FixedRateCashflow::setNominal(double nominal);
+			 *
+			 * @brief	Sets the nominal amount.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	05/10/2017
+			 *
+			 * @param	nominal	The nominal.
+			 */
+			void setNominal(double nominal);
+
+			/**
+			 * @fn	void FixedRateCashflow::setAmortization(double amortization);
+			 *
+			 * @brief	Sets the amortization
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	05/10/2017
+			 *
+			 * @param	amortization	The amortization.
+			 */
+			void setAmortization(double amortization);
+
+			/**
 			 * @fn	tuple<QCDate, QCDate, QCDate, double, double, double, bool, QCCurrency> FixedRateCashflow::show();
 			 *
 			 * @brief	Wraps the cashflow in a FixedRateCashflowWrapper
@@ -186,7 +215,120 @@ namespace QCode
 		 *
 		 * @brief	Defines an alias representing a Leg made of Fixed Rate Cashflows.
 		 */
-		typedef std::vector<shared_ptr<FixedRateCashflow>> FixedRateLeg;
+		//typedef std::vector<shared_ptr<FixedRateCashflow>> FixedRateLeg;
+
+		/**
+		 * @struct	CustomNotionalAmort
+		 *
+		 * @brief	Represents a customized notional and amortization schedule.
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	07/10/2017
+		 */
+		struct CustomNotionalAmort
+		{
+			/**
+			 * @fn	CustomNotionalAmort()
+			 *
+			 * @brief	Default constructor
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 */
+			CustomNotionalAmort()
+			{
+			}
+
+			/**
+			 * @fn	void setSize(size_t n)
+			 *
+			 * @brief	Sets a size (length)
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 *
+			 * @param	n	A size_t to process.
+			 */
+			void setSize(size_t n)
+			{
+				customNotionalAmort.resize(n);
+			}
+
+			/**
+			 * @fn	size_t getSize()
+			 *
+			 * @brief	Gets the size (length) of the customized amortization schedule.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 *
+			 * @return	The size.
+			 */
+			size_t getSize()
+			{
+				return customNotionalAmort.size();
+			}
+
+			/**
+			 * @fn	void setNotionalAmortAt(size_t n, double notional, double amortization)
+			 *
+			 * @brief	Sets notional and amortization at position n
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 *
+			 * @param	n				A size_t to process.
+			 * @param	notional		The notional.
+			 * @param	amortization	The amortization.
+			 */
+			void setNotionalAmortAt(size_t n, double notional, double amortization)
+			{
+				get<0>(customNotionalAmort[n]) = notional;
+				get<1>(customNotionalAmort[n]) = amortization;
+			}
+
+			double getNotionalAt(size_t n)
+			{
+				return get<0>(customNotionalAmort[n]);
+			}
+
+			double getAmortAt(size_t n)
+			{
+				return get<1>(customNotionalAmort[n]);
+			}
+
+			/**
+			 * @fn	void pushbackNotionalAmort(double notional, double amortization)
+			 *
+			 * @brief	Appends at the end a notional and a amortization
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 *
+			 * @param	notional		The notional.
+			 * @param	amortization	The amortization.
+			 */
+			void pushbackNotionalAmort(double notional, double amortization)
+			{
+				customNotionalAmort.push_back(make_tuple(notional, amortization));
+			}
+
+			/**
+			 * @fn	~CustomNotionalAmort()
+			 *
+			 * @brief	Destructor
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/10/2017
+			 */
+			~CustomNotionalAmort()
+			{
+			}
+
+			/** @brief	The custom notional and amortization schedule */
+			std::vector<std::tuple<double, double>> customNotionalAmort;
+		};
+
 	};
 }
 

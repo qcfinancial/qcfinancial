@@ -96,6 +96,14 @@ namespace QCode
 				return refDate > date();
 			}
 
+			/**
+			 * @fn	virtual Cashflow::~Cashflow()
+			 *
+			 * @brief	Destructor
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	04/10/2017
+			 */
 			virtual ~Cashflow()
 			{
 			}
@@ -106,7 +114,7 @@ namespace QCode
 		 *
 		 * @brief	Defines an alias representing a Leg that is made of arbitrary cashflows.
 		 */
-		typedef std::vector<std::shared_ptr<Cashflow>> Leg;
+		//typedef std::vector<std::shared_ptr<Cashflow>> Leg;
 
 		/**
 		 * @enum	RecPay

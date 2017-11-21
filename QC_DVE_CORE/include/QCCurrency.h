@@ -170,6 +170,31 @@ private:
 };
 
 /**
+ * @class	QCCLF
+ *
+ * @brief	Representation for CLF (ISO Code and Number are ficticious).
+ *
+ * @author	Alvaro Díaz V.
+ * @date	09/10/2017
+ */
+class QCCLF : public QCCurrency
+{
+public:
+
+	/**
+	 * @fn	QCCLF::QCCLF()
+	 *
+	 * @brief	Default constructor
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	09/10/2017
+	 */
+	QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 4)
+	{
+	}
+};
+
+/**
  * @class	QCBRL
  *
  * @brief	Representation for BRL.

@@ -63,7 +63,6 @@ QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
     return fechaOut;
 }
 
-
 QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
 {
     QCDate::QCWeekDay d = fecha.weekDay();
@@ -89,7 +88,6 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     }
     return fechaOut;
 }
-
 
 QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays)
 {

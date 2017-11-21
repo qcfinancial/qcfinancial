@@ -15,11 +15,21 @@ namespace QCode
 {
 	namespace Financial
 	{
-		typedef std::tuple<QCDate, QCDate, QCDate, QCDate,
-			double, double, double, bool,
-			shared_ptr<QCCurrency>,
-			std::string, QCInterestRate,
-			double, double> IborCashflowWrapper;
+		typedef std::tuple<
+			QCDate,                  /* Start date */
+			QCDate,                  /* End date */
+			QCDate,                  /* Fixing date */
+			QCDate,                  /* Settlement date */
+			double,                  /* Nominal */
+			double,                  /* Amortization */
+			double,                  /* Interest */
+			bool,                    /* Amortization is cashflow */
+			shared_ptr<QCCurrency>,  /* Nominal currency */
+			std::string,             /* Interest rate index code */
+			QCInterestRate,          /* Interest rate */
+			double,                  /* Spread */
+			double                   /* Gearing */
+		> IborCashflowWrapper;
 
 		/**
 		 * @class	IborCashflow
@@ -75,7 +85,12 @@ namespace QCode
 			};
 
 			/**
-			 * @fn	IborCashflow::IborCashflow(InterestRateIndex iborIndexCode, const QCDate& startDate, const QCDate& endDate, const QCDate& fixingDate, const QCDate& settlementDate, double nominal, double amortization, bool doesAmortize, const QCInterestRate& rate, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
+			 * @fn	IborCashflow::IborCashflow(std::shared_ptr<InterestRateIndex> index,
+			 *                                 const QCDate& startDate, const QCDate& endDate,
+			 *                                 const QCDate& fixingDate, const QCDate& settlementDate,
+			 *                                 double nominal, double amortization, bool doesAmortize,
+			 *                                 const QCInterestRate& rate, std::shared_ptr<QCCurrency> currency,
+			 *                                 double spread, double gearing);
 			 *
 			 * @brief	Constructor
 			 *
@@ -95,8 +110,7 @@ namespace QCode
 			 * @param	spread		  	The spread.
 			 * @param	gearing		  	The gearing.
 			 */
-
-			IborCashflow(InterestRateIndex iborIndexCode,
+			IborCashflow(std::shared_ptr<InterestRateIndex> index,
 						 const QCDate& startDate,
 						 const QCDate& endDate,
 						 const QCDate& fixingDate,
@@ -104,7 +118,6 @@ namespace QCode
 						 double nominal,
 						 double amortization,
 						 bool doesAmortize,
-						 const QCInterestRate& rate,
 						 std::shared_ptr<QCCurrency> currency,
 						 double spread,
 						 double gearing);
@@ -146,6 +159,30 @@ namespace QCode
 			QCDate date();
 
 			/**
+			* @fn	void iborCashflow::setNominal(double nominal);
+			*
+			* @brief	Sets the nominal amount.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	05/10/2017
+			*
+			* @param	nominal	The nominal.
+			*/
+			void setNominal(double nominal);
+
+			/**
+			* @fn	void iborCashflow::setAmortization(double amortization);
+			*
+			* @brief	Sets the amortization
+			*
+			* @author	Alvaro Díaz V.
+			* @date	05/10/2017
+			*
+			* @param	amortization	The amortization.
+			*/
+			void setAmortization(double amortization);
+
+			/**
 			 * @fn	shared_ptr<IborCashflowWrapper> IborCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a IborCashflowWrapper
@@ -179,8 +216,8 @@ namespace QCode
 			 */
 			void _calculateInterest();
 
-			/** @brief	The ibor index code */
-			InterestRateIndex _iborIndexCode;
+			/** @brief	The associated interest rate index */
+			std::shared_ptr<InterestRateIndex> _index;
 
 			/** @brief	The start date */
 			QCDate _startDate;
@@ -205,9 +242,6 @@ namespace QCode
 
 			/** @brief	True if amortization is part of the cashflow */
 			bool _doesAmortize;
-
-			/** @brief	The rate */
-			QCInterestRate _rate;
 
 			/** @brief	The currency */
 			shared_ptr<QCCurrency> _currency;
