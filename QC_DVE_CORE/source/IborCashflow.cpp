@@ -12,7 +12,7 @@ namespace QCode
 								   const QCDate& fixingDate,
 								   const QCDate& settlementDate,
 								   double nominal,
-								   double amortizationn,
+								   double amortization,
 								   bool doesAmortize,
 								   shared_ptr<QCCurrency> currency,
 								   double spread,
@@ -62,6 +62,17 @@ namespace QCode
 			_amortization = amortization;
 		}
 
+		void IborCashflow::setInterestRateValue(double value)
+		{
+			_index->setRateValue(value);
+			_calculateInterest();
+		}
+
+		QCDate IborCashflow::getFixingDate()
+		{
+			return _fixingDate;
+		}
+
 		shared_ptr<IborCashflowWrapper> IborCashflow::wrap()
 		{
 			IborCashflowWrapper tup = std::make_tuple(_startDate,
@@ -72,6 +83,7 @@ namespace QCode
 													  _amortization,
 													  _interest,
 													  _doesAmortize,
+													  amount(),
 													  _currency,
 													  _index->getCode(),
 													  _index->getRate(),

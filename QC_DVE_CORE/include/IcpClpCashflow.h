@@ -1,8 +1,6 @@
 #ifndef ICPCLPCASHFLOW_H
 #define ICPCLPCASHFLOW_H
 
-#define DEFAULT_ICP 10000.00
-
 #include<tuple>
 #include<memory>
 
@@ -15,6 +13,7 @@ namespace QCode
 {
 	namespace Financial
 	{
+		const double DEFAULT_ICP = 10000.00;
 		typedef std::tuple<
 			QCDate,                 /* Start Date */
 			QCDate,                 /* End Date */
@@ -197,6 +196,30 @@ namespace QCode
 			std::string getTypeOfRate();
 
 			/**
+			* @fn	    double IcpClpCashflow::getStartDate();
+			*
+			* @brief	Gets the start date
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    06/12/2017
+			*
+			* @return   A QCDate
+			*/
+			QCDate getStartDate();
+
+			/**
+			* @fn	    double IcpClpCashflow::getEndDate();
+			*
+			* @brief	Gets the end date
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    06/12/2017
+			*
+			* @return   A QCDate
+			*/
+			QCDate getEndDate();
+
+			/**
 			* @fn	IcpClpCashflow::~IcpClpCashflow();
 			*
 			* @brief	Destructor
@@ -207,7 +230,7 @@ namespace QCode
 			*/
 			virtual ~IcpClpCashflow();
 		
-		private:
+		protected:
 			/** @brief	The interest rate index. It is always Lin ACT360. */
 			QCInterestRate 	_rate = QCInterestRate(0.0,
 												   std::make_shared<QCAct360>(QCAct360()),

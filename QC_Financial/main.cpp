@@ -24,6 +24,7 @@
 #include "IborCashflow.h"
 #include "Simplecashflow.h"
 #include "IcpClpCashflow.h"
+#include "IcpClfCashflow.h"
 #include "InterestRateIndex.h"
 #include "LegFactory.h"
 #include "Tenor.h"
@@ -81,6 +82,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("month", &QCDate::month)
 		.def("year", &QCDate::year)
 		.def("week_day", &QCDate::weekDay)
+		.def("description", &QCDate::description)
 		.def(self_ns::str(self_ns::self))
 		;
 	
@@ -221,6 +223,10 @@ BOOST_PYTHON_MODULE(QC_Financial)
 							 .def("ccy", &qf::IborCashflow::ccy)
 							 .def("date", &qf::IborCashflow::date)
 							 .def("wrap", &qf::IborCashflow::wrap)
+							 .def("set_interest_rate_value", &qf::IborCashflow::setInterestRateValue)
+							 .def("set_nominal", &qf::IborCashflow::setNominal)
+							 .def("set_amortization", &qf::IborCashflow::setAmortization)
+							 .def("get_fixing_date", &qf::IborCashflow::getFixingDate)
 							 ;
 
 	PyObject* (*show2)(qf::IborCashflow) = wrappers::show;
@@ -273,6 +279,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("set_amortization", &qf::IcpClpCashflow::setAmortization)
 		.def("get_rate_value", &qf::IcpClpCashflow::getRateValue)
 		.def("get_type_of_rate", &qf::IcpClpCashflow::getTypeOfRate)
+		.def("get_start_date", &qf::IcpClpCashflow::getStartDate)
+		.def("get_end_date", &qf::IcpClpCashflow::getEndDate)
 		;
 
 	PyObject* (*show5)(qf::IcpClpCashflow) = wrappers::show;
@@ -281,6 +289,24 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	PyObject* (*show51)(std::shared_ptr<qf::IcpClpCashflow>) = wrappers::show;
 	def("show", show51);
 
+	class_<std::vector<double> >("double_vec")
+		.def(vector_indexing_suite<std::vector<double> >())
+		;
+
+	class_<qf::IcpClfCashflow, std::shared_ptr<qf::IcpClfCashflow>, bases<qf::IcpClpCashflow>>
+		("IcpClfCashflow", init<QCDate&, QCDate&, QCDate&, double, double, bool, double, double, vector<double>>())
+		.def("amount", &qf::IcpClfCashflow::amount)
+		.def("accrued_interest", &qf::IcpClfCashflow::accruedInterest)
+		.def("set_start_date_uf", &qf::IcpClfCashflow::setStartDateUf)
+		.def("set_end_date_uf", &qf::IcpClfCashflow::setEndDateUf)
+		.def("ccy", &qf::IcpClfCashflow::ccy)
+		;
+
+	PyObject* (*show6)(qf::IcpClfCashflow) = wrappers::show;
+	def("show", show6);
+
+	PyObject* (*show61)(std::shared_ptr<qf::IcpClfCashflow>) = wrappers::show;
+	def("show", show61);
 
 	class_<DateList>("DateList")
 		.def(vector_indexing_suite<DateList>())
@@ -329,6 +355,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("get_years", &qf::Tenor::getYears)
 		.def("get_months", &qf::Tenor::getMonths)
 		.def("get_days", &qf::Tenor::getDays)
+		.def("get_string", &qf::Tenor::getString)
 		;
 
 	class_<qf::FinancialIndex, std::shared_ptr<qf::FinancialIndex>>("FinancialIndex", init<qf::FinancialIndex::AssetClass, std::string>())
@@ -372,6 +399,10 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.staticmethod("build_bullet_icp_clp_leg")
 		.def("build_custom_amort_icp_clp_leg", &qf::LegFactory::buildCustomAmortIcpClpLeg)
 		.staticmethod("build_custom_amort_icp_clp_leg")
+		.def("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
+		.staticmethod("build_bullet_icp_clf_leg")
+		.def("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
+		.staticmethod("build_custom_amort_icp_clf_leg")
 		;
 
 	class_<qf::FXRate, std::shared_ptr<qf::FXRate>>

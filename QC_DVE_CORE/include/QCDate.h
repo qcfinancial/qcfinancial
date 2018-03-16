@@ -300,7 +300,9 @@ class QCDate
 
         /*!
          * Retorna a si misma como string legible y printer friendly
-         * @return (std::string)
+		 * @param dmy si es true retorna formato 'dd-mm-yyyy' si es false el formato
+		 * es 'yyyy-mm-dd'.
+		 * @return (std::string)
          */
         string description(bool dmy = true);
 

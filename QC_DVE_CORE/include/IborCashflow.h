@@ -24,6 +24,7 @@ namespace QCode
 			double,                  /* Amortization */
 			double,                  /* Interest */
 			bool,                    /* Amortization is cashflow */
+			double,                  /* Total cashflow */
 			shared_ptr<QCCurrency>,  /* Nominal currency */
 			std::string,             /* Interest rate index code */
 			QCInterestRate,          /* Interest rate */
@@ -183,6 +184,18 @@ namespace QCode
 			void setAmortization(double amortization);
 
 			/**
+			* @fn	void iborCashflow::setInterestRateValue(double value);
+			*
+			* @brief	Sets the rate value of the interest rate index 
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    05/12/2017
+			*
+			* @param	value	The value of the interest rate.
+			*/
+			void setInterestRateValue(double value);
+
+			/**
 			 * @fn	shared_ptr<IborCashflowWrapper> IborCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a IborCashflowWrapper
@@ -193,6 +206,18 @@ namespace QCode
 			 * @return	A shared_ptr&lt;IborCashflowWrapper&gt;
 			 */
 			shared_ptr<IborCashflowWrapper> wrap();
+
+			/**
+			* @fn	    QCDate IborCashflow::getFixingDate();
+			*
+			* @brief	Returns the fixing date.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    05/12/2017
+			*
+			* @return	QCDate;
+			*/
+			QCDate getFixingDate();
 
 			/**
 			 * @fn	virtual IborCashflow::~IborCashflow();

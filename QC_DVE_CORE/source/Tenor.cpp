@@ -90,7 +90,9 @@ namespace QCode
 			(months == 0) ? strMonths = "" : (strYears = std::to_string(months) + "M");
 			(days == 0) ? strDays = "" : (strYears = std::to_string(days) + "D");
 
-			return strYears + strMonths + strDays;
+			std::string result;
+			(strYears + strMonths + strDays == "") ? (result = "0D") : (result = strYears + strMonths + strDays);
+			return result;
 		}
 
 		bool Tenor::_validate(std::string tenor)

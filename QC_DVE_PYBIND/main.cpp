@@ -2618,14 +2618,11 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 				legCharacteristics, i), 10))),  //interest rate index tenor
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))		 //notional
 				);
-			//cout << "YYY" << endl;
 
-			auto x = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 21)));
-			cout << "ZZZ" << endl;
-			auto xx = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 22)));
-			cout << "WWW" << endl;
-			auto y = mapManyFixings.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)));
-			cout << "AAA" << endl;
+			//auto x = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 21)));
+			//auto xx = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 22)));
+			//auto y = mapManyFixings.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)));
+			cout << "idLeg: " << numOp << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCFloatingRatePayoff{ tmpIntRate,
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 12)), 1.0,
@@ -3087,14 +3084,15 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				<< endl;
 			cout << "curva2: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))
 				<< endl;
+			cout << "Alta payoff: " << numOp << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
-				new QCIcpClpPayoff{ tmpIntRate, PyFloat_AsDouble(PyList_GetItem(
-				PyList_GetItem(legCharacteristics, i), 12)), 1.0,
-				make_shared<QCInterestRateLeg>(tmpIntRateLeg),
-				allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 17))),
-				allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))),
-				allValueDate,
-				make_shared<map<QCDate, double>>(mapIcpFixings) });
+					new QCIcpClpPayoff{ tmpIntRate, PyFloat_AsDouble(PyList_GetItem(
+					PyList_GetItem(legCharacteristics, i), 12)), 1.0,
+					make_shared<QCInterestRateLeg>(tmpIntRateLeg),
+					allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 17))),
+					allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))),
+					allValueDate,
+					make_shared<map<QCDate, double>>(mapIcpFixings) });
 			cout << "payoff ok" << endl;
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
@@ -3160,6 +3158,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 		PyErr_SetString(qcDveError, msg.c_str());
 		return NULL;
 	}
+
 }
 
 PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)

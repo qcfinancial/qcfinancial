@@ -105,10 +105,10 @@ QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays)
     }
     else
     {
-        for (int i = 0; i > nDays; --i)
+        for (int i = 1; i < -nDays + 1; ++i)
         {
             result.setDateFromExcelSerial(--serial);
-            result.setDateFromExcelSerial((this->nextBusinessDay(result)).excelSerial());
+            result.setDateFromExcelSerial((this->previousBusinessDay(result)).excelSerial());
         }
     }
 

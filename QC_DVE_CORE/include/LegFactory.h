@@ -7,6 +7,7 @@
 #include "FixedRateCashflow.h"
 #include "Leg.h"
 #include "InterestRateIndex.h"
+#include "Tenor.h"
 
 #include "QCInterestRateLeg.h"
 #include "QCBusinessCalendar.h"
@@ -23,7 +24,8 @@ namespace QCode
 			{
 				fixedRateCashflow,
 				iborCashflow,
-				icpClpCashflow
+				icpClpCashflow,
+				icpClfCashflow
 			};
 
 			static Leg LegFactory::buildBulletFixedRateLeg(
@@ -31,7 +33,7 @@ namespace QCode
 				QCDate startDate,
 				QCDate endDate,
 				QCDate::QCBusDayAdjRules endDateAdjustment,
-				string settlementPeriodicity,
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
@@ -45,7 +47,7 @@ namespace QCode
 				QCDate startDate,
 				QCDate endDate,
 				QCDate::QCBusDayAdjRules endDateAdjustment,
-				string settlementPeriodicity,
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
@@ -59,11 +61,11 @@ namespace QCode
 				QCDate startDate,				
 				QCDate endDate,						
 				QCDate::QCBusDayAdjRules endDateAdjustment, 
-				string settlementPeriodicity,			
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
-				string fixingPeriodicity,					
+				Tenor fixingPeriodicity,					
 				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
 				QCBusinessCalendar fixingCalendar,				
 				unsigned int fixingLag,
@@ -79,12 +81,12 @@ namespace QCode
 				QCDate startDate,
 				QCDate endDate,
 				QCDate::QCBusDayAdjRules endDateAdjustment,
-				string settlementPeriodicity,
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
 				CustomNotionalAmort notionalAndAmort,
-				string fixingPeriodicity,
+				Tenor fixingPeriodicity,
 				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
 				QCBusinessCalendar fixingCalendar,
 				unsigned int fixingLag,
@@ -99,7 +101,7 @@ namespace QCode
 				QCDate startDate,
 				QCDate endDate,
 				QCDate::QCBusDayAdjRules endDateAdjustment,
-				string settlementPeriodicity,
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
@@ -113,7 +115,35 @@ namespace QCode
 				QCDate startDate,
 				QCDate endDate,
 				QCDate::QCBusDayAdjRules endDateAdjustment,
-				string settlementPeriodicity,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				CustomNotionalAmort notionalAndAmort,
+				bool doesAmortize,
+				double spread,
+				double gearing);
+
+			static Leg LegFactory::buildBulletIcpClfLeg(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				double notional,
+				bool doesAmortize,
+				double spread,
+				double gearing);
+
+			static Leg LegFactory::buildCustomAmortIcpClfLeg(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,

@@ -300,19 +300,20 @@ namespace wrappers
 	PyObject* show(qf::IborCashflow cshflw)
 	{
 		// The types inside the wrapper are:
-		// startDate       QCDate,
-		// endDate         QCDate,
-		// fixingDate      QCDate,
-		// settlementDate  QCDate,
-		// nominal         double,
-		// amortization    double,
-		// interest        double,
-		// doesAmortize    bool,
-		// currency        shared_ptr<QCCurrency>,
-		// code            std::string,
-		// rate            QCInterestRate,
-		// spread          double,
-		// gearing         double.
+		// startDate,
+		// endDate,
+		// fixingDate,
+		// settlementDate,
+		// nominal,
+		// amortization,
+		// interest,
+		// doesAmortize,
+		// amount,
+		// _currency,
+		// _index->getCode(),
+		// _index->getRate(),
+		// _spread,
+		// _gearing);
 		
 		auto cashflow = cshflw.wrap();
 
@@ -325,16 +326,18 @@ namespace wrappers
 		double amortization;
 		double interest;
 		long doesAmortize = 0;
+		double cashflowAmount;
 		std::string currency;
 		std::string code;
+		double rate_value;
 		double spread;
 		double gearing;
 		try
 		{
-			startDate = std::get<0>(*cashflow).description();
-			endDate = std::get<1>(*cashflow).description();
-			fixingDate = std::get<2>(*cashflow).description();
-			settlementDate = std::get<3>(*cashflow).description();
+			startDate = std::get<0>(*cashflow).description(false);
+			endDate = std::get<1>(*cashflow).description(false);
+			fixingDate = std::get<2>(*cashflow).description(false);
+			settlementDate = std::get<3>(*cashflow).description(false);
 
 			nominal = std::get<4>(*cashflow);
 			amortization = std::get<5>(*cashflow);
@@ -343,10 +346,12 @@ namespace wrappers
 			{
 				doesAmortize = 1;
 			}
-			currency = std::get<8>(*cashflow)->getIsoCode();
-			code = std::get<9>(*cashflow);
-			spread = std::get<11>(*cashflow);
-			gearing = std::get<12>(*cashflow);
+			cashflowAmount = std::get<8>(*cashflow);
+			currency = std::get<9>(*cashflow)->getIsoCode();
+			code = std::get<10>(*cashflow);
+			rate_value = std::get<11>(*cashflow).getValue();
+			spread = std::get<12>(*cashflow);
+			gearing = std::get<13>(*cashflow);
 		}
 		catch (exception& e)
 		{
@@ -424,8 +429,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		double amount = cshflw.amount();
-		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(amount));
+		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(cashflowAmount));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -442,7 +446,6 @@ namespace wrappers
 		}
 
 		const char* cCode = code.c_str();
-		std::cout << "code: " << code << std::endl;
 		success = PyTuple_SetItem(result, 10, PyString_FromString(cCode));
 		if (success != 0)
 		{
@@ -451,7 +454,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		double rate = std::get<10>(*cashflow).getValue();
+		double rate = std::get<11>(*cashflow).getValue();
 		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(rate));
 		if (success != 0)
 		{
@@ -476,8 +479,8 @@ namespace wrappers
 			return NULL;
 		}
 
-		std::string wf = std::get<10>(*cashflow).getWealthFactor()->description();
-		std::string yf = std::get<10>(*cashflow).getYearFraction()->description();
+		std::string wf = std::get<11>(*cashflow).getWealthFactor()->description();
+		std::string yf = std::get<11>(*cashflow).getYearFraction()->description();
 		success = PyTuple_SetItem(result, 14, PyString_FromString((wf + yf).c_str()));
 		if (success != 0)
 		{
@@ -508,180 +511,7 @@ namespace wrappers
 		// gearing         double.
 		
 		auto cshflw = *cshflwPtr;
-		auto cashflow = cshflw.wrap();
-
-		// We will first unpack the wrapper
-		std::string startDate;
-		std::string endDate;
-		std::string fixingDate;
-		std::string settlementDate;
-		double nominal;
-		double amortization;
-		double interest;
-		long doesAmortize = 0;
-		std::string currency;
-		std::string code;
-		double spread;
-		double gearing;
-		try
-		{
-			startDate = std::get<0>(*cashflow).description();
-			endDate = std::get<1>(*cashflow).description();
-			fixingDate = std::get<2>(*cashflow).description();
-			settlementDate = std::get<3>(*cashflow).description();
-
-			nominal = std::get<4>(*cashflow);
-			amortization = std::get<5>(*cashflow);
-			interest = std::get<6>(*cashflow);
-			if (std::get<7>(*cashflow))
-			{
-				doesAmortize = 1;
-			}
-			currency = std::get<8>(*cashflow)->getIsoCode();
-			code = std::get<9>(*cashflow);
-			spread = std::get<11>(*cashflow);
-			gearing = std::get<12>(*cashflow);
-		}
-		catch (exception& e)
-		{
-			string msg = string(e.what());
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, msg.c_str());
-			return NULL;
-		}
-
-		// Now we pack the values in a Python tuple
-		PyObject* result = PyTuple_New(15);
-		int success;
-
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "startDate");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "endDate");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 2, PyString_FromString(fixingDate.c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "fixingDate");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 3, PyString_FromString(settlementDate.c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "settlementDate");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 4, PyFloat_FromDouble(nominal));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "nominal");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 5, PyFloat_FromDouble(amortization));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "amortization");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 6, PyFloat_FromDouble(interest));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "interest");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 7, PyBool_FromLong(doesAmortize));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "doesAmortize");
-			return NULL;
-		}
-
-		double amount = cshflw.amount();
-		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(amount));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "total flow");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 9, PyString_FromString(currency.c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "currency");
-			return NULL;
-		}
-
-		const char* cCode = code.c_str();
-		std::cout << "code: " << code << std::endl;
-		success = PyTuple_SetItem(result, 10, PyString_FromString(cCode));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "ir code");
-			return NULL;
-		}
-
-		double rate = std::get<10>(*cashflow).getValue();
-		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(rate));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "rate value");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 12, PyFloat_FromDouble(spread));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "spread");
-			return NULL;
-		}
-
-		success = PyTuple_SetItem(result, 13, PyFloat_FromDouble(gearing));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "total flow");
-			return NULL;
-		}
-
-		std::string wf = std::get<10>(*cashflow).getWealthFactor()->description();
-		std::string yf = std::get<10>(*cashflow).getYearFraction()->description();
-		success = PyTuple_SetItem(result, 14, PyString_FromString((wf + yf).c_str()));
-		if (success != 0)
-		{
-			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "currency");
-			return NULL;
-		}
-
-		return result;
-
+		return show(cshflw);
 	}
 
 	PyObject* show(qf::SimpleCashflow cshflw)
@@ -770,7 +600,7 @@ namespace wrappers
 			endDate = std::get<0>(*cashflow).description(false);
 			nominal = std::get<1>(*cashflow);
 			currency = std::get<2>(*cashflow)->getIsoCode();
-			fxRateFixingDate = std::get<3>(*cashflow).description();
+			fxRateFixingDate = std::get<3>(*cashflow).description(false);
 			settlementCurrency = std::get<4>(*cashflow)->getIsoCode();
 			fxRateIndexCode = std::get<5>(*cashflow)->getCode();
 			fxRateIndexValue = std::get<6>(*cashflow);
@@ -785,7 +615,7 @@ namespace wrappers
 		}
 
 		// Now we pack the values in a Python tuple
-		PyObject* result = PyTuple_New(7);
+		PyObject* result = PyTuple_New(8);
 		int success;
 
 		success = PyTuple_SetItem(result, 0, PyString_FromString(endDate.c_str()));
@@ -844,7 +674,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 6, PyFloat_FromDouble(amount));
+		success = PyTuple_SetItem(result, 7, PyFloat_FromDouble(amount));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -887,6 +717,7 @@ namespace wrappers
 		double nominal;
 		double amortization;
 		long doesAmortize = 0;
+		double cashflowAmount;
 		std::string nominalCurrency;
 		double startDateICP;
 		double endDateICP;
@@ -905,6 +736,7 @@ namespace wrappers
 			{
 				doesAmortize = 1;
 			}
+			cashflowAmount = cshflw.amount();
 			nominalCurrency = std::get<6>(*cashflow)->getIsoCode();
 			startDateICP =    std::get<7>(*cashflow);
 			endDateICP =      std::get<8>(*cashflow);
@@ -922,7 +754,7 @@ namespace wrappers
 		}
 
 		// Now we pack the values in a Python tuple
-		PyObject* result = PyTuple_New(13);
+		PyObject* result = PyTuple_New(15);
 		int success;
 
 		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
@@ -973,7 +805,15 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 6, PyString_FromString(nominalCurrency.c_str()));
+		success = PyTuple_SetItem(result, 6, PyFloat_FromDouble(cashflowAmount));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "cashflowAmount");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 7, PyString_FromString(nominalCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -981,7 +821,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 7, PyFloat_FromDouble(startDateICP));
+		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(startDateICP));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -989,7 +829,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(endDateICP));
+		success = PyTuple_SetItem(result, 9, PyFloat_FromDouble(endDateICP));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -997,7 +837,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 9, PyFloat_FromDouble(rateValue));
+		success = PyTuple_SetItem(result, 10, PyFloat_FromDouble(rateValue));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1005,7 +845,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 10, PyFloat_FromDouble(interest));
+		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(interest));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1013,7 +853,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(spread));
+		success = PyTuple_SetItem(result, 12, PyFloat_FromDouble(spread));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1021,13 +861,22 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 12, PyFloat_FromDouble(gearing));
+		success = PyTuple_SetItem(result, 13, PyFloat_FromDouble(gearing));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
 			PyErr_SetString(qcfError, "gearing");
 			return NULL;
 		}
+
+		success = PyTuple_SetItem(result, 14, PyString_FromString("LinAct360"));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "type_of_rate");
+			return NULL;
+		}
+
 
 		return result;
 	}
@@ -1037,6 +886,225 @@ namespace wrappers
 		qf::IcpClpCashflow cshflw = *cshflwPtr;
 		return show(cshflw);
 	}
+
+	PyObject* show(qf::IcpClfCashflow cshflw)
+	{
+		// The types inside the wrapper are:
+		//QCDate,                 /* Start Date */
+		//QCDate,                 /* End Date */
+		//QCDate,                 /* Settlement Date */
+		//double,                 /* Nominal */
+		//double,                 /* Amortization */
+		//bool,                   /* Amortization is cashflow */
+		//shared_ptr<QCCurrency>, /* Nominal Currency (always CLP) */
+		//double,                 /* Start date ICP value */
+		//double,                 /* End date ICP value */
+		//double,                 /* Start date UF value */
+		//double,                 /* End date UF value */
+		//double,                 /* Rate */
+		//double,                 /* Interest */
+		//double,                 /* Spread */
+		//double                  /* Gearing */
+
+		auto cashflow = cshflw.wrap();
+
+		// We will first unpack the wrapper
+		std::string startDate;
+		std::string endDate;
+		std::string settlementDate;
+		double nominal;
+		double amortization;
+		long doesAmortize = 0;
+		double cashflowAmount;
+		std::string nominalCurrency;
+		double startDateICP;
+		double endDateICP;
+		double startDateUF;
+		double endDateUF;
+		double rateValue;
+		double interest;
+		double spread;
+		double gearing;
+		try
+		{
+			startDate = std::get<0>(*cashflow).description(false);
+			endDate = std::get<1>(*cashflow).description(false);
+			settlementDate = std::get<2>(*cashflow).description(false);
+			nominal = std::get<3>(*cashflow);
+			amortization = std::get<4>(*cashflow);
+			if (std::get<5>(*cashflow))
+			{
+				doesAmortize = 1;
+			}
+			cashflowAmount = cshflw.amount();
+			nominalCurrency = std::get<6>(*cashflow)->getIsoCode();
+			startDateICP = std::get<7>(*cashflow);
+			endDateICP = std::get<8>(*cashflow);
+			startDateUF = std::get<9>(*cashflow);
+			endDateUF = std::get<10>(*cashflow);
+			rateValue = std::get<11>(*cashflow);
+			interest = std::get<12>(*cashflow);
+			spread = std::get<13>(*cashflow);
+			gearing = std::get<14>(*cashflow);
+		}
+		catch (exception& e)
+		{
+			string msg = string(e.what());
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, msg.c_str());
+			return NULL;
+		}
+
+		// Now we pack the values in a Python tuple
+		PyObject* result = PyTuple_New(17);
+		int success;
+
+		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "startDate");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "endDate");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "settlementDate");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 3, PyFloat_FromDouble(nominal));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "nominal");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 4, PyFloat_FromDouble(amortization));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "amortization");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 5, PyBool_FromLong(doesAmortize));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "doesAmortize");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 6, PyFloat_FromDouble(cashflowAmount));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "cashflowAmount");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 7, PyString_FromString(nominalCurrency.c_str()));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "currency");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 8, PyFloat_FromDouble(startDateICP));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "startDateICP");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 9, PyFloat_FromDouble(endDateICP));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "endDateICP");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 10, PyFloat_FromDouble(startDateUF));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "startDateUF");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(endDateUF));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "endDateUF");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 12, PyFloat_FromDouble(rateValue));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "rateValue");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 13, PyFloat_FromDouble(interest));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "interest");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 14, PyFloat_FromDouble(spread));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "spread");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 15, PyFloat_FromDouble(gearing));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "gearing");
+			return NULL;
+		}
+
+		success = PyTuple_SetItem(result, 16, PyString_FromString("LinAct360"));
+		if (success != 0)
+		{
+			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
+			PyErr_SetString(qcfError, "type_of_rate");
+			return NULL;
+		}
+
+		return result;
+	}
+
+	PyObject* show(std::shared_ptr<qf::IcpClfCashflow> cshflwPtr)
+	{
+		qf::IcpClfCashflow cshflw = *cshflwPtr;
+		return show(cshflw);
+	}
+
+
 }
 
 

@@ -21,6 +21,10 @@ namespace QCode
 
 		double SimpleMultiCurrencyCashflow::amount()
 		{
+			if (_currency->getIsoCode() == _settlementCurrency->getIsoCode())
+			{
+					return _nominal;
+			}
 			if (_fxRateIndex->strongCcyCode() == _currency->getIsoCode())
 			{
 				return _nominal * _fxRateIndexValue;

@@ -132,6 +132,17 @@ namespace QCode
 			return _rate.getWealthFactor()->description() + _rate.getYearFraction()->description();
 		}
 
+		QCDate IcpClpCashflow::getStartDate()
+		{
+			return _startDate;
+		}
+
+		QCDate IcpClpCashflow::getEndDate()
+		{
+			return _endDate;
+		}
+
+
 		IcpClpCashflow::~IcpClpCashflow()
 		{
 		}

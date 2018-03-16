@@ -27,6 +27,7 @@ namespace QCode
 		double FixedRateCashflow::amount()
 		{
 			double amort{ 0.0 };
+			_calculateInterest();
 			if (_doesAmortize)
 			{
 				amort = _amortization;
@@ -47,6 +48,7 @@ namespace QCode
 		void FixedRateCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;
+			_calculateInterest();
 		}
 
 		void FixedRateCashflow::setAmortization(double amortization)
