@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BD8BC383-0654-43B1-8C9F-2A1C7D8AFAE3}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>QC_DVE_CORE</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\QCZeroCurveBootstrappingFromRates.h" />
+    <ClInclude Include="include\QC30360.h" />
+    <ClInclude Include="include\QCAct360.h" />
+    <ClInclude Include="include\QCAct365.h" />
+    <ClInclude Include="include\QCActAct.h" />
+    <ClInclude Include="include\QCBusinessCalendar.h" />
+    <ClInclude Include="include\QCClampedSpline.h" />
+    <ClInclude Include="include\QCCompoundWf.h" />
+    <ClInclude Include="include\QCContinousWf.h" />
+    <ClInclude Include="include\QCCurrencyConverter.h" />
+    <ClInclude Include="include\QCCurve.h" />
+    <ClInclude Include="include\QCDate.h" />
+    <ClInclude Include="include\QCDefinitions.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="include\QCDiscountBondPayoff.h" />
+    <ClInclude Include="include\QCFixedRatePayoff.h" />
+    <ClInclude Include="include\QCFloatingRatePayoff.h" />
+    <ClInclude Include="include\QCFXForward.h" />
+    <ClInclude Include="include\QCHelperFunctions.h" />
+    <ClInclude Include="include\QCIcpClfPayoff.h" />
+    <ClInclude Include="include\QCIcpClpPayoff.h" />
+    <ClInclude Include="include\QCInterestRate.h" />
+    <ClInclude Include="include\QCInterestRateCurveGenerator.h" />
+    <ClInclude Include="include\QCInterestRateLeg.h" />
+    <ClInclude Include="include\QCInterestRatePayoff.h" />
+    <ClInclude Include="include\QCInterestRatePeriodsFactory.h" />
+    <ClInclude Include="include\QCInterpolator.h" />
+    <ClInclude Include="include\QCLinearInterpolator.h" />
+    <ClInclude Include="include\QCLinearWf.h" />
+    <ClInclude Include="include\QCLogLinearInterpolator.h" />
+    <ClInclude Include="include\QCOperation.h" />
+    <ClInclude Include="include\QCProjectingInterestRateCurve.h" />
+    <ClInclude Include="include\QCTest.h" />
+    <ClInclude Include="include\QCTimeDepositPayoff.h" />
+    <ClInclude Include="include\QCValueEngine.h" />
+    <ClInclude Include="include\QCWealthFactor.h" />
+    <ClInclude Include="include\QCYearFraction.h" />
+    <ClInclude Include="include\QCFactoryFunctions.h" />
+    <ClInclude Include="include\QCZeroCouponCurve.h" />
+    <ClInclude Include="include\QCZeroCouponDiscountFactorCurve.h" />
+    <ClInclude Include="include\QCZeroCouponInterestRateCurve.h" />
+    <ClInclude Include="include\QCInterestRateCurve.h" />
+    <ClInclude Include="include\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.h" />
+    <ClInclude Include="include\QCZeroCurveBootstrappingFromRatesAndFixedLegs.h" />
+    <ClInclude Include="include\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\Cashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FinancialIndex.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FXRate.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FXRateIndex.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IcpClfCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IcpClpCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\Leg.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\LegFactory.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FixedRateCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IborCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\InterestRateIndex.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCCurrency.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCInterestRateBasisSwap.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\SimpleCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\SimpleMultiCurrencyCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\Tenor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\QC30360.cpp" />
+    <ClCompile Include="source\QCAct360.cpp" />
+    <ClCompile Include="source\QCAct365.cpp" />
+    <ClCompile Include="source\QCActAct.cpp" />
+    <ClCompile Include="source\QCBusinessCalendar.cpp" />
+    <ClCompile Include="source\QCClampedSpline.cpp" />
+    <ClCompile Include="source\QCCompoundWf.cpp" />
+    <ClCompile Include="source\QCContinousWf.cpp" />
+    <ClCompile Include="source\QCCurve.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="source\QCDate.cpp" />
+    <ClCompile Include="source\QCDiscountBondPayoff.cpp" />
+    <ClCompile Include="source\QCFactoryFunctions.cpp" />
+    <ClCompile Include="source\QCFixedRatePayoff.cpp" />
+    <ClCompile Include="source\QCFloatingRatePayoff.cpp" />
+    <ClCompile Include="source\QCFXForward.cpp" />
+    <ClCompile Include="source\QCHelperFunctions.cpp" />
+    <ClCompile Include="source\QCIcpClfPayoff.cpp" />
+    <ClCompile Include="source\QCIcpClpPayoff.cpp" />
+    <ClCompile Include="source\QCInterestRate.cpp" />
+    <ClCompile Include="source\QCInterestRateLeg.cpp" />
+    <ClCompile Include="source\QCInterestRatePayoff.cpp" />
+    <ClCompile Include="source\QCInterestRatePeriodsFactory.cpp" />
+    <ClCompile Include="source\QCInterpolator.cpp" />
+    <ClCompile Include="source\QCLinearInterpolator.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="source\QCLinearWf.cpp" />
+    <ClCompile Include="source\QCLogLinearInterpolator.cpp" />
+    <ClCompile Include="source\QCProjectingInterestRateCurve.cpp" />
+    <ClCompile Include="source\QCTest.cpp" />
+    <ClCompile Include="source\QCTimeDepositPayoff.cpp" />
+    <ClCompile Include="source\QCWealthFactor.cpp" />
+    <ClCompile Include="source\QCZeroCouponCurve.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="source\QCZeroCouponDiscountFactorCurve.cpp" />
+    <ClCompile Include="source\QCZeroCouponInterestRateCurve.cpp" />
+    <ClCompile Include="source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp" />
+    <ClCompile Include="source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp" />
+    <ClCompile Include="source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp" />
+    <ClCompile Include="source\QCZeroCurveBootstrappingFromRates.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IborCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClfCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClpCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\InterestRateIndex.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Leg.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\LegFactory.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRateBasisSwap.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Tenor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
