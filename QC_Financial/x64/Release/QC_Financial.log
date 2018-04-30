@@ -1,13 +1,109 @@
-﻿Build started 30-04-2018 15:44:33.
-     1>Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" on node 2 (Build target(s)).
+﻿Build started 30-04-2018 16:46:17.
+     1>Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\QC_DVE_CORE\source\QCDate.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\QC_DVE_CORE\source\FixedRateCashflow.cpp ..\QC_DVE_CORE\source\IborCashflow.cpp ..\QC_DVE_CORE\source\IcpClfCashflow.cpp ..\QC_DVE_CORE\source\IcpClpCashflow.cpp ..\QC_DVE_CORE\source\InterestRateIndex.cpp ..\QC_DVE_CORE\source\Leg.cpp ..\QC_DVE_CORE\source\LegFactory.cpp ..\QC_DVE_CORE\source\QC30360.cpp ..\QC_DVE_CORE\source\QCAct360.cpp ..\QC_DVE_CORE\source\QCAct365.cpp ..\QC_DVE_CORE\source\QCActAct.cpp ..\QC_DVE_CORE\source\QCBusinessCalendar.cpp ..\QC_DVE_CORE\source\QCCompoundWf.cpp ..\QC_DVE_CORE\source\QCContinousWf.cpp ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCInterestRate.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCLinearWf.cpp ..\QC_DVE_CORE\source\QCWealthFactor.cpp ..\QC_DVE_CORE\source\SimpleCashflow.cpp ..\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp ..\QC_DVE_CORE\source\Tenor.cpp main.cpp
+         FixedRateCashflow.cpp
+         IborCashflow.cpp
+         IcpClfCashflow.cpp
+         IcpClpCashflow.cpp
+         InterestRateIndex.cpp
+         Leg.cpp
+         LegFactory.cpp
+         QC30360.cpp
+         QCAct360.cpp
+         QCAct365.cpp
+         QCActAct.cpp
+         QCBusinessCalendar.cpp
+         QCCompoundWf.cpp
+         QCContinousWf.cpp
          QCDate.cpp
      1>..\QC_DVE_CORE\source\QCDate.cpp(55): warning C4101: 'e' : unreferenced local variable
      1>..\QC_DVE_CORE\source\QCDate.cpp(433): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCDate.cpp(441): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCDate.cpp(456): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCDate.cpp(464): warning C4018: '<' : signed/unsigned mismatch
+         QCHelperFunctions.cpp
+     1>d:\qcdvaluationengine\qc_dve_core\include\QCInterestRateCurve.h(115): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned long', possible loss of data
+         QCInterestRate.cpp
+         QCInterestRatePeriodsFactory.cpp
+     1>d:\qcdvaluationengine\qc_dve_core\include\QCInterestRateCurve.h(115): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned long', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(64): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(155): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(294): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(335): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(375): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(419): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+         QCLinearWf.cpp
+         QCWealthFactor.cpp
+         Compiling...
+         SimpleCashflow.cpp
+         SimpleMultiCurrencyCashflow.cpp
+         Tenor.cpp
+         main.cpp
+     1>D:\boost\boost_1_66_0\boost/python/suite/indexing/vector_indexing_suite.hpp(176): warning C4267: '+=' : conversion from 'size_t' to 'long', possible loss of data
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/vector_indexing_suite.hpp(170) : while compiling class template member function 'unsigned __int64 boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>::convert_index(Container &,PyObject *)'
+                 with
+                 [
+                     _Ty=double
+         ,            Container=std::vector<double,std::allocator<double>>
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/indexing_suite.hpp(229) : see reference to function template instantiation 'unsigned __int64 boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>::convert_index(Container &,PyObject *)' being compiled
+                 with
+                 [
+                     _Ty=double
+         ,            Container=std::vector<double,std::allocator<double>>
+                 ]
+                 main.cpp(295) : see reference to class template instantiation 'boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>' being compiled
+                 with
+                 [
+                     _Ty=double
+         ,            Container=std::vector<double,std::allocator<double>>
+                 ]
+     1>D:\boost\boost_1_66_0\boost/python/suite/indexing/detail/indexing_suite_detail.hpp(605): warning C4267: '+=' : conversion from 'size_t' to 'long', possible loss of data
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/detail/indexing_suite_detail.hpp(590) : while compiling class template member function 'void boost::python::detail::slice_helper<Container,DerivedPolicies,boost::python::detail::no_proxy_helper<Container,DerivedPolicies,boost::python::detail::container_element<Container,Index,DerivedPolicies>,Index>,Data,Index>::base_get_slice_data(Container &,PySliceObject *,Index &,Index &)'
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+         ,            Index=unsigned __int64
+         ,            Data=double
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/detail/indexing_suite_detail.hpp(583) : see reference to function template instantiation 'void boost::python::detail::slice_helper<Container,DerivedPolicies,boost::python::detail::no_proxy_helper<Container,DerivedPolicies,boost::python::detail::container_element<Container,Index,DerivedPolicies>,Index>,Data,Index>::base_get_slice_data(Container &,PySliceObject *,Index &,Index &)' being compiled
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+         ,            Index=unsigned __int64
+         ,            Data=double
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/indexing_suite.hpp(206) : see reference to class template instantiation 'boost::python::detail::slice_helper<Container,DerivedPolicies,boost::python::detail::no_proxy_helper<Container,DerivedPolicies,boost::python::detail::container_element<Container,Index,DerivedPolicies>,Index>,Data,Index>' being compiled
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+         ,            Index=unsigned __int64
+         ,            Data=double
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/indexing_suite.hpp(204) : while compiling class template member function 'boost::python::api::object boost::python::indexing_suite<Container,DerivedPolicies,false,false,double,unsigned __int64,double>::base_get_item(boost::python::back_reference<Container &>,PyObject *)'
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/indexing_suite.hpp(187) : see reference to function template instantiation 'boost::python::api::object boost::python::indexing_suite<Container,DerivedPolicies,false,false,double,unsigned __int64,double>::base_get_item(boost::python::back_reference<Container &>,PyObject *)' being compiled
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+                 ]
+                 D:\boost\boost_1_66_0\boost/python/suite/indexing/vector_indexing_suite.hpp(50) : see reference to class template instantiation 'boost::python::indexing_suite<Container,DerivedPolicies,false,false,double,unsigned __int64,double>' being compiled
+                 with
+                 [
+                     Container=std::vector<double,std::allocator<double>>
+         ,            DerivedPolicies=boost::python::detail::final_vector_derived_policies<std::vector<double,std::allocator<double>>,false>
+                 ]
+     1>D:\boost\boost_1_66_0\boost/python/suite/indexing/detail/indexing_suite_detail.hpp(619): warning C4267: '+=' : conversion from 'size_t' to 'long', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\qcdvaluationengine\x64\Release\QC_Financial.pyd" /INCREMENTAL:NO /NOLOGO /LIBPATH:"D:\boost\boost_1_66_0\lib64-msvc-12.0" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\qcdvaluationengine\x64\Release\QC_Financial.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\qcdvaluationengine\x64\Release\QC_Financial.lib" /MACHINE:X64 /DLL x64\Release\FixedRateCashflow.obj
          x64\Release\IborCashflow.obj
@@ -37,8 +133,8 @@
          Generating code
          Finished generating code
          QC_Financial.vcxproj -> D:\qcdvaluationengine\x64\Release\QC_Financial.pyd
-     1>Done Building Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:10.22
+Time Elapsed 00:00:22.24

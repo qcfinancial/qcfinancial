@@ -1,4 +1,4 @@
-﻿Build started 30-04-2018 15:12:16.
+﻿Build started 30-04-2018 16:45:49.
      1>Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\FixedRateCashflow.cpp ..\QC_DVE_CORE\source\IborCashflow.cpp ..\QC_DVE_CORE\source\IcpClfCashflow.cpp ..\QC_DVE_CORE\source\IcpClpCashflow.cpp ..\QC_DVE_CORE\source\InterestRateIndex.cpp ..\QC_DVE_CORE\source\Leg.cpp ..\QC_DVE_CORE\source\LegFactory.cpp ..\QC_DVE_CORE\source\QC30360.cpp ..\QC_DVE_CORE\source\QCAct360.cpp ..\QC_DVE_CORE\source\QCAct365.cpp ..\QC_DVE_CORE\source\QCActAct.cpp ..\QC_DVE_CORE\source\QCBusinessCalendar.cpp ..\QC_DVE_CORE\source\QCCompoundWf.cpp ..\QC_DVE_CORE\source\QCContinousWf.cpp ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCInterestRate.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCLinearWf.cpp ..\QC_DVE_CORE\source\QCWealthFactor.cpp ..\QC_DVE_CORE\source\SimpleCashflow.cpp ..\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp ..\QC_DVE_CORE\source\Tenor.cpp main.cpp
@@ -65,4 +65,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:23.22
+Time Elapsed 00:00:19.91
