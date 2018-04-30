@@ -1,52 +1,9 @@
-﻿Build started 18/06/2017 8:08:11.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
-         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt source\QCZeroCouponCurve.cpp
-         Skipping... (no relevant changes detected)
-         QCZeroCouponCurve.cpp
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib" /NOLOGO Debug\QC30360.obj
-         Debug\QCAct360.obj
-         Debug\QCAct365.obj
-         Debug\QCActAct.obj
-         Debug\QCBusinessCalendar.obj
-         Debug\QCClampedSpline.obj
-         Debug\QCCompoundWf.obj
-         Debug\QCContinousWf.obj
-         Debug\QCDate.obj
-         Debug\QCDiscountBondPayoff.obj
-         Debug\QCFactoryFunctions.obj
-         Debug\QCFixedRatePayoff.obj
-         Debug\QCFloatingRatePayoff.obj
-         Debug\QCFXForward.obj
-         Debug\QCHelperFunctions.obj
-         Debug\QCIcpClfPayoff.obj
-         Debug\QCIcpClpPayoff.obj
-         Debug\QCInterestRate.obj
-         Debug\QCInterestRateLeg.obj
-         Debug\QCInterestRatePayoff.obj
-         Debug\QCInterestRatePeriodsFactory.obj
-         Debug\QCInterpolator.obj
-         Debug\QCLinearInterpolator.obj
-         Debug\QCLinearWf.obj
-         Debug\QCLogLinearInterpolator.obj
-         Debug\QCProjectingInterestRateCurve.obj
-         Debug\QCTest.obj
-         Debug\QCTimeDepositPayoff.obj
-         Debug\QCWealthFactor.obj
-         Debug\QCZeroCouponDiscountFactorCurve.obj
-         Debug\QCZeroCouponInterestRateCurve.obj
-         Debug\QCZeroCurveBootstrappingFromRatesAndFixedLegs.obj
-         Debug\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.obj
-         Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.obj
-         Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.obj
-         Debug\QCZeroCurveBootstrappingFromRates.obj
-         Debug\QCZeroCouponCurve.obj
-         QC_DVE_CORE.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\Debug\QC_DVE_CORE.lib
-     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Build target(s)).
+﻿Build started 20-03-2018 11:46:30.
+     1>Project "D:\qcdvaluationengine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         QC_DVE_CORE.vcxproj -> D:\qcdvaluationengine\Debug\QC_DVE_CORE.lib
+     1>Done Building Project "D:\qcdvaluationengine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.92
+Time Elapsed 00:00:00.05

@@ -518,13 +518,13 @@ QCDate QCDate::addMonths(int nMonths) const
     if (d > dm[m])
         eom = true;
 
-    if (eom)
-    {
-        d = dm[m];  //if the date correspond to the end of a month,
-                            // the resulting date is forced to be the end of a month
-        if (((y / 4) == (y / 4.0)) && (m == 2))
-            d = 29;
-    }
+    //if (eom)
+    //{
+    //    d = dm[m];  //if the date correspond to the end of a month,
+    //                // the resulting date is forced to be the end of a month
+    //    if (((y / 4) == (y / 4.0)) && (m == 2))
+    //        d = 29;
+    //}
 
     return QCDate {d, m, y};
 }

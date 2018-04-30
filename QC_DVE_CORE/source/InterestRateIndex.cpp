@@ -53,7 +53,7 @@ namespace QCode
 
 		unsigned int InterestRateIndex::getMonthsOfTenor()
 		{
-			_tenor.getMonths();
+			return _tenor.getMonths();
 		}
 
 		InterestRateIndex::~InterestRateIndex()

@@ -1,113 +1,30 @@
-﻿Build started 18/06/2017 8:38:27.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(364,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+﻿Build started 26-04-2018 15:32:52.
+     1>Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QCCompoundWf.cpp ..\QC_DVE_CORE\source\QCContinousWf.cpp ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp ..\QC_DVE_CORE\source\QCFactoryFunctions.cpp ..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp ..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp ..\QC_DVE_CORE\source\QCFXForward.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp ..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp ..\QC_DVE_CORE\source\QCInterestRate.cpp ..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCInterpolator.cpp ..\QC_DVE_CORE\source\QCLinearInterpolator.cpp ..\QC_DVE_CORE\source\QCLinearWf.cpp ..\QC_DVE_CORE\source\QCLogLinearInterpolator.cpp ..\QC_DVE_CORE\source\QCProjectingInterestRateCurve.cpp ..\QC_DVE_CORE\source\QCTimeDepositPayoff.cpp ..\QC_DVE_CORE\source\QCWealthFactor.cpp ..\QC_DVE_CORE\source\QCZeroCouponCurve.cpp ..\QC_DVE_CORE\source\QCZeroCouponDiscountFactorCurve.cpp ..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRates.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp main.cpp
          main.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(632): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(663): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(703): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(163): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(344): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(547): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(760): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2219): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2441): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2456): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2693): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2707): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2913): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2928): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(3132): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(3407): warning C4101: 'label' : unreferenced local variable
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\utility(144): warning C4244: 'initializing' : conversion from 'double' to 'long', possible loss of data
-                 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2262) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=double &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-                 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2262) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<double&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=double &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\utility(144): warning C4244: 'initializing' : conversion from '__int64' to 'long', possible loss of data
-                 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2965) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=__int64 &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
-                 \\psf\home\documents\qcode\qcdvaluationengine\qc_dve_pybind\main.cpp(2965) : see reference to function template instantiation 'std::pair<long,std::shared_ptr<QCInterestRatePayoff>>::pair<__int64&,std::shared_ptr<QCInterestRatePayoff>&,void>(_Other1,_Other2)' being compiled
-                 with
-                 [
-                     _Other1=__int64 &
-         ,            _Other2=std::shared_ptr<QCInterestRatePayoff> &
-                 ]
+     1>d:\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(770): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(801): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\include\qcdvepybindhelperfunctions.h(841): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(164): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(345): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(548): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(761): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(2356): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(2578): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(2593): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(2825): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(2839): warning C4244: 'argument' : conversion from 'double' to 'const unsigned long', possible loss of data
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(3045): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(3060): warning C4244: 'argument' : conversion from '__int64' to 'const unsigned long', possible loss of data
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(3266): warning C4018: '<' : signed/unsigned mismatch
+     1>d:\qcdvaluationengine\qc_dve_pybind\main.cpp(3541): warning C4101: 'label' : unreferenced local variable
          QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
          QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
          QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
-         QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
-         QCZeroCurveBootstrappingFromRates.cpp
-         QCZeroCouponInterestRateCurve.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qczerocouponinterestratecurve.cpp(50): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qczerocouponinterestratecurve.cpp(108): warning C4018: '<' : signed/unsigned mismatch
-         QCWealthFactor.cpp
-         QCTimeDepositPayoff.cpp
-         QCInterestRatePayoff.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcinterestratepayoff.cpp(162): warning C4018: '<' : signed/unsigned mismatch
-         QCInterestRate.cpp
-         QCIcpClpPayoff.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcicpclppayoff.cpp(85): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcicpclppayoff.cpp(121): warning C4018: '<' : signed/unsigned mismatch
-         QCHelperFunctions.cpp
-         QCFXForward.cpp
-         QCFloatingRatePayoff.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfloatingratepayoff.cpp(55): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfloatingratepayoff.cpp(85): warning C4018: '<' : signed/unsigned mismatch
-         QCFixedRatePayoff.cpp
-         QCFactoryFunctions.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(556): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(579): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(636): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(657): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(668): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(679): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(975): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(987): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(998): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(1258): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(1270): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(1281): warning C4018: '<' : signed/unsigned mismatch
-         QCDate.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(55): warning C4101: 'e' : unreferenced local variable
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(426): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(434): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(449): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(457): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfactoryfunctions.cpp(182): warning C4715: 'QCFactoryFunctions::intRtCrvShrdPtr' : not all control paths return a value
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcfxforward.cpp(118): warning C4715: 'QCFXForward::getPvRateDerivativeAtFromLeg' : not all control paths return a value
-         Compiling...
-         QCZeroCouponDiscountFactorCurve.cpp
-         QCZeroCouponCurve.cpp
-         QCProjectingInterestRateCurve.cpp
-         QCLogLinearInterpolator.cpp
-         QCLinearWf.cpp
-         QCLinearInterpolator.cpp
-         QCInterpolator.cpp
-         QCInterestRatePeriodsFactory.cpp
-         QCIcpClfPayoff.cpp
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcicpclfpayoff.cpp(86): warning C4018: '<' : signed/unsigned mismatch
-     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcicpclfpayoff.cpp(116): warning C4018: '<' : signed/unsigned mismatch
-         QCDiscountBondPayoff.cpp
-         QCContinousWf.cpp
-         QCCompoundWf.cpp
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib" /MACHINE:X86 /DLL Debug\QC30360.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pyd" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.lib" /MACHINE:X86 /DLL Debug\QC30360.obj
          Debug\QCAct360.obj
          Debug\QCAct365.obj
          Debug\QCActAct.obj
@@ -123,6 +40,7 @@
          Debug\QCIcpClfPayoff.obj
          Debug\QCIcpClpPayoff.obj
          Debug\QCInterestRate.obj
+         Debug\QCInterestRateBasisSwap.obj
          Debug\QCInterestRateLeg.obj
          Debug\QCInterestRatePayoff.obj
          Debug\QCInterestRatePeriodsFactory.obj
@@ -142,10 +60,9 @@
          Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.obj
          Debug\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.obj
          Debug\main.obj
-            Creating library c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.lib and object c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.exp
-         QC_DVE_PYBIND.vcxproj -> c:\Users\Soporte\Anaconda2\QC_DVE_PYBIND.pyd
-     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)).
+     1>LINK : fatal error LNK1104: cannot open file 'python27_d.lib'
+     1>Done Building Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:27.30
+Time Elapsed 00:00:04.58

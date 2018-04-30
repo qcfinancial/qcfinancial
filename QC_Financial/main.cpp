@@ -1,4 +1,5 @@
 #define BOOST_PYTHON_STATIC_LIB
+#define BOOST_PYTHON_MAX_ARITY 20
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
@@ -83,6 +84,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("year", &QCDate::year)
 		.def("week_day", &QCDate::weekDay)
 		.def("description", &QCDate::description)
+		.def("add_months", &QCDate::addMonths)
+		.def("add_days", &QCDate::addDays)
 		.def(self_ns::str(self_ns::self))
 		;
 	

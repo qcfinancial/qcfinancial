@@ -116,3 +116,8 @@ UnitTests_QC_DVE_CORE/UnitTests_QC_DVE_CORE.vcxproj
 UnitTests_QC_DVE_CORE/UnitTests_QC_DVE_CORE.vcxproj.filters
 ipch/qc_dve_core-86bea07f/qc_dve_core-5eb8a5ca.ipch
 ipch/unittests_qc_dve_core-35c8ac23/unittests_qc_dve_core-78243712.ipch
+*.obj
+*.ipch
+*.tlog
+*.obj
+*.obj

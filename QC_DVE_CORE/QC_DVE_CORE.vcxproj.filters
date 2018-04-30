@@ -329,41 +329,41 @@
     <ClCompile Include="source\QCZeroCurveBootstrappingFromRates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRateBasisSwap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IborCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\LegFactory.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Tenor.cpp">
+    <ClCompile Include="source\Tenor.cpp">
       <Filter>Source Files\Indexes</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\InterestRateIndex.cpp">
+    <ClCompile Include="source\FixedRateCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IborCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IcpClfCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\IcpClpCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Leg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LegFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SimpleCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SimpleMultiCurrencyCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\InterestRateIndex.cpp">
       <Filter>Source Files\Indexes</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Leg.cpp">
-      <Filter>Source Files\Cashflows</Filter>
+    <ClCompile Include="source\QCInterestRateBasisSwap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClpCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
-    </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClfCashflow.cpp">
-      <Filter>Source Files\Cashflows</Filter>
+    <ClCompile Include="source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

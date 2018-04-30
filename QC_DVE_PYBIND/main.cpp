@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <Python.h>
 
 #include "include.h"
 #include "QCCurrencyConverter.h"

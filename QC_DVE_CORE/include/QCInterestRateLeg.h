@@ -49,7 +49,14 @@ public:
 		qcLongFront2,	/*!< Período largo al inicio agrupando 2*/
 		qcLongFront3,	/*!< Período largo al inicio agrupando 3 */
 		qcLongFront4,	/*!< Período largo al inicio agrupando 4 */
-		qcLongFront5	/*!< Período largo al inicio agrupando 5 */
+		qcLongFront5,	/*!< Período largo al inicio agrupando 5 */
+		qcLongFront6,	/*!< Período largo al inicio agrupando 6 */
+		qcLongFront7,	/*!< Período largo al inicio agrupando 7 */
+		qcLongFront8,	/*!< Período largo al inicio agrupando 8 */
+		qcLongFront9,	/*!< Período largo al inicio agrupando 9 */
+		qcLongFront10,	/*!< Período largo al inicio agrupando 10 */
+		qcLongFront11,	/*!< Período largo al inicio agrupando 11 */
+		qcLongFront12	/*!< Período largo al inicio agrupando 12 */
 	};
 
 	/*!

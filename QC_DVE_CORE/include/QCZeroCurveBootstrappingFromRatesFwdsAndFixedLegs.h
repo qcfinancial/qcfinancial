@@ -45,14 +45,14 @@ public:
 	* Calcula el largo de la curva.
 	* @return largo de la curva.
 	*/
-	virtual unsigned int getCurveLength();
+	virtual unsigned int getCurveLength() override;
 
 	/*!
 	* Devuelve la tasa en la posición i de la curva generada.
 	* @param i posición de la tasa deseada.
 	* @return valor de la tasa deseada.
 	*/
-	virtual double getRateAt(unsigned int index);
+	virtual double getRateAt(size_t index) override;
 
 	/*!
 	* Calculada la derivada de una tasa generada a partir de uno de los inputs.
@@ -66,7 +66,7 @@ public:
 	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
 	* @param derivativeIndex índice del input que se quiere usar para derivar.
 	*/
-	virtual double getDerivativeAt(unsigned int rateIndex, unsigned int derivativeIndex);
+	virtual double getDerivativeAt(size_t rateIndex, size_t derivativeIndex) override;
 
 	virtual ~QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs();
 

@@ -180,7 +180,7 @@ unsigned int QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getCurve
 	return _curve->getLength();
 }
 
-double QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getRateAt(unsigned int index)
+double QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getRateAt(size_t index)
 {
 	return _curve->getRateAt(index);
 }
@@ -192,7 +192,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::calculateDerivat
 }
 
 double QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getDerivativeAt(
-	unsigned int rateIndex, unsigned int derivativeIndex)
+	size_t rateIndex, size_t derivativeIndex)
 {
 	return _derivatives.at(rateIndex).at(derivativeIndex);
 }

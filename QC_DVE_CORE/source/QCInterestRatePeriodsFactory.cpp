@@ -712,60 +712,6 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 			get<0>(periods.at(1)) = get<1>(periods.at(0));
 		}
 	}
-	if (stubPeriod == QCInterestRateLeg::qcLongFront3)
-	{
-		unsigned int numPeriods = numWholePeriods + 1;
-		vector<tuple<QCDate, QCDate>> tempPeriods;
-		tempPeriods.resize(numPeriods);
-
-		QCDate fechaInicioPeriodo = _startDate;
-		QCDate fechaFinalPeriodo;
-
-		if (numPeriods == 1)
-		{
-			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
-			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
-				businessDay(calendar, _endDateAdjustment);
-			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-		}
-
-		if (numPeriods > 1)
-		{
-			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
-			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
-			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-			fechaInicioPeriodo = fechaFinalPeriodo;
-
-			QCDate pseudoStartDate = fechaFinalPeriodo;
-
-			for (unsigned int i = 1; i < numPeriods; ++i)
-			{
-				fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i)
-					.businessDay(calendar, _endDateAdjustment);
-				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-				fechaInicioPeriodo = fechaFinalPeriodo;
-			}
-			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-			//consecuencia de la fecha inicial del segundo período.
-			get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
-			get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
-		}
-		if (numPeriods == 1 || numPeriods == 2)
-		{
-			periods = tempPeriods;
-		}
-		else
-		{
-			periods.resize(numPeriods - 2);
-			fechaInicioPeriodo = get<0>(tempPeriods.at(0));
-			fechaFinalPeriodo = get<1>(tempPeriods.at(2));
-			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-			for (unsigned int i = 3; i < numPeriods; ++i)
-			{
-				periods.at(i - 2) = tempPeriods.at(i);
-			}
-		}
-	}
 	if (stubPeriod == QCInterestRateLeg::qcLongFront2)
 	{
 		unsigned int numPeriods = numWholePeriods + 1;
@@ -820,7 +766,60 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 			}
 		}
 	}
+	if (stubPeriod == QCInterestRateLeg::qcLongFront3)
+	{
+		unsigned int numPeriods = numWholePeriods + 1;
+		vector<tuple<QCDate, QCDate>> tempPeriods;
+		tempPeriods.resize(numPeriods);
 
+		QCDate fechaInicioPeriodo = _startDate;
+		QCDate fechaFinalPeriodo;
+
+		if (numPeriods == 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
+				businessDay(calendar, _endDateAdjustment);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+		}
+
+		if (numPeriods > 1)
+		{
+			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
+			tempPeriods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			fechaInicioPeriodo = fechaFinalPeriodo;
+
+			QCDate pseudoStartDate = fechaFinalPeriodo;
+
+			for (unsigned int i = 1; i < numPeriods; ++i)
+			{
+				fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i)
+					.businessDay(calendar, _endDateAdjustment);
+				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+			}
+			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
+			//consecuencia de la fecha inicial del segundo período.
+			get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
+			get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
+		}
+		if (numPeriods == 1 || numPeriods == 2)
+		{
+			periods = tempPeriods;
+		}
+		else
+		{
+			periods.resize(numPeriods - 2);
+			fechaInicioPeriodo = get<0>(tempPeriods.at(0));
+			fechaFinalPeriodo = get<1>(tempPeriods.at(2));
+			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+			for (unsigned int i = 3; i < numPeriods; ++i)
+			{
+				periods.at(i - 2) = tempPeriods.at(i);
+			}
+		}
+	}
 	return periods;
 }
 

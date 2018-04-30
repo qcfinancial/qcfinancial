@@ -18,78 +18,78 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCDate.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\FixedRateCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QC30360.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\IborCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct360.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\IcpClfCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct365.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\IcpClpCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCActAct.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\InterestRateIndex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCCompoundWf.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\Leg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCLinearWf.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\LegFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCWealthFactor.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QC30360.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRate.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct360.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCContinousWf.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCAct365.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCActAct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IborCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCBusinessCalendar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCBusinessCalendar.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCCompoundWf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\LegFactory.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCContinousWf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCDate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCHelperFunctions.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCHelperFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Tenor.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\InterestRateIndex.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Leg.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCLinearWf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\QCWealthFactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\SimpleCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClpCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClfCashflow.cpp">
+    <ClCompile Include="..\QC_DVE_CORE\source\Tenor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include\Wrappers.h">
+    <ClInclude Include="Include\Wrappers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

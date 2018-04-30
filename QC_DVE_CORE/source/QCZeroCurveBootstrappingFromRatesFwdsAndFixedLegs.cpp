@@ -223,7 +223,7 @@ unsigned int QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getCurveLength()
 	return 0;
 }
 
-double QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getRateAt(unsigned int index)
+double QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getRateAt(size_t index)
 {
 	return 0.0;
 }
@@ -235,7 +235,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::calculateDerivativesAt(
 }
 
 double QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getDerivativeAt(
-	unsigned int rateIndex, unsigned int derivativeIndex)
+	size_t rateIndex, size_t derivativeIndex)
 {
 	return _derivatives.at(rateIndex).at(derivativeIndex);
 }

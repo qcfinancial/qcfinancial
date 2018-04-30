@@ -24,7 +24,7 @@ public:
 	* (depósitos o Libor) que se utilizan como datos inciales en el proceso.
 	* @param inputForwards vector<shared_ptr<QCFXForward>> que representa las cotizaciones que se
 	* usan como ipnut en el bootstrapping
-	* @param inputFixedRateLegs vector<shared_ptr<QCFloatingRatePayoff>> que representan las patas flotantes de los
+	* @param inputFloatingRateLegs vector<shared_ptr<QCFloatingRatePayoff>> que representan las patas flotantes de los
 	* swaps que se usan como input del bootstrapping.
 	* @param zeroCurve es un puntero a un objeto de tipo QCZeroCouponCurve que contiene los valores de curva
 	* que se van a construir. La curva debe venir inicializada con las dimensiones apropiadas.
@@ -39,7 +39,7 @@ public:
 	/*!
 	* Ejecuta el procedimiento que genera la curva.
 	*/
-	virtual void generateCurve();
+	virtual void generateCurve() override;
 
 	/*!
 	* Ejecuta el procedimiento que genera la curva y calcula todas las derivadas.
@@ -50,14 +50,14 @@ public:
 	* Calcula el largo de la curva.
 	* @return largo de la curva.
 	*/
-	virtual unsigned int getCurveLength();
+	virtual unsigned int getCurveLength() override;
 
 	/*!
 	* Devuelve la tasa en la posición i de la curva generada.
 	* @param i posición de la tasa deseada.
 	* @return valor de la tasa deseada.
 	*/
-	virtual double getRateAt(unsigned int index);
+	virtual double getRateAt(size_t index) override;
 
 	/*!
 	* Calculada la derivada de una tasa generada a partir de uno de los inputs.
@@ -71,7 +71,7 @@ public:
 	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
 	* @param derivativeIndex índice del input que se quiere usar para derivar.
 	*/
-	virtual double getDerivativeAt(unsigned int rateIndex, unsigned int derivativeIndex);
+	virtual double getDerivativeAt(size_t rateIndex, size_t derivativeIndex) override;
 
 	virtual ~QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs();
 
