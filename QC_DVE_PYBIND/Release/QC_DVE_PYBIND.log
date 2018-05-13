@@ -1,49 +1,9 @@
-﻿Build started 26-04-2018 15:33:14.
-     1>Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pyd" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.lib" /MACHINE:X86 /SAFESEH /DLL Release\QC30360.obj
-         Release\QCAct360.obj
-         Release\QCAct365.obj
-         Release\QCActAct.obj
-         Release\QCCompoundWf.obj
-         Release\QCContinousWf.obj
-         Release\QCDate.obj
-         Release\QCDiscountBondPayoff.obj
-         Release\QCFactoryFunctions.obj
-         Release\QCFixedRatePayoff.obj
-         Release\QCFloatingRatePayoff.obj
-         Release\QCFXForward.obj
-         Release\QCHelperFunctions.obj
-         Release\QCIcpClfPayoff.obj
-         Release\QCIcpClpPayoff.obj
-         Release\QCInterestRate.obj
-         Release\QCInterestRateBasisSwap.obj
-         Release\QCInterestRateLeg.obj
-         Release\QCInterestRatePayoff.obj
-         Release\QCInterestRatePeriodsFactory.obj
-         Release\QCInterpolator.obj
-         Release\QCLinearInterpolator.obj
-         Release\QCLinearWf.obj
-         Release\QCLogLinearInterpolator.obj
-         Release\QCProjectingInterestRateCurve.obj
-         Release\QCTimeDepositPayoff.obj
-         Release\QCWealthFactor.obj
-         Release\QCZeroCouponCurve.obj
-         Release\QCZeroCouponDiscountFactorCurve.obj
-         Release\QCZeroCouponInterestRateCurve.obj
-         Release\QCZeroCurveBootstrappingFromRates.obj
-         Release\QCZeroCurveBootstrappingFromRatesAndFixedLegs.obj
-         Release\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.obj
-         Release\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.obj
-         Release\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.obj
-         Release\main.obj
-            Creating library D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.lib and object D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.exp
-         Generating code
-     1>d:\qcdvaluationengine\qc_dve_core\source\qcfxforward.cpp(118): warning C4715: 'QCFXForward::getPvRateDerivativeAtFromLeg' : not all control paths return a value
-         Finished generating code
-         QC_DVE_PYBIND.vcxproj -> D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pyd
-     1>Done Building Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)).
+﻿Build started 13/05/2018 11:22:50.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(399,5): error MSB3191: Unable to create directory "D:\qcdvaluationengine\QC_DVE_PYBIND\Release\". El dispositivo no está listo.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(399,5): error MSB3191: 
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:06.67
+Time Elapsed 00:00:00.29

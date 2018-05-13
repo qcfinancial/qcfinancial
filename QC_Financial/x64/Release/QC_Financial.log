@@ -1,15 +1,7 @@
-﻿Build started 30-04-2018 15:44:33.
-     1>Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\QC_DVE_CORE\source\QCDate.cpp
-         QCDate.cpp
-     1>..\QC_DVE_CORE\source\QCDate.cpp(55): warning C4101: 'e' : unreferenced local variable
-     1>..\QC_DVE_CORE\source\QCDate.cpp(433): warning C4018: '<' : signed/unsigned mismatch
-     1>..\QC_DVE_CORE\source\QCDate.cpp(441): warning C4018: '<' : signed/unsigned mismatch
-     1>..\QC_DVE_CORE\source\QCDate.cpp(456): warning C4018: '<' : signed/unsigned mismatch
-     1>..\QC_DVE_CORE\source\QCDate.cpp(464): warning C4018: '<' : signed/unsigned mismatch
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\qcdvaluationengine\x64\Release\QC_Financial.pyd" /INCREMENTAL:NO /NOLOGO /LIBPATH:"D:\boost\boost_1_66_0\lib64-msvc-12.0" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\qcdvaluationengine\x64\Release\QC_Financial.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\qcdvaluationengine\x64\Release\QC_Financial.lib" /MACHINE:X64 /DLL x64\Release\FixedRateCashflow.obj
+﻿Build started 13/05/2018 15:24:22.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_Financial\QC_Financial.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.pyd" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\boost_1_67_0\lib64-msvc-12.0" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"\\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.lib" /MACHINE:X64 /DLL x64\Release\FixedRateCashflow.obj
          x64\Release\IborCashflow.obj
          x64\Release\IcpClfCashflow.obj
          x64\Release\IcpClpCashflow.obj
@@ -33,12 +25,12 @@
          x64\Release\SimpleMultiCurrencyCashflow.obj
          x64\Release\Tenor.obj
          x64\Release\main.obj
-            Creating library D:\qcdvaluationengine\x64\Release\QC_Financial.lib and object D:\qcdvaluationengine\x64\Release\QC_Financial.exp
+            Creating library \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.lib and object \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.exp
          Generating code
          Finished generating code
-         QC_Financial.vcxproj -> D:\qcdvaluationengine\x64\Release\QC_Financial.pyd
-     1>Done Building Project "D:\qcdvaluationengine\QC_Financial\QC_Financial.vcxproj" (Build target(s)).
+         QC_Financial.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.pyd
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_Financial\QC_Financial.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:10.22
+Time Elapsed 00:00:13.51

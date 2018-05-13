@@ -1,51 +1,60 @@
-﻿  main.cpp
-d:\qcdvaluationengine\qc_financial\main.cpp(2): fatal error C1083: No se puede abrir el archivo incluir: 'boost/python.hpp': No such file or directory
-  FixedRateCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateCashflow.cpp': No such file or directory
-  IborCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IborCashflow.cpp': No such file or directory
-  IcpClfCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClfCashflow.cpp': No such file or directory
-  IcpClpCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\IcpClpCashflow.cpp': No such file or directory
-  InterestRateIndex.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\InterestRateIndex.cpp': No such file or directory
-  Leg.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Leg.cpp': No such file or directory
-  LegFactory.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\LegFactory.cpp': No such file or directory
-  QC30360.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QC30360.cpp': No such file or directory
-  QCAct360.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct360.cpp': No such file or directory
-  QCAct365.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct365.cpp': No such file or directory
-  QCActAct.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCActAct.cpp': No such file or directory
-  QCBusinessCalendar.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCBusinessCalendar.cpp': No such file or directory
-  QCCompoundWf.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCCompoundWf.cpp': No such file or directory
-  QCContinousWf.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCContinousWf.cpp': No such file or directory
-  QCDate.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCDate.cpp': No such file or directory
-  QCHelperFunctions.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCHelperFunctions.cpp': No such file or directory
-  QCInterestRate.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRate.cpp': No such file or directory
-  QCInterestRatePeriodsFactory.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp': No such file or directory
-  QCLinearWf.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCLinearWf.cpp': No such file or directory
-  Generando código...
-  Compilando...
-  QCWealthFactor.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCWealthFactor.cpp': No such file or directory
-  SimpleCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleCashflow.cpp': No such file or directory
-  SimpleMultiCurrencyCashflow.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp': No such file or directory
-  Tenor.cpp
-c1xx : fatal error C1083: No se puede abrir el archivo origen: '\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\Tenor.cpp': No such file or directory
-  Generando código...
+﻿Build started 01/05/2018 23:15:08.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_Financial\QC_Financial.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\FixedRateCashflow.cpp ..\QC_DVE_CORE\source\IborCashflow.cpp ..\QC_DVE_CORE\source\IcpClfCashflow.cpp ..\QC_DVE_CORE\source\IcpClpCashflow.cpp ..\QC_DVE_CORE\source\InterestRateIndex.cpp ..\QC_DVE_CORE\source\Leg.cpp ..\QC_DVE_CORE\source\LegFactory.cpp ..\QC_DVE_CORE\source\QC30360.cpp ..\QC_DVE_CORE\source\QCAct360.cpp ..\QC_DVE_CORE\source\QCAct365.cpp ..\QC_DVE_CORE\source\QCActAct.cpp ..\QC_DVE_CORE\source\QCBusinessCalendar.cpp ..\QC_DVE_CORE\source\QCCompoundWf.cpp ..\QC_DVE_CORE\source\QCContinousWf.cpp ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCInterestRate.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCLinearWf.cpp ..\QC_DVE_CORE\source\QCWealthFactor.cpp ..\QC_DVE_CORE\source\SimpleCashflow.cpp ..\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp ..\QC_DVE_CORE\source\Tenor.cpp main.cpp
+         main.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_financial\main.cpp(3): fatal error C1083: Cannot open include file: 'boost/python.hpp': No such file or directory
+         Tenor.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\tenor.cpp(1): fatal error C1083: Cannot open include file: 'Tenor.h': No such file or directory
+         SimpleMultiCurrencyCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\simplemulticurrencycashflow.cpp(1): fatal error C1083: Cannot open include file: 'SimpleMultiCurrencyCashflow.h': No such file or directory
+         SimpleCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\simplecashflow.cpp(1): fatal error C1083: Cannot open include file: 'SimpleCashflow.h': No such file or directory
+         QCWealthFactor.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcwealthfactor.cpp(1): fatal error C1083: Cannot open include file: 'QCWealthFactor.h': No such file or directory
+         QCLinearWf.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qclinearwf.cpp(1): fatal error C1083: Cannot open include file: 'QCLinearWf.h': No such file or directory
+         QCInterestRatePeriodsFactory.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcinterestrateperiodsfactory.cpp(1): fatal error C1083: Cannot open include file: 'QCInterestRatePeriodsFactory.h': No such file or directory
+         QCInterestRate.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcinterestrate.cpp(2): fatal error C1083: Cannot open include file: 'QCInterestRate.h': No such file or directory
+         QCHelperFunctions.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qchelperfunctions.cpp(3): fatal error C1083: Cannot open include file: 'QCHelperFunctions.h': No such file or directory
+         QCDate.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcdate.cpp(5): fatal error C1083: Cannot open include file: 'QCDate.h': No such file or directory
+         QCContinousWf.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qccontinouswf.cpp(1): fatal error C1083: Cannot open include file: 'QCContinousWf.h': No such file or directory
+         QCCompoundWf.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qccompoundwf.cpp(1): fatal error C1083: Cannot open include file: 'QCCompoundWf.h': No such file or directory
+         QCBusinessCalendar.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcbusinesscalendar.cpp(6): fatal error C1083: Cannot open include file: 'QCBusinessCalendar.h': No such file or directory
+         QCActAct.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcactact.cpp(5): fatal error C1083: Cannot open include file: 'QCActAct.h': No such file or directory
+         QCAct365.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcact365.cpp(5): fatal error C1083: Cannot open include file: 'QCAct365.h': No such file or directory
+         QCAct360.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qcact360.cpp(5): fatal error C1083: Cannot open include file: 'QCAct360.h': No such file or directory
+         QC30360.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\qc30360.cpp(5): fatal error C1083: Cannot open include file: 'QC30360.h': No such file or directory
+         LegFactory.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\legfactory.cpp(5): fatal error C1083: Cannot open include file: 'LegFactory.h': No such file or directory
+         Leg.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\leg.cpp(1): fatal error C1083: Cannot open include file: 'Leg.h': No such file or directory
+         InterestRateIndex.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\interestrateindex.cpp(1): fatal error C1083: Cannot open include file: 'InterestRateIndex.h': No such file or directory
+         Generating Code...
+         Compiling...
+         IcpClpCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\icpclpcashflow.cpp(3): fatal error C1083: Cannot open include file: 'IcpClpCashflow.h': No such file or directory
+         IcpClfCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\icpclfcashflow.cpp(1): fatal error C1083: Cannot open include file: 'IcpClfCashflow.h': No such file or directory
+         IborCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\iborcashflow.cpp(1): fatal error C1083: Cannot open include file: 'IborCashflow.h': No such file or directory
+         FixedRateCashflow.cpp
+     1>\\psf\home\documents\qcode\qcdvaluationengine\qc_dve_core\source\fixedratecashflow.cpp(1): fatal error C1083: Cannot open include file: 'FixedRateCashflow.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_Financial\QC_Financial.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:03.25
