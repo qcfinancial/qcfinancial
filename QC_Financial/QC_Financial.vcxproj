@@ -17,6 +17,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="x64|Win32">
+      <Configuration>x64</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="x64|x64">
+      <Configuration>x64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CEC51A4-378F-4B6E-8984-1091F76BCE29}</ProjectGuid>
@@ -44,7 +52,21 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='x64|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='x64|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
@@ -63,7 +85,13 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='x64|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='x64|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -75,11 +103,19 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\qcdvaluationengine\QC_Financial\Include;C:\Python27\include;D:\boost_1_66_0\boost\python;D:\boost_1_66_0;D:\qcdvaluationengine\QC_DVE_CORE\include;D:\qcdvaluationengine\QC_Financial\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\boost_1_65_1\build\include\boost-1_65_1;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include;C:\Users\Soporte\AppData\Local\Programs\Python\Python27\include;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
     <SourcePath>D:\qcdvaluationengine\QC_DVE_CORE\source;$(SourcePath)</SourcePath>
-    <LibraryPath>C:\Python27\libs;D:\boost_1_66_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\Soporte\AppData\Local\Programs\Python\Python27\libs;C:\boost_1_65_1\lib\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include;C:\Users\Soporte\AppData\Local\Programs\Python\Python27\include;C:\boost_1_65_1\build\include\boost-1_65_1;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Soporte\AppData\Local\Programs\Python\Python27\libs;C:\boost_1_65_1\build\lib;$(LibraryPath)</LibraryPath>
+    <TargetExt>.pyd</TargetExt>
+    <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
+    <SourcePath>\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='x64|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>D:\qcdvaluationengine\QC_Financial\Include;C:\Python27_32\include;D:\boost\boost_1_66_0;D:\qcdvaluationengine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Python27_32\libs;D:\boost\boost_1_66_0\lib32-msvc-12.0;$(LibraryPath)</LibraryPath>
@@ -87,6 +123,12 @@
     <OutDir>$(SolutionDir)$(ProjectName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include;C:\Users\Soporte\AppData\Local\Programs\Python\Python27\include;C:\boost_1_65_1\build\include\boost-1_65_1;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Soporte\AppData\Local\Programs\Python\Python27\libs;C:\boost_1_65_1\lib\x64\lib;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\x64\Release;$(LibraryPath)</LibraryPath>
+    <TargetExt>.pyd</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='x64|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>D:\qcdvaluationengine\QC_Financial\Include;C:\Python27\include;D:\boost\boost_1_66_0;D:\qcdvaluationengine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Python27\libs;D:\boost\boost_1_66_0\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
@@ -116,9 +158,29 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;QC_FINANCIAL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='x64|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
@@ -138,6 +200,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;QC_FINANCIAL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\boost_1_67_0\lib64-msvc-12.0;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='x64|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
