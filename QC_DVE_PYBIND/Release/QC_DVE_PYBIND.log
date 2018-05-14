@@ -1,7 +1,13 @@
-﻿Build started 30-04-2018 16:47:56.
-     1>Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Build target(s)).
+﻿Build started 30-04-2018 19:11:45.
+     1>Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D Py_LIMITED_API /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp ..\QC_DVE_CORE\source\QCFXForward.cpp ..\QC_DVE_CORE\source\QCFactoryFunctions.cpp ..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp ..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp ..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp ..\QC_DVE_CORE\source\QCInterestRateBasisSwap.cpp ..\QC_DVE_CORE\source\QCInterestRateLeg.cpp ..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCTimeDepositPayoff.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRates.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D Py_LIMITED_API /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_DVE_PYBIND_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\QC_DVE_CORE\source\QC30360.cpp ..\QC_DVE_CORE\source\QCAct360.cpp ..\QC_DVE_CORE\source\QCAct365.cpp ..\QC_DVE_CORE\source\QCActAct.cpp ..\QC_DVE_CORE\source\QCCompoundWf.cpp ..\QC_DVE_CORE\source\QCContinousWf.cpp ..\QC_DVE_CORE\source\QCDate.cpp ..\QC_DVE_CORE\source\QCDiscountBondPayoff.cpp ..\QC_DVE_CORE\source\QCFactoryFunctions.cpp ..\QC_DVE_CORE\source\QCFixedRatePayoff.cpp ..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp ..\QC_DVE_CORE\source\QCFXForward.cpp ..\QC_DVE_CORE\source\QCHelperFunctions.cpp ..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp ..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp ..\QC_DVE_CORE\source\QCInterestRate.cpp ..\QC_DVE_CORE\source\QCInterestRateBasisSwap.cpp ..\QC_DVE_CORE\source\QCInterestRateLeg.cpp ..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp ..\QC_DVE_CORE\source\QCInterpolator.cpp ..\QC_DVE_CORE\source\QCLinearInterpolator.cpp ..\QC_DVE_CORE\source\QCLinearWf.cpp ..\QC_DVE_CORE\source\QCLogLinearInterpolator.cpp ..\QC_DVE_CORE\source\QCProjectingInterestRateCurve.cpp ..\QC_DVE_CORE\source\QCTimeDepositPayoff.cpp ..\QC_DVE_CORE\source\QCWealthFactor.cpp ..\QC_DVE_CORE\source\QCZeroCouponCurve.cpp ..\QC_DVE_CORE\source\QCZeroCouponDiscountFactorCurve.cpp ..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRates.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp ..\QC_DVE_CORE\source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp main.cpp
+         QC30360.cpp
+         QCAct360.cpp
+         QCAct365.cpp
+         QCActAct.cpp
+         QCCompoundWf.cpp
+         QCContinousWf.cpp
          QCDate.cpp
      1>..\QC_DVE_CORE\source\QCDate.cpp(55): warning C4101: 'e' : unreferenced local variable
      1>..\QC_DVE_CORE\source\QCDate.cpp(433): warning C4018: '<' : signed/unsigned mismatch
@@ -9,7 +15,6 @@
      1>..\QC_DVE_CORE\source\QCDate.cpp(456): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCDate.cpp(464): warning C4018: '<' : signed/unsigned mismatch
          QCDiscountBondPayoff.cpp
-         QCFXForward.cpp
          QCFactoryFunctions.cpp
      1>..\QC_DVE_CORE\source\QCFactoryFunctions.cpp(556): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCFactoryFunctions.cpp(579): warning C4018: '<' : signed/unsigned mismatch
@@ -27,6 +32,7 @@
          QCFloatingRatePayoff.cpp
      1>..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp(54): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCFloatingRatePayoff.cpp(86): warning C4018: '<' : signed/unsigned mismatch
+         QCFXForward.cpp
          QCHelperFunctions.cpp
          QCIcpClfPayoff.cpp
      1>..\QC_DVE_CORE\source\QCIcpClfPayoff.cpp(86): warning C4018: '<' : signed/unsigned mismatch
@@ -34,12 +40,25 @@
          QCIcpClpPayoff.cpp
      1>..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp(85): warning C4018: '<' : signed/unsigned mismatch
      1>..\QC_DVE_CORE\source\QCIcpClpPayoff.cpp(121): warning C4018: '<' : signed/unsigned mismatch
+         QCInterestRate.cpp
          QCInterestRateBasisSwap.cpp
          QCInterestRateLeg.cpp
          QCInterestRatePayoff.cpp
      1>..\QC_DVE_CORE\source\QCInterestRatePayoff.cpp(194): warning C4018: '<' : signed/unsigned mismatch
          QCInterestRatePeriodsFactory.cpp
+         Compiling...
+         QCInterpolator.cpp
+         QCLinearInterpolator.cpp
+         QCLinearWf.cpp
+         QCLogLinearInterpolator.cpp
+         QCProjectingInterestRateCurve.cpp
          QCTimeDepositPayoff.cpp
+         QCWealthFactor.cpp
+         QCZeroCouponCurve.cpp
+         QCZeroCouponDiscountFactorCurve.cpp
+         QCZeroCouponInterestRateCurve.cpp
+     1>..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp(50): warning C4018: '<' : signed/unsigned mismatch
+     1>..\QC_DVE_CORE\source\QCZeroCouponInterestRateCurve.cpp(108): warning C4018: '<' : signed/unsigned mismatch
          QCZeroCurveBootstrappingFromRates.cpp
          QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
          QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
@@ -104,8 +123,8 @@
      1>d:\qcdvaluationengine\qc_dve_core\source\qcfxforward.cpp(118): warning C4715: 'QCFXForward::getPvRateDerivativeAtFromLeg' : not all control paths return a value
          Finished generating code
          QC_DVE_PYBIND.vcxproj -> D:\qcdvaluationengine\QC_DVE_PYBIND\Release\QC_DVE_PYBIND.pyd
-     1>Done Building Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\qcdvaluationengine\QC_DVE_PYBIND\QC_DVE_PYBIND.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:13.60
+Time Elapsed 00:00:18.48
