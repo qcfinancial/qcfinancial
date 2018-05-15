@@ -75,6 +75,28 @@ QCInterestRateLeg::QCStubPeriod QCHelperFunctions::stringToQCStubPeriod(string s
 		return QCInterestRateLeg::qcLongFront2;
 	if (stubPeriod == "LARGO INICIO 3")
 		return QCInterestRateLeg::qcLongFront3;
+	if (stubPeriod == "LARGO INICIO 4")
+		return QCInterestRateLeg::qcLongFront4;
+	if (stubPeriod == "LARGO INICIO 5")
+		return QCInterestRateLeg::qcLongFront5;
+	if (stubPeriod == "LARGO INICIO 6")
+		return QCInterestRateLeg::qcLongFront6;
+	if (stubPeriod == "LARGO INICIO 7")
+		return QCInterestRateLeg::qcLongFront7;
+	if (stubPeriod == "LARGO INICIO 8")
+		return QCInterestRateLeg::qcLongFront8;
+	if (stubPeriod == "LARGO INICIO 9")
+		return QCInterestRateLeg::qcLongFront9;
+	if (stubPeriod == "LARGO INICIO 10")
+		return QCInterestRateLeg::qcLongFront10;
+	if (stubPeriod == "LARGO INICIO 11")
+		return QCInterestRateLeg::qcLongFront11;
+	if (stubPeriod == "LARGO INICIO 12")
+		return QCInterestRateLeg::qcLongFront12;
+	if (stubPeriod == "LARGO INICIO 120")
+		return QCInterestRateLeg::qcLongFront120;
+	if (stubPeriod == "LARGO INICIO 121")
+		return QCInterestRateLeg::qcLongFront121;
 	return QCInterestRateLeg::qcNoStubPeriod;
 }
 

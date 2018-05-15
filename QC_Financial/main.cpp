@@ -334,6 +334,13 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.value("LONGFRONT3", QCInterestRateLeg::qcLongFront3)
 		.value("LONGFRONT4", QCInterestRateLeg::qcLongFront4)
 		.value("LONGFRONT5", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT6", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT7", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT8", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT9", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT10", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT11", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT12", QCInterestRateLeg::qcLongFront5)
 		;
 
 	class_<qf::Leg>("Leg")

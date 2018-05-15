@@ -110,10 +110,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\qcdvaluationengine\QC_DVE_PYBIND\Include;C:\Python27_32\include;D:\qcdvaluationengine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Python27_32\libs;D:\qcdvaluationengine\QC_DVE_CORE\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_PYBIND\Include;C:\Users\Soporte\AppData\Local\Programs\Python\Python27_32\include;\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Soporte\AppData\Local\Programs\Python\Python27_32\libs;D:\qcdvaluationengine\QC_DVE_CORE\Release;$(LibraryPath)</LibraryPath>
     <TargetExt>.pyd</TargetExt>
-    <OutDir>D:\qcdvaluationengine\QC_DVE_PYBIND\Release\</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='x64|Win32'">
     <LinkIncremental>false</LinkIncremental>

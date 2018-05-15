@@ -1344,7 +1344,7 @@ double pvFixed1(CellMatrix tablaDesarrollo,
 	string wf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	for (size_t i = 0; i < filas; ++i)
 	{
@@ -1419,7 +1419,7 @@ double pvFixed(CellMatrix tablaDesarrollo,
 	string curveWf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	for (size_t i = 0; i < filas; ++i)
 	{
@@ -1500,7 +1500,7 @@ double QCPvFixedRateLeg(CellMatrix tablaDesarrollo,
 		throw runtime_error(LICENSE_MSG);
 
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	periods.resize(filas);
 	for (size_t i = 0; i < filas; ++i)
@@ -1583,7 +1583,7 @@ double QCPvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 		throw runtime_error(LICENSE_MSG);
 
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 	periods.resize(filas);
 
 	for (size_t i = 0; i < filas; ++i)
@@ -1678,7 +1678,7 @@ double QCPvFloatingLeg(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pa
 		throw runtime_error(LICENSE_MSG);
 
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	for (size_t i = 0; i < filas; ++i)
 	{
@@ -1785,7 +1785,7 @@ double pvFloat1(CellMatrix tablaDesarrollo,
 	int fecha, string yf, string wf)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	for (size_t i = 0; i < filas; ++i)
 	{
@@ -1892,7 +1892,7 @@ double pvIcpClp1(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 	{
 		QCInterestRateLeg::QCInterestRatePeriods periods;
-		size_t filas = tablaDesarrollo.RowsInStructure();
+		unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 		for (size_t i = 0; i < filas; ++i)
 		{
@@ -2012,7 +2012,7 @@ double pvIcpClp(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	size_t filas = tablaDesarrollo.RowsInStructure();
+	unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 	for (size_t i = 0; i < filas; ++i)
 	{
@@ -2129,7 +2129,7 @@ double pvIcpClf(CellMatrix tablaDesarrollo //Tabla de desarrollo de la pata
 	)
 	{
 		QCInterestRateLeg::QCInterestRatePeriods periods;
-		size_t filas = tablaDesarrollo.RowsInStructure();
+		unsigned int filas = tablaDesarrollo.RowsInStructure();
 
 		for (size_t i = 0; i < filas; ++i)
 		{

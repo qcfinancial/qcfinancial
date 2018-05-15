@@ -140,7 +140,35 @@ private:
 	/*! Construye el vector _fixingFlags.
 	* @param numPeriods es el número de períodos de pago de la pata
 	*/
-	void _setFixingFlags(unsigned int numPeriods);		
+	void _setFixingFlags(unsigned int numPeriods);
+
+	/*! Función auxiliar para operaciones LONGFRONTN con easy case (período cuadrado).
+	 * Se utiliza en _buildBasicDates2.
+	* @param displacement = N - 1 (se ingresa porque no se puede deducir del enum QCStubPeriod)
+	* @param numWholePeriods. Se calcula en el cuerpo de _buildBasicDates2
+	* @param periods. Se define al inicio de _buildBasicDates2. Se entrega por referencia y se
+	* rellena dentro de la función.
+	* @param periodicity. Periodicidad, viene de la llamada a _buildBasicDates2.
+	* @param calendar. Calendario relevante, viene de la llamada a _buildBasicDates2.
+	*/
+	void _auxWithLongFrontNEasyCase(unsigned int displacement,
+		unsigned int numWholePeriods, vector<tuple<QCDate, QCDate>>& periods,
+		string& periodicity, shared_ptr<vector<QCDate>>& calendar);
+
+	/*! Función auxiliar para operaciones LONGFRONTN con not easy case (período no cuadrado).
+	* Se utiliza en _buildBasicDates2.
+	* @param displacement = N - 1 (se ingresa porque no se puede deducir del enum QCStubPeriod)
+	* @param numWholePeriods. Se calcula en el cuerpo de _buildBasicDates2
+	* @param remainderInMonths. Se calcula en el cuerpo de _buildBasicDates2
+	* @param remainderInDays. Se calcula en el cuerpo de _buildBasicDates2
+	* @param periods. Se define al inicio de _buildBasicDates2. Se entrega por referencia y se
+	* rellena dentro de la función.
+	* @param periodicity. Periodicidad, viene de la llamada a _buildBasicDates2.
+	* @param calendar. Calendario relevante, viene de la llamada a _buildBasicDates2.
+	*/
+	void _auxWithLongFrontNNotEasyCase(unsigned int displacement,
+		unsigned int numWholePeriods, unsigned int remainderInMonths, unsigned int remainderInDays,
+		vector<tuple<QCDate, QCDate>>& periods, string& periodicity, shared_ptr<vector<QCDate>>& calendar);
 
 };
 
