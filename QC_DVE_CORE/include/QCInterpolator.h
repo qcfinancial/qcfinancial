@@ -19,6 +19,11 @@ public:
 	};
 
 	/*!
+	* Constructor por default.
+	*/
+	QCInterpolator();
+
+	/*!
 	* Constructor.
 	* @param curve En este objeto de tipo QCCurve vienen los pares de abscisas y ordenadas sobre los cuales
 	* se desea realizar interpolaciones.Notar que el template QCCurve está especificado con abscisa
@@ -92,14 +97,14 @@ public:
 	* Retorna el largo (número de elementos) de la curva.
 	* @return largo de la curva.
 	*/
-	long getLength();
+	size_t getLength();
 
 	/*!
 	* Retorna el par plazo tasa de la curva en una posición.
 	* @param position índice de la posición buscada.
 	* @return par en la posición buscada.
 	*/
-	pair<long, double> getValuesAt(unsigned long position);
+	pair<long, double> getValuesAt(size_t position);
 
 	/*!
 	* Destructor.

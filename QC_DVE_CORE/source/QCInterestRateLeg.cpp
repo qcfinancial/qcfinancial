@@ -2,7 +2,7 @@
 
 
 QCInterestRateLeg::QCInterestRateLeg(QCInterestRatePeriods periods,
-	unsigned int lastPeriod) :_periods(periods), _lastPeriod(lastPeriod)
+	size_t lastPeriod) :_periods(periods), _lastPeriod(lastPeriod)
 {}
 
 void QCInterestRateLeg::operator=(const QCInterestRateLeg& otherLeg)
@@ -16,17 +16,17 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRateLeg::periods() const
 	return _periods;
 }
 
-unsigned int QCInterestRateLeg::lastPeriod() const
+size_t QCInterestRateLeg::lastPeriod() const
 {
 	return _lastPeriod;
 }
 
-int QCInterestRateLeg::size()
+size_t QCInterestRateLeg::size()
 {
 	return _lastPeriod + 1;
 }
 
-QCInterestRateLeg::QCInterestRatePeriod QCInterestRateLeg::getPeriodAt(unsigned int n)
+QCInterestRateLeg::QCInterestRatePeriod QCInterestRateLeg::getPeriodAt(size_t n)
 {
 	if (n > _periods.size() - 1)
 	{

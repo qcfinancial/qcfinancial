@@ -85,7 +85,6 @@ namespace QCode
 			 * @param	rate		  	The rate.
 			 * @param	currency	  	The currency.
 			 */
-
 			FixedRateCashflow(const QCDate& startDate,
 							  const QCDate& endDate,
 							  const QCDate& settlementDate,
@@ -328,7 +327,6 @@ namespace QCode
 			/** @brief	The custom notional and amortization schedule */
 			std::vector<std::tuple<double, double>> customNotionalAmort;
 		};
-
 	};
 }
 

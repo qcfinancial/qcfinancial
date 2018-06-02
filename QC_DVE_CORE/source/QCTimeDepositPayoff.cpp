@@ -19,7 +19,7 @@ void QCTimeDepositPayoff::_setAllRates()
 {
 	//cout << "Enter QCTimeDepositPayoff::_setAllRates" << endl;
 
-	unsigned int numPeriods = _irLeg->size();
+	size_t numPeriods = _irLeg->size();
 
 	_allRates.resize(numPeriods);
 	double rate{ _rate->getValue() };
@@ -27,7 +27,7 @@ void QCTimeDepositPayoff::_setAllRates()
 	{
 		_allRates.at(i) = rate;
 	}
-	long curveLength{ _discountCurve->getLength() };
+	unsigned long long curveLength{ _discountCurve->getLength() };
 	vector<double> temp(curveLength, 0.0);
 	_allRatesDerivatives.resize(numPeriods);
 	for (unsigned int i = 0; i < numPeriods; ++i)

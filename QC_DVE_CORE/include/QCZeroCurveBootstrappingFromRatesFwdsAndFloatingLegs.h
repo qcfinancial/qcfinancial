@@ -50,7 +50,7 @@ public:
 	* Calcula el largo de la curva.
 	* @return largo de la curva.
 	*/
-	virtual unsigned int getCurveLength() override;
+	virtual size_t getCurveLength() override;
 
 	/*!
 	* Devuelve la tasa en la posición i de la curva generada.

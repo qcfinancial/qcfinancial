@@ -35,7 +35,7 @@ namespace QCode
 			}
 
 			/**
-			* @fn	virtual double Cashflow::amount() = 0;
+			* @fn	virtual double Cashflow::amount();
 			*
 			* @brief	Gets the amount
 			*
@@ -65,7 +65,7 @@ namespace QCode
 			}
 
 			/**
-			* @fn	virtual QCDate Cashflow::date() = 0;
+			* @fn	virtual QCDate Cashflow::date();
 			*
 			* @brief	Gets the date of the cashflow.
 			*

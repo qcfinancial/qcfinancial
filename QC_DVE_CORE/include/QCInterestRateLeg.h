@@ -88,10 +88,10 @@ public:
 
 	/*! Constructor de la clase.
 	* @param periods vector con los períodos
-	* @param índice que identifica el último período
+	* @param lastPeriod índice que identifica el último período
 	*/
 	QCInterestRateLeg(QCInterestRatePeriods periods,
-		unsigned int lastPeriod);
+		size_t lastPeriod);
 
 	/*! Operador de igualdad */
 	void operator=(const QCInterestRateLeg& otherLeg);
@@ -104,18 +104,18 @@ public:
 	/*! Getter para el índice del último período.
 	* @return índice del último período.
 	*/
-	unsigned int lastPeriod() const;
+	size_t lastPeriod() const;
 	
 	/*! Getter para el tamaño del vector de períodos.
 	* @return tamaño del vector de períodos
 	*/
-	int size();
+	size_t size();
 
 	/*! Getter para un período específico.
 	* @param n índice del período que se quiere obtener.
 	* @return período con índice n.
 	*/
-	QCInterestRatePeriod getPeriodAt(unsigned int n);
+	QCInterestRatePeriod getPeriodAt(size_t n);
 
 	/*! Destructor */
 	~QCInterestRateLeg();
@@ -125,7 +125,7 @@ protected:
 	QCInterestRatePeriods _periods;
 
 	/*! Variable donde se almacena el valor del índice del último período. */
-	unsigned int _lastPeriod;
+	size_t _lastPeriod;
 };
 
 #endif //QCINTERESTRATELEG_H

@@ -63,13 +63,13 @@ public:
 	* @param position posición del par buscado.
 	* @return valor del par buscado.
 	*/
-	pair<T, double> getValuesAt(unsigned long position);
+	pair<T, double> getValuesAt(size_t position);
 
 	/*!
 	* Método que devuelve el largo de la curva modelada.
 	@return largo de la curva.
 	*/
-	long getLength();
+	size_t getLength();
 
 	/*!
 	* Destructor
@@ -164,12 +164,12 @@ template<class T> void QCCurve<T>::setAbscissaAtWithValue(unsigned long position
 	return;
 }
 
-template<class T> pair<T, double> QCCurve<T>::getValuesAt(unsigned long position)
+template<class T> pair<T, double> QCCurve<T>::getValuesAt(size_t position)
 {
 	return _values[position];
 }
 
-template<class T> long QCCurve<T>::getLength()
+template<class T> size_t QCCurve<T>::getLength()
 {
 	return _values.size();
 }

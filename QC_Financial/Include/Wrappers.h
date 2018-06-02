@@ -5,6 +5,7 @@
 #include<string>
 
 #include <boost/python.hpp>
+#include <boost/python/wrapper.hpp>
 
 #include "Cashflow.h"
 #include "FixedRateCashflow.h"
@@ -12,9 +13,15 @@
 #include "SimpleCashflow.h"
 #include "SimpleMultiCurrencyCashflow.h"
 #include "IcpClpCashflow.h"
+#include "InterestRateCurve.h"
+#include "ZeroCouponCurve.h"
+#include "PresentValue.h"
 
 #include "QCDate.h"
 #include "QCCurrency.h"
+#include "QCInterpolator.h"
+#include "QCLinearInterpolator.h"
+#include "QCInterestRate.h"
 
 namespace qf = QCode::Financial;
 
@@ -1104,7 +1111,68 @@ namespace wrappers
 		return show(cshflw);
 	}
 
+	class QCInterpolatorWrap : public QCInterpolator, public boost::python::wrapper<QCInterpolator>
+	{
+		double interpolateAt(long value)
+		{
+			return this->get_override("interpolateAt")();
+		}
+		
+		double derivativeAt(long value)
+		{
+			return this->get_override("derivativeAt")();
+		}
 
+		double secondDerivativeAt(long value)
+		{
+			return this->get_override("secondDerivativeAt")();
+		}
+	};
+
+	class InterestRateCurveWrap : public qf::InterestRateCurve,
+		                          public boost::python::wrapper<qf::InterestRateCurve>
+	{
+	public:
+		InterestRateCurveWrap(std::shared_ptr<QCInterpolator> curve, QCInterestRate intRate) :
+			InterestRateCurve(curve, intRate)
+		{
+		}
+
+		double getRateAt(long d)
+		{
+			return this->get_override("getRateAt")();
+		}
+
+		double getDiscountFactorAt(long d)
+		{
+			return this->get_override("getDiscountFactorAt")();
+		}
+
+		double getForwardRateWithRate(QCInterestRate& intRate, long d1, long d2)
+		{
+			return this->get_override("getForwardRateWithRate")();
+		}
+
+		double getForwardRate(long d1, long d2)
+		{
+			return this->get_override("getForwardRate")();
+		}
+
+		double getForwardWf(long d1, long d2)
+		{
+			return this->get_override("getForwardWf")();
+		}
+
+		double dfDerivativeAt(unsigned int index)
+		{
+			return this->get_override("dfDerivativeAt")();
+		}
+
+		double fwdWfDerivativeAt(unsigned int index)
+		{
+			return this->get_override("fwdWfDerivativeAt")();
+		}
+	};
 }
 
 

@@ -112,7 +112,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 		//Ejecutar generateCurve() y guardar los valores
 		for (size_t k = 0; k < numRates + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 		generateCurve();
 
@@ -135,7 +135,7 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 
 		for (size_t k = 1; k < numRates + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 
 		generateCurve();
@@ -175,14 +175,14 @@ void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::generateCurveAnd
 	}
 }
 
-unsigned int QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getCurveLength()
+size_t QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getCurveLength()
 {
 	return _curve->getLength();
 }
 
 double QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::getRateAt(size_t index)
 {
-	return _curve->getRateAt(index);
+	return _curve->getRateAt(static_cast<long>(index));
 }
 
 void QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve::calculateDerivativesAt(

@@ -22,11 +22,11 @@ double QCFloatingRatePayoff::getForwardRateAt(size_t n)
 void QCFloatingRatePayoff::_setAllRates()
 {
 	//Loopea sobre los periods de interest rate leg a partir del current period
-	int numPeriods = _irLeg->size();
+	size_t numPeriods = _irLeg->size();
 	_allRates.resize(numPeriods);
 	_forwardRates.resize(numPeriods);
 	_allRatesDerivatives.resize(numPeriods);
-	unsigned int tempCurrentPeriod;
+	size_t tempCurrentPeriod;
 	if (_currentPeriod == -1)
 	{
 		tempCurrentPeriod = 0;
@@ -35,7 +35,7 @@ void QCFloatingRatePayoff::_setAllRates()
 	{
 		tempCurrentPeriod = _currentPeriod;
 	}
-	for (int i = tempCurrentPeriod; i < numPeriods; ++i)
+	for (size_t i = tempCurrentPeriod; i < numPeriods; ++i)
 	{
 		auto per = _irLeg->getPeriodAt(i);
 		//Si el fixing date es menor que _valueDate lo va a calcular con fixingData
@@ -104,7 +104,7 @@ void QCFloatingRatePayoff::addToAdditiveSpreadValue(double mov)
 
 bool QCFloatingRatePayoff::operator<(const QCFloatingRatePayoff& rhs)
 {
-	unsigned int lastPeriod = _irLeg->lastPeriod();
+	auto lastPeriod = _irLeg->lastPeriod();
 	QCDate lastDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(this->getPeriodAt(lastPeriod));
 	lastPeriod = rhs.getLastPeriodIndex();
 	QCDate lastDateRhs = get<QCInterestRateLeg::intRtPrdElmntEndDate>(rhs.getPeriodAt(lastPeriod));

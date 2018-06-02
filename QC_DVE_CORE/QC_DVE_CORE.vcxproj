@@ -292,19 +292,23 @@
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FinancialIndex.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FXRate.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FXRateIndex.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCAct30.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IcpClfCashflow.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IcpClpCashflow.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\InterestRateCurve.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\Leg.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\LegFactory.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FixedRateCashflow.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IborCashflow.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\InterestRateIndex.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\PresentValue.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCCurrency.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCInterestRateBasisSwap.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\SimpleCashflow.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\SimpleMultiCurrencyCashflow.h" />
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\Tenor.h" />
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\ZeroCouponCurve.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\FixedRateCashflow.cpp" />
@@ -371,6 +375,8 @@
     <ClCompile Include="source\SimpleCashflow.cpp" />
     <ClCompile Include="source\SimpleMultiCurrencyCashflow.cpp" />
     <ClCompile Include="source\Tenor.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ZeroCouponCurve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -58,7 +58,7 @@ public:
 	* Retorna el índice del último flujo
 	* @return índice
 	*/
-	unsigned int getLastPeriodIndex() const;
+	size_t getLastPeriodIndex() const;
 
 	/*!
 	* Retorna la fecha inicial del primer período
@@ -114,13 +114,13 @@ public:
 	* Retorna el largo (numero de vertices) de la curva de descuento.
 	* @return (unsigned long) largo de la curva.
 	*/
-	unsigned long discountCurveLength();
+	size_t discountCurveLength();
 
 	/*!
 	* Retorna el largo (numero de vertices) de la curva de proyeccion.
 	* @return (unsigned long) largo de la curva.
 	*/
-	unsigned long projectingCurveLength();
+	size_t projectingCurveLength();
 
 	/*!
 	* Retorna la tupla que describe el cashflow en el indice n del vector
@@ -176,7 +176,7 @@ protected:
 	QCTimeSeriesShrdPtr _fixingData;
 	
 	/*! Aquí se almacena el período vigente considerando valueDate.*/
-	int _currentPeriod;
+	size_t _currentPeriod;
 
 	/* Aquí se almacenan los flujos calculados con el método payoff().*/
 	vector<tuple<QCDate, QCCashFlowLabel, double>> _payoffs;

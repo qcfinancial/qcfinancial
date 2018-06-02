@@ -17,7 +17,7 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 	_fixingData(fixingData)
 {
 	//Determinar _currentPeriod
-	unsigned long numPeriods = _irLeg->size();
+	size_t numPeriods = _irLeg->size();
 	if (_valueDate > get<QCInterestRateLeg::intRtPrdElmntEndDate>(_irLeg->getPeriodAt(numPeriods)))
 	{
 		_currentPeriod = numPeriods; //Despues se controla al calcular pv si _currentPeriod tiene sentido
@@ -54,7 +54,7 @@ void QCInterestRatePayoff::payoff()
 	//cout << "Enter QCInterestRatePayoff::payoff()" << endl;
 
 	_payoffs.clear();
-	int tempCurrentPeriod;
+	size_t tempCurrentPeriod;
 	if (_currentPeriod == -1)
 	{
 		tempCurrentPeriod = 0;
@@ -63,14 +63,14 @@ void QCInterestRatePayoff::payoff()
 	{
 		tempCurrentPeriod = _currentPeriod;
 	}
-	unsigned int curveLength = _projectingCurve->getLength();
+	size_t curveLength = _projectingCurve->getLength();
 	_pvProjCurveDerivatives.resize(curveLength);
 	for (unsigned int j = 0; j < curveLength; ++j)
 	{
 		_pvProjCurveDerivatives.at(j) = 0.0;
 	}
 
-	for (int i = tempCurrentPeriod; i < _irLeg->size(); ++i)
+	for (size_t i = tempCurrentPeriod; i < _irLeg->size(); ++i)
 	{
 		QCInterestRateLeg::QCInterestRatePeriod prd = _irLeg->getPeriodAt(i);
 
@@ -136,7 +136,7 @@ QCInterestRateLeg::QCInterestRatePeriod QCInterestRatePayoff::getPeriodAt(size_t
 	return _irLeg->getPeriodAt(n);
 }
 
-unsigned int QCInterestRatePayoff::getLastPeriodIndex() const
+size_t QCInterestRatePayoff::getLastPeriodIndex() const
 {
 	return _irLeg->lastPeriod();
 }
@@ -215,12 +215,12 @@ double QCInterestRatePayoff::getPvProjRateDerivativeAt(unsigned int index)
 	return _pvProjCurveDerivatives.at(index);
 }
 
-unsigned long QCInterestRatePayoff::discountCurveLength()
+size_t QCInterestRatePayoff::discountCurveLength()
 {
 	return _discountCurve->getLength();
 }
 
-unsigned long QCInterestRatePayoff::projectingCurveLength()
+size_t QCInterestRatePayoff::projectingCurveLength()
 {
 	return _projectingCurve->getLength();
 }

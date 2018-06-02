@@ -28,7 +28,7 @@ QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::QCZeroCurveBootstrappingFromR
 void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurve()
 {
 	//Loop sobre las tasas
-	unsigned int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
+	size_t rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
 	QCDate startDate{ get<QCInterestRateLeg::intRtPrdElmntStartDate>(
 		_inputRates.at(0)->getPeriodAt(0)) }; //Fecha inicial de todas las tasas que vamos a calcular
 	for (auto& td : _inputRates)
@@ -38,15 +38,15 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurve()
 
 		//Utiliza la tasa del payoff como punto inicial del cálculo
 		double rLast{ td->getRateValue() }; //valor inicial de la tasa a calcular
-		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
+		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
 		while (abs(diff) > EPSILON)
 		{
 			double f{ td->presentValue(true) };
-			double df{ td->getPvRateDerivativeAt(rateCounter) };
+			double df{ td->getPvRateDerivativeAt(static_cast<unsigned int>(rateCounter)) };
 			rNext = rLast - f / df;
-			_curve->setOrdinateAtWithValue(rateCounter, rNext);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
 		}
@@ -63,15 +63,15 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurve()
 
 		//Utiliza la tasa del payoff como punto inicial del cálculo
 		double rLast{ .01 }; //valor inicial de la tasa a calcular
-		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
+		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
 		while (abs(diff) > EPSILON)
 		{
 			double f{ fr->marketValue() };
-			double df{ fr->getPvRateDerivativeAtFromLeg(rateCounter, _whichForwardLeg) };
+			double df{ fr->getPvRateDerivativeAtFromLeg(static_cast<unsigned int>(rateCounter), _whichForwardLeg) };
 			rNext = rLast - f / df;
-			_curve->setOrdinateAtWithValue(rateCounter, rNext);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
 		}
@@ -88,15 +88,15 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurve()
 
 		//Utiliza la tasa del payoff como punto inicial del cálculo
 		double rLast{ fr->getRateValue() }; //valor inicial de la tasa a calcular
-		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
+		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
 		while (abs(diff) > EPSILON)
 		{
 			double f{ fr->presentValue(true) - df };
-			double df{ fr->getPvRateDerivativeAt(rateCounter) };
+			double df{ fr->getPvRateDerivativeAt(static_cast<unsigned int>(rateCounter)) };
 			rNext = rLast - f / df;
-			_curve->setOrdinateAtWithValue(rateCounter, rNext);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
 		}
@@ -144,7 +144,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurveAndDerivati
 		//Ejecutar generateCurve() y guardar los valores
 		for (size_t k = 0; k < numRates + numFwds + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 		
 		generateCurve();
@@ -171,7 +171,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurveAndDerivati
 		}
 		for (size_t k = 0; k < numRates + numFwds + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 		
 		generateCurve();
@@ -218,7 +218,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::generateCurveAndDerivati
 
 }
 
-unsigned int QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getCurveLength()
+size_t QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs::getCurveLength()
 {
 	return 0;
 }

@@ -120,7 +120,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 		//Ejecutar generateCurve() y guardar los valores
 		for (size_t k = 0; k < numRates + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 		generateCurve();
 
@@ -143,7 +143,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 		}
 		for (size_t k = 0; k < numRates + numSwaps; ++k)
 		{
-			_curve->setOrdinateAtWithValue(k, 0.0);
+			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 		generateCurve();
 
@@ -183,14 +183,14 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 	}
 }
 
-unsigned int QCZeroCurveBootstrappingFromRatesAndFixedLegs::getCurveLength()
+size_t QCZeroCurveBootstrappingFromRatesAndFixedLegs::getCurveLength()
 {
 	return _curve->getLength();
 }
 
 double QCZeroCurveBootstrappingFromRatesAndFixedLegs::getRateAt(size_t index)
 {
-	return _curve->getRateAt(index);
+	return _curve->getRateAt(static_cast<long>(index));
 }
 
 void QCZeroCurveBootstrappingFromRatesAndFixedLegs::calculateDerivativesAt(size_t derivativeIndex)
@@ -213,7 +213,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::calculateDerivativesAt(size_
 	temp.resize(numRates + numSwaps);
 	for (size_t i = 0; i < numRates + numSwaps; ++i)
 	{
-		temp.at(i) = _curve->getRateAt(i);
+		temp.at(i) = _curve->getRateAt(static_cast<long>(i));
 	}
 	
 	//Devolver el 1pip y volver a ejecutar generateCurve()
@@ -230,7 +230,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::calculateDerivativesAt(size_
 	//Sacar la diferencia entre _curve y los valores guardados y guardar esas diferencias en _derivatives
 	for (size_t i = 0; i < numRates + numSwaps; ++i)
 	{
-		_derivatives.at(i).at(derivativeIndex) = (temp.at(i) - _curve->getRateAt(i)) / BP;
+		_derivatives.at(i).at(derivativeIndex) = (temp.at(i) - _curve->getRateAt(static_cast<long>(i))) / BP;
 	}
 	return;
 }

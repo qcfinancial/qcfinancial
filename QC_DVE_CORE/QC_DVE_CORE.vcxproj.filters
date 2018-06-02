@@ -28,6 +28,15 @@
     <Filter Include="Header Files\Asset Classes">
       <UniqueIdentifier>{fdb89cff-99d2-4f43-96c4-99a70ba755f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Curves">
+      <UniqueIdentifier>{46482e7a-c0b7-4437-ae92-141dd3ba57df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Curves">
+      <UniqueIdentifier>{7c4fea4c-a533-4dbb-90ce-7b5aa0bf3b41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Valuation">
+      <UniqueIdentifier>{d022d6b9-edb8-4ea7-b25f-b57b65a8a918}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -216,6 +225,18 @@
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\IcpClfCashflow.h">
       <Filter>Header Files\Cashflows</Filter>
     </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\ZeroCouponCurve.h">
+      <Filter>Header Files\Curves</Filter>
+    </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\InterestRateCurve.h">
+      <Filter>Header Files\Curves</Filter>
+    </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\PresentValue.h">
+      <Filter>Header Files\Valuation</Filter>
+    </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCAct30.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\QCTest.cpp">
@@ -363,6 +384,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ZeroCouponCurve.cpp">
+      <Filter>Source Files\Curves</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

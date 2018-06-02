@@ -24,7 +24,6 @@ namespace QCode
 		private:
 			vector<shared_ptr<Cashflow>> _cashflows;
 		};
-
 	}
 }
 #endif //LEG_H

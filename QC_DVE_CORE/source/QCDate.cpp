@@ -52,7 +52,7 @@ QCDate::QCDate(string& stringDate)
 		m = stoi(stringDate.substr(5, 2));
 		y = stoi(stringDate.substr(0, 4));
 	}
-	catch (exception& e)
+	catch (...)
 	{
 		throw invalid_argument("Invalid day, month and year");
 	}
@@ -430,7 +430,7 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
 		result = result.businessDay(calendar, QCDate::qcFollow);
-		for (int i = 1; i < nDays + 1; ++i)
+		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
 		}
@@ -438,7 +438,7 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	else
 	{
 		result = result.businessDay(calendar, QCDate::qcPrev);
-		for (int i = 1; i < nDays + 1; ++i)
+		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
 		}
@@ -453,7 +453,7 @@ QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
 		result = result.businessDay(calendar, QCDate::qcFollow);
-		for (int i = 1; i < nDays + 1; ++i)
+		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
 		}
@@ -461,7 +461,7 @@ QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	else
 	{
 		result = result.businessDay(calendar, QCDate::qcPrev);
-		for (int i = 1; i < nDays + 1; ++i)
+		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
 		}

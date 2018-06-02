@@ -12,6 +12,7 @@
 #include "QCAct360.h"
 #include "QCAct365.h"
 #include "QC30360.h"
+#include "QCAct30.h"
 #include "QCWealthFactor.h"
 #include "QCLinearWf.h"
 #include "QCCompoundWf.h"
@@ -19,6 +20,9 @@
 #include "QCInterestRate.h"
 #include "QCBusinessCalendar.h"
 #include "QCInterestRateLeg.h"
+#include "QCCurve.h"
+#include "QCInterpolator.h"
+#include "QCLinearInterpolator.h"
 
 #include "Cashflow.h"
 #include "FixedRateCashflow.h"
@@ -32,7 +36,8 @@
 #include "Leg.h"
 #include "FXRate.h"
 #include "FXRateIndex.h"
-
+#include "InterestRateCurve.h"
+#include "PresentValue.h"
 
 #include "Wrappers.h"
 
@@ -142,6 +147,17 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("count_days", &QC30360::countDays)
 		;
 
+	implicitly_convertible<std::shared_ptr<QCAct30>, std::shared_ptr<QCYearFraction>>();
+
+	double (QCAct30::*yf1_Act30)(long) = &QCAct30::yf;
+	double (QCAct30::*yf2_Act30)(const QCDate&, const QCDate&) = &QCAct30::yf;
+
+	class_<QCAct30, std::shared_ptr<QCAct30>, bases<QCYearFraction>>("QCAct30")
+		.def("yf", yf1_Act30)
+		.def("yf", yf2_Act30)
+		.def("count_days", &QCAct30::countDays)
+		;
+
 	class_<QCWealthFactor>("QCWealthFactor", no_init);
 
 	implicitly_convertible<std::shared_ptr<QCLinearWf>, std::shared_ptr<QCWealthFactor>>();
@@ -237,6 +253,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	PyObject* (*show21)(std::shared_ptr<qf::IborCashflow>) = wrappers::show;
 	def("show", show21);
+
+	implicitly_convertible<std::shared_ptr<qf::SimpleCashflow>, std::shared_ptr<qf::Cashflow>>();
 
 	class_<qf::SimpleCashflow, std::shared_ptr<qf::SimpleCashflow>, bases<qf::Cashflow>>
 		("SimpleCashflow", init <QCDate&, double, shared_ptr <QCCurrency>>())
@@ -334,13 +352,13 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.value("LONGFRONT3", QCInterestRateLeg::qcLongFront3)
 		.value("LONGFRONT4", QCInterestRateLeg::qcLongFront4)
 		.value("LONGFRONT5", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT6", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT7", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT8", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT9", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT10", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT11", QCInterestRateLeg::qcLongFront5)
-		.value("LONGFRONT12", QCInterestRateLeg::qcLongFront5)
+		.value("LONGFRONT6", QCInterestRateLeg::qcLongFront6)
+		.value("LONGFRONT7", QCInterestRateLeg::qcLongFront7)
+		.value("LONGFRONT8", QCInterestRateLeg::qcLongFront8)
+		.value("LONGFRONT9", QCInterestRateLeg::qcLongFront9)
+		.value("LONGFRONT10", QCInterestRateLeg::qcLongFront10)
+		.value("LONGFRONT11", QCInterestRateLeg::qcLongFront11)
+		.value("LONGFRONT12", QCInterestRateLeg::qcLongFront12)
 		;
 
 	class_<qf::Leg>("Leg")
@@ -426,4 +444,61 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("value_date", &qf::FXRateIndex::valueDate)
 		;
 
-}
+	class_<std::vector<long>>("long_vec")
+		.def(vector_indexing_suite<std::vector<long>>())
+		;
+
+	class_<std::pair<long, double> >("CurvePoint")
+		.def_readwrite("tenor", &std::pair<long, double>::first)
+		.def_readwrite("value", &std::pair<long, double>::second);
+
+	class_<QCCurve<long>, std::shared_ptr<QCCurve<long>>>
+		("QCCurve", init <std::vector<long>&, std::vector<double>&>())
+		.def("reset", &QCCurve<long>::reset)
+		.def("set_pair", &QCCurve<long>::setPair)
+		.def("set_ordinate_at_with_value", &QCCurve<long>::setOrdinateAtWithValue)
+		.def("set_abscissa_at_with_value", &QCCurve<long>::setAbscissaAtWithValue)
+		.def("get_values_at", &QCCurve<long>::getValuesAt)
+		.def("get_length", &QCCurve<long>::getLength)
+		;
+
+	class_<wrappers::QCInterpolatorWrap, boost::noncopyable>("QCInterpolator")
+		.def("interpolate_at", pure_virtual(&QCInterpolator::interpolateAt))
+		.def("derivative_at", pure_virtual(&QCInterpolator::derivativeAt))
+		.def("second_derivative_at", pure_virtual(&QCInterpolator::secondDerivativeAt))
+		;
+
+	implicitly_convertible<std::shared_ptr<QCLinearInterpolator>, shared_ptr<QCInterpolator>>();
+	class_<QCLinearInterpolator, std::shared_ptr<QCLinearInterpolator>, bases<QCInterpolator>>
+		("QCLinearInterpolator", init<shared_ptr<QCCurve<long>>>());
+
+	class_<wrappers::InterestRateCurveWrap, std::shared_ptr<wrappers::InterestRateCurveWrap>, boost::noncopyable>
+		("InterestRateCurve", init<shared_ptr<QCInterpolator>, QCInterestRate>())
+		.def("get_rate_at", pure_virtual(&qf::InterestRateCurve::getRateAt))
+		.def("get_discount_factor_at", pure_virtual(&qf::InterestRateCurve::getDiscountFactorAt))
+		.def("get_forward_rate_with_rate", pure_virtual(&qf::InterestRateCurve::getForwardRateWithRate))
+		.def("get_forward_rate", pure_virtual(&qf::InterestRateCurve::getForwardRate))
+		.def("get_forward_wf", pure_virtual(&qf::InterestRateCurve::getForwardWf))
+		.def("df_derivative_at", pure_virtual(&qf::InterestRateCurve::dfDerivativeAt))
+		.def("fwd_wf_derivative_at", pure_virtual(&qf::InterestRateCurve::fwdWfDerivativeAt))
+		;
+	
+	implicitly_convertible<std::shared_ptr<qf::ZeroCouponCurve>, shared_ptr<qf::InterestRateCurve>>();
+	class_<qf::ZeroCouponCurve, std::shared_ptr<qf::ZeroCouponCurve>, bases<qf::InterestRateCurve>>
+		("ZeroCouponCurve", init<shared_ptr<QCInterpolator>, QCInterestRate>());
+
+	double (qf::PresentValue::*pv1)(QCDate&, const std::shared_ptr<qf::Cashflow>&, QCInterestRate&) = &qf::PresentValue::pv;
+	double (qf::PresentValue::*pv2)(QCDate&, const std::shared_ptr<qf::Cashflow>&,
+		const std::shared_ptr<qf::InterestRateCurve>&) = &qf::PresentValue::pv;
+	double (qf::PresentValue::*pv3)(QCDate&, qf::Leg&, QCInterestRate&) = &qf::PresentValue::pv;
+	double (qf::PresentValue::*pv4)(QCDate&, qf::Leg&, const std::shared_ptr<qf::InterestRateCurve>&) = &qf::PresentValue::pv;
+	class_<qf::PresentValue>("PresentValue")
+		.def("pv", pv1)
+		.def("pv", pv2)
+		.def("pv", pv3)
+		.def("pv", pv4)
+		.def("get_derivative", &qf::PresentValue::getDerivative)
+		.def("get_derivatives", &qf::PresentValue::getDerivatives)
+		.def("get_rate", &qf::PresentValue::getRate)
+		;
+};

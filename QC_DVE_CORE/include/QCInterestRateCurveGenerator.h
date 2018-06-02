@@ -166,7 +166,7 @@ public:
 	* Calcula el largo de la curva.
 	* @return largo de la curva.
 	*/
-	virtual unsigned int getCurveLength() = 0;
+	virtual size_t getCurveLength() = 0;
 
 	/*!
 	* Devuelve la tasa en la posición i de la curva generada.
@@ -326,8 +326,8 @@ protected:
 		//Si no lo son se retorna false .
 		for (unsigned int i = 1; i < _inputFixedRateLegs.size(); ++i)
 		{
-			unsigned int lastPeriodIndex1 = _inputFixedRateLegs.at(i - 1)->getLastPeriodIndex();
-			unsigned int lastPeriodIndex2 = _inputFixedRateLegs.at(i)->getLastPeriodIndex();
+			size_t lastPeriodIndex1 = _inputFixedRateLegs.at(i - 1)->getLastPeriodIndex();
+			size_t lastPeriodIndex2 = _inputFixedRateLegs.at(i)->getLastPeriodIndex();
 
 			if (!(get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(i - 1)->getPeriodAt(lastPeriodIndex1)) <
 				get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(i)->getPeriodAt(lastPeriodIndex2))))
@@ -350,7 +350,7 @@ protected:
 		}
 
 		//Se verifica que el start date de los swaps sea <= que el end date de la tasa más larga.
-		unsigned int temp = _inputRates.size();
+		size_t temp = _inputRates.size();
 		QCDate fecha1 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(_inputFixedRateLegs.at(0)->getPeriodAt(0));
 		QCDate fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(temp - 1)->getPeriodAt(0));
 		if (fecha1 > fecha2)
@@ -363,7 +363,7 @@ protected:
 		//Finalmente se verifica que la fecha final del swap más corto sea superior a la fecha final
 		//de la tasa más larga.
 		fecha1 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputRates.at(temp - 1)->getPeriodAt(0));
-		unsigned int lastPeriod = _inputFixedRateLegs.at(0)->getLastPeriodIndex();
+		size_t lastPeriod = _inputFixedRateLegs.at(0)->getLastPeriodIndex();
 		fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(_inputFixedRateLegs.at(0)->getPeriodAt(lastPeriod));
 		if (fecha2 <= fecha1)
 		{
@@ -418,7 +418,7 @@ protected:
 		//Se verifica que el start date de los forwards sea <= que el end date de la tasa más larga.
 		if (_inputRates.size() > 0)
 		{
-			unsigned int temp = _inputRates.size();
+			size_t temp = _inputRates.size();
 			QCDate fecha1 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(
 				_inputForwards.at(0)->getPeriod());
 			QCDate fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(
@@ -490,7 +490,7 @@ protected:
 		//Se verifica que el start date de los basis swaps sea <= que el end date de la tasa más larga.
 		if (_inputRates.size() > 0)
 		{
-			unsigned int temp = _inputRates.size();
+			size_t temp = _inputRates.size();
 			QCDate fecha1 = _inputBasisSwaps.at(0)->getStartDate();
 			QCDate fecha2 = get<QCInterestRateLeg::intRtPrdElmntEndDate>(
 				_inputRates.at(temp - 1)->getPeriodAt(0));
@@ -562,7 +562,7 @@ protected:
 		//Se verifica que el start date de las patas flotantes sea <= que el end date de la tasa más larga.
 		if (_inputRates.size() > 0)
 		{
-			unsigned int temp = _inputRates.size();
+			size_t temp = _inputRates.size();
 			/*
 			QCDate fecha1 = get<QCInterestRateLeg::intRtPrdElmntStartDate>(
 				_inputFloatingRateLegs.at(0)->getPeriodAt(0));

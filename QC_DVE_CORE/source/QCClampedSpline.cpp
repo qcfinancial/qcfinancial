@@ -4,7 +4,7 @@
 double QCClampedSpline::interpolateAt(long value)
 {
 	long i = _index(value);
-	long temp = _curve->getLength();
+	size_t temp = _curve->getLength();
 	double t = value - _curve->getValuesAt(i).first;
 	double a = _curve->getValuesAt(i).second;
 	return a + _b[i] * t + _c[i] * pow(t, 2.0) + _d[i] * pow(t, 3.0);
@@ -33,7 +33,7 @@ void QCClampedSpline::setCoefficients(void)
 		x.push_back(_curve->getValuesAt(i).first);
 		y.push_back(_curve->getValuesAt(i).second);
 	}
-	const signed long n = x.size() - 1;
+	size_t n = x.size() - 1; //const signed long
 	double fp1,fpn ;
 	
 	vector <double> h(n), alpha(n+1);
@@ -67,7 +67,7 @@ void QCClampedSpline::setCoefficients(void)
 	l.at(n) = h[n - 1] * (2 - u[n - 1]);
 	z.at(n) = (alpha[n] - h[n - 1] * z[n - 1]) / l[n];
 	_c.at(n) = z[n];
-	int i, j;
+	size_t i, j;
 	for (j = 1; j < (n + 1) ; ++j)
     {	         
 		i = n - j;

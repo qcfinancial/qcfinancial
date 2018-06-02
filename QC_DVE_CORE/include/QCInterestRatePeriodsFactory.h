@@ -140,7 +140,7 @@ private:
 	/*! Construye el vector _fixingFlags.
 	* @param numPeriods es el número de períodos de pago de la pata
 	*/
-	void _setFixingFlags(unsigned int numPeriods);
+	void _setFixingFlags(size_t numPeriods);
 
 	/*! Función auxiliar para operaciones LONGFRONTN con easy case (período cuadrado).
 	 * Se utiliza en _buildBasicDates2.

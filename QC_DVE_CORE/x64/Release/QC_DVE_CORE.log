@@ -1,18 +1,60 @@
-﻿Build started 14/05/2018 12:22:01.
-     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 3 (Build target(s)).
+﻿Build started 30/05/2018 19:06:02.
+     1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt source\QCHelperFunctions.cpp source\QCInterestRatePeriodsFactory.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt source\FixedRateCashflow.cpp source\IborCashflow.cpp source\IcpClfCashflow.cpp source\IcpClpCashflow.cpp source\InterestRateIndex.cpp source\Leg.cpp source\LegFactory.cpp source\QC30360.cpp source\QCAct360.cpp source\QCAct365.cpp source\QCActAct.cpp source\QCBusinessCalendar.cpp source\QCClampedSpline.cpp source\QCCompoundWf.cpp source\QCContinousWf.cpp source\QCDate.cpp source\QCDiscountBondPayoff.cpp source\QCFactoryFunctions.cpp source\QCFixedRatePayoff.cpp source\QCFloatingRatePayoff.cpp source\QCFXForward.cpp source\QCHelperFunctions.cpp source\QCIcpClfPayoff.cpp source\QCIcpClpPayoff.cpp source\QCInterestRate.cpp source\QCInterestRateBasisSwap.cpp source\QCInterestRateLeg.cpp source\QCInterestRatePayoff.cpp source\QCInterestRatePeriodsFactory.cpp source\QCInterpolator.cpp source\QCLinearWf.cpp source\QCLogLinearInterpolator.cpp source\QCProjectingInterestRateCurve.cpp source\QCTest.cpp source\QCTimeDepositPayoff.cpp source\QCWealthFactor.cpp source\QCZeroCouponCurve.cpp source\QCZeroCouponDiscountFactorCurve.cpp source\QCZeroCouponInterestRateCurve.cpp source\QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp source\QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp source\QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp source\QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp source\QCZeroCurveBootstrappingFromRates.cpp source\SimpleCashflow.cpp source\SimpleMultiCurrencyCashflow.cpp source\Tenor.cpp \\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp \\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ZeroCouponCurve.cpp
+         FixedRateCashflow.cpp
+         IborCashflow.cpp
+         IcpClfCashflow.cpp
+         IcpClpCashflow.cpp
+         InterestRateIndex.cpp
+         Leg.cpp
+         LegFactory.cpp
+         QC30360.cpp
+         QCAct360.cpp
+         QCAct365.cpp
+         QCActAct.cpp
+         QCBusinessCalendar.cpp
+         QCClampedSpline.cpp
+         QCCompoundWf.cpp
+         QCContinousWf.cpp
+         QCDate.cpp
+         QCDiscountBondPayoff.cpp
+         QCFactoryFunctions.cpp
+         QCFixedRatePayoff.cpp
+         QCFloatingRatePayoff.cpp
+         Compiling...
+         QCFXForward.cpp
          QCHelperFunctions.cpp
-     1>\\mac\home\documents\qcode\qcdvaluationengine\qc_dve_core\include\QCInterestRateCurve.h(115): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned long', possible loss of data
+         QCIcpClfPayoff.cpp
+         QCIcpClpPayoff.cpp
+         QCInterestRate.cpp
+         QCInterestRateBasisSwap.cpp
+         QCInterestRateLeg.cpp
+         QCInterestRatePayoff.cpp
          QCInterestRatePeriodsFactory.cpp
-     1>\\mac\home\documents\qcode\qcdvaluationengine\qc_dve_core\include\QCInterestRateCurve.h(115): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned long', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(64): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(155): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(294): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(335): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(375): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>source\QCInterestRatePeriodsFactory.cpp(419): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+         QCInterpolator.cpp
+         QCLinearWf.cpp
+         QCLogLinearInterpolator.cpp
+         QCProjectingInterestRateCurve.cpp
+         QCTest.cpp
+         QCTimeDepositPayoff.cpp
+         QCWealthFactor.cpp
+         QCZeroCouponCurve.cpp
+         QCZeroCouponDiscountFactorCurve.cpp
+         QCZeroCouponInterestRateCurve.cpp
+         QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
+         Compiling...
+         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
+         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
+         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
+         QCZeroCurveBootstrappingFromRates.cpp
+         SimpleCashflow.cpp
+         SimpleMultiCurrencyCashflow.cpp
+         Tenor.cpp
+         QCAct30.cpp
+         ZeroCouponCurve.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt source\QCLinearInterpolator.cpp
+         QCLinearInterpolator.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"\\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_DVE_CORE.lib" /NOLOGO /MACHINE:X64 /LTCG x64\Release\FixedRateCashflow.obj
          x64\Release\IborCashflow.obj
@@ -61,10 +103,12 @@
          x64\Release\SimpleCashflow.obj
          x64\Release\SimpleMultiCurrencyCashflow.obj
          x64\Release\Tenor.obj
+         x64\Release\QCAct30.obj
+         x64\Release\ZeroCouponCurve.obj
          x64\Release\QCLinearInterpolator.obj
          QC_DVE_CORE.vcxproj -> \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_DVE_CORE.lib
-     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Build target(s)).
+     1>Done Building Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\QC_DVE_CORE.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.65
+Time Elapsed 00:00:28.92

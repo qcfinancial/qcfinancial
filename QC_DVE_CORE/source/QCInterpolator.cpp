@@ -3,6 +3,9 @@
 
 #include <exception>
 
+QCInterpolator::QCInterpolator()
+{}
+
 QCInterpolator::QCInterpolator(shared_ptr<QCCurve<long>> curve) : _curve(curve)
 {}
 
@@ -27,7 +30,7 @@ void QCInterpolator::setAbscissaAtWithValue(unsigned long position, long value)
 	_curve->setAbscissaAtWithValue(position, value);
 }
 
-long QCInterpolator::getLength()
+size_t QCInterpolator::getLength()
 {
 	return _curve->getLength();
 }
@@ -37,7 +40,7 @@ double QCInterpolator::rateDerivativeAt(unsigned long rateIndex)
 	return _derivatives.at(rateIndex);
 }
 
-pair<long, double> QCInterpolator::getValuesAt(unsigned long position)
+pair<long, double> QCInterpolator::getValuesAt(size_t position)
 {
 	return _curve->getValuesAt(position);
 }
@@ -51,7 +54,7 @@ long QCInterpolator::_index(long arg)
 	}
 
 	long inf = 0;
-	long sup = data.size() - 1;
+	long sup = static_cast<long>(data.size()) - 1;
 	long centro = (inf + sup) / 2;
 	long indice = centro;
     if (data.size() < 2)
@@ -64,7 +67,7 @@ long QCInterpolator::_index(long arg)
 		if (arg == data[centro])
 		{
 			indice = centro;
-			inf = data.size();
+			inf = static_cast<long>(data.size());
 		}
 		else
 		{

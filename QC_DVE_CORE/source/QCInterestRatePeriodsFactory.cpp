@@ -61,7 +61,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 			QCDate::qcFollow);
 		
 		//Asigna el fixing date. El primero es el primero de los basic dates de fixing
-		for (unsigned int j = _fixingBasicDates.size(); j-- > 0;)
+		for (size_t j = _fixingBasicDates.size(); j-- > 0;)
 		{
 			if (get<0>(_fixingBasicDates.at(j)) <= get<0>(_settlementBasicDates.at(i)))
 			{
@@ -115,7 +115,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 			QCDate::qcFollow);
 
 		//Asigna el fixing date. El primero es el primero de los basic dates de fixing
-		for (unsigned int j = _fixingBasicDates.size(); j-- > 0;)
+		for (size_t j = _fixingBasicDates.size(); j-- > 0;)
 		{
 			if (get<0>(_fixingBasicDates.at(j)) <= get<0>(_settlementBasicDates.at(i)))
 			{
@@ -152,7 +152,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	_settlementBasicDates = _buildBasicDates2(_settlementPeriodicity, _settlementStubPeriod, _settlementCalendar);
 
 	//Aprovechamos de darle size a result
-	unsigned int numPeriods = _settlementBasicDates.size();
+	size_t numPeriods = _settlementBasicDates.size();
 	result.resize(numPeriods);
 
 	_setFixingFlags(numPeriods);
@@ -188,11 +188,11 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	return result;
 }
 
-void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
+void QCInterestRatePeriodsFactory::_setFixingFlags(size_t numPeriods)
 {
 	_fixingFlags.resize(numPeriods);
-	unsigned int numWholeFixingPeriods = numPeriods / QCHelperFunctions::tenor(_fixingPeriodicity);
-	unsigned int remainderFixing = numPeriods % QCHelperFunctions::tenor(_fixingPeriodicity);
+	size_t numWholeFixingPeriods = numPeriods / QCHelperFunctions::tenor(_fixingPeriodicity);
+	size_t remainderFixing = numPeriods % QCHelperFunctions::tenor(_fixingPeriodicity);
 
 	if (_fixingStubPeriod == QCInterestRateLeg::qcNoStubPeriod)
 	{
@@ -212,7 +212,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
 	{
 		_fixingFlags.at(0) = true;
 		_fixingFlags.at(remainderFixing) = true;
-		for (unsigned int i = remainderFixing + 1; i < numPeriods; ++i)
+		for (size_t i = remainderFixing + 1; i < numPeriods; ++i)
 		{
 			if (i % QCHelperFunctions::tenor(_fixingPeriodicity) == remainderFixing)
 			{
@@ -228,7 +228,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(unsigned int numPeriods)
 	{
 		_fixingFlags.at(0) = true;
 		_fixingFlags.at(remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity)) = true;
-		for (unsigned int i = remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity) + 1;
+		for (size_t i = remainderFixing + QCHelperFunctions::tenor(_fixingPeriodicity) + 1;
 			i < numPeriods; ++i)
 		{
 			if (i % QCHelperFunctions::tenor(_fixingPeriodicity) == remainderFixing)
@@ -291,7 +291,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
 			indicador = 1;
 		periods.resize(numWholePeriods + 1 - indicador);
-		unsigned int numPeriods = periods.size();
+		size_t numPeriods = periods.size();
 
 		QCDate fechaInicioPeriodo = _startDate;
 		QCDate fechaFinalPeriodo;
@@ -332,7 +332,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
 			indicador = 1;
 		periods.resize(numWholePeriods + 1 - indicador);
-		unsigned int numPeriods = periods.size();
+		size_t numPeriods = periods.size();
 
 		QCDate fechaInicioPeriodo = _startDate;
 		QCDate fechaFinalPeriodo;
@@ -372,7 +372,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
 			indicador = 1;
 		periods.resize(numWholePeriods + 1 - indicador);
-		unsigned int numPeriods = periods.size();
+		size_t numPeriods = periods.size();
 
 		QCDate fechaFinalPeriodo = _endDate;
 		QCDate fechaInicioPeriodo;
@@ -393,10 +393,10 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		{
 			if (numPeriods > 2)
 			{
-				for (unsigned int i = numPeriods - 2; i > 0; --i)
+				for (size_t i = numPeriods - 2; i > 0; --i)
 				{
 					fechaFinalPeriodo = fechaInicioPeriodo;
-					fechaInicioPeriodo = _endDate.addMonths((i - numPeriods) *
+					fechaInicioPeriodo = _endDate.addMonths((static_cast<int>(i - numPeriods)) *
 						QCHelperFunctions::tenor(periodicity)).businessDay(
 						calendar, _endDateAdjustment);
 					fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, _settlementLag, QCDate::qcFollow);
@@ -416,7 +416,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		if (remainderInMonths + get<1>(distanceMonthsDays) == 0)
 			indicador = 1;
 		periods.resize(numWholePeriods + 1 - indicador);
-		unsigned int numPeriods = periods.size();
+		size_t numPeriods = periods.size();
 
 		QCDate fechaFinalPeriodo = _endDate;
 		QCDate fechaInicioPeriodo;
@@ -437,10 +437,10 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 		{
 			if (numPeriods > 2)
 			{
-				for (unsigned int i = numPeriods - 2; i > 0; --i)
+				for (size_t i = numPeriods - 2; i > 0; --i)
 				{
 					fechaFinalPeriodo = fechaInicioPeriodo;
-					fechaInicioPeriodo = _endDate.addMonths((i - numPeriods) *
+					fechaInicioPeriodo = _endDate.addMonths(static_cast<int>(i - numPeriods) *
 						QCHelperFunctions::tenor(periodicity)).businessDay(
 						calendar, _endDateAdjustment);
 					fechaPagoPeriodo = fechaFinalPeriodo.shift(calendar, _settlementLag, QCDate::qcFollow);

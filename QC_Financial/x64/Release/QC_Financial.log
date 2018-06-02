@@ -1,19 +1,10 @@
-﻿Build started 14/05/2018 11:24:10.
+﻿Build started 01/06/2018 20:23:21.
      1>Project "\\psf\Home\Documents\qcode\QCDValuationEngine\QC_Financial\QC_Financial.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt ..\QC_DVE_CORE\source\LegFactory.cpp ..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp main.cpp
-         LegFactory.cpp
-         QCInterestRatePeriodsFactory.cpp
-     1>\\mac\home\documents\qcode\qcdvaluationengine\qc_dve_core\include\QCInterestRateCurve.h(115): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned long', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(64): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(155): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(294): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(335): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(375): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
-     1>..\QC_DVE_CORE\source\QCInterestRatePeriodsFactory.cpp(419): warning C4267: 'initializing' : conversion from 'size_t' to 'unsigned int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D QC_FINANCIAL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
      1>C:\boost_1_65_1\build\include\boost-1_65_1\boost/python/detail/caller.hpp(53): warning C4244: 'return' : conversion from 'Py_ssize_t' to 'unsigned int', possible loss of data
+     1>\\Mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\PresentValue.h(161): warning C4267: 'argument' : conversion from 'size_t' to 'unsigned int', possible loss of data
      1>C:\boost_1_65_1\build\include\boost-1_65_1\boost/python/suite/indexing/vector_indexing_suite.hpp(176): warning C4267: '+=' : conversion from 'size_t' to 'long', possible loss of data
                  C:\boost_1_65_1\build\include\boost-1_65_1\boost/python/suite/indexing/vector_indexing_suite.hpp(170) : while compiling class template member function 'unsigned __int64 boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>::convert_index(Container &,PyObject *)'
                  with
@@ -27,7 +18,7 @@
                      _Ty=double
          ,            Container=std::vector<double,std::allocator<double>>
                  ]
-                 main.cpp(295) : see reference to class template instantiation 'boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>' being compiled
+                 main.cpp(313) : see reference to class template instantiation 'boost::python::vector_indexing_suite<std::vector<double,std::allocator<_Ty>>,false,boost::python::detail::final_vector_derived_policies<Container,false>>' being compiled
                  with
                  [
                      _Ty=double
@@ -102,6 +93,10 @@
          x64\Release\SimpleMultiCurrencyCashflow.obj
          x64\Release\Tenor.obj
          x64\Release\main.obj
+         x64\Release\QCAct30.obj
+         x64\Release\QCInterpolator.obj
+         x64\Release\QCLinearInterpolator.obj
+         x64\Release\ZeroCouponCurve.obj
             Creating library \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.lib and object \\psf\Home\Documents\qcode\QCDValuationEngine\x64\Release\QC_Financial.exp
          Generating code
          Finished generating code
@@ -110,4 +105,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:25.42
+Time Elapsed 00:00:52.25

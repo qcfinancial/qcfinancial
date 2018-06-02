@@ -262,6 +262,10 @@
     <ClCompile Include="..\QC_DVE_CORE\source\SimpleMultiCurrencyCashflow.cpp" />
     <ClCompile Include="..\QC_DVE_CORE\source\Tenor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCInterpolator.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCLinearInterpolator.cpp" />
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ZeroCouponCurve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Wrappers.h" />

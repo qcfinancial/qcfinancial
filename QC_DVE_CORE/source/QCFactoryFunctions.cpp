@@ -312,7 +312,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg(
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Apenas se calcule el numero de periodos se registrara aqui
-	unsigned int numPeriods;
+	size_t numPeriods;
 	
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
 	int signo;
@@ -422,7 +422,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Apenas se calcule el numero de periodos se registrara aqui
-	unsigned int numPeriods;
+	size_t numPeriods;
 
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
 	int signo;
@@ -458,7 +458,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
 	}
 	if (amortization == QCInterestRateLeg::qcConstantAmort || amortization == QCInterestRateLeg::qcCustomAmort)
 	{
-		unsigned int numAmort = amortNotionalByDate.size();
+		size_t numAmort = amortNotionalByDate.size();
 		for (unsigned int i = 0; i < numAmort; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1- i)) =
@@ -549,11 +549,11 @@ QCInterestRateLeg QCFactoryFunctions::buildFrenchFixedRateLeg(
 	//Se generan los periodos
 	periods = factory.getPeriods();
 
-	unsigned int numPeriods = periods.size();
-	long currentPeriod = 0;
+	size_t numPeriods = periods.size();
+	size_t currentPeriod = 0;
 	
 	//Determinar el current period
-	for (long i = 0; i < numPeriods; ++i)
+	for (size_t i = 0; i < numPeriods; ++i)
 	{
 		if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
 			valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
@@ -564,7 +564,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFrenchFixedRateLeg(
 	}
 
 	//Con esas fechas residuales y el notional calcular la cuota
-	long periodsCuota = numPeriods - currentPeriod;
+	auto periodsCuota = numPeriods - currentPeriod;
 	double r = 1 / (1 + intRate->getValue() / 12.0);
 	double formula = r * (1 - pow(r, periodsCuota)) / (1 - r);
 	double cuota = notional / formula;
@@ -576,7 +576,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFrenchFixedRateLeg(
 	//Con la cuota y el nocional calcular el nocional vigente y las amortizaciones
 	double tempNotional = notional;
 	r = intRate->getValue() / 12.0;
-	for (long i = currentPeriod; i < numPeriods; ++i)
+	for (size_t i = currentPeriod; i < numPeriods; ++i)
 	{
 		get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
 		double amort = cuota - tempNotional * r;
@@ -629,11 +629,11 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	//Se generan los periodos
 	periods = factory.getPeriods();
 
-	unsigned int numPeriods = periods.size();
-	long currentPeriod = 0;
+	size_t numPeriods = periods.size();
+	size_t currentPeriod = 0;
 
 	//Determinar el current period
-	for (long i = 0; i < numPeriods; ++i)
+	for (size_t i = 0; i < numPeriods; ++i)
 	{
 		if (valueDate >= get<QCInterestRateLeg::intRtPrdElmntStartDate>(periods.at(i)) &&
 			valueDate < get<QCInterestRateLeg::intRtPrdElmntEndDate>(periods.at(i)))
@@ -646,7 +646,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	if (amortization == QCInterestRateLeg::qcFrenchAmort)
 	{
 		//Con esas fechas residuales y el notional calcular la cuota
-		long periodsCuota = numPeriods - currentPeriod;
+		auto periodsCuota = numPeriods - currentPeriod;
 		double r = 1 / (1 + intRate->getValue() / 12.0);
 		double formula = r * (1 - pow(r, periodsCuota)) / (1 - r);
 		double cuota = notional / formula;
@@ -654,7 +654,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 		//Con la cuota y el nocional calcular el nocional vigente y las amortizaciones
 		double tempNotional = notional;
 		r = intRate->getValue() / 12.0;
-		for (long i = currentPeriod; i < numPeriods; ++i)
+		for (size_t i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
 			double amort = cuota - tempNotional * r;
@@ -665,7 +665,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 
 	if (amortization == QCInterestRateLeg::qcBulletAmort)
 	{
-		for (long i = currentPeriod; i < numPeriods; ++i)
+		for (size_t i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 		}
@@ -676,7 +676,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	{
 		double amort = signo * notional / (numPeriods - currentPeriod);
 		double tempNotional = signo * notional;
-		for (long i = currentPeriod; i < numPeriods; ++i)
+		for (size_t i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
 			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
@@ -722,7 +722,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg(
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Apenas se calcule el numero de periodos se registrara aqui
-	unsigned int numPeriods;
+	size_t numPeriods;
 
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
 	int signo;
@@ -833,7 +833,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Apenas se calcule el numero de periodos se registrara aqui
-	unsigned int numPeriods;
+	size_t numPeriods;
 
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
 	int signo;
@@ -879,7 +879,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
 	}
 	if (amortization == QCInterestRateLeg::qcConstantAmort || amortization == QCInterestRateLeg::qcCustomAmort)
 	{
-		unsigned int numAmort = amortNotionalByDate.size();
+		auto numAmort = amortNotionalByDate.size();
 		for (unsigned int i = 0; i < numAmort; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1 - i)) =
@@ -944,7 +944,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Apenas se calcule el numero de periodos se registrara aqui
-	unsigned int numPeriods;
+	size_t numPeriods;
 
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
 	int signo;
@@ -969,7 +969,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
 	periods = factory.getPeriods();
 
 	numPeriods = periods.size();
-	long currentPeriod = 0;
+	size_t currentPeriod = 0;
 
 	//Determinar el current period
 	for (long i = 0; i < numPeriods; ++i)
@@ -984,7 +984,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
 
 	if (amortization == QCInterestRateLeg::qcBulletAmort)
 	{
-		for (long i = currentPeriod; i < numPeriods; ++i)
+		for (size_t i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 		}
@@ -995,7 +995,7 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg3(
 	{
 		double amort = signo * notional / (numPeriods - currentPeriod);
 		double tempNotional = signo * notional;
-		for (long i = currentPeriod; i < numPeriods; ++i)
+		for (size_t i = currentPeriod; i < numPeriods; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
 			get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;
@@ -1043,7 +1043,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg(
 	//intRtPrdElmntFxngEndDate		/*!< Fecha final de devengo del indice */
 
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int numPeriods;
+	size_t numPeriods;
 	int signo;
 	if (receivePay == "R") { signo = 1; }
 	else { signo = -1; }
@@ -1161,7 +1161,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 	)
 {
 	QCInterestRateLeg::QCInterestRatePeriods periods;
-	unsigned int numPeriods;
+	size_t numPeriods;
 	int signo;
  	if (receivePay == "R") { signo = 1; }
 	else { signo = -1; }
@@ -1195,7 +1195,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 	}
 	if (amortization == QCInterestRateLeg::qcConstantAmort || amortization == QCInterestRateLeg::qcCustomAmort)
 	{
-		unsigned int numAmort = amortNotionalByDate.size();
+		auto numAmort = amortNotionalByDate.size();
 		for (unsigned int i = 0; i < numAmort; ++i)
 		{
 			get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(numPeriods - 1 - i)) =
@@ -1229,7 +1229,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		)
 	{
 		QCInterestRateLeg::QCInterestRatePeriods periods;
-		unsigned int numPeriods;
+		size_t numPeriods;
 		int signo;
 		if (receivePay == "R") { signo = 1; }
 		else { signo = -1; }
@@ -1252,7 +1252,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		periods = factory.getPeriods();
 
 		numPeriods = periods.size();
-		long currentPeriod = 0;
+		size_t currentPeriod = 0;
 
 		//Determinar el current period
 		for (long i = 0; i < numPeriods; ++i)
@@ -1267,7 +1267,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 
 		if (amortization == QCInterestRateLeg::qcBulletAmort)
 		{
-			for (long i = currentPeriod; i < numPeriods; ++i)
+			for (size_t i = currentPeriod; i < numPeriods; ++i)
 			{
 				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = signo * notional;
 			}
@@ -1278,7 +1278,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		{
 			double amort = signo * notional / (numPeriods - currentPeriod);
 			double tempNotional = signo * notional;
-			for (long i = currentPeriod; i < numPeriods; ++i)
+			for (size_t i = currentPeriod; i < numPeriods; ++i)
 			{
 				get<QCInterestRateLeg::intRtPrdElmntNotional>(periods.at(i)) = tempNotional;
 				get<QCInterestRateLeg::intRtPrdElmntFinalAmrtztn>(periods.at(i)) = amort;

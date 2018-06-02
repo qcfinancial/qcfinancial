@@ -100,7 +100,7 @@ public:
 	* Este método es un getter que retorna el largo de la curva
 	* @return largo de la curva.
 	*/
-	long getLength()
+	size_t getLength()
 	{
 		return _curve->getLength();
 	}
