@@ -34,6 +34,11 @@ public:
 				   QCYrFrctnShrdPtr yearFraction,
 				   QCWlthFctrShrdPtr wealthFactor);
 
+	QCInterestRate(const QCInterestRate& otherRate):QCInterestRate(otherRate._value, otherRate._yf, otherRate._wf)
+	{
+	}
+
+
 	/**
 	 * @fn	double QCInterestRate::getValue();
 	 *
@@ -88,19 +93,19 @@ public:
 	double wf(long days);
 
 	/**
-	 * @fn	double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate);
-	 *
-	 * @brief	Returns the derivative wrt to rate of the wf calculated given
-	 * 			'startDate' and 'endDate'.
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	27/09/2017
-	 *
-	 * @param [in,out]	startDate	The start date.
-	 * @param [in,out]	endDate  	The end date.
-	 *
-	 * @return	A double.
-	 */
+	* @fn	double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate);
+	*
+	* @brief	Returns the 2nd derivative wrt to rate of the wf calculated given
+	* 			'startDate' and 'endDate'.
+	*
+	* @author	Alvaro Díaz V.
+	* @date	27/09/2017
+	*
+	* @param [in,out]	startDate	The start date.
+	* @param [in,out]	endDate  	The end date.
+	*
+	* @return	A double.
+	*/
 	double dwf(QCDate& startDate, QCDate& endDate);
 
 	/**
@@ -116,6 +121,36 @@ public:
 	 * @return	A double.
 	 */
 	double dwf(long days);
+
+	/**
+	* @fn		double QCInterestRate::dwf(long days);
+	*
+	* @brief	Returns 2nd the derivative wrt to rate of the wf calculated given 'days'.
+	*
+	* @author	Alvaro Díaz V.
+	* @date		15/06/2018
+	*
+	* @param	days	The days.
+	*
+	* @return	A double.
+	*/
+	double d2wf(long days);
+
+	/**
+	* @fn	double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate);
+	*
+	* @brief	Returns the derivative wrt to rate of the wf calculated given
+	* 			'startDate' and 'endDate'.
+	*
+	* @author	Alvaro Díaz V.
+	* @date	15/06/2018
+	*
+	* @param [in,out]	startDate	The start date.
+	* @param [in,out]	endDate  	The end date.
+	*
+	* @return	A double.
+	*/
+	double d2wf(QCDate& startDate, QCDate& endDate);
 
 	/**
 	 * @fn	double QCInterestRate::getRateFromWf(double wf, QCDate& startDate, QCDate& endDate);
@@ -210,6 +245,9 @@ private:
 
 	/** @brief	The wealth factor */
 	QCWlthFctrShrdPtr _wf;
+
+	/** @brief	The 2nd derivative of wf wrt rate */
+	double _d2wf;
 };
 
 #endif //QCINTERESTRATE_H

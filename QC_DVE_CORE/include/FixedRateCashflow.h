@@ -131,6 +131,42 @@ namespace QCode
 			QCDate date();
 
 			/**
+			* @fn	QCDate FixedRateCashflow::getStartDate();
+			*
+			* @brief	Gets the start date of the cashflow.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	27/09/2017
+			*
+			* @return	A const QCDate&.
+			*/
+			const QCDate& getStartDate() const;
+
+			/**
+			* @fn	QCDate FixedRateCashflow::getEndDate();
+			*
+			* @brief	Gets the end date of the cashflow.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	27/09/2017
+			*
+			* @return	A const QCDate&.
+			*/
+			const QCDate& getEndDate() const;
+
+			/**
+			* @fn	double FixedRateCashflow::getNominal();
+			*
+			* @brief	Gets the nominal of the cashflow.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	27/09/2017
+			*
+			* @return	A double.
+			*/
+			double getNominal() const;
+
+			/**
 			 * @fn	void FixedRateCashflow::setNominal(double nominal);
 			 *
 			 * @brief	Sets the nominal amount.
@@ -165,6 +201,18 @@ namespace QCode
 			 * @return	A tuple&lt;QCDate,QCDate,QCDate,double,double,double,bool,QCCurrency&gt;
 			 */
 			shared_ptr<FixedRateCashflowWrapper> wrap();
+
+			/**
+			* @fn	double FixedRateCashflow::accruedInterest(const QCDate&) const;
+			*
+			* @brief	Gets the accrued interest given a value date.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	27/09/2017
+			*
+			* @return	A double.
+			*/
+			double accruedInterest(const QCDate& valueDate);
 
 			/**
 			* @fn	virtual FixedRateCashflow::~FixedRateCashflow();

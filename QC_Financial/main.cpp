@@ -38,6 +38,8 @@
 #include "FXRateIndex.h"
 #include "InterestRateCurve.h"
 #include "PresentValue.h"
+#include "FixedRateBond.h"
+#include "ChileanFixedRateBond.h"
 
 #include "Wrappers.h"
 
@@ -491,7 +493,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	double (qf::PresentValue::*pv2)(QCDate&, const std::shared_ptr<qf::Cashflow>&,
 		const std::shared_ptr<qf::InterestRateCurve>&) = &qf::PresentValue::pv;
 	double (qf::PresentValue::*pv3)(QCDate&, qf::Leg&, QCInterestRate&) = &qf::PresentValue::pv;
-	double (qf::PresentValue::*pv4)(QCDate&, qf::Leg&, const std::shared_ptr<qf::InterestRateCurve>&) = &qf::PresentValue::pv;
+	double (qf::PresentValue::*pv4)(QCDate&, qf::Leg&, const std::shared_ptr<qf::InterestRateCurve>&) = &qf::
+		PresentValue::pv;
 	class_<qf::PresentValue>("PresentValue")
 		.def("pv", pv1)
 		.def("pv", pv2)
@@ -501,4 +504,19 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("get_derivatives", &qf::PresentValue::getDerivatives)
 		.def("get_rate", &qf::PresentValue::getRate)
 		;
+
+	class_<qf::FixedRateBond, std::shared_ptr<qf::FixedRateBond>>
+		("FixedRateBond", init<qf::Leg&>())
+		.def("accrued_interest", &qf::FixedRateBond::accruedInterest)
+		;
+
+	class_<qf::ChileanFixedRateBond, std::shared_ptr<qf::ChileanFixedRateBond>, bases<qf::FixedRateBond>>
+		("ChileanFixedRateBond", init<qf::Leg&, const QCInterestRate&>())
+		.def("valor_par", &qf::ChileanFixedRateBond::valorPar)
+		.def("precio", &qf::ChileanFixedRateBond::price)
+		.def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
+		.def("duracion", &qf::ChileanFixedRateBond::duration)
+		.def("convexidad", &qf::ChileanFixedRateBond::convexity)
+		;
+
 };

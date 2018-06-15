@@ -61,7 +61,7 @@ namespace QCode
 			*/
 			virtual shared_ptr<QCCurrency> ccy()
 			{
-				return shared_ptr<QCCurrency>(new QCCurrency);
+				return std::make_shared<QCCurrency>();
 			}
 
 			/**
@@ -108,13 +108,6 @@ namespace QCode
 			{
 			}
 		};
-
-		/**
-		 * @typedef	std::vector<std::shared_ptr<Cashflow>> Leg
-		 *
-		 * @brief	Defines an alias representing a Leg that is made of arbitrary cashflows.
-		 */
-		//typedef std::vector<std::shared_ptr<Cashflow>> Leg;
 
 		/**
 		 * @enum	RecPay

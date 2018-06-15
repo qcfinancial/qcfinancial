@@ -45,6 +45,14 @@ public:
 	*/
 	double dwf();
 
+	/*!
+	* La función dwf es un getter que devuelve el valor de la derivada segunda del último factor de capitalización
+	* calculado, respecto a la tasa. El cálculo de las derivadas se realiza al invocar el método wf.
+	* @return (double) valor de la derivada respecto a la tasa
+	*/
+	double d2wf();
+
+
 	/**
 	 * @fn	virtual std::string QCWealthFactor::description();
 	 *
@@ -68,6 +76,7 @@ protected:
 	* capitalización calculado.
 	*/
 	double _dwf;
+	double _d2wf;
 };
 
 #endif //QWEALTHFACTOR_H

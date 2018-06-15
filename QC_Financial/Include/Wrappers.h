@@ -13,6 +13,7 @@
 #include "SimpleCashflow.h"
 #include "SimpleMultiCurrencyCashflow.h"
 #include "IcpClpCashflow.h"
+#include "IcpClfCashflow.h"
 #include "InterestRateCurve.h"
 #include "ZeroCouponCurve.h"
 #include "PresentValue.h"

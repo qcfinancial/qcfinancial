@@ -6,7 +6,9 @@ QCInterestRate::QCInterestRate(double value,
 							   QCWlthFctrShrdPtr wealthFactor) :
 							   _value(value),
 							   _yf(yearFraction),
-							   _wf(wealthFactor)
+							   _wf(wealthFactor),
+							   _dwf(0.0),
+							   _d2wf(0.0)
 {
 }
 
@@ -24,6 +26,7 @@ double QCInterestRate::wf(QCDate& startDate, QCDate& endDate)
 {
 	double result = _wf->wf(_value, _yf->yf(startDate, endDate));
 	_dwf = _wf->dwf();
+	_d2wf = _wf->d2wf();
 	return result;
 }
 
@@ -31,6 +34,7 @@ double QCInterestRate::wf(long days)
 {
 	double result = _wf->wf(_value, _yf->yf(days));
 	_dwf = _wf->dwf();
+	_d2wf = _wf->d2wf();
 	return result;
 }
 
@@ -44,9 +48,19 @@ double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate)
 	return _dwf;
 }
 
+double QCInterestRate::d2wf(QCDate& startDate, QCDate& endDate)
+{
+	return _d2wf;
+}
+
 double QCInterestRate::dwf(long days)
 {
 	return _dwf;
+}
+
+double QCInterestRate::d2wf(long days)
+{
+	return _d2wf;
 }
 
 double QCInterestRate::getRateFromWf(double wf, QCDate& startDate, QCDate& endDate)

@@ -109,9 +109,11 @@ namespace QCode
 					double amount = cashflow->amount();
 					double wf = intRate.wf(days);
 					double dwf = intRate.dwf(days);
+					double d2wf = intRate.d2wf(days);
 					double pv = amount / wf;
 					//wf(r) ---> d/dr(1/wf(r)) = (-dwf(r)/dr)/wf(r)**2
-					_derivative = -amount * dwf / pow(wf, 2.0);
+					_derivative = -amount * dwf * pow(wf, -2.0);
+					_derivative2 = -amount * (d2wf * pow(wf, -2.0) - 2.0 * pow(wf, -3.0) * dwf * dwf);
 					_rate = intRate.getValue();
 					return pv;
 				}
@@ -158,7 +160,7 @@ namespace QCode
 					_rate = curve->getRateAt(days);
 					for (size_t i = 0; i < _derivatives.size(); ++i)
 					{
-						_derivatives[i] = curve->dfDerivativeAt(i) * amount;
+						_derivatives[i] = curve->dfDerivativeAt((unsigned)i) * amount;
 					}
 					return pv;
 				}
@@ -191,6 +193,7 @@ namespace QCode
 				{
 					result += pv(valuationDate, leg.getCashflowAt(i), intRate);
 					_derivatives[i] = _derivative;
+					_derivatives2[i] = _derivative2;
 				}
 				return result;
 			}
@@ -249,6 +252,21 @@ namespace QCode
 			}
 
 			/**
+			* @fn      std::vector<double> getDerivatives(): returns the 2nd derivatives of the present
+			*          value of a single cashflow with respect to each vertex of the discounting curve.
+			*         
+			* @author	Alvaro Díaz V.
+			* @date	    28/05/2018
+			*
+			* @return	A std::vector<double> with the derivatives. The indexes of this vector
+			*           coincides with the indices of the vertices of the curve.
+			*/
+			std::vector<double> get2Derivatives() const
+			{
+				return _derivatives2;
+			}
+
+			/**
 			* @fn      std::double getDerivative(): returns the derivative with respect to
 			*          a single interest rate.
 			*
@@ -261,6 +279,21 @@ namespace QCode
 			{
 				return _derivative;
 			}
+
+			/**
+			* @fn      std::double get2Derivative(): returns the 2nd derivative of the present
+			*          value of a single cashflow with respect to a single interest rate.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    28/05/2018
+			*
+			* @return	A double.
+			*/
+			double get2Derivative() const
+			{
+				return _derivative2;
+			}
+
 
 			/**
 			* @fn      std::double getRate(): returns the rate used to calculate the pv
@@ -282,17 +315,29 @@ namespace QCode
 		private:
 
 			/**
-			* @brief	Variable that holds the derivatives of present value with respect
-			*           to a single interest rate.
+			* @brief	Variable that holds the derivative of the present value of a single
+			*           cashflow with respect to a single interest rate.
 			*/
 			double _derivative;
 
 			/**
-			* @brief	Variable that holds the derivatives of present value with respect  
-			*           to the vertices of the discounting curve.
+			* @brief	Variable that holds the 2nd derivative of the present value of a single
+			*           cashflow with respect to a single interest rate.
+			*/
+			double _derivative2;
+
+			/**
+			* @brief	Variable that holds the derivatives of the present value of a single
+			*           cashflow with respect to the vertices of a discounting curve.
 			*/
 			std::vector<double> _derivatives;
-			
+
+			/**
+			* @brief	Variable that holds the 2nd derivatives of the present value of a single
+			*           cashflow with respect to the vertices of a discounting curve.
+			*/
+			std::vector<double> _derivatives2;
+
 			/**
 			* @brief	Resets the container for derivatives.
 			*/
@@ -300,6 +345,8 @@ namespace QCode
 			{
 				_derivatives.clear();
 				_derivatives.resize(newSize);
+				_derivatives2.clear();
+				_derivatives2.resize(newSize);
 				return;
 			}
 

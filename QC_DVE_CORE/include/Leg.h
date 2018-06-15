@@ -5,11 +5,14 @@
 #include<vector>
 
 #include "Cashflow.h"
+#include "FixedRateCashflow.h"
 
 namespace QCode
 {
 	namespace Financial
 	{
+		using FixedRateLeg = std::vector<std::shared_ptr<FixedRateCashflow>>;
+
 		class Leg
 		{
 		public:

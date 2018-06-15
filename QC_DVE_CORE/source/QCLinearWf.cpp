@@ -7,6 +7,7 @@ QCLinearWf::QCLinearWf()
 double QCLinearWf::wf(double rate, double yf)
 {
 	_dwf = yf;
+	_d2wf = 0.0;
 	return 1 + rate * yf;
 }
 

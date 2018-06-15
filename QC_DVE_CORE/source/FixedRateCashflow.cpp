@@ -45,6 +45,21 @@ namespace QCode
 			return _settlementDate;
 		}
 
+		const QCDate& FixedRateCashflow::getStartDate() const
+		{
+			return _startDate;
+		}
+
+		const QCDate& FixedRateCashflow::getEndDate() const
+		{
+			return _endDate;
+		}
+
+		double FixedRateCashflow::getNominal() const
+		{
+			return _nominal;
+		}
+
 		void FixedRateCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;
@@ -69,6 +84,16 @@ namespace QCode
 								   _rate);
 
 			return std::make_shared<FixedRateCashflowWrapper>(tup);
+		}
+
+		double FixedRateCashflow::accruedInterest(const QCDate& valueDate)
+		{
+			if (Cashflow::isExpired(valueDate) || valueDate > _endDate)
+			{
+				return 0.0;
+			}
+			QCDate temp = valueDate;
+			return _nominal * (_rate.wf(_startDate, temp) - 1.0);
 		}
 
 		void FixedRateCashflow::_calculateInterest()
