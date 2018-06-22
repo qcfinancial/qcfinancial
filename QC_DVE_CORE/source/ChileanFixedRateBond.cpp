@@ -6,7 +6,7 @@ namespace QCode
 	namespace Financial
 	{
 		ChileanFixedRateBond::ChileanFixedRateBond(Leg& fixedRateLeg,
-			const QCInterestRate& tera) : FixedRateBond(fixedRateLeg), _tera(tera), _duration(0.0), _convexity(0.0)
+			const QCInterestRate& tera) : FixedRateBond(fixedRateLeg), _tera(tera)
 		{
 		}
 		
@@ -55,17 +55,6 @@ namespace QCode
 			return round((pv / vPar) * 10000) / 10000;
 		}
 		
-		double ChileanFixedRateBond::duration() const
-		{
-			return  _duration;
-		}
-
-		double ChileanFixedRateBond::convexity() const
-		{
-			return _convexity;
-		}
-
-
 		double ChileanFixedRateBond::settlementValue(double notional, std::shared_ptr<QCCurrency> currency,
 			const QCDate& valueDate, const QCInterestRate& yieldToMaturity)
 		{

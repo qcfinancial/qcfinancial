@@ -39,6 +39,15 @@ namespace QCode
 			virtual double getRateAt(long d) = 0;
 
 			/*!
+			* Retorna la tasa interpolada al plazo d.
+			* @param d plazo a interpolar
+			* @return objeto de tipo QCInterestRate que representa
+			* 		  la tasa interpolada con la convención de las tasas de la curva.
+			*/
+			virtual QCInterestRate getQCInterestRateAt(long d) = 0;
+
+
+			/*!
 			* Retorna el factor de descuento interpolado al plazo d.
 			* @param d plazo a interpolar
 			* @return valor del factor de descuento interpolado.

@@ -15,6 +15,13 @@ namespace QCode
 			return _curve->interpolateAt(d);
 		}
 
+		QCInterestRate ZeroCouponCurve::getQCInterestRateAt(long d)
+		{
+			auto rate = getRateAt(d);
+			InterestRateCurve::_intRate.setValue(rate);
+			return InterestRateCurve::_intRate;
+		}
+
 		double ZeroCouponCurve::getForwardWf(long d1, long d2)
 		{
 			if (d1 > d2)

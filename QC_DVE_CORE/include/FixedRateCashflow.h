@@ -140,7 +140,7 @@ namespace QCode
 			*
 			* @return	A const QCDate&.
 			*/
-			const QCDate& getStartDate() const;
+			QCDate getStartDate() const;
 
 			/**
 			* @fn	QCDate FixedRateCashflow::getEndDate();
@@ -152,7 +152,7 @@ namespace QCode
 			*
 			* @return	A const QCDate&.
 			*/
-			const QCDate& getEndDate() const;
+			QCDate getEndDate() const;
 
 			/**
 			* @fn	double FixedRateCashflow::getNominal();

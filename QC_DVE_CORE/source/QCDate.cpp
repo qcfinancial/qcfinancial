@@ -44,7 +44,7 @@ QCDate::QCDate(int d, int m, int y)
 QCDate::QCDate(string& stringDate)
 {
 	if (stringDate.length() != 10)
-		throw invalid_argument("String has invalid length shoulf be yyyy/mm/dd");
+		throw invalid_argument("String has invalid length should be yyyy/mm/dd");
 	int d, m, y;
 	try
 	{
