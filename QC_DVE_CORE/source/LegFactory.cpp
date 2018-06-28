@@ -30,7 +30,8 @@ namespace QCode
 			double notional,
 			bool doesAmortize,
 			QCInterestRate rate,
-			std::shared_ptr<QCCurrency> currency)
+			std::shared_ptr<QCCurrency> currency,
+			bool forBonds)
 		{
 			auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
 			// Make all the holidays in the calendar into a shared_ptr.
@@ -65,6 +66,9 @@ namespace QCode
 				QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
 				QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
 				QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
+				// For the correct calculation of present values using market yields according
+				// to the usual conventions in fixed income markets.
+				if (forBonds) settlementDate = thisEndDate; 
 				double amort = 0.0;
 				if (i == numPeriods - 1)
 				{

@@ -1144,6 +1144,11 @@ namespace wrappers
 			return this->get_override("getRateAt")();
 		}
 
+		QCInterestRate getQCInterestRateAt(long d)
+		{
+			return this->get_override("getQCInterestRateAt")();
+		}
+
 		double getDiscountFactorAt(long d)
 		{
 			return this->get_override("getDiscountFactorAt")();
@@ -1174,6 +1179,12 @@ namespace wrappers
 			return this->get_override("fwdWfDerivativeAt")();
 		}
 	};
+
+	QCDate buildQCDateFromString(const std::string& fechaString)
+	{
+		std::string fechaStr {fechaString};
+		return QCDate{ fechaStr };
+	}
 }
 
 

@@ -40,7 +40,8 @@ namespace QCode
 				double notional,
 				bool doesAmortize,
 				QCInterestRate rate,
-				std::shared_ptr<QCCurrency> currency);
+				std::shared_ptr<QCCurrency> currency,
+				bool forBonds = false);
 
 			static Leg LegFactory::buildCustomAmortFixedRateLeg(
 				RecPay recPay,

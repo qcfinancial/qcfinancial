@@ -26,7 +26,8 @@ public:
 		qcEURUSD,
 		qcGBPUSD,
 		qcUSDCLF,
-		qcUSDUSD
+		qcUSDUSD,
+		qcEUREUR
 	};
 
 	/*!
@@ -58,6 +59,7 @@ public:
 		_fxRateCode.insert(pair<QCFxRate, string>(qcGBPUSD, "GBPUSD"));
 		_fxRateCode.insert(pair<QCFxRate, string>(qcUSDCLF, "USDCLF"));
 		_fxRateCode.insert(pair<QCFxRate, string>(qcUSDUSD, "USDUSD"));
+		_fxRateCode.insert(pair<QCFxRate, string>(qcEUREUR, "EUREUR"));
 
 		_currencyCode.insert(pair<QCCurrency, string>(qcCLF, "CLF"));
 		_currencyCode.insert(pair<QCCurrency, string>(qcCLP, "CLP"));
@@ -82,6 +84,7 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRate>("USDUSD", qcUSDUSD));
 		_standardFxRate.insert(pair<string, QCFxRate>("GBPUSD", qcGBPUSD));
 		_standardFxRate.insert(pair<string, QCFxRate>("USDGBP", qcGBPUSD));
+		_standardFxRate.insert(pair<string, QCFxRate>("EUREUR", qcEUREUR));
 	}
 
 	/*!
@@ -117,7 +120,7 @@ public:
 			if (x.second == code)
 				return x.first;
 		}
-		throw invalid_argument("No corresponding currency enum for this currency code.");
+		throw invalid_argument("No corresponding currency enum for this currency code (" + code +").");
 	}
 
 	/*!
@@ -130,7 +133,7 @@ public:
 			if (x.second == code)
 				return x.first;
 		}
-		throw invalid_argument("No corresponding fx rate enum for this fx rate code.");
+		throw invalid_argument("No corresponding fx rate enum for this fx rate code (" + code + ").");
 	}
 
 	/*!
@@ -144,7 +147,7 @@ public:
 	}
 
 	/*!
-	* Retorna el enum de la divisa debil de un tipo de cambio si se da el código en texto.
+	* Retorna el enum de la divisa débil de un tipo de cambio si se da el código en texto.
 	*/
 	QCCurrency getWeakCurrencyEnum(string code)
 	{

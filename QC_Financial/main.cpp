@@ -2,6 +2,7 @@
 #define BOOST_PYTHON_MAX_ARITY 20
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <boost/python/docstring_options.hpp>
 
 #include<memory>
 #include<string>
@@ -42,12 +43,15 @@
 #include "ChileanFixedRateBond.h"
 
 #include "Wrappers.h"
+#include "Include/Wrappers.h"
 
 using namespace boost::python;
 namespace qf = QCode::Financial;
 
 BOOST_PYTHON_MODULE(QC_Financial)
 {
+	docstring_options doc_options(true);
+
 	class_<QCCurrency, shared_ptr<QCCurrency>>("QCCurrency")
 		.def("get_name", &QCCurrency::getName)
 		.def("get_iso_code", &QCCurrency::getIsoCode)
@@ -93,8 +97,12 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("description", &QCDate::description)
 		.def("add_months", &QCDate::addMonths)
 		.def("add_days", &QCDate::addDays)
+		.def("day_diff", &QCDate::dayDiff)
 		.def(self_ns::str(self_ns::self))
 		;
+
+	def("build_qcdate_from_string", &wrappers::buildQCDateFromString);
+
 	
 	enum_<QCDate::QCWeekDay>("WeekDay")
 		.value("MON", QCDate::qcMonday)
@@ -218,13 +226,16 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	implicitly_convertible<std::shared_ptr<qf::FixedRateCashflow>, std::shared_ptr<qf::Cashflow>>();
 
-	class_<qf::FixedRateCashflow, std::shared_ptr<qf::FixedRateCashflow>, bases<qf::Cashflow>>("FixedRateCashflow", init < QCDate&, QCDate&, QCDate&,
+	class_<qf::FixedRateCashflow, std::shared_ptr<qf::FixedRateCashflow>, bases<qf::Cashflow>>("FixedRateCashflow",
+		               init < QCDate&, QCDate&, QCDate&,
 							  double, double, bool,
 							  const QCInterestRate&,
 							  shared_ptr < QCCurrency >> ())
 							  .def("amount", &qf::FixedRateCashflow::amount)
 							  .def("ccy", &qf::FixedRateCashflow::ccy)
-							  .def("date", &qf::FixedRateCashflow::date)
+							  .def("get_settlement_date", &qf::FixedRateCashflow::date)
+							  .def("get_start_date", &qf::FixedRateCashflow::getStartDate)
+							  .def("get_end_date", &qf::FixedRateCashflow::getEndDate)
 							  .def("wrap", &qf::FixedRateCashflow::wrap)
 							  .def("set_nominal", &qf::FixedRateCashflow::setNominal)
 							  .def("set_amortization", &qf::FixedRateCashflow::setAmortization)
@@ -477,6 +488,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	class_<wrappers::InterestRateCurveWrap, std::shared_ptr<wrappers::InterestRateCurveWrap>, boost::noncopyable>
 		("InterestRateCurve", init<shared_ptr<QCInterpolator>, QCInterestRate>())
 		.def("get_rate_at", pure_virtual(&qf::InterestRateCurve::getRateAt))
+		.def("get_qc_interest_rate_at", pure_virtual(&qf::InterestRateCurve::getQCInterestRateAt))
 		.def("get_discount_factor_at", pure_virtual(&qf::InterestRateCurve::getDiscountFactorAt))
 		.def("get_forward_rate_with_rate", pure_virtual(&qf::InterestRateCurve::getForwardRateWithRate))
 		.def("get_forward_rate", pure_virtual(&qf::InterestRateCurve::getForwardRate))
@@ -507,16 +519,20 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	class_<qf::FixedRateBond, std::shared_ptr<qf::FixedRateBond>>
 		("FixedRateBond", init<qf::Leg&>())
+		.def("present_value", &qf::FixedRateBond::presentValue)
+		.def("price", &qf::FixedRateBond::price)
 		.def("accrued_interest", &qf::FixedRateBond::accruedInterest)
+		.def("duracion", &qf::FixedRateBond::duration)
+		.def("convexidad", &qf::FixedRateBond::convexity)
+		.def("get_leg", &qf::FixedRateBond::getLeg)
 		;
 
+	implicitly_convertible<std::shared_ptr<qf::ChileanFixedRateBond>, shared_ptr<qf::FixedRateBond>>();
 	class_<qf::ChileanFixedRateBond, std::shared_ptr<qf::ChileanFixedRateBond>, bases<qf::FixedRateBond>>
 		("ChileanFixedRateBond", init<qf::Leg&, const QCInterestRate&>())
 		.def("valor_par", &qf::ChileanFixedRateBond::valorPar)
 		.def("precio", &qf::ChileanFixedRateBond::price)
 		.def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
-		.def("duracion", &qf::ChileanFixedRateBond::duration)
-		.def("convexidad", &qf::ChileanFixedRateBond::convexity)
 		;
 
 };
