@@ -24,10 +24,14 @@ public:
 		qcJPYCLP,
 		qcUSDCLP,
 		qcEURUSD,
+		qcGBPGBP,
 		qcGBPUSD,
+		qcGBPCLP,
 		qcUSDCLF,
 		qcUSDUSD,
-		qcEUREUR
+		qcEUREUR,
+		qcCHFCHF,
+		qcEURCHF
 	};
 
 	/*!
@@ -60,6 +64,10 @@ public:
 		_fxRateCode.insert(pair<QCFxRate, string>(qcUSDCLF, "USDCLF"));
 		_fxRateCode.insert(pair<QCFxRate, string>(qcUSDUSD, "USDUSD"));
 		_fxRateCode.insert(pair<QCFxRate, string>(qcEUREUR, "EUREUR"));
+		_fxRateCode.insert(pair<QCFxRate, string>(qcCHFCHF, "CHFCHF"));
+		_fxRateCode.insert(pair<QCFxRate, string>(qcEURCHF, "EURCHF"));
+		_fxRateCode.insert(pair<QCFxRate, string>(qcGBPCLP, "GBPCLP"));
+		_fxRateCode.insert(pair<QCFxRate, string>(qcGBPGBP, "GBPGBP"));
 
 		_currencyCode.insert(pair<QCCurrency, string>(qcCLF, "CLF"));
 		_currencyCode.insert(pair<QCCurrency, string>(qcCLP, "CLP"));
@@ -67,6 +75,7 @@ public:
 		_currencyCode.insert(pair<QCCurrency, string>(qcEUR, "EUR"));
 		_currencyCode.insert(pair<QCCurrency, string>(qcJPY, "JPY"));
 		_currencyCode.insert(pair<QCCurrency, string>(qcUSD, "USD"));
+		_currencyCode.insert(pair<QCCurrency, string>(qcCHF, "CHF"));
 
 		_standardFxRate.insert(pair<string, QCFxRate>("CLFCLP", qcCLFCLP));
 		_standardFxRate.insert(pair<string, QCFxRate>("CLPCLF", qcCLFCLP));
@@ -82,9 +91,15 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRate>("USDCLF", qcUSDCLF));
 		_standardFxRate.insert(pair<string, QCFxRate>("CLFUSD", qcUSDCLF));
 		_standardFxRate.insert(pair<string, QCFxRate>("USDUSD", qcUSDUSD));
+		_standardFxRate.insert(pair<string, QCFxRate>("GBPGBP", qcGBPGBP));
 		_standardFxRate.insert(pair<string, QCFxRate>("GBPUSD", qcGBPUSD));
 		_standardFxRate.insert(pair<string, QCFxRate>("USDGBP", qcGBPUSD));
+		_standardFxRate.insert(pair<string, QCFxRate>("GBPCLP", qcGBPCLP));
+		_standardFxRate.insert(pair<string, QCFxRate>("CLPGBP", qcGBPCLP));
 		_standardFxRate.insert(pair<string, QCFxRate>("EUREUR", qcEUREUR));
+		_standardFxRate.insert(pair<string, QCFxRate>("CHFCHF", qcCHFCHF));
+		_standardFxRate.insert(pair<string, QCFxRate>("EURCHF", qcEURCHF));
+		_standardFxRate.insert(pair<string, QCFxRate>("CHFEUR", qcEURCHF));
 	}
 
 	/*!

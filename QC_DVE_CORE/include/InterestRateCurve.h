@@ -4,38 +4,55 @@
 #include "QCInterestRate.h"
 #include "QCInterpolator.h"
 
-/*!
-* @author Alvaro Díaz
-* @brief Clase base abstracta para todas las curvas de tasas de interés.
-* @details Esta clase define varios métodos que las clases derivadas deben implementar.
-* Los distintos tipos de curvas (descuento, proyección, por factores o tasas)
-* se derivan de ésta.
-*/
-
 namespace QCode
 {
 	namespace Financial
 	{
+		/**
+		 * @class	InterestRateCurve
+		 *
+		 * @brief	Abstract base class for all interest rate curves (discount, projection). 
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	07/07/2018
+		 */
 		class InterestRateCurve
 		{
 		public:
-			/*!
-			* Constructor de la clase.
-			* @param curve plazos y valores (tasas o factores de descuento) de la curva junto con el
-			* método de interpolación seleccionado.
-			* @param intRate contiene el tipo de las tasas de interés de la curva.
-			*/
+			/**
+			 * @fn	InterestRateCurve::InterestRateCurve(shared_ptr<QCInterpolator> curve, 
+			 * 		QCInterestRate intRate)
+			 *
+			 * @brief	Constructor
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/07/2018
+			 *
+			 * @param	curve  	The values of the curve (x's and y's) with an associated
+			 * 					method of interpolation.
+			 * @param	intRate	A QCInterestRate object which establishes the convention
+			 * 					of all rates in the curve.
+			 */
 			InterestRateCurve(shared_ptr<QCInterpolator> curve, QCInterestRate intRate) : _curve(curve), _intRate(intRate)
 			{
 				_dfDerivatives.resize(_curve->getLength());
 				_fwdWfDerivatives.resize(_curve->getLength());
 			}
 
-			/*!
-			* Retorna la tasa interpolada al plazo d.
-			* @param d plazo a interpolar
-			* @return valor de la tasa interpolada en la convención de las tasas de la curva.
-			*/
+
+			/**
+			 * @fn	virtual double InterestRateCurve::getRateAt(long d) = 0;
+			 *
+			 * @brief	Gets rate at maturity d. This method uses the interpolation defined
+			 * 			in the parameter curve used when constructing an instance of this class.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	07/07/2018
+			 *
+			 * @param	d	A long representing the maturity of the rate.
+			 *
+			 * @return	The rate at maturity d.
+			 */
 			virtual double getRateAt(long d) = 0;
 
 			/*!

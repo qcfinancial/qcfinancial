@@ -8,6 +8,13 @@ namespace QCode
 {
 	namespace Financial
 	{
+		/**
+		 * @typedef	std::tuple< QCDate, double, shared_ptr<QCCurrency>, 
+		 * 			QCDate, std::shared_ptr<QCCurrency>, std::shared_ptr<FXRateIndex>, 
+		 * 			double, double > SimpleMultiCurrencyCashflowWrapper
+		 *
+		 * @brief	Defines an alias representing the simple multi currency cashflow wrapper
+		 */
 		typedef std::tuple<
 			QCDate,                        /* end date */
 			double,                        /* nominal */
@@ -19,6 +26,15 @@ namespace QCode
 			double                         /* Amount */
 		> SimpleMultiCurrencyCashflowWrapper;
 
+		/**
+		 * @class	SimpleMultiCurrencyCashflow
+		 *
+		 * @brief	A simple multi currency cashflow. A multi currency cashflow is a cashflow
+		 * 			calculated in a given currency but payed/exchanged in a different currency.
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	07/07/2018
+		 */
 		class SimpleMultiCurrencyCashflow : public SimpleCashflow
 		{
 		public:
@@ -113,9 +129,19 @@ namespace QCode
 			std::shared_ptr<SimpleMultiCurrencyCashflowWrapper> wrap();
 
 		private:
+
+			/** @brief	The fx rate index fixing date */
 			QCDate _fxRateIndexFixingDate;
+
+			/** @brief	The settlement currency */
 			std::shared_ptr<QCCurrency> _settlementCurrency;
+
+
+			/** @brief	Fx rate index used to perform the calculation. */
 			std::shared_ptr<FXRateIndex> _fxRateIndex;
+
+
+			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
 
 		};

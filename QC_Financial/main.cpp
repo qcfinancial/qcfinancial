@@ -534,5 +534,4 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("precio", &qf::ChileanFixedRateBond::price)
 		.def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
 		;
-
 };

@@ -426,13 +426,17 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	QCDate::QCBusDayAdjRules direction) const
 {
+	//cout << "Enter shift" << endl;
+	//cout << "nDays: " << nDays << endl;
 	QCDate result{ _day, _month, _year };
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
 		result = result.businessDay(calendar, QCDate::qcFollow);
+		//cout << "result (primero): " << result.description() << endl;
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
+			//cout << "result " << i << ": " << result.description() << endl;
 		}
 	}
 	else
@@ -589,6 +593,24 @@ QCDate QCDate::addDays(long nDays) const
 {
     long newSerial = this->excelSerial() + nDays;
     return QCDate {newSerial};
+}
+
+QCDate QCDate::addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
+	QCDate::QCBusDayAdjRules direction) const
+{
+	//cout << "Enter addWeeks" << endl;
+	//cout << "nDays: " << nWeeks << endl;
+	QCDate result{ _day, _month, _year };
+	int multiplier = -1;
+	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
+	{
+		multiplier = 1;
+	}
+	result = result.businessDay(calendar, direction);
+	//cout << "result (primero): " << result.description() << endl;
+	result = result.addDays(multiplier * nWeeks * 7).businessDay(calendar, direction);
+	//cout << "result: " << result.description() << endl;
+	return result;
 }
 
 QCDate QCDate::moveToDayOfMonth(unsigned int dayOfMonth, QCDate::QCDirection direction,

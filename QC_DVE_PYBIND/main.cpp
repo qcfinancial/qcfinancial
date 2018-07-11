@@ -3326,8 +3326,13 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 		unsigned int longestCurve = 0;
 		for (const auto& payoff : payoffs)
 		{
+			const double zero = 0;
 			m2m = payoff.second->presentValue();
 			valueDateCashflow = payoff.second->getValueDateCashflow();
+			if (m2m == zero)
+			{
+				m2m = valueDateCashflow;
+			}
 			unsigned int vertices = payoff.second->discountCurveLength();
 			der.resize(vertices);
 			for (unsigned long i = 0; i < vertices; ++i)

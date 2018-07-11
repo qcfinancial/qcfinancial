@@ -198,6 +198,7 @@ namespace QCDvePyBindHelperFunctions
 		size_t numRates = PyList_Size(input);
 		zeroRateVector.resize(numRates);
 		cout << "Enter buildZeroRateVector" << endl;
+		cout << "Process date: " << processDate.description() << endl;
 		for (size_t i = 0; i < numRates; ++i)
 		{
 			ZeroRate temp;
@@ -206,17 +207,33 @@ namespace QCDvePyBindHelperFunctions
 			//Build start date
 			string rule = PyString_AsString(PyTuple_GetItem((PyList_GetItem(input, i)), 1));
 			unsigned int lag = QCHelperFunctions::tenor(rule);
-			get<0>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
+			QCHelperFunctions::lowerCase(rule);
+			if (rule.substr(rule.size() - 1, 1) == "w")
+			{
+				get<0>(temp) = processDate.addWeeks(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
+			}
+			else
+			{
+				get<0>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
+			}
+			cout << "\tlag: " << lag << endl;
 			cout << "\tbuildZeroRateVector: start_date " + get<0>(temp).description() << endl;
 
 			//Build end date
 			rule = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 2));
+			lag = QCHelperFunctions::tenor(rule);
 			QCHelperFunctions::lowerCase(rule);
+			cout << "\tend date rule: " << rule << endl;;
 			if (rule.substr(rule.size() - 1, 1) == "d")
 			{
 				lag = QCHelperFunctions::tenor(rule);
 				get<1>(temp) = get<0>(temp).addDays(lag).businessDay(dateVector,
 					QCDate::QCBusDayAdjRules::qcFollow);
+			}
+			else if (rule.substr(rule.size() - 1, 1) == "w")
+			{
+				lag = QCHelperFunctions::tenor(rule);
+				get<1>(temp) = get<0>(temp).addWeeks(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
 			}
 			else
 			{
@@ -224,6 +241,8 @@ namespace QCDvePyBindHelperFunctions
 				get<1>(temp) = get<0>(temp).addMonths(lag).businessDay(dateVector,
 					QCDate::QCBusDayAdjRules::qcFollow);
 			}
+			
+			cout << "\tlag: " << lag << endl;
 			cout << "\tbuildZeroRateVector: end_date " + get<1>(temp).description() << endl;
 
 			//Build value

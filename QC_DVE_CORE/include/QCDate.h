@@ -298,6 +298,17 @@ class QCDate
          */
         QCWeekDay weekDay() const;
 
+		/*!
+		* Calcula la fecha que resulta de sumar un número de semanas a si misma
+		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
+		* @param nWeeks número de semanas a sumar. Una semana son 7 días más
+		* 				el ajuste que se produzca por el ajuste por día hábil.
+		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
+		* @return (QCDate) fecha resultante
+		*/
+		QCDate addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
+			QCDate::QCBusDayAdjRules direction) const;
+
         /*!
          * Retorna a si misma como string legible y printer friendly
 		 * @param dmy si es true retorna formato 'dd-mm-yyyy' si es false el formato

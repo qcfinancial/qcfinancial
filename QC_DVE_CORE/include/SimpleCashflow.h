@@ -7,8 +7,21 @@ namespace QCode
 {
 	namespace Financial
 	{
+		/**
+		 * @typedef	std::tuple<QCDate, double, shared_ptr<QCCurrency>> SimpleCashflowWrapper
+		 *
+		 * @brief	Defines an alias representing the simple cashflow wrapper
+		 */
 		typedef std::tuple<QCDate, double, shared_ptr<QCCurrency>> SimpleCashflowWrapper;
 
+		/**
+		 * @class	SimpleCashflow
+		 *
+		 * @brief	A simple cashflow.
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	07/07/2018
+		 */
 		class SimpleCashflow : public Cashflow
 		{
 		public:
