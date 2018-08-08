@@ -25,8 +25,8 @@ public:
 		QCIntRtCrvShrdPtr discountCurve,
 		QCDate valueDate,
 		QCTimeSeriesShrdPtr fxFixingData,
-		QCCurrencyConverter::QCCurrency notionalCurrency,
-		QCCurrencyConverter::QCFxRate fxRate
+		QCCurrencyConverter::QCCurrencyEnum notionalCurrency,
+		QCCurrencyConverter::QCFxRateEnum fxRate
 		);
 
 	/*!
@@ -39,7 +39,7 @@ public:
 	* Retorna la moneda del nocional
 	* @return moneda del nocional
 	*/
-	QCCurrencyConverter::QCCurrency getNotionalCurrency();
+	QCCurrencyConverter::QCCurrencyEnum getNotionalCurrency();
 
 	/*!
 	* Entrega el período de tasa de interés
@@ -62,13 +62,13 @@ protected:
 	/*!
 	* Variable donde se almacena la moneda del nocional de la pata
 	*/
-	QCCurrencyConverter::QCCurrency _notionalCurrency;
+	QCCurrencyConverter::QCCurrencyEnum _notionalCurrency;
 
 	/*!
 	* Variable donde se almacena el tipo de fx rate que se usa para convertir.
 	* Con tipo nos referimos a la descripcion MX1MX2 donde MXi es el código de una divisa.
 	*/
-	QCCurrencyConverter::QCFxRate _fxRate;
+	QCCurrencyConverter::QCFxRateEnum _fxRate;
 };
 
 #endif //QCDISCOUNTBONDPAYOFF_H

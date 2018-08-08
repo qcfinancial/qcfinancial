@@ -3,8 +3,8 @@
 
 QCFXForward::QCFXForward(
 	vector<shared_ptr<QCDiscountBondPayoff>> legs,
-	QCCurrencyConverter::QCCurrency marketValueCurrency,
-	shared_ptr<map<QCCurrencyConverter::QCFxRate, double>> fxRates) :
+	QCCurrencyConverter::QCCurrencyEnum marketValueCurrency,
+	shared_ptr<map<QCCurrencyConverter::QCFxRateEnum, double>> fxRates) :
 	_legs(legs), _marketValueCurrency(marketValueCurrency), _fxRates(fxRates)
 {
 	if (_legs.size() != 2)
@@ -25,8 +25,8 @@ QCFXForward::QCFXForward(
 double QCFXForward::marketValue()
 {
 	QCCurrencyConverter conv;
-	QCCurrencyConverter::QCCurrency legCurrency = _legs.at(0)->getNotionalCurrency();
-	QCCurrencyConverter::QCFxRate fxRate = conv.getStandardFxRate(legCurrency, _marketValueCurrency);
+	QCCurrencyConverter::QCCurrencyEnum legCurrency = _legs.at(0)->getNotionalCurrency();
+	QCCurrencyConverter::QCFxRateEnum fxRate = conv.getStandardFxRate(legCurrency, _marketValueCurrency);
 	double fxRateValue;
 	auto it = _fxRates->find(fxRate);
 	if (it != _fxRates->end())
@@ -100,8 +100,8 @@ double QCFXForward::getPvRateDerivativeAtFromLeg(unsigned int index, unsigned in
 	if (numPayoff == 0 || numPayoff == 1)
 	{
 		QCCurrencyConverter conv;
-		QCCurrencyConverter::QCCurrency legCurrency = _legs.at(numPayoff)->getNotionalCurrency();
-		QCCurrencyConverter::QCFxRate fxRate = conv.getStandardFxRate(legCurrency, _marketValueCurrency);
+		QCCurrencyConverter::QCCurrencyEnum legCurrency = _legs.at(numPayoff)->getNotionalCurrency();
+		QCCurrencyConverter::QCFxRateEnum fxRate = conv.getStandardFxRate(legCurrency, _marketValueCurrency);
 		double fxRateValue;
 		auto it = _fxRates->find(fxRate);
 		if (it != _fxRates->end())

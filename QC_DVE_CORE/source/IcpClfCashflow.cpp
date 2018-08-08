@@ -35,13 +35,16 @@ namespace QCode
 			// Calcular la fracción de año correspondiente
 			auto yf = _rate.yf(_startDate, date);
 
-			// Factor para redondeo
+			// Factor para redondeo de TNA
 			double factor = std::pow(10, 4);
 
 			//Cálculo de TNA
 			auto tna = (icpValue / _startDateICP - 1) / yf;
 			tna = round(tna * factor) / factor;
 			_rate.setValue(tna);
+
+			// Se redefine para redondeo de TRA
+			factor = std::pow(10, 6);
 
 			// Cálculo de TRA
 			double tra = (_rate.wf(_startDate, date) * _startDateUF / ufValue - 1) / yf;
@@ -57,7 +60,7 @@ namespace QCode
 			auto interest = _calculateInterest(_endDate, _endDateICP, _endDateUF);
 			if (_doesAmortize)
 			{
-				return _nominal + interest;
+				return _amortization + interest;
 			}
 			else
 			{
@@ -67,7 +70,7 @@ namespace QCode
 
 		double IcpClfCashflow::accruedInterest(QCDate& accrualDate, double icpValue, double ufValue)
 		{
-			return _calculateInterest(accrualDate, icpValue, ufValue);
+			return _currency->amount(_calculateInterest(accrualDate, icpValue, ufValue));
 		}
 
 		void IcpClfCashflow::setStartDateUf(double ufValue)
@@ -105,7 +108,7 @@ namespace QCode
 
 			//Se precalcula el interés porque eso permite asegurar que el valor
 			//de la tasa es consistente con los valores de ICP y UF ingresados.
-			double interest = _calculateInterest(_endDate, _endDateICP, _endDateUF);
+			double interest = accruedInterest(_endDate, _endDateICP, _endDateUF);
 			IcpClfCashflowWrapper tup = std::make_tuple(_startDate,
 														_endDate,
 														_settlementDate,

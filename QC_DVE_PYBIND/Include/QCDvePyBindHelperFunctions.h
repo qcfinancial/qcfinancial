@@ -51,11 +51,11 @@ namespace QCDvePyBindHelperFunctions
 		double,								//0 notional1 (strong currency)
 		double,								//1 notional2 (weak currency)
 		QCDate,								//2 end_date
-		QCCurrencyConverter::QCCurrency,	//3 present value currency
-		QCCurrencyConverter::QCCurrency,	//4 notional1 currency (strong)
-		QCCurrencyConverter::QCCurrency,	//5 notional2 currency (weak)
-		QCCurrencyConverter::QCFxRate,		//6 fxRate1 (strong a present value)
-		QCCurrencyConverter::QCFxRate		//7 fxRate2 (weak a presente value)
+		QCCurrencyConverter::QCCurrencyEnum,	//3 present value currency
+		QCCurrencyConverter::QCCurrencyEnum,	//4 notional1 currency (strong)
+		QCCurrencyConverter::QCCurrencyEnum,	//5 notional2 currency (weak)
+		QCCurrencyConverter::QCFxRateEnum,		//6 fxRate1 (strong a present value)
+		QCCurrencyConverter::QCFxRateEnum		//7 fxRate2 (weak a presente value)
 	> FwdIndex;
 
 	enum QCFwdIndex

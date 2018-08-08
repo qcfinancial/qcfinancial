@@ -1414,12 +1414,12 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 
 		}
 
-		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 		vector<shared_ptr<QCDiscountBondPayoff>> legs;
 		shared_ptr<map<QCDate, double>> fixings;
 		legs.resize(2);
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<7>(fwdIndexVector.at(0)), 1.0));
 		for (unsigned int i = 0; i < cuantosFwds; ++i)
 		{
 			//strong currency
@@ -1448,7 +1448,7 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 			legs.at(1) = dbPayoff1;
 
 			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
-				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+				make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 			cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
 
 			inputForwards.at(i) = fxFwd;
@@ -1702,12 +1702,12 @@ PyObject* boot_zero_rates_fwds_floating_legs(PyObject* self, PyObject* args)
 		}
 		cout << "\tboot_zero_rates_floating_legs: time deposit payoffs initialized" << endl;
 
-		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 		vector<shared_ptr<QCDiscountBondPayoff>> legs;
 		shared_ptr<map<QCDate, double>> fixings;
 		legs.resize(2);
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<7>(fwdIndexVector.at(0)), 1.0));
 		string curveCurr{ PyString_AsString(PyList_GetItem(curveCharacteristics, 4)) };
 		string forwardsFx{ PyString_AsString(PyTuple_GetItem(PyList_GetItem(fxForwards, 0), 3)) };
 		string strongForwardFxCurr{ forwardsFx.substr(0, 3) };
@@ -1758,7 +1758,7 @@ PyObject* boot_zero_rates_fwds_floating_legs(PyObject* self, PyObject* args)
 
 			}
 			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
-				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+				make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 			//cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
 
 			inputForwards.at(i) = fxFwd;

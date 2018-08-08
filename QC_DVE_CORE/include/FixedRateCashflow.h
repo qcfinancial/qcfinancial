@@ -104,7 +104,7 @@ namespace QCode
 			 *
 			 * @return	A double.
 			 */
-			double amount();
+			virtual double amount();
 
 			/**
 			 * @fn	QCCurrency FixedRateCashflow::ccy();
@@ -224,7 +224,7 @@ namespace QCode
 			*/
 			virtual ~FixedRateCashflow();
 
-		private:
+		protected:
 
 			/** @brief	Calculates interest */
 			void _calculateInterest();

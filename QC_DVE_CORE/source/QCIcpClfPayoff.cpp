@@ -63,8 +63,11 @@ void QCIcpClfPayoff::_setAllRates()
 			}
 			else
 			{
-				TRA = (icpValue / icpStart * ufStart / ufValue - 1) * 360.0 / (double)pTRA;
-				TRA = round(TRA * 10000) / 10000.0;
+				double TNA = (icpValue / icpStart - 1) * 360.0 / (double)pTRA;
+				TNA = round(TNA * 10000) / 10000.0;
+				double wf = 1 + TNA * (double)pTRA / 360.0;
+				TRA = (wf * ufStart / ufValue - 1) * 360.0 / (double)pTRA;
+				TRA = round(TRA * 1000000) / 1000000.0;
 			}
 
 			//Calcula el plazo pZ desde valueDate hasta endDate

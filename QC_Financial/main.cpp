@@ -27,6 +27,7 @@
 
 #include "Cashflow.h"
 #include "FixedRateCashflow.h"
+#include "FixedRateMultiCurrencyCashflow.h"
 #include "IborCashflow.h"
 #include "Simplecashflow.h"
 #include "IcpClpCashflow.h"
@@ -98,6 +99,13 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("add_months", &QCDate::addMonths)
 		.def("add_days", &QCDate::addDays)
 		.def("day_diff", &QCDate::dayDiff)
+		.def("__lt__", &QCDate::operator<)
+		.def("__le__", &QCDate::operator<=)
+		.def("__eq__", &QCDate::operator==)
+		.def("__ne__", &QCDate::operator!=)
+		.def("__ge__", &QCDate::operator>=)
+		.def("__gt__", &QCDate::operator>)
+		.def("__hash__", &QCDate::excelSerial)
 		.def(self_ns::str(self_ns::self))
 		;
 
@@ -226,7 +234,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	implicitly_convertible<std::shared_ptr<qf::FixedRateCashflow>, std::shared_ptr<qf::Cashflow>>();
 
-	class_<qf::FixedRateCashflow, std::shared_ptr<qf::FixedRateCashflow>, bases<qf::Cashflow>>("FixedRateCashflow",
+	class_<qf::FixedRateCashflow, std::shared_ptr<qf::FixedRateCashflow>, bases<qf::Cashflow>>
+		("FixedRateCashflow",
 		               init < QCDate&, QCDate&, QCDate&,
 							  double, double, bool,
 							  const QCInterestRate&,
@@ -240,12 +249,34 @@ BOOST_PYTHON_MODULE(QC_Financial)
 							  .def("set_nominal", &qf::FixedRateCashflow::setNominal)
 							  .def("set_amortization", &qf::FixedRateCashflow::setAmortization)
 							  ;
-	
 	PyObject* (*show1)(qf::FixedRateCashflow) = wrappers::show;
 	def("show", show1);
 
 	PyObject* (*show11)(std::shared_ptr<qf::FixedRateCashflow>) = wrappers::show;
 	def("show", show11);
+
+	implicitly_convertible<std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>, 
+		std::shared_ptr<qf::Cashflow>>();
+
+	class_<qf::FixedRateMultiCurrencyCashflow, std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>, 
+		bases<qf::FixedRateCashflow>>("FixedRateMultiCurrencyCashflow",
+		init < QCDate&, QCDate&, QCDate&,
+		double, double, bool,
+		const QCInterestRate&,
+		shared_ptr < QCCurrency >,
+		QCDate&, shared_ptr<QCCurrency>,
+		shared_ptr<qf::FXRateIndex>, double> ())
+		.def("amount", &qf::FixedRateMultiCurrencyCashflow::amount)
+		.def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCcy)
+		.def("set_fx_rate_index_value", &qf::FixedRateMultiCurrencyCashflow::setFxRateIndexValue)
+		.def("wrap", &qf::FixedRateMultiCurrencyCashflow::wrap)
+		;
+
+	PyObject* (*show0)(qf::FixedRateMultiCurrencyCashflow) = wrappers::showFixedRateMCCashflow;
+	def("show", show0);
+
+	PyObject* (*show01)(std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>) = wrappers::showFixedRateMCCashflow;
+	def("show", show01);
 
 	class_<qf::IborCashflow, std::shared_ptr<qf::IborCashflow>, bases<qf::Cashflow>>("IborCashflow", init <std::shared_ptr<qf::InterestRateIndex>, QCDate&, QCDate&, QCDate&, QCDate&,
 							 double, double, bool,

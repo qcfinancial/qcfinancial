@@ -6,8 +6,8 @@ QCDiscountBondPayoff::QCDiscountBondPayoff(
 	QCIntRtCrvShrdPtr discountCurve,
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fxFixingData,
-	QCCurrencyConverter::QCCurrency notionalCurrency,
-	QCCurrencyConverter::QCFxRate fxRate
+	QCCurrencyConverter::QCCurrencyEnum notionalCurrency,
+	QCCurrencyConverter::QCFxRateEnum fxRate
 	) :
 	QCInterestRatePayoff(QCFactoryFunctions::zeroIntRateSharedPtr(),irLeg, valueDate, discountCurve,
 	discountCurve, fxFixingData), _notionalCurrency(notionalCurrency), _fxRate(fxRate)
@@ -46,7 +46,7 @@ double QCDiscountBondPayoff::presentValue()
 	return pv;
 }
 
-QCCurrencyConverter::QCCurrency QCDiscountBondPayoff::getNotionalCurrency()
+QCCurrencyConverter::QCCurrencyEnum QCDiscountBondPayoff::getNotionalCurrency()
 {
 	return _notionalCurrency;
 }

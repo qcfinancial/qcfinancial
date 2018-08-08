@@ -46,7 +46,7 @@ namespace QCode
 			auto interest = _calculateInterest(_endDate, _endDateICP);
 			if (_doesAmortize)
 			{
-				return _nominal + interest;
+				return _amortization + interest;
 			}
 			else
 			{
@@ -56,7 +56,7 @@ namespace QCode
 
 		double IcpClpCashflow::accruedInterest(QCDate& accrualDate, double icpValue)
 		{
-			return _calculateInterest(accrualDate, icpValue);
+			return _currency->amount(_calculateInterest(accrualDate, icpValue));
 		}
 
 		void IcpClpCashflow::setStartDateICP(double icpValue)
@@ -115,7 +115,7 @@ namespace QCode
 														_startDateICP,
 														_endDateICP,
 														_rate.getValue(),
-														_calculateInterest(_endDate, _endDateICP),
+														accruedInterest(_endDate, _endDateICP),
 														_spread,
 														_gearing);
 
