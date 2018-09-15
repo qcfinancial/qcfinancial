@@ -17,6 +17,11 @@ namespace QCode
 																 _fxRateIndex(fxRateIndex),
 																 _fxRateIndexValue(fxRateIndexValue)
 		{
+			if (!_validateFxRateIndex())
+			{
+				std::string msg{ "The FX Rate is not compatible with notional and settlement currencies." };
+				throw invalid_argument(msg);
+			}
 		}
 
 		double SimpleMultiCurrencyCashflow::amount()
@@ -62,6 +67,26 @@ namespace QCode
 																	 amount());
 
 			return std::make_shared<SimpleMultiCurrencyCashflowWrapper>(tup);
+		}
+
+		bool SimpleMultiCurrencyCashflow::_validateFxRateIndex()
+		{
+			if (_fxRateIndex->strongCcyCode() == _currency->getIsoCode() &&
+				_fxRateIndex->weakCcyCode() == _settlementCurrency->getIsoCode())
+			{
+				return true;
+			}
+			if (_fxRateIndex->weakCcyCode() == _currency->getIsoCode() &&
+				_fxRateIndex->strongCcyCode() == _settlementCurrency->getIsoCode())
+			{
+				return true;
+			}
+			return false;
+		}
+
+		SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow()
+		{
+
 		}
 
 	}
