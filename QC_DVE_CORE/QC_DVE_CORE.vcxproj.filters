@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Valuation">
       <UniqueIdentifier>{d022d6b9-edb8-4ea7-b25f-b57b65a8a918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Products">
+      <UniqueIdentifier>{9887eb9a-e6e5-4e67-a3d9-035ed1d27d84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Products">
+      <UniqueIdentifier>{710dbe62-eba8-429c-8f61-50edf50f2a89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -237,6 +243,15 @@
     <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\QCAct30.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\ChileanFixedRateBond.h">
+      <Filter>Header Files\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FixedRateBond.h">
+      <Filter>Header Files\Products</Filter>
+    </ClInclude>
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\include\FixedRateMultiCurrencyCashflow.h">
+      <Filter>Header Files\Cashflows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\QCTest.cpp">
@@ -365,12 +380,6 @@
     <ClCompile Include="source\IcpClpCashflow.cpp">
       <Filter>Source Files\Cashflows</Filter>
     </ClCompile>
-    <ClCompile Include="source\Leg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\LegFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\SimpleCashflow.cpp">
       <Filter>Source Files\Cashflows</Filter>
     </ClCompile>
@@ -391,6 +400,21 @@
     </ClCompile>
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateBond.cpp">
+      <Filter>Source Files\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ChileanFixedRateBond.cpp">
+      <Filter>Source Files\Products</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Leg.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LegFactory.cpp">
+      <Filter>Source Files\Cashflows</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateMultiCurrencyCashflow.cpp">
+      <Filter>Source Files\Cashflows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

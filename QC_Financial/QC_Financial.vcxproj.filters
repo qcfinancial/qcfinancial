@@ -99,9 +99,18 @@
     <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\QCAct30.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateBond.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\ChileanFixedRateBond.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_DVE_CORE\source\FixedRateMultiCurrencyCashflow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Wrappers.h">
+    <ClInclude Include="\\mac\Home\Documents\qcode\QCDValuationEngine\QC_Financial\Include\Wrappers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
