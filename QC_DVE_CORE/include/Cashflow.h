@@ -1,6 +1,8 @@
 #ifndef CASHFLOW_H
 #define CASHFLOW_H
 
+#define NO_CONSTRUCTOR_VALIDATION
+
 #include<memory>
 
 #include "QCCurrency.h"

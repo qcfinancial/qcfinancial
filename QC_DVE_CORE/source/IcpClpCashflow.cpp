@@ -28,10 +28,12 @@ namespace QCode
 									   _startDateICP(startDateICP),
 									   _endDateICP(endDateICP)
 		{
+#ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
 			{
 				throw std::invalid_argument(_validateMsg);
 			}
+#endif
 			_currency = std::make_shared<QCCurrency>(QCCLP());
 			_tnaDecimalPlaces = DEFAULT_TNA_DECIMAL_PLACES;
 			_rate.setValue(getTna(_endDate, _endDateICP));

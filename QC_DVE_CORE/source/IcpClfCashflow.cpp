@@ -27,10 +27,12 @@ namespace QCode
 									   _startDateUF(icpAndUf[2]),
 									   _endDateUF(icpAndUf[3])
 		{
+#ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
 			{
 				throw std::invalid_argument(_validateMsg);
 			}
+#endif
 			_currency = std::make_shared<QCCurrency>(QCCLF());
 			_traDecimalPlaces = DEFAULT_TRA_DECIMAL_PLACES;
 			_rate.setValue(getTra(_endDate, icpAndUf[1], icpAndUf[3]));

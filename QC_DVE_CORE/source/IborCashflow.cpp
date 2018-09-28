@@ -29,10 +29,12 @@ namespace QCode
 								   _spread(spread),
 								   _gearing(gearing)
 		{
+#ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
 			{
 				throw std::invalid_argument(_validateMsg);
 			}
+#endif
 			_calculateInterest();
 		}
 

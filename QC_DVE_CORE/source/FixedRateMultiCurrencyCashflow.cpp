@@ -25,11 +25,14 @@ namespace QCode
 			_fxRateIndex(fxRateIndex),
 			_fxRateIndexValue(fxRateIndexValue)
 		{
+#ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
 			{
 				throw std::invalid_argument(_validateMsg);
 			}
+#endif
 		}
+
 
 		double FixedRateMultiCurrencyCashflow::amount()
 		{
