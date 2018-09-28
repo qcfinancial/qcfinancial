@@ -18,6 +18,39 @@ namespace QCode
 		{
 		}
 
+		/**
+		 * @fn	Leg LegFactory::buildBulletFixedRateLeg(RecPay recPay,
+		 * 		QCDate startDate, QCDate endDate,
+		 * 		QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity,
+		 * 		QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+		 * 		QCBusinessCalendar settlementCalendar, unsigned int settlementLag,
+		 * 		double notional, bool doesAmortize, QCInterestRate rate,
+		 * 		std::shared_ptr<QCCurrency> currency, bool forBonds)
+		 *
+		 * @brief	Builds bullet fixed rate leg
+		 *
+		 * @author	Alvaro Díaz V.
+		 * @date	26/09/2018
+		 *
+		 * @param	recPay				 	Receive por pay.
+		 * @param	startDate			 	The start date.
+		 * @param	endDate				 	The end date.
+		 * @param	endDateAdjustment	 	The end date adjustment.
+		 * @param	settlementPeriodicity	The settlement periodicity.
+		 * @param	settlementStubPeriod 	The settlement stub period.
+		 * @param	settlementCalendar   	The settlement calendar.
+		 * @param	settlementLag		 	The settlement lag.
+		 * @param	notional			 	The notional.
+		 * @param	doesAmortize		 	True if amortization is a real cashflow.
+		 * @param	rate				 	The fixed rate.
+		 * @param	currency			 	The currency.
+		 * @param	forBonds			 	If True forces the settlement date to be equal to end date.
+		 * 									This enables the correct calculation of present values
+		 * 									using market yields according to the usual conventions
+		 * 									in fixed income markets.
+		 *
+		 * @return	A Leg.
+		 */
 		Leg LegFactory::buildBulletFixedRateLeg(
 			RecPay recPay,
 			QCDate startDate,

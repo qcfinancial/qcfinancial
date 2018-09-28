@@ -28,12 +28,16 @@ namespace QCode
 
 		QCDate InterestRateIndex::getStartDate(QCDate& fixingDate)
 		{
-			return QCDate();
+			auto dias = _startLag.getDays();
+			return _fixingCalendar.shift(fixingDate, dias);
 		}
 
 		QCDate InterestRateIndex::getEndDate(QCDate& fixingDate)
 		{
-			return QCDate();
+			auto dias = _startLag.getDays();
+			auto startDate = _fixingCalendar.shift(fixingDate, dias);
+			auto meses = _tenor.getMonths();
+			return _valueCalendar.nextBusinessDay(startDate.addMonths(meses));
 		}
 
 		Tenor InterestRateIndex::getTenor()

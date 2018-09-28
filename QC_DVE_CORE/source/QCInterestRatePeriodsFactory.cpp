@@ -619,10 +619,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 			_auxWithLongFrontNEasyCase(displacement, numWholePeriods, periods, periodicity, calendar);
 			return periods;
 		}
-
-
 	}
-
 	if (stubPeriod == QCInterestRateLeg::qcShortBack)
 	{
 		unsigned int numPeriods = numWholePeriods + 1;

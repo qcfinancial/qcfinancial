@@ -44,10 +44,7 @@ namespace QCode
 			*
 			* @return	A double.
 			*/
-			virtual double amount()
-			{
-				return 0.0;
-			}
+			virtual double amount() = 0;
 
 			/**
 			* @fn	virtual QCCurrency Cashflow::ccy() = 0;
@@ -59,10 +56,7 @@ namespace QCode
 			*
 			* @return	A QCCurrency.
 			*/
-			virtual shared_ptr<QCCurrency> ccy()
-			{
-				return std::make_shared<QCCurrency>();
-			}
+			virtual shared_ptr<QCCurrency> ccy() = 0;
 
 			/**
 			* @fn	virtual QCDate Cashflow::date();
@@ -74,10 +68,7 @@ namespace QCode
 			*
 			* @return	A QCDate.
 			*/
-			virtual QCDate date()
-			{
-				return QCDate();
-			}
+			virtual QCDate date() = 0;
 
 			/**
 			* @fn	bool Cashflow::isExpired(const QCDate& refDate)
@@ -116,7 +107,11 @@ namespace QCode
 		 */
 		enum RecPay
 		{
+			///< An enum constant representing the receive option
 			Receive,
+
+
+			///< An enum constant representing the pay option
 			Pay
 		};
 	}

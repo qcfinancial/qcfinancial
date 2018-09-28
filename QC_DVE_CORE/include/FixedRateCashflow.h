@@ -162,7 +162,7 @@ namespace QCode
 			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*
-			* @return	A double.
+			* @return	The cashflow's nominal.
 			*/
 			double getNominal() const;
 
@@ -177,6 +177,18 @@ namespace QCode
 			 * @param	nominal	The nominal.
 			 */
 			void setNominal(double nominal);
+
+			/**
+			 * @fn	double FixedRateCashflow::getAmortization() const;
+			 *
+			 * @brief	Gets the amortization of the cashflow.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	20/09/2018
+			 *
+			 * @return	The cashflow's amortization.
+			 */
+			double getAmortization() const;
 
 			/**
 			 * @fn	void FixedRateCashflow::setAmortization(double amortization);
@@ -203,7 +215,7 @@ namespace QCode
 			shared_ptr<FixedRateCashflowWrapper> wrap();
 
 			/**
-			* @fn	double FixedRateCashflow::accruedInterest(const QCDate&) const;
+			* @fn	    double FixedRateCashflow::accruedInterest(const QCDate&) const;
 			*
 			* @brief	Gets the accrued interest given a value date.
 			*
@@ -255,6 +267,21 @@ namespace QCode
 
 			/** @brief	The currency */
 			shared_ptr<QCCurrency> _currency;
+
+			/** @brief	Message that describes errors encountered when constructing the object */
+			std::string _validateMsg;
+
+			/**
+			 * @fn	bool FixedRateCashflow::_validate();
+			 *
+			 * @brief	Validates that the object is properly constructed.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	True if it succeeds, false if it fails.
+			 */
+			bool _validate();
 		};
 
 		/**

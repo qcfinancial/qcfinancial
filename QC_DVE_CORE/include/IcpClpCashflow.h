@@ -14,6 +14,8 @@ namespace QCode
 	namespace Financial
 	{
 		const double DEFAULT_ICP = 10000.00;
+		const unsigned int DEFAULT_TNA_DECIMAL_PLACES = 4;
+
 		typedef std::tuple<
 			QCDate,                 /* Start Date */
 			QCDate,                 /* End Date */
@@ -66,6 +68,18 @@ namespace QCode
 						   double endDateICP = DEFAULT_ICP);
 
 			/**
+			* @fn	void IcpClpCashflow::setTnaDecimalPlaces(unsigned int decimalPlaces);
+			*
+			* @brief	Sets the number of decimal places for TNA.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	24/09/2018
+			*
+			* @param	decimalPlaces	The decimal places.
+			*/
+			void setTnaDecimalPlaces(unsigned int decimalPlaces);
+
+			/**
 			* @fn	    double IcpClpCashflow::amount();
 			*
 			* @brief	Gets the amount
@@ -90,6 +104,22 @@ namespace QCode
 			double accruedInterest(QCDate& accrualDate, double icpValue);
 
 			/**
+			 * @fn	double IcpClpCashflow::getTna(QCDate date, double icpValue);
+			 *
+			 * @brief	Calculates and returns the TNA of the cashflow for the given date and icpValue
+			 * 			(which corresponds to date).
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	24/09/2018
+			 *
+			 * @param	date		The date.
+			 * @param	icpValue	The icp value.
+			 *
+			 * @return	The calculated TNA.
+			 */
+			double getTna(QCDate date, double icpValue);
+
+			/**
 			* @fn	    void IcpClpCashflow::setStartDateIcp(double icpValue);
 			*
 			* @brief	Sets the value of start date ICP
@@ -99,6 +129,30 @@ namespace QCode
 			*
 			*/
 			void setStartDateICP(double icpValue);
+
+			/**
+			 * @fn	double IcpClpCashflow::getStartDateICP() const;
+			 *
+			 * @brief	Gets the value of ICP at start date
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The start date icp.
+			 */
+			double getStartDateICP() const;
+
+			/**
+			 * @fn	double IcpClpCashflow::getEndDateICP() const;
+			 *
+			 * @brief	Gets the value of ICP at end date
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The end date icp.
+			 */
+			double getEndDateICP() const;
 
 			/**
 			* @fn	    void IcpClpCashflow::setEndDateIcp(double icpValue);
@@ -148,6 +202,18 @@ namespace QCode
 			void setNominal(double nominal);
 
 			/**
+			 * @fn	double IcpClpCashflow::getNominal() const;
+			 *
+			 * @brief	Gets the nominal
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The nominal.
+			 */
+			double getNominal() const;
+
+			/**
 			* @fn	    void IcpClpCashflow::setAmortization(double amortization);
 			*
 			* @brief	Sets the amortization
@@ -158,6 +224,18 @@ namespace QCode
 			* @param	amortization	The amortization.
 			*/
 			void setAmortization(double amortization);
+
+			/**
+			 * @fn	double IcpClpCashflow::getAmortization() const;
+			 *
+			 * @brief	Gets the amortization
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The amortization.
+			 */
+			double getAmortization() const;
 
 			/**
 			* @fn	shared_ptr<IcpClpCashflowWrapper> IcpClpCashflow::wrap();
@@ -237,6 +315,9 @@ namespace QCode
 												   std::make_shared<QCLinearWf>(QCLinearWf())
 												   );
 
+			/** @brief	The default amount of decimal places for TNA. */
+			unsigned int _tnaDecimalPlaces;
+
 			/** @brief	Calculates interest (final or accrued) given a date and ICP value. */
 			double _calculateInterest(QCDate& date, double icpValue);
 
@@ -276,6 +357,20 @@ namespace QCode
 			/** @brief	The gearing */
 			double _gearing;
 
+			/**
+			 * @fn	bool IcpClpCashflow::_validate();
+			 *
+			 * @brief	Validates that the object is instantiated properly.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	24/09/2018
+			 *
+			 * @return	True if it succeeds, false if it fails.
+			 */
+			bool _validate();
+
+			/** @brief	Message that describes errors encountered when constructing the object */
+			std::string _validateMsg;
 		};
 	}
 }

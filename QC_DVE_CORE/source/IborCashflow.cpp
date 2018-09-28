@@ -29,6 +29,10 @@ namespace QCode
 								   _spread(spread),
 								   _gearing(gearing)
 		{
+			if (!_validate())
+			{
+				throw std::invalid_argument(_validateMsg);
+			}
 			_calculateInterest();
 		}
 
@@ -52,14 +56,39 @@ namespace QCode
 			return _settlementDate;
 		}
 
+		QCDate IborCashflow::getStartDate() const
+		{
+			return _startDate;
+		}
+
+		QCDate IborCashflow::getEndDate() const
+		{
+			return _endDate;
+		}
+
+		QCDate IborCashflow::getFixingDate() const
+		{
+			return _fixingDate;
+		}
+
 		void IborCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;
 		}
 
+		double IborCashflow::getNominal() const
+		{
+			return _nominal;
+		}
+
 		void IborCashflow::setAmortization(double amortization)
 		{
 			_amortization = amortization;
+		}
+
+		double IborCashflow::getAmortization() const
+		{
+			return _amortization;
 		}
 
 		void IborCashflow::setInterestRateValue(double value)
@@ -68,9 +97,23 @@ namespace QCode
 			_calculateInterest();
 		}
 
-		QCDate IborCashflow::getFixingDate()
+		double IborCashflow::getInterestRateValue() const
 		{
-			return _fixingDate;
+			return _index->getRate().getValue();
+		}
+
+		double IborCashflow::accruedInterest(const QCDate& valueDate)
+		{
+			if (Cashflow::isExpired(valueDate) || valueDate < _startDate)
+			{
+				return 0.0;
+			}
+			QCDate temp = valueDate;
+			double indexValue = _index->getRate().getValue();
+			_index->setRateValue(indexValue * _gearing + _spread);
+			double result = _nominal * (_index->getRate().wf(_startDate, temp) - 1.0);
+			_index->setRateValue(indexValue);
+			return result;
 		}
 
 		shared_ptr<IborCashflowWrapper> IborCashflow::wrap()
@@ -103,6 +146,31 @@ namespace QCode
 			// método ya existente).
 			_interest = _nominal * (_index->getRate().wf(_startDate, _endDate) - 1.0);
 			_index->setRateValue(rateValue);
+		}
+
+		bool IborCashflow::_validate()
+		{
+			bool result;
+			_validateMsg = "";
+			if (_startDate >= _endDate)
+			{
+				result = false;
+				_validateMsg += "Start date (" + _startDate.description();
+				_validateMsg += ") is gt or eq to end date (" + _endDate.description() + ").";
+			}
+			if (_fixingDate > _startDate)
+			{
+				result = false;
+				_validateMsg += "Fixing date (" + _fixingDate.description() + ") ";
+				_validateMsg +=	"is gt start date (" + _startDate.description() + ").";
+			}
+			if (_settlementDate < _endDate)
+			{
+				result = false;
+				_validateMsg += "Settlement date (" + _settlementDate.description() + ") ";
+				_validateMsg +=	"is lt end date (" + _endDate.description() + ").";
+			}
+			return result;
 		}
 
 		IborCashflow::~IborCashflow()

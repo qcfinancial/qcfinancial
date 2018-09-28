@@ -150,10 +150,12 @@ namespace QCode
 			/** @brief	Fx rate index used to perform the calculation. */
 			std::shared_ptr<FXRateIndex> _fxRateIndex;
 
-
 			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
 
+
+			/** @brief	Message that describes errors encountered when constructing the object */
+			std::string _validateMsg;
 			/**
 			 * @fn	bool SimpleMultiCurrencyCashflow::_validateFxRateIndex();
 			 *
@@ -165,9 +167,7 @@ namespace QCode
 			 *
 			 * @return	True if it succeeds, false if it fails.
 			 */
-			bool _validateFxRateIndex();
-
-
+			bool _validate();
 		};
 	}
 }

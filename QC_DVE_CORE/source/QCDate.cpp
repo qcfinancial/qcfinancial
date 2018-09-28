@@ -299,7 +299,7 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 			int month = result.month();
 			result = result.addDays(1);
 			if (result.month() != month)
-				result = result.addDays(-2);
+				result = result.addDays(-3);
 		}
 		while (find(calendar.begin(), calendar.end(), result) != calendar.end())
 		{
@@ -369,19 +369,19 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 		break;
 
 	case QCDate::qcModFollow:
-		if (result.weekDay() == 6)
+		if (result.weekDay() == qcSaturday)
 		{
 			int month = result.month();
 			result = result.addDays(2);
 			if (result.month() != month)
 				result = result.addDays(-3);
 		}
-		if (result.weekDay() == 0)
+		if (result.weekDay() == qcSunday)
 		{
 			int month = result.month();
 			result = result.addDays(1);
 			if (result.month() != month)
-				result = result.addDays(-2);
+				result = result.addDays(-3);
 		}
 		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
 		{

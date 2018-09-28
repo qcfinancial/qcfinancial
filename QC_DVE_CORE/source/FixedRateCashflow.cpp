@@ -21,6 +21,10 @@ namespace QCode
 											 _rate(rate),
 											 _currency(currency)
 		{
+			if (!_validate())
+			{
+				throw std::invalid_argument(_validateMsg);
+			}
 			_calculateInterest();
 		}
 
@@ -66,6 +70,11 @@ namespace QCode
 			_calculateInterest();
 		}
 
+		double FixedRateCashflow::getAmortization() const
+		{
+			return _amortization;
+		}
+
 		void FixedRateCashflow::setAmortization(double amortization)
 		{
 			_amortization = amortization;
@@ -88,7 +97,7 @@ namespace QCode
 
 		double FixedRateCashflow::accruedInterest(const QCDate& valueDate)
 		{
-			if (Cashflow::isExpired(valueDate) || valueDate > _endDate)
+			if (Cashflow::isExpired(valueDate) || valueDate < _startDate)
 			{
 				return 0.0;
 			}
@@ -99,6 +108,31 @@ namespace QCode
 		void FixedRateCashflow::_calculateInterest()
 		{
 			_interest = _nominal * (_rate.wf(_startDate, _endDate) - 1.0);
+		}
+
+		bool FixedRateCashflow::_validate()
+		{
+			bool result = true;
+			_validateMsg = "";
+			if (_startDate >= _endDate)
+			{
+				result = false;
+				_validateMsg += "Start date (" + _startDate.description();
+				_validateMsg += ") is gt o eq to end date (";
+				_validateMsg += _endDate.description() + ").";
+			}
+			if (_settlementDate < _endDate)
+			{
+				result = false;
+				_validateMsg += "Settlement date (" + _settlementDate.description();
+				_validateMsg +=	") is lt end date (" + _endDate.description() + ").";
+			}
+			if (_amortization > _nominal)
+			{
+				result = false;
+				_validateMsg += "Amortization is gt nominal.";
+			}
+			return result;
 		}
 
 		FixedRateCashflow::~FixedRateCashflow()

@@ -44,6 +44,15 @@ namespace QCode
 			QCBusinessCalendar _valueCalendar;
 			std::shared_ptr<QCCurrency> _ccy;
 		};
+
+		//class LiborUSD3M : public InterestRateIndex
+		//{
+		//public:
+		//	LiborUSD3M() : InterestRateIndex("LIBORUSD3M",
+		//		QCInterestRate(0.0, std::make_shared<QCYearFraction>(QCAct360()),
+		//		std::make_shared<QCWealthFactor>(QCLinearWf())), Tenor("2D"),
+
+		//};
 	}
 }
 #endif

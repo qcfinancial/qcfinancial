@@ -27,32 +27,19 @@ namespace QCode
 									   _startDateUF(icpAndUf[2]),
 									   _endDateUF(icpAndUf[3])
 		{
+			if (!_validate())
+			{
+				throw std::invalid_argument(_validateMsg);
+			}
 			_currency = std::make_shared<QCCurrency>(QCCLF());
+			_traDecimalPlaces = DEFAULT_TRA_DECIMAL_PLACES;
+			_rate.setValue(getTra(_endDate, icpAndUf[1], icpAndUf[3]));
 		}
 
-		double IcpClfCashflow::_calculateInterest(QCDate& date, double icpValue, double ufValue)
+		void IcpClfCashflow::setTraDecimalPlaces(unsigned int decimalPlaces)
 		{
-			// Calcular la fracción de año correspondiente
-			auto yf = _rate.yf(_startDate, date);
-
-			// Factor para redondeo de TNA
-			double factor = std::pow(10, 4);
-
-			//Cálculo de TNA
-			auto tna = (icpValue / _startDateICP - 1) / yf;
-			tna = round(tna * factor) / factor;
-			_rate.setValue(tna);
-
-			// Se redefine para redondeo de TRA
-			factor = std::pow(10, 6);
-
-			// Cálculo de TRA
-			double tra = (_rate.wf(_startDate, date) * _startDateUF / ufValue - 1) / yf;
-			tra = round(tra * factor) / factor;
-			_rate.setValue(tra * _gearing + _spread);
-
-			// Cálculo de interés
-			return _nominal * (_rate.wf(_startDate, date) - 1);
+			_traDecimalPlaces = decimalPlaces;
+			_rate.setValue(getTra(_endDate, _endDateICP, _endDateUF));
 		}
 
 		double IcpClfCashflow::amount()
@@ -68,19 +55,58 @@ namespace QCode
 			}
 		}
 
+		double IcpClfCashflow::getTra(QCDate& accrualDate, double icpValue, double ufValue)
+		{
+			double tna = getTna(accrualDate, icpValue);
+			IcpClpCashflow::_rate.setValue(tna);
+			double wfTna = IcpClpCashflow::_rate.wf(_startDate, accrualDate);
+			double tra = (wfTna * _startDateUF / ufValue - 1) * 360.0 / _startDate.dayDiff(accrualDate);
+			double factor = pow(10, _traDecimalPlaces);
+			return round(tra * factor) / factor;
+		}
+
+		double IcpClfCashflow::getRateValue()
+		{
+			return _rate.getValue();
+		}
+
+		double IcpClfCashflow::_calculateInterest(QCDate& date, double icpValue, double ufValue)
+		{
+			// Cálculo de TRA
+			double tra = getTra(date, icpValue, ufValue);
+
+			// Seteo del valor de la tasa interna
+			_rate.setValue(tra * _gearing + _spread);
+
+			// Cálculo de interés
+			return _nominal * (_rate.wf(_startDate, date) - 1);
+		}
+
 		double IcpClfCashflow::accruedInterest(QCDate& accrualDate, double icpValue, double ufValue)
 		{
-			return _currency->amount(_calculateInterest(accrualDate, icpValue, ufValue));
+			return _calculateInterest(accrualDate, icpValue, ufValue);
 		}
 
 		void IcpClfCashflow::setStartDateUf(double ufValue)
 		{
 			_startDateUF = ufValue;
+			_rate.setValue(getTra(_endDate, _endDateICP, _endDateUF));
+		}
+
+		double IcpClfCashflow::getStartDateUf() const
+		{
+			return _startDateUF;
 		}
 
 		void IcpClfCashflow::setEndDateUf(double ufValue)
 		{
 			_endDateUF = ufValue;
+			_rate.setValue(getTra(_endDate, _endDateICP, _endDateUF));
+		}
+
+		double IcpClfCashflow::getEndDateUf() const
+		{
+			return _endDateUF;
 		}
 
 		shared_ptr<QCCurrency> IcpClfCashflow::ccy()

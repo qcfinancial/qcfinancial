@@ -17,10 +17,9 @@ namespace QCode
 																 _fxRateIndex(fxRateIndex),
 																 _fxRateIndexValue(fxRateIndexValue)
 		{
-			if (!_validateFxRateIndex())
+			if (!_validate())
 			{
-				std::string msg{ "The FX Rate is not compatible with notional and settlement currencies." };
-				throw invalid_argument(msg);
+				throw invalid_argument(_validateMsg);
 			}
 		}
 
@@ -69,24 +68,36 @@ namespace QCode
 			return std::make_shared<SimpleMultiCurrencyCashflowWrapper>(tup);
 		}
 
-		bool SimpleMultiCurrencyCashflow::_validateFxRateIndex()
+		bool SimpleMultiCurrencyCashflow::_validate()
 		{
+			bool result;
+			_validateMsg = "";
 			if (_fxRateIndex->strongCcyCode() == _currency->getIsoCode() &&
 				_fxRateIndex->weakCcyCode() == _settlementCurrency->getIsoCode())
 			{
-				return true;
+				result = true;
 			}
-			if (_fxRateIndex->weakCcyCode() == _currency->getIsoCode() &&
+			else if (_fxRateIndex->weakCcyCode() == _currency->getIsoCode() &&
 				_fxRateIndex->strongCcyCode() == _settlementCurrency->getIsoCode())
 			{
-				return true;
+				result = true;
 			}
-			return false;
+			else
+			{
+				result = false;
+				_validateMsg += "Fx Rate Index provided is not compatible with nominal and ";
+				_validateMsg += "settlement currency. ";
+			}
+			if (_fxRateIndexFixingDate > _endDate)
+			{
+				result = false;
+				_validateMsg += "Fx Rate fixing date is gt settlement date.";
+			}
+			return result;
 		}
 
 		SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow()
 		{
-
 		}
 
 	}

@@ -188,6 +188,20 @@ namespace QCode
 			 */
 			virtual ~FixedRateMultiCurrencyCashflow();
 
+		protected:
+
+			/**
+			 * @fn	    bool FixedRateMultiCurrencyCashflow::_validate();
+			 *
+			 * @brief	Validates that the object is properly constructed.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	True if it succeeds, false if it fails.
+			 */
+			bool _validate();
+
 		private:
 			/** @brief	The effects rate index fixing date */
 			QCDate _fxRateIndexFixingDate;
