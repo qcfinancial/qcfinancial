@@ -128,6 +128,16 @@ namespace QCode
 			*/
 			std::shared_ptr<SimpleMultiCurrencyCashflowWrapper> wrap();
 
+			/**
+			 * @fn	SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow();
+			 *
+			 * @brief	Destructor
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	14/09/2018
+			 */
+			~SimpleMultiCurrencyCashflow();
+
 		private:
 
 			/** @brief	The fx rate index fixing date */
@@ -140,10 +150,24 @@ namespace QCode
 			/** @brief	Fx rate index used to perform the calculation. */
 			std::shared_ptr<FXRateIndex> _fxRateIndex;
 
-
 			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
 
+
+			/** @brief	Message that describes errors encountered when constructing the object */
+			std::string _validateMsg;
+			/**
+			 * @fn	bool SimpleMultiCurrencyCashflow::_validateFxRateIndex();
+			 *
+			 * @brief	Validates the FX rate index. It has to be an index that is compatible with
+			 * 			the notional currency and the settlement currency.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	14/09/2018
+			 *
+			 * @return	True if it succeeds, false if it fails.
+			 */
+			bool _validate();
 		};
 	}
 }

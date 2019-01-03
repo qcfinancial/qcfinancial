@@ -15,6 +15,8 @@ namespace QCode
 	namespace Financial
 	{
 		const double DEFAULT_UF = 27000.00;
+		const unsigned int DEFAULT_TRA_DECIMAL_PLACES = 6;
+
 		const std::vector<double> DEFAULT_ICP_UF = { DEFAULT_ICP, DEFAULT_ICP, DEFAULT_UF, DEFAULT_UF };
 		typedef std::tuple<
 			QCDate,                 /* Start Date */
@@ -23,7 +25,7 @@ namespace QCode
 			double,                 /* Nominal */
 			double,                 /* Amortization */
 			bool,                   /* Amortization is cashflow */
-			shared_ptr<QCCurrency>, /* Nominal Currency (always CLP) */
+			shared_ptr<QCCurrency>, /* Nominal Currency (always CLF) */
 			double,                 /* Start date ICP value */
 			double,                 /* End date ICP value */
 			double,                 /* Start date UF value */
@@ -70,6 +72,18 @@ namespace QCode
 						   std::vector<double> icpAndUf = DEFAULT_ICP_UF);
 
 			/**
+			* @fn	    void IcpClfCashflow::setTraDecimalPlaces(unsigned int decimalPlaces);
+			*
+			* @brief	Sets the number of decimal places for TRA.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    24/09/2018
+			*
+			* @param	decimalPlaces	The decimal places.
+			*/
+			void setTraDecimalPlaces(unsigned int decimalPlaces);
+
+			/**
 			* @fn	    double IcpClfCashflow::amount();
 			*
 			* @brief	Gets the amount
@@ -80,6 +94,18 @@ namespace QCode
 			* @return	A double.
 			*/
 			double amount();
+
+			/**
+			 * @fn	    double IcpClfCashflow::getRateValue();
+			 *
+			 * @brief	Gets the value of the associated interest rate
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The rate value.
+			 */
+			double getRateValue();
 
 			/**
 			* @fn	    double IcpClfCashflow::accruedInterest(QCDate& accrualDate, double icpValue);
@@ -94,6 +120,23 @@ namespace QCode
 			double accruedInterest(QCDate& accrualDate, double icpValue, double ufValue);
 
 			/**
+			 * @fn	    double IcpClfCashflow::getTra(QCDate& accrualDate, double icpValue, double ufValue);
+			 *
+			 * @brief	Calculates and returns the TRA of the cashflow for the given date, icpValue
+			 * 			and ufValue (both of which correspond to date).
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @param [in,out]	accrualDate	The accrual date.
+			 * @param 		  	icpValue   	The icp value.
+			 * @param 		  	ufValue	   	The uf value.
+			 *
+			 * @return	The tra.
+			 */
+			double getTra(QCDate& accrualDate, double icpValue, double ufValue);
+
+			/**
 			* @fn	    void IcpClfCashflow::setStartDateUf(double ufValue);
 			*
 			* @brief	Sets the value of start date UF
@@ -105,6 +148,18 @@ namespace QCode
 			void setStartDateUf(double ufValue);
 
 			/**
+			 * @fn	double IcpClfCashflow::getStartDateUf() const;
+			 *
+			 * @brief	Gets the value of UF start date
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The start date uf.
+			 */
+			double getStartDateUf() const;
+
+			/**
 			* @fn	    void IcpClfCashflow::setEndDateUf(double ufValue);
 			*
 			* @brief	Sets the value of end date Uf
@@ -114,6 +169,18 @@ namespace QCode
 			*
 			*/
 			void setEndDateUf(double ufValue);
+
+			/**
+			 * @fn	    double IcpClfCashflow::getEndDateUf() const;
+			 *
+			 * @brief	Gets the value of UF at end date
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	25/09/2018
+			 *
+			 * @return	The end date uf.
+			 */
+			double getEndDateUf() const;
 
 			/**
 			* @fn	    shared_ptr<QCCurrency> IcpClfCashflow::ccy();
@@ -151,6 +218,14 @@ namespace QCode
 			virtual ~IcpClfCashflow();
 
 		private:
+			/** @brief	The interest rate index. It is always Lin ACT360. */
+			QCInterestRate 	_rate = QCInterestRate(0.0,
+				                                   std::make_shared<QCAct360>(QCAct360()),
+												   std::make_shared<QCLinearWf>(QCLinearWf()));
+
+			/** @brief	The default amount of decimal places for TRA. */
+			unsigned int _traDecimalPlaces;
+
 			/** @brief	Calculates interest (final or accrued) given a date, ICP value and UF value. */
 			double _calculateInterest(QCDate& date, double icpValue, double ufValue);
 

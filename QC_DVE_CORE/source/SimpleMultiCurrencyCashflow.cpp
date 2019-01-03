@@ -17,6 +17,10 @@ namespace QCode
 																 _fxRateIndex(fxRateIndex),
 																 _fxRateIndexValue(fxRateIndexValue)
 		{
+			if (!_validate())
+			{
+				throw invalid_argument(_validateMsg);
+			}
 		}
 
 		double SimpleMultiCurrencyCashflow::amount()
@@ -62,6 +66,38 @@ namespace QCode
 																	 amount());
 
 			return std::make_shared<SimpleMultiCurrencyCashflowWrapper>(tup);
+		}
+
+		bool SimpleMultiCurrencyCashflow::_validate()
+		{
+			bool result;
+			_validateMsg = "";
+			if (_fxRateIndex->strongCcyCode() == _currency->getIsoCode() &&
+				_fxRateIndex->weakCcyCode() == _settlementCurrency->getIsoCode())
+			{
+				result = true;
+			}
+			else if (_fxRateIndex->weakCcyCode() == _currency->getIsoCode() &&
+				_fxRateIndex->strongCcyCode() == _settlementCurrency->getIsoCode())
+			{
+				result = true;
+			}
+			else
+			{
+				result = false;
+				_validateMsg += "Fx Rate Index provided is not compatible with nominal and ";
+				_validateMsg += "settlement currency. ";
+			}
+			if (_fxRateIndexFixingDate > _endDate)
+			{
+				result = false;
+				_validateMsg += "Fx Rate fixing date is gt settlement date.";
+			}
+			return result;
+		}
+
+		SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow()
+		{
 		}
 
 	}

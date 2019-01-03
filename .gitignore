@@ -137,3 +137,14 @@ ipch/unittests_qc_dve_core-35c8ac23/unittests_qc_dve_core-78243712.ipch
 *.tlog
 *.obj
 *.obj
+x64/Release/.ipynb_checkpoints/Ejemplos QC_Financial-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Ejemplos QC_Financial 2-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Tabla de Desarrollo a Pata Fija-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/QCCurve Family-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Prueba_Val_Depo-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Prueba Valorización Cartera al 15-6-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Fixed Rate Bonds-checkpoint.ipynb
+QC_DVE_XLL/x64_Release/obj/QC_DVE_XLL.vcxprojResolveAssemblyReference.cache
+QC_DVE_XLL/Release/obj/QC_DVE_XLL.vcxprojResolveAssemblyReference.cache
+QC_DVE_XLL/Release/QC_DVE_XLL - copia.xll
+QC_DVE_XLL/Debug/QC_DVE_XLL.xll

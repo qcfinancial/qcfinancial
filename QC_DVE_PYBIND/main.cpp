@@ -3237,7 +3237,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 			cout << "\tIngresó la curva: " << curva.first << endl;
 		}
 
-		//Metemos los fixings de los índices de tasa flotante en esta estructura
+		//Metemos los fixings de los índices fx en esta estructura
 		map<string, map<QCDate, double>> mapManyFixings;
 		QCDvePyBindHelperFunctions::buildManyFixings(fxFixings, mapManyFixings);
 		cout << "\tFinished Fx Fixings" << endl;

@@ -85,5 +85,10 @@ shared_ptr<QCYearFraction> QCInterestRate::getYearFraction()
 	return _yf;
 }
 
+std::string QCInterestRate::description()
+{
+	return std::to_string(_value) + " " + _yf->description() + " " + _wf->description();
+}
+
 QCInterestRate::~QCInterestRate()
 {}

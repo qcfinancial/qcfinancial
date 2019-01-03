@@ -28,17 +28,21 @@ namespace QCode
 									   _startDateICP(startDateICP),
 									   _endDateICP(endDateICP)
 		{
+#ifndef NO_CONSTRUCTOR_VALIDATION
+			if (!_validate())
+			{
+				throw std::invalid_argument(_validateMsg);
+			}
+#endif
 			_currency = std::make_shared<QCCurrency>(QCCLP());
+			_tnaDecimalPlaces = DEFAULT_TNA_DECIMAL_PLACES;
+			_rate.setValue(getTna(_endDate, _endDateICP));
 		}
 
-		double IcpClpCashflow::_calculateInterest(QCDate& date, double icpValue)
+		void IcpClpCashflow::setTnaDecimalPlaces(unsigned int decimalPlaces)
 		{
-			auto yf = _rate.yf(_startDate, date);
-			auto tna = (icpValue / _startDateICP - 1) / yf;
-			double factor = std::pow(10, 4);
-			tna = round(tna * factor) / factor;
-			_rate.setValue(tna * _gearing + _spread);
-			return _nominal * (_rate.wf(_startDate, date) - 1);
+			_tnaDecimalPlaces = decimalPlaces;
+			_rate.setValue(getTna(_endDate, _endDateICP));
 		}
 
 		double IcpClpCashflow::amount()
@@ -54,19 +58,39 @@ namespace QCode
 			}
 		}
 
+		double IcpClpCashflow::getTna(QCDate date, double icpValue)
+		{
+			double yf = _rate.yf(_startDate, date);
+			double tna = (icpValue / _startDateICP - 1) / yf;
+			double factor = std::pow(10, _tnaDecimalPlaces);
+			return round(tna * factor) / factor;
+		}
+
 		double IcpClpCashflow::accruedInterest(QCDate& accrualDate, double icpValue)
 		{
-			return _currency->amount(_calculateInterest(accrualDate, icpValue));
+			return _calculateInterest(accrualDate, icpValue);
 		}
 
 		void IcpClpCashflow::setStartDateICP(double icpValue)
 		{
 			_startDateICP = icpValue;
+			_rate.setValue(getTna(_endDate, _endDateICP));
+		}
+
+		double IcpClpCashflow::getStartDateICP() const
+		{
+			return _startDateICP;
 		}
 
 		void IcpClpCashflow::setEndDateICP(double icpValue)
 		{
 			_endDateICP = icpValue;
+			_rate.setValue(getTna(_endDate, _endDateICP));
+		}
+
+		double IcpClpCashflow::getEndDateICP() const
+		{
+			return _endDateICP;
 		}
 
 		shared_ptr<QCCurrency> IcpClpCashflow::ccy()
@@ -84,9 +108,19 @@ namespace QCode
 			_nominal = nominal;
 		}
 
+		double IcpClpCashflow::getNominal() const
+		{
+			return _nominal;
+		}
+
 		void IcpClpCashflow::setAmortization(double amortization)
 		{
 			_amortization = amortization;
+		}
+
+		double IcpClpCashflow::getAmortization() const
+		{
+			return _amortization;
 		}
 
 		shared_ptr<IcpClpCashflowWrapper> IcpClpCashflow::wrap()
@@ -142,6 +176,37 @@ namespace QCode
 			return _endDate;
 		}
 
+		bool IcpClpCashflow::_validate()
+		{
+			bool result = true;
+			_validateMsg = "";
+			if (_startDate >= _endDate)
+			{
+				result = false;
+				_validateMsg += "Start date (" + _startDate.description();
+				_validateMsg += ") is gt o eq to end date (";
+				_validateMsg += _endDate.description() + ").";
+			}
+			if (_settlementDate < _endDate)
+			{
+				result = false;
+				_validateMsg += "Settlement date (" + _settlementDate.description();
+				_validateMsg += ") is lt end date (" + _endDate.description() + ").";
+			}
+			if (_amortization > _nominal)
+			{
+				result = false;
+				_validateMsg += "Amortization is gt nominal.";
+			}
+			return result;
+		}
+
+		double IcpClpCashflow::_calculateInterest(QCDate& date, double icpValue)
+		{
+			double tna = getTna(date, icpValue);
+			_rate.setValue(tna * _gearing + _spread);
+			return _nominal * (_rate.wf(_startDate, date) - 1);
+		}
 
 		IcpClpCashflow::~IcpClpCashflow()
 		{

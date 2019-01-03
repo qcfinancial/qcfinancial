@@ -133,7 +133,7 @@ namespace QCode
 			 *
 			 * @return	A double.
 			 */
-			double amount();
+			double amount() override;
 
 			/**
 			 * @fn	shared_ptr<QCCurrency> IborCashflow::ccy();
@@ -145,7 +145,7 @@ namespace QCode
 			 *
 			 * @return	A shared_ptr&lt;QCCurrency&gt;
 			 */
-			shared_ptr<QCCurrency> ccy();
+			shared_ptr<QCCurrency> ccy() override;
 
 			/**
 			 * @fn	QCDate IborCashflow::date();
@@ -157,7 +157,43 @@ namespace QCode
 			 *
 			 * @return	A QCDate.
 			 */
-			QCDate date();
+			QCDate date() override;
+
+			/**
+			 * @fn	QCDate IborCashflow::getStartDate();
+			 *
+			 * @brief	Gets the start date of the cashflow
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	The start date.
+			 */
+			QCDate getStartDate() const;
+
+			/**
+			 * @fn	QCDate IborCashflow::getEndDate() const;
+			 *
+			 * @brief	Gets the end date of the cashflow (date used to calculate interest)
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	The end date.
+			 */
+			QCDate getEndDate() const;
+
+			/**
+			* @fn	    QCDate IborCashflow::getFixingDate();
+			*
+			* @brief	Returns the fixing date.
+			*
+			* @author	Alvaro Díaz V.
+			* @date	    05/12/2017
+			*
+			* @return	QCDate;
+			*/
+			QCDate getFixingDate() const;
 
 			/**
 			* @fn	void iborCashflow::setNominal(double nominal);
@@ -172,6 +208,18 @@ namespace QCode
 			void setNominal(double nominal);
 
 			/**
+			 * @fn	double IborCashflow::getNominal() const;
+			 *
+			 * @brief	Gets the nominal
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	The nominal.
+			 */
+			double getNominal() const;
+
+			/**
 			* @fn	void iborCashflow::setAmortization(double amortization);
 			*
 			* @brief	Sets the amortization
@@ -182,6 +230,18 @@ namespace QCode
 			* @param	amortization	The amortization.
 			*/
 			void setAmortization(double amortization);
+
+			/**
+			 * @fn	double IborCashflow::getAmortization() const;
+			 *
+			 * @brief	Gets the amortization
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	The amortization.
+			 */
+			double getAmortization() const;
 
 			/**
 			* @fn	void iborCashflow::setInterestRateValue(double value);
@@ -196,6 +256,32 @@ namespace QCode
 			void setInterestRateValue(double value);
 
 			/**
+			 * @fn	double IborCashflow::getInterestRateValue() const;
+			 *
+			 * @brief	Gets the value of the interest rate index.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	24/09/2018
+			 *
+			 * @return	The interest rate value.
+			 */
+			double getInterestRateValue() const;
+
+			/**
+			 * @fn	double IborCashflow::accruedInterest(const QCDate& valueDate);
+			 *
+			 * @brief	Gets the accrued interest given a value date.
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @param	valueDate	The value date.
+			 *
+			 * @return	A double.
+			 */
+			double accruedInterest(const QCDate& valueDate);
+
+			/**
 			 * @fn	shared_ptr<IborCashflowWrapper> IborCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a IborCashflowWrapper
@@ -208,18 +294,6 @@ namespace QCode
 			shared_ptr<IborCashflowWrapper> wrap();
 
 			/**
-			* @fn	    QCDate IborCashflow::getFixingDate();
-			*
-			* @brief	Returns the fixing date.
-			*
-			* @author	Alvaro Díaz V.
-			* @date	    05/12/2017
-			*
-			* @return	QCDate;
-			*/
-			QCDate getFixingDate();
-
-			/**
 			 * @fn	virtual IborCashflow::~IborCashflow();
 			 *
 			 * @brief	Destructor
@@ -229,7 +303,7 @@ namespace QCode
 			 */
 			virtual ~IborCashflow();
 
-		private:
+		protected:
 
 			/**
 			 * @fn	void IborCashflow::_calculateInterest();
@@ -276,6 +350,25 @@ namespace QCode
 
 			/** @brief	The gearing */
 			double _gearing;
+
+			/** @brief	Message that describes errors encountered when constructing the object */
+			std::string _validateMsg;
+
+			/**
+			 * @fn	bool IborCashflow::_validate();
+			 *
+			 * @brief	Validates that the object is properly constructed. More precisely,
+			 * 			the following checks are performed:
+			 * 			- startDate < endDate  
+			 * 			- settlementDate >= endDate  
+			 * 			- fixingDate <= startDate
+			 *
+			 * @author	Alvaro Díaz V.
+			 * @date	23/09/2018
+			 *
+			 * @return	True if it succeeds, false if it fails.
+			 */
+			bool _validate();
 		};
 
 	}

@@ -32,12 +32,15 @@ namespace QCode
 
 			QCDate fixingDate(QCDate& publishDate)
 			{
-				return publishDate;
+				// Sólo se consideran los días de _fixingRule.
+				auto dias = (int)_fixingRule.getDays();
+				return _calendar.shift(publishDate, -dias);
 			}
 
 			QCDate valueDate(QCDate& publishDate)
 			{
-				return publishDate;
+				// Sólo se consideran los días de _valueDateRule.
+				return _calendar.shift(fixingDate(publishDate), _valueDateRule.getDays());
 			}
 
 			std::string strongCcyCode()

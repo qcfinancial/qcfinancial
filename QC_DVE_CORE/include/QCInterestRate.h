@@ -9,7 +9,7 @@
  * @class	QCInterestRate
  *
  * @brief	A class that models an interest rate; it's value, it's year fraction and it's
- * 			compounding method or wealth factor.
+ * 			compounding method.
  *
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
@@ -34,6 +34,16 @@ public:
 				   QCYrFrctnShrdPtr yearFraction,
 				   QCWlthFctrShrdPtr wealthFactor);
 
+	/**
+	 * @fn	QCInterestRate::QCInterestRate(const QCInterestRate& otherRate)
+	 *
+	 * @brief	Copy constructor
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	23/09/2018
+	 *
+	 * @param	otherRate	The other rate.
+	 */
 	QCInterestRate(const QCInterestRate& otherRate):QCInterestRate(otherRate._value, otherRate._yf, otherRate._wf)
 	{
 	}
@@ -221,6 +231,18 @@ public:
 	 * @return	The year fraction.
 	 */
 	shared_ptr<QCYearFraction> getYearFraction();
+
+	/**
+	 * @fn	std::string QCInterestRate::description();
+	 *
+	 * @brief	Gets the description of the rate. Includes the value, yf and wf.
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	20/09/2018
+	 *
+	 * @return	A std::string.
+	 */
+	std::string description();
 
 	/**
 	 * @fn	QCInterestRate::~QCInterestRate();

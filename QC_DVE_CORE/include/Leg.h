@@ -16,7 +16,7 @@ namespace QCode
 		/**
 		 * @class	Leg
 		 *
-		 * @brief	Abstract class that provides the basis for an arbitrary leg of a financial product .
+		 * @brief	Wrapper class that provides the basis for an arbitrary leg of a financial product .
 		 *
 		 * @author	Alvaro Díaz V.
 		 * @date	07/07/2018
@@ -109,7 +109,6 @@ namespace QCode
 			virtual ~Leg();
 
 		private:
-
 			/** @brief	The cashflows */
 			vector<shared_ptr<Cashflow>> _cashflows;
 		};

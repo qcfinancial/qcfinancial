@@ -306,7 +306,7 @@ namespace wrappers
 		return result;
 	}
 
-	PyObject* showFixedRateMCCashflow(qf::FixedRateMultiCurrencyCashflow cshflw)
+	PyObject* show(qf::FixedRateMultiCurrencyCashflow cshflw)
 	{
 		// The types inside the wrapper are:
 		// QCDate, QCDate, QCDate, double, double, double, bool,
@@ -506,7 +506,7 @@ namespace wrappers
 		return result;
 	}
 
-	PyObject* showFixedRateMCCashflow(std::shared_ptr<qf::FixedRateMultiCurrencyCashflow> cshflwPtr)
+	PyObject* show(std::shared_ptr<qf::FixedRateMultiCurrencyCashflow> cshflwPtr)
 	{
 		auto cshflw = *cshflwPtr;
 		return show(cshflw);
@@ -1384,6 +1384,24 @@ namespace wrappers
 		double fwdWfDerivativeAt(unsigned int index)
 		{
 			return this->get_override("fwdWfDerivativeAt")();
+		}
+	};
+
+	class CashflowWrap : public qf::Cashflow, public boost::python::wrapper<qf::Cashflow>
+	{
+		double amount()
+		{
+			return this->get_override("amount")();
+		}
+
+		shared_ptr<QCCurrency> ccy()
+		{
+			return this->get_override("ccy")();
+		}
+
+		QCDate date()
+		{
+			return this->get_override("date")();
 		}
 	};
 

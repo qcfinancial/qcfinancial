@@ -300,12 +300,12 @@ CellMatrix QCBootZeroRatesFwdsFixedLegs(double xlValueDate,
 
 		}
 
-		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 		vector<shared_ptr<QCDiscountBondPayoff>> legs;
 		shared_ptr<map<QCDate, double>> fixings;
 		legs.resize(2);
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<7>(fwdIndexVector.at(0)), 1.0));
 		for (unsigned int i = 0; i < cuantosFwds; ++i)
 		{
 			//strong currency
@@ -334,7 +334,7 @@ CellMatrix QCBootZeroRatesFwdsFixedLegs(double xlValueDate,
 			legs.at(1) = dbPayoff1;
 
 			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
-				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+				make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 			cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
 
 			inputForwards.at(i) = fxFwd;
@@ -586,12 +586,12 @@ CellMatrix QCBootZeroRatesFwdsFloatingLegs(double xlValueDate,
 		}
 
 		//Se construyen los fwds
-		map<QCCurrencyConverter::QCFxRate, double> fxRate;
+		map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 		vector<shared_ptr<QCDiscountBondPayoff>> legs;
 		shared_ptr<map<QCDate, double>> fixings;
 		legs.resize(2);
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<6>(fwdIndexVector.at(0)), fx));
-		fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(get<7>(fwdIndexVector.at(0)), 1.0));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<6>(fwdIndexVector.at(0)), fx));
+		fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(get<7>(fwdIndexVector.at(0)), 1.0));
 		for (unsigned int i = 0; i < cuantosFwds; ++i)
 		{
 			//strong currency
@@ -622,7 +622,7 @@ CellMatrix QCBootZeroRatesFwdsFloatingLegs(double xlValueDate,
 			legs.at(1) = dbPayoff1;
 
 			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
-				make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+				make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 
 			inputForwards.at(i) = fxFwd;
 		}
@@ -813,11 +813,11 @@ CellMatrix checkBoostrappingFwds(int xlValueDate,
 		inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
 	}
 
-	map<QCCurrencyConverter::QCFxRate, double> fxRate;
+	map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 	vector<shared_ptr<QCDiscountBondPayoff>> legs;
 	legs.resize(2);
-	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLFCLP, fx));
-	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(QCCurrencyConverter::qcCLFCLP, fx));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
 	for (unsigned int i = 0; i < cuantosForwards; ++i)
 	{
 		QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
@@ -845,7 +845,7 @@ CellMatrix checkBoostrappingFwds(int xlValueDate,
 		legs.at(1) = dbPayoff1;
 		
 		auto fxFwd = make_shared<QCFXForward>(legs, QCCurrencyConverter::qcCLP,
-			make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+			make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 		
 		inputForwards.at(i) = fxFwd;
 	}
@@ -1022,11 +1022,11 @@ CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
 		inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
 	}
 
-	map<QCCurrencyConverter::QCFxRate, double> fxRate;
+	map<QCCurrencyConverter::QCFxRateEnum, double> fxRate;
 	vector<shared_ptr<QCDiscountBondPayoff>> legs;
 	legs.resize(2);
-	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcUSDCLP, fx));
-	fxRate.insert(pair<QCCurrencyConverter::QCFxRate, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(QCCurrencyConverter::qcUSDCLP, fx));
+	fxRate.insert(pair<QCCurrencyConverter::QCFxRateEnum, double>(QCCurrencyConverter::qcCLPCLP, 1.0));
 	for (unsigned int i = 0; i < cuantosForwards; ++i)
 	{
 		QCInterestRateLeg dbLeg0 = QCFactoryFunctions::buildDiscountBondLeg(
@@ -1055,7 +1055,7 @@ CellMatrix checkBoostrappingFwdsFloating(int xlValueDate,
 		legs.at(1) = dbPayoff1;
 
 		auto fxFwd = make_shared<QCFXForward>(legs, QCCurrencyConverter::qcCLP,
-			make_shared<map<QCCurrencyConverter::QCFxRate, double>>(fxRate));
+			make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
 
 		inputForwards.at(i) = fxFwd;
 	}

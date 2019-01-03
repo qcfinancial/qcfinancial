@@ -35,7 +35,6 @@ namespace QCode
 			 *
 			 * @brief	Values that represent type of cashflows
 			 */
-
 			enum TypeOfCashflow
 			{
 

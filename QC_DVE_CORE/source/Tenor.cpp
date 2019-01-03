@@ -87,8 +87,8 @@ namespace QCode
 			std::string strDays;
 
 			(years == 0) ? strYears = "" : (strYears = std::to_string(years) + "Y");
-			(months == 0) ? strMonths = "" : (strYears = std::to_string(months) + "M");
-			(days == 0) ? strDays = "" : (strYears = std::to_string(days) + "D");
+			(months == 0) ? strMonths = "" : (strMonths = std::to_string(months) + "M");
+			(days == 0) ? strDays = "" : (strDays = std::to_string(days) + "D");
 
 			std::string result;
 			(strYears + strMonths + strDays == "") ? (result = "0D") : (result = strYears + strMonths + strDays);
