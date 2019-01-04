@@ -1,7 +1,7 @@
 #ifndef QCYEARFRACTION_H
 #define QCYEARFRACTION_H
 
-#include<string>
+#include <string>
 
 class QCDate;
 

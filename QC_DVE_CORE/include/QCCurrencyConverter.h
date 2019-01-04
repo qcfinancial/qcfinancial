@@ -34,7 +34,8 @@ public:
 		qcUSDUSD,
 		qcEUREUR,
 		qcCHFCHF,
-		qcEURCHF
+		qcEURCHF,
+		qcJPYJPY
 	};
 
 	/*!
@@ -71,6 +72,7 @@ public:
 		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcEURCHF, "EURCHF"));
 		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcGBPCLP, "GBPCLP"));
 		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcGBPGBP, "GBPGBP"));
+		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcJPYJPY, "JPYJPY"));
 
 		_currencyCode.insert(pair<QCCurrencyEnum, string>(qcCLF, "CLF"));
 		_currencyCode.insert(pair<QCCurrencyEnum, string>(qcCLP, "CLP"));
@@ -103,6 +105,7 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CHFCHF", qcCHFCHF));
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("EURCHF", qcEURCHF));
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CHFEUR", qcEURCHF));
+		_standardFxRate.insert(pair<string, QCFxRateEnum>("JPYJPY", qcJPYJPY));
 	}
 
 	/*!

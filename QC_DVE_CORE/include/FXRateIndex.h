@@ -9,6 +9,7 @@
 #include "Tenor.h"
 #include "QCDate.h"
 #include "QCBusinessCalendar.h"
+#include "QCCurrency.h"
 
 namespace QCode
 {
@@ -51,6 +52,24 @@ namespace QCode
 			std::string weakCcyCode()
 			{
 				return _fxRate->weakCcyCode();
+			}
+
+			double convert(double notional, QCCurrency ccy, double value)
+			{
+				if (ccy.getIsoCode() == strongCcyCode())
+				{
+					return notional * value;
+				}
+				else if (ccy.getIsoCode() == weakCcyCode())
+				{
+					return notional / value;
+				}
+				else
+				{
+					std::string msg = "Currency " + ccy.getIsoCode() + " of notional is incompatible with currencies ";
+					msg += strongCcyCode() + " and " + weakCcyCode() + " associated with FxRateIndex " + _code + ".";
+					throw invalid_argument(msg);
+				}
 			}
 
 		private:
