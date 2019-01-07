@@ -86,6 +86,9 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	implicitly_convertible<std::shared_ptr<QCGBP>, shared_ptr<QCCurrency>>();
 	class_<QCGBP, std::shared_ptr<QCGBP>, bases<QCCurrency>>("QCGBP");
 
+	implicitly_convertible<std::shared_ptr<QCJPY>, shared_ptr<QCCurrency>>();
+	class_<QCJPY, std::shared_ptr<QCJPY>, bases<QCCurrency>>("QCJPY");
+
 	class_<QCDate>("QCDate", init<int, int, int>())
 		.def(init<>())
 		.def(init<long>())

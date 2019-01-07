@@ -202,7 +202,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCBRL : public QCCurrency
 {
 public:
@@ -228,7 +227,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCCLP : public QCCurrency
 {
 public:
@@ -254,7 +252,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCMXN : public QCCurrency
 {
 public:
@@ -280,7 +277,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCCAD : public QCCurrency
 {
 public:
@@ -306,7 +302,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCUSD : public QCCurrency
 {
 public:
@@ -332,7 +327,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCEUR : public QCCurrency
 {
 public:
@@ -358,7 +352,6 @@ public:
  * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
-
 class QCGBP : public QCCurrency
 {
 public:
@@ -372,6 +365,22 @@ public:
 	 * @date	27/09/2017
 	 */
 	QCGBP() : QCCurrency("British Pound Sterling", "GBP", 826, 2)
+	{
+	}
+};
+
+/**
+* @fn	QCJPY::QCJPY()
+*
+* @brief	Default constructor
+*
+* @author	Alvaro Díaz V.
+* @date	07/01/2019
+*/
+class QCJPY : public QCCurrency
+{
+public:
+	QCJPY() : QCCurrency("Japanese Yen", "JPY", 392, 2)
 	{
 	}
 };
