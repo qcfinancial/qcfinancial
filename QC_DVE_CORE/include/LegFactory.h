@@ -23,7 +23,7 @@ namespace QCode
 		 * @brief	A leg factory. This class provides many static methods that allow the user to build
 		 * 			often used Legs (fixed rate legs, floating rate legs etc.).
 		 *
-		 * @author	Alvaro Díaz V.
+		 * @author	Alvaro Dï¿½az V.
 		 * @date	07/07/2018
 		 */
 		class LegFactory
@@ -56,7 +56,7 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet fixed rate leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -79,7 +79,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildBulletFixedRateLeg(
+			static Leg buildBulletFixedRateLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -99,7 +99,7 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort fixed rate leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -117,7 +117,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildCustomAmortFixedRateLeg(
+			static Leg buildCustomAmortFixedRateLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -136,7 +136,7 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet ibor leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -160,7 +160,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildBulletIborLeg(
+			static Leg buildBulletIborLeg(
 				RecPay recPay,					
 				QCDate startDate,				
 				QCDate endDate,						
@@ -185,7 +185,7 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort ibor leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -209,7 +209,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildCustomAmortIborLeg(
+			static Leg buildCustomAmortIborLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -234,7 +234,7 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet icp clp leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -252,7 +252,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildBulletIcpClpLeg(
+			static Leg buildBulletIcpClpLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -271,7 +271,7 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort icp clp leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -289,7 +289,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildCustomAmortIcpClpLeg(
+			static Leg buildCustomAmortIcpClpLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -308,7 +308,7 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet icp clf leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -326,7 +326,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildBulletIcpClfLeg(
+			static Leg buildBulletIcpClfLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -345,7 +345,7 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort icp clf leg
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
@@ -363,7 +363,7 @@ namespace QCode
 			 *
 			 * @return	A Leg.
 			 */
-			static Leg LegFactory::buildCustomAmortIcpClfLeg(
+			static Leg buildCustomAmortIcpClfLeg(
 				RecPay recPay,
 				QCDate startDate,
 				QCDate endDate,
@@ -383,7 +383,7 @@ namespace QCode
 			*
 			* @brief	Customize amortization
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro Dï¿½az V.
 			* @date	07/07/2018
 			*
 			* @param 		  	recPay				The record pay.
@@ -401,7 +401,7 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 */
 			~LegFactory();
@@ -412,7 +412,7 @@ namespace QCode
 			 *
 			 * @brief	Default constructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 */
 			LegFactory();

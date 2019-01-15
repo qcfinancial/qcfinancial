@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <math.h>
 
 #include "QCFactoryFunctions.h"
 #include "QCHelperFunctions.h"
@@ -113,7 +114,7 @@ QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vect
 	return zrCrvPtr;
 }
 
-//El parámetro typeCurve aún no está implementado
+//El parï¿½metro typeCurve aï¿½n no estï¿½ implementado
 QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
 	const string& interpolator, const string& wf, const string& yf, const string& typeCurve)
 {
@@ -858,8 +859,8 @@ QCInterestRateLeg QCFactoryFunctions::buildIcpLeg2(
 	periods = factory.getPeriods();
 	numPeriods = periods.size();
 
-	//Se ajustan las fechas de inicio y final de índice de fixing y se dejan igual que
-	//startDate y endDate de cada período.
+	//Se ajustan las fechas de inicio y final de ï¿½ndice de fixing y se dejan igual que
+	//startDate y endDate de cada perï¿½odo.
 	for (unsigned int i = 0; i < numPeriods; ++i)
 	{
 		get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(periods.at(i)) =

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <exception>
 #include <algorithm>
+#include <math.h>
 //
 //  QCDate.cpp
 //  QC-FXOptions

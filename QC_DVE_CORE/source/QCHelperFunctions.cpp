@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <locale>
 
 #include "QCHelperFunctions.h"
 
@@ -39,7 +40,7 @@ int QCHelperFunctions::lagToInt(string lag)
 
 void QCHelperFunctions::lowerCase(string& word)
 {
-	transform(word.begin(), word.end(), word.begin(), tolower);
+	std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 }
 
 QCHelperFunctions::QCZeroOne QCHelperFunctions::boolToZeroOne(bool value)
