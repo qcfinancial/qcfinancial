@@ -1,80 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
 project(QC_DVE_CORE)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 include_directories(include)
 
-add_executable(QC_DVE_CORE
-        include/Cashflow.h
-        include/ChileanFixedRateBond.h
-        include/FinancialIndex.h
-        include/FixedRateBond.h
-        include/FixedRateCashflow.h
-        include/FixedRateCashflowWrapper.h
-        include/FixedRateMultiCurrencyCashflow.h
-        include/FXRate.h
-        include/FXRateIndex.h
-        include/IborCashflow.h
-        include/IcpClfCashflow.h
-        include/IcpClpCashflow.h
-        include/InterestRateCurve.h
-        include/InterestRateIndex.h
-        include/Leg.h
-        include/LegFactory.h
-        include/PresentValue.h
-        include/QC30360.h
-        include/QCAct30.h
-        include/QCAct360.h
-        include/QCAct365.h
-        include/QCActAct.h
-        include/QCBusinessCalendar.h
-        include/QCClampedSpline.h
-        include/QCCompoundWf.h
-        include/QCContinousWf.h
-        include/QCCurrency.h
-        include/QCCurrencyConverter.h
-        include/QCCurve.h
-        include/QCDate.h
-        include/QCDefinitions.h
-        include/QCDiscountBondPayoff.h
-        include/QCFactoryFunctions.h
-        include/QCFixedRatePayoff.h
-        include/QCFloatingRatePayoff.h
-        include/QCFXForward.h
-        include/QCHelperFunctions.h
-        include/QCIcpClfPayoff.h
-        include/QCIcpClpPayoff.h
-        include/QCInterestRate.h
-        include/QCInterestRateBasisSwap.h
-        include/QCInterestRateCurve.h
-        include/QCInterestRateCurveGenerator.h
-        include/QCInterestRateLeg.h
-        include/QCInterestRatePayoff.h
-        include/QCInterestRatePeriodsFactory.h
-        include/QCInterpolator.h
-        include/QCLinearInterpolator.h
-        include/QCLinearWf.h
-        include/QCLogLinearInterpolator.h
-        include/QCOperation.h
-        include/QCProjectingInterestRateCurve.h
-        include/QCTest.h
-        include/QCTimeDepositPayoff.h
-        include/QCValueEngine.h
-        include/QCWealthFactor.h
-        include/QCYearFraction.h
-        include/QCZeroCouponCurve.h
-        include/QCZeroCouponDiscountFactorCurve.h
-        include/QCZeroCouponInterestRateCurve.h
-        include/QCZeroCurveBootstrappingFromRates.h
-        include/QCZeroCurveBootstrappingFromRatesAndFixedLegs.h
-        include/QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.h
-        include/QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.h
-        include/QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.h
-        include/SimpleCashflow.h
-        include/SimpleMultiCurrencyCashflow.h
-        include/Tenor.h
-        include/ZeroCouponCurve.h
+add_library(QC_DVE_CORE STATIC
         source/ChileanFixedRateBond.cpp
         source/FixedRateBond.cpp
         source/FixedRateCashflow.cpp
@@ -94,7 +25,6 @@ add_executable(QC_DVE_CORE
         source/QCClampedSpline.cpp
         source/QCCompoundWf.cpp
         source/QCContinousWf.cpp
-        source/QCCurve.cpp
         source/QCDate.cpp
         source/QCDiscountBondPayoff.cpp
         source/QCFactoryFunctions.cpp
@@ -129,3 +59,8 @@ add_executable(QC_DVE_CORE
         source/SimpleMultiCurrencyCashflow.cpp
         source/Tenor.cpp
         source/ZeroCouponCurve.cpp)
+
+add_executable(QC_DVE_CORE_TESTS
+        Tests/CatchMain.cpp
+        Tests/QCDateTests.cpp)
+target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

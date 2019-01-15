@@ -116,7 +116,7 @@ private:
 	* @param stubPeriod tipo de período irregular
 	* @param calendar calendario a utilizar
 	*/
-	vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(string periodicity,
+	vector<tuple<QCDate, QCDate>> _buildBasicDates2(string periodicity,
 		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar);
 	
 	/*! DEPRECATED. Método que construye la estructura de fechas que se quiere obtener.
