@@ -119,7 +119,7 @@ TEST_CASE("Constructor QCDate::QCDate(string& stringDate)") {
     SECTION("Well padded valid dates different separators") {
         array<std::string, 12> fechasString {"1969%01$01", "1969-02_01", "1969a03n01", "1969?04?01",
                                              "1969z05@01", "1969i06001", "1969)07?01", "1969<08>01",
-                                             "1969#09#01", "1969)10(01", "1969ñ11ñ01", "1969}12{01"};
+                                             "1969#09#01", "1969)10(01", "1969;11,01", "1969}12{01"};
         int i = 0;
         for (auto& fechaString : fechasString) {
             INFO("Fecha:" << fechaString);
