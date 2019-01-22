@@ -196,6 +196,30 @@ namespace QCode
 			QCDate getFixingDate() const;
 
 			/**
+			 * @fn	QCDate IborCashflow::getIndexStartDate() const;
+			 *
+			 * @brief	Gets the interest rate index start date
+			 *
+			 * @author	A Diaz V
+			 * @date	21-01-2019
+			 *
+			 * @returns	The index start date.
+			 */
+			QCDate getIndexStartDate();
+
+			/**
+			 * @fn	QCDate IborCashflow::getindexEndDate() const;
+			 *
+			 * @brief	Get the interest rate index end date
+			 *
+			 * @author	A Diaz V
+			 * @date	21-01-2019
+			 *
+			 * @returns	A QCDate.
+			 */
+			QCDate getIndexEndDate();
+
+			/**
 			* @fn	void iborCashflow::setNominal(double nominal);
 			*
 			* @brief	Sets the nominal amount.

@@ -42,6 +42,7 @@
 #include "PresentValue.h"
 #include "FixedRateBond.h"
 #include "ChileanFixedRateBond.h"
+#include "ForwardRates.h"
 
 #include "Wrappers.h"
 #include "Include/Wrappers.h"
@@ -604,4 +605,12 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("precio", &qf::ChileanFixedRateBond::price)
 		.def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
 		;
+
+	class_<qf::ForwardRates>("ForwardRates")
+		.def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
+		.def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
+		.def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
+		.def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
+		;
+
 };

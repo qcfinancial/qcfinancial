@@ -73,6 +73,16 @@ namespace QCode
 			return _fixingDate;
 		}
 
+		QCDate IborCashflow::getIndexStartDate() 
+		{
+			return _index->getStartDate(_fixingDate);
+		}
+
+		QCDate IborCashflow::getIndexEndDate() 
+		{
+			return _index->getEndDate(_fixingDate);
+		}
+
 		void IborCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;

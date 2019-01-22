@@ -26,13 +26,13 @@ namespace QCode
 			_rate.setValue(rateValue);
 		}
 
-		QCDate InterestRateIndex::getStartDate(QCDate& fixingDate)
+		QCDate InterestRateIndex::getStartDate(QCDate& fixingDate) 
 		{
 			auto dias = _startLag.getDays();
 			return _fixingCalendar.shift(fixingDate, dias);
 		}
 
-		QCDate InterestRateIndex::getEndDate(QCDate& fixingDate)
+		QCDate InterestRateIndex::getEndDate(QCDate& fixingDate) 
 		{
 			auto dias = _startLag.getDays();
 			auto startDate = _fixingCalendar.shift(fixingDate, dias);
