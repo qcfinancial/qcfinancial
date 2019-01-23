@@ -47,6 +47,7 @@ namespace wrappers
 		double interest;
 		long doesAmortize = 0;
 		std::string currency;
+		double rate;
 		try
 		{
 			startDate = std::get<0>(*cashflow).description(false);
@@ -55,6 +56,7 @@ namespace wrappers
 			nominal = std::get<3>(*cashflow);
 			amortization = std::get<4>(*cashflow);
 			interest = std::get<5>(*cashflow);
+			rate = std::get<8>(*cashflow).getValue();
 			if (std::get<6>(*cashflow))
 			{
 				doesAmortize = 1;
@@ -146,7 +148,6 @@ namespace wrappers
 			return NULL;
 		}
 
-		double rate = std::get<8>(*cashflow).getValue();
 		success = PyTuple_SetItem(result, 9, PyFloat_FromDouble(rate));
 		if (success != 0)
 		{
@@ -528,7 +529,8 @@ namespace wrappers
 		// _index->getCode(),
 		// _index->getRate(),
 		// _spread,
-		// _gearing);
+		// _gearing,
+		// _rateValue);
 		
 		auto cashflow = cshflw.wrap();
 
@@ -544,7 +546,7 @@ namespace wrappers
 		double cashflowAmount;
 		std::string currency;
 		std::string code;
-		double rate_value;
+		double rateValue;
 		double spread;
 		double gearing;
 		try
@@ -564,7 +566,7 @@ namespace wrappers
 			cashflowAmount = std::get<8>(*cashflow);
 			currency = std::get<9>(*cashflow)->getIsoCode();
 			code = std::get<10>(*cashflow);
-			rate_value = std::get<11>(*cashflow).getValue();
+			rateValue = std::get<14>(*cashflow);
 			spread = std::get<12>(*cashflow);
 			gearing = std::get<13>(*cashflow);
 		}
@@ -669,8 +671,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		double rate = std::get<11>(*cashflow).getValue();
-		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(rate));
+		success = PyTuple_SetItem(result, 11, PyFloat_FromDouble(rateValue));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -700,7 +701,7 @@ namespace wrappers
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "currency");
+			PyErr_SetString(qcfError, "type of rate");
 			return NULL;
 		}
 
@@ -723,7 +724,8 @@ namespace wrappers
 		// code            std::string,
 		// rate            QCInterestRate,
 		// spread          double,
-		// gearing         double.
+		// gearing         double,
+		// rateValue       double.
 		
 		auto cshflw = *cshflwPtr;
 		return show(cshflw);

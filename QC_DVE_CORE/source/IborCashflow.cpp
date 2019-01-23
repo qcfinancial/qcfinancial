@@ -112,7 +112,7 @@ namespace QCode
 
 		double IborCashflow::getInterestRateValue() const
 		{
-			return _index->getRate().getValue();
+			return _rateValue;
 		}
 
 		double IborCashflow::accruedInterest(const QCDate& valueDate)
@@ -144,7 +144,8 @@ namespace QCode
 													  _index->getCode(),
 													  _index->getRate(),
 													  _spread,
-													  _gearing);
+													  _gearing,
+													  _rateValue);
 
 			return std::make_shared<IborCashflowWrapper>(tup);
 		}

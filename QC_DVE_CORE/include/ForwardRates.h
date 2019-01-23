@@ -26,7 +26,7 @@ namespace QCode
 			{
 				auto iborCashflow_ = dynamic_cast<IborCashflow&>(iborCashflow);
 				std::vector<double> derivatives(curve.getLength(), 0.0);
-				if (valuationDate >= iborCashflow_.getFixingDate())
+				if (valuationDate > iborCashflow_.getFixingDate())
 				{
 					return std::make_shared<IborCashflow>(iborCashflow_);
 				}
