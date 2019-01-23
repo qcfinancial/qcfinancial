@@ -105,7 +105,8 @@ namespace QCode
 
 		void IborCashflow::setInterestRateValue(double value)
 		{
-			_index->setRateValue(value);
+			_rateValue = value;
+			_index->setRateValue(_rateValue);
 			_calculateInterest();
 		}
 
@@ -150,14 +151,13 @@ namespace QCode
 
 		void IborCashflow::_calculateInterest()
 		{
-			double rateValue = _index->getRate().getValue();
-			_index->setRateValue(rateValue * _gearing + _spread);
+			_index->setRateValue(_rateValue * _gearing + _spread);
 			// Con este procedimiento vamos a tener un problema al momento de calcular
-			// derivadas. Se dará de alta una sobrecarga de QCInterestRate.wf que considere
-			// también gearing y spread (o se agregan como parámetros opcionales en el
-			// método ya existente).
+			// derivadas. Se darÃ¡ de alta una sobrecarga de QCInterestRate.wf que considere
+			// tambiÃ©n gearing y spread (o se agregan como parÃ¡metros opcionales en el
+			// mÃ©todo ya existente).
 			_interest = _nominal * (_index->getRate().wf(_startDate, _endDate) - 1.0);
-			_index->setRateValue(rateValue);
+			_index->setRateValue(_rateValue);
 		}
 
 		bool IborCashflow::_validate()
