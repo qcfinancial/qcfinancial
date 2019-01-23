@@ -92,7 +92,12 @@ namespace QCode
 				}
 			}
 
-		private:
+            ~ForwardRates()
+            {
+            }
+
+
+        private:
 			std::vector<double> _derivatives;
 			std::vector<vector<double>> _derivatives2;
 		};
