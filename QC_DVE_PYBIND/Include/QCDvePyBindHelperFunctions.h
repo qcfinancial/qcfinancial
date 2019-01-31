@@ -380,7 +380,7 @@ namespace QCDvePyBindHelperFunctions
 					PyString_AsString(
 					PyTuple_GetItem(
 					PyList_GetItem(input, i), 3)));
-				get<2>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
+				get<2>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcNo);
 				cout << "\tbuildFixedRateIndexVector: end date " << get<2>(temp).description() << endl;
 			}
 
@@ -684,7 +684,6 @@ namespace QCDvePyBindHelperFunctions
 			floatIndexVector.at(i) = temp;
 		}
 	}
-
 
 	void buildQCDateVector(PyObject* input, vector<QCDate>& dateVector)
 	{

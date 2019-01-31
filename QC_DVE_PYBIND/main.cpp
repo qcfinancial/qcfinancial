@@ -1017,6 +1017,10 @@ PyObject* boot_zero_rates_fixed_legs(PyObject* self, PyObject* args)
 				get<7>(swapIndexVector.at(i)),			//amortization
 				amortIfCustom,							//amortization and notional by date
 				get<9>(swapIndexVector.at(i)));			//notional
+			if (i == 7)
+			{
+				cout << get<2>(swapIndexVector.at(i)) << endl;
+			}
 			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
 
 			//buildFixedRatePayoff
