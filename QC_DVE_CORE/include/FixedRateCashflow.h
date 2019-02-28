@@ -18,10 +18,15 @@ namespace QCode
 		 *
 		 * @brief	Defines an alias representing a FixedRateCashflow wrapper
 		 */
-		typedef std::tuple<QCDate, QCDate, QCDate,
-			double, double, double, bool,
-			shared_ptr<QCCurrency>,
-			QCInterestRate> FixedRateCashflowWrapper;
+		typedef std::tuple<QCDate,
+			               QCDate,
+						   QCDate,
+			               double,
+						   double,
+						   double,
+						   bool,
+			               shared_ptr<QCCurrency>,
+			               QCInterestRate> FixedRateCashflowWrapper;
 
 		/**
 		 * @class	FixedRateCashflow
@@ -34,39 +39,6 @@ namespace QCode
 		class FixedRateCashflow : public Cashflow
 		{
 		public:
-
-			/**
-			* @enum	Element
-			*
-			* @brief	Values that represent the different elements of a FixedRateCashflow
-			*/
-			enum Element
-			{
-				///< An enum constant representing the start date
-				startDate,
-
-				///< An enum constant representing the end date
-				endDate,
-
-				///< An enum constant representing the settlement date
-				settlementDate,
-
-				///< An enum constant representing the notional
-				notional,
-
-				///< An enum constant representing the amortization
-				amortization,
-
-				///< An enum constant representing the interest
-				interest,
-
-				///< An enum constant representing the amort is cashflow
-				amortIsCashflow,
-
-				///< An enum constant representing the currency
-				currency
-			};
-
 			/**
 			 * @fn	FixedRateCashflow::FixedRateCashflow(const QCDate& startDate, const QCDate& endDate, const QCDate& settlementDate, double nominal, double amortization, bool doesAmortize, const QCInterestRate& rate, const QCCurrency& currency);
 			 *

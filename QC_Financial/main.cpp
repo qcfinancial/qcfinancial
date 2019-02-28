@@ -2,6 +2,7 @@
 #define BOOST_PYTHON_MAX_ARITY 20
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/docstring_options.hpp>
 
 #include<memory>
@@ -43,6 +44,7 @@
 #include "FixedRateBond.h"
 #include "ChileanFixedRateBond.h"
 #include "ForwardRates.h"
+#include "TypeAliases.h"
 
 #include "Wrappers.h"
 #include "Include/Wrappers.h"
@@ -276,6 +278,11 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	implicitly_convertible<std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>, 
 		std::shared_ptr<qf::Cashflow>>();
+	
+
+	class_<qf::FXVariation >("FXVariation", init<double, double>())
+		.def_readwrite("nominal_variation", &qf::FXVariation::nominalVariation)
+		.def_readwrite("interest_variation", &qf::FXVariation::interestVariation);
 
 	class_<qf::FixedRateMultiCurrencyCashflow, std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>, 
 		bases<qf::FixedRateCashflow>>("FixedRateMultiCurrencyCashflow",
@@ -288,6 +295,9 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("amount", &qf::FixedRateMultiCurrencyCashflow::amount)
 		.def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCcy)
 		.def("set_fx_rate_index_value", &qf::FixedRateMultiCurrencyCashflow::setFxRateIndexValue)
+		.def("accrued_interest", &qf::FixedRateCashflow::accruedInterest)
+		.def("accrued_interest", &qf::FixedRateMultiCurrencyCashflow::accruedInterest)
+		.def("accrued_fx_variation", &qf::FixedRateMultiCurrencyCashflow::accruedFXVariation)
 		.def("wrap", &qf::FixedRateMultiCurrencyCashflow::wrap)
 		;
 
@@ -530,6 +540,10 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	class_<std::vector<long>>("long_vec")
 		.def(vector_indexing_suite<std::vector<long>>())
+		;
+
+	class_<qf::TimeSeries>("time_series")
+		.def(map_indexing_suite<qf::TimeSeries>())
 		;
 
 	class_<std::pair<long, double> >("CurvePoint")

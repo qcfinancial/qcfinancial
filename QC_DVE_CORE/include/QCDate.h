@@ -314,7 +314,7 @@ class QCDate
 		 * es 'yyyy-mm-dd'.
 		 * @return (std::string)
          */
-        string description(bool dmy = true);
+        string description(bool dmy = true) const;
 
     private:
         int _day;

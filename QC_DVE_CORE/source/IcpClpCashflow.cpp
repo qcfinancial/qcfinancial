@@ -60,7 +60,7 @@ namespace QCode
 
 		double IcpClpCashflow::getTna(QCDate date, double icpValue)
 		{
-			int LIMIT_TNA_DECIMAL_PLACES = 15;
+			unsigned int LIMIT_TNA_DECIMAL_PLACES = 15;
 			double yf = _rate.yf(_startDate, date);
 			double tna = (icpValue / _startDateICP - 1) / yf;
 			if (_tnaDecimalPlaces > LIMIT_TNA_DECIMAL_PLACES)

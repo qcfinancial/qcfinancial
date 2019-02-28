@@ -38,53 +38,12 @@ namespace QCode
 		 *
 		 * @brief	An Ibor based cashflow.
 		 *
-		 * @author	Alvaro D�az V.
+		 * @author	Alvaro Diaz V.
 		 * @date	29/09/2017
 		 */
 		class IborCashflow : public Cashflow
 		{
 		public:
-
-			/**
-			* @enum	Element
-			*
-			* @brief	Values that represent the different elements of an IborCashflow
-			*/
-			enum Element
-			{
-				///< An enum constant representing the start date
-				startDate,
-
-				///< An enum constant representing the end date
-				endDate,
-
-				///< An enum constant representing the fixing date
-				fixingDate,
-
-				///< An enum constant representing the settlement date
-				settlementDate,
-
-				///< An enum constant representing the notional
-				notional,
-
-				///< An enum constant representing the amortization
-				amortization,
-
-				///< An enum constant representing the interest
-				interest,
-
-				///< An enum constant representing the amort is cashflow
-				amortIsCashflow,
-
-				///< An enum constant representing the currency
-				currency,
-				
-				///< An enum constant representing the spread
-				spread,
-				
-				///< An enum constant representing the gearing
-				gearing
-			};
 
 			/**
 			 * @fn	IborCashflow::IborCashflow(std::shared_ptr<InterestRateIndex> index,

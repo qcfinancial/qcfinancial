@@ -242,7 +242,7 @@ QCDate::QCWeekDay QCDate::weekDay() const
     return QCWeekDay((auxYear + auxYear/4 - auxYear/100 + auxYear/400 + t[_month-1] + _day) % 7);
 }
 
-std::string QCDate::description(bool dmy)
+std::string QCDate::description(bool dmy) const
 {
     std::stringstream ss;
     std::string auxDay = "";
