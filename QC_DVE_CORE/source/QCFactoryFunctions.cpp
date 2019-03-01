@@ -114,7 +114,7 @@ QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vect
 	return zrCrvPtr;
 }
 
-//El par�metro typeCurve a�n no est� implementado
+//El parametro typeCurve aun no esta implementado
 QCZrCpnCrvShrdPtr QCFactoryFunctions::zrCpnCrvShrdPtr(vector<long>& tenors, vector<double>& rates,
 	const string& interpolator, const string& wf, const string& yf, const string& typeCurve)
 {

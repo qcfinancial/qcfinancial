@@ -6,11 +6,13 @@
 
 #include <boost/python.hpp>
 #include <boost/python/wrapper.hpp>
+#include <boost/python/tuple.hpp>
 
 #include "Cashflow.h"
 #include "FixedRateCashflow.h"
 #include "FixedRateMultiCurrencyCashflow.h"
 #include "IborCashflow.h"
+#include "IborMultiCurrencyCashflow.h"
 #include "SimpleCashflow.h"
 #include "SimpleMultiCurrencyCashflow.h"
 #include "IcpClpCashflow.h"
@@ -511,6 +513,115 @@ namespace wrappers
 	{
 		auto cshflw = *cshflwPtr;
 		return show(cshflw);
+	}
+
+	boost::python::tuple show(qf::IborMultiCurrencyCashflow cshflw)
+	{
+		// The types inside the wrapper are:
+		// QCDate,                  /* Start date */
+		// QCDate,                  /* End date */
+		// QCDate,                  /* Fixing date */
+		// QCDate,                  /* Settlement date */
+		// double,                  /* Nominal */
+		// double,                  /* Amortization */
+		// double,                  /* Interest */
+		// bool,                    /* Amortization is cashflow */
+		// double,                  /* Total cashflow */
+		// shared_ptr<QCCurrency>,  /* Nominal currency */
+		// std::string,             /* Interest rate index code */
+		// QCInterestRate,			 /* Interest rate */
+		// double,                  /* Spread */
+		// double,                  /* Gearing */
+		// double,					 /* Interest rate value */
+		// QCDate,							/* fx index fixing date */
+		// std::shared_ptr<QCCurrency>,    /* settlement currency */
+		// std::shared_ptr<FXRateIndex>,   /* fx rate index */
+		// double,							/* fx rate index value */
+		// double,							/* amortization in settlement currency */
+		// double  						/* interest in settlement currency */
+
+		auto cashflow = cshflw.wrap();
+
+		// We will first unpack the wrapper
+		std::string startDate;
+		std::string endDate;
+		std::string fixingDate;
+		std::string settlementDate;
+		double nominal;
+		double amortization;
+		double interest;
+		long doesAmortize = 0;
+		double settCcyCashflow;
+		std::string nominalCurrency;
+		std::string interestRateIndexCode;
+		double spread;
+		double gearing;
+		double rateValue;
+		std::string typeRate;
+		std::string fxRateIndexDate;
+		std::string settCurrency;
+		std::string fxRateIndexCode;
+		double fxRateIndexValue;
+		double settCcyAmortization;
+		double settCcyInterest;
+		try
+		{
+			startDate = std::get<0>(*cashflow).description(false);
+			endDate = std::get<1>(*cashflow).description(false);
+			fixingDate = std::get<2>(*cashflow).description(false);
+			settlementDate = std::get<3>(*cashflow).description(false);
+			nominal = std::get<4>(*cashflow);
+			amortization = std::get<5>(*cashflow);
+			interest = std::get<6>(*cashflow);
+			if (std::get<7>(*cashflow))
+			{
+				doesAmortize = 1;
+			}
+			settCcyCashflow = std::get<8>(*cashflow);
+			nominalCurrency = std::get<9>(*cashflow)->getIsoCode();
+			interestRateIndexCode = std::get<10>(*cashflow);
+			spread = std::get <12> (*cashflow);
+			gearing = std::get <13>(*cashflow);
+			rateValue = std::get <14>(*cashflow);
+			std::string wf = std::get<11>(*cashflow).getWealthFactor()->description();
+			std::string yf = std::get<11>(*cashflow).getYearFraction()->description();
+			typeRate = wf + yf;
+			fxRateIndexDate = std::get<15>(*cashflow).description(false);
+			nominalCurrency = std::get<16>(*cashflow)->getIsoCode();
+			fxRateIndexCode = std::get<17>(*cashflow)->getCode();
+			fxRateIndexValue = std::get<18>(*cashflow);
+			settCcyAmortization = std::get<19>(*cashflow);
+			settCcyInterest = std::get<20>(*cashflow);
+		}
+		catch (exception& e)
+		{
+			std::string msg = "QC_Financial " + string(e.what());
+			throw invalid_argument(msg);
+		}
+
+		// Now we pack the values in a Python tuple
+		boost::python::tuple result(startDate,
+			endDate,
+			fixingDate,
+			settlementDate,
+			nominal,
+			amortization,
+			interest,
+			doesAmortize,
+			settCcyCashflow,
+			nominalCurrency,
+			interestRateIndexCode,
+			spread,
+			gearing,
+			rateValue,
+			typeRate,
+			fxRateIndexDate,
+			settCurrency,
+			fxRateIndexCode,
+			fxRateIndexValue,
+			settCcyAmortization,
+			settCcyInterest);
+		return result;
 	}
 
 	PyObject* show(qf::IborCashflow cshflw)
@@ -1412,6 +1523,17 @@ namespace wrappers
 		std::string fechaStr {fechaString};
 		return QCDate{ fechaStr };
 	}
+
+	unsigned long first(std::tuple<unsigned long, int> tupla)
+	{
+		return std::get<0>(tupla);
+	}
+
+	int second(std::tuple<unsigned long, int> tupla)
+	{
+		return std::get<1>(tupla);
+	}
+
 }
 
 

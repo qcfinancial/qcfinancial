@@ -115,9 +115,10 @@ namespace QCode
 			void setFxRateIndexValue(double fxRateIndexValue);
 
 			/**
-			 * @fn	double FixedRateMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+			 * @fn	double FixedRateMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate,
+			 * 		const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
 			 *
-			 * @brief	Calculates accrued interest in settlement currency.
+			 * @brief	Calculates accrued interest in settlement currency
 			 *
 			 * @author	A Diaz V
 			 * @date	28-02-2019
@@ -134,7 +135,7 @@ namespace QCode
 			/**
 			 * @fn	FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 			 *
-			 * @brief	Calculates accrued FX variation. It is expressed in settlement currency.
+			 * @brief	Calculates accrued FX variation expressed in settlement currency
 			 *
 			 * @author	A Diaz V
 			 * @date	28-02-2019
@@ -195,22 +196,6 @@ namespace QCode
 
 			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
-
-			/**
-			 * @fn	bool FixedRateMultiCurrencyCashflow::_checkFXrateIndexValues(const QCDate& date, TimeSeries& fxRateIndexValues);
-			 *
-			 * @brief	Checks whether a value for FX rate exists for the given date.
-			 *
-			 * @author	A Diaz V
-			 * @date	28-02-2019
-			 *
-			 * @param 		  	date			 	The date.
-			 * @param [in,out]	fxRateIndexValues	The FX rate index values.
-			 *
-			 * @returns	True if it succeeds, false if it fails.
-			 */
-			bool _checkFXRateIndexValues(const QCDate& date, const TimeSeries& fxRateIndexValues);
-
 		};
 
 	}

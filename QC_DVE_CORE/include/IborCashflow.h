@@ -58,7 +58,7 @@ namespace QCode
 			 * @author	Alvaro Díaz V.
 			 * @date	29/09/2017
 			 *
-			 * @param	iborIndexCode 	The associated Ibor code.
+			 * @param	iborIndexCode 	The associated interest rate index.
 			 * @param	startDate	  	The start date.
 			 * @param	endDate		  	The end date.
 			 * @param	fixingDate	  	The fixing date.
@@ -86,7 +86,7 @@ namespace QCode
 			/**
 			 * @fn	double IborCashflow::amount();
 			 *
-			 * @brief	Gets the amount
+			 * @brief	Gets the amount.
 			 *
 			 * @author	Alvaro Díaz V.
 			 * @date	29/09/2017

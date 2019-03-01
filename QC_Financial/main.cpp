@@ -7,6 +7,7 @@
 
 #include<memory>
 #include<string>
+#include <tuple>
 
 #include "QCCurrency.h"
 #include "QCYearFraction.h"
@@ -92,6 +93,15 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	implicitly_convertible<std::shared_ptr<QCJPY>, shared_ptr<QCCurrency>>();
 	class_<QCJPY, std::shared_ptr<QCJPY>, bases<QCCurrency>>("QCJPY");
 
+	std::tuple<unsigned long, int>(QCDate::*mddiff_1)(const QCDate&, std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const = 
+		&QCDate::monthDiffDayRemainder;
+	std::tuple<unsigned long, int>(QCDate::*mddiff_2)(const QCDate&, shared_ptr<vector<QCDate>>, QCDate::QCBusDayAdjRules) const = 
+		&QCDate::monthDiffDayRemainder;
+
+	class_<std::tuple<unsigned long, int>>("tupla_uint_int");
+	def("first", &wrappers::first);
+	def("second", &wrappers::second);
+
 	class_<QCDate>("QCDate", init<int, int, int>())
 		.def(init<>())
 		.def(init<long>())
@@ -106,6 +116,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("add_months", &QCDate::addMonths)
 		.def("add_days", &QCDate::addDays)
 		.def("day_diff", &QCDate::dayDiff)
+		.def("month_diff_day_remainder", mddiff_1)
+		.def("month_diff_day_remainder", mddiff_2)
 		.def("__lt__", &QCDate::operator<)
 		.def("__le__", &QCDate::operator<=)
 		.def("__eq__", &QCDate::operator==)
