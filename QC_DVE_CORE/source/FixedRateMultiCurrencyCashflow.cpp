@@ -1,5 +1,6 @@
 #include "QCCurrencyConverter.h"
 #include "FixedRateMultiCurrencyCashflow.h"
+#include "HelperFunctions.h"
 
 namespace QCode
 {
@@ -61,10 +62,10 @@ namespace QCode
 			double interest = FixedRateCashflow::accruedInterest(valueDate);
 
 			QCCurrencyConverter ccyConverter;
-			if (!isDateInTimeSeries(fxRateIndexDate, fxRateIndexValues))
+			if (!QCode::Helpers::isDateInTimeSeries(fxRateIndexDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
-				msg += _fxRateIndex->getCode() + " and date " + fxRateIndexDate.description() + ".";
+				msg += _fxRateIndex->getCode() + " and date " + fxRateIndexDate.description(false) + ".";
 				throw invalid_argument(msg);
 			}
 			else
@@ -77,7 +78,7 @@ namespace QCode
 		FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate,
 			const TimeSeries& fxRateIndexValues)
 		{
-			if (!isDateInTimeSeries(_startDate, fxRateIndexValues))
+			if (!QCode::Helpers::isDateInTimeSeries(_startDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
 				msg += _fxRateIndex->getCode() + " and date " + _startDate.description() + ".";
@@ -85,7 +86,7 @@ namespace QCode
 			}
 
 			//QCDate _valueDate{ valueDate };
-			if (!isDateInTimeSeries(valueDate, fxRateIndexValues))
+			if (!QCode::Helpers::isDateInTimeSeries(valueDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
 				msg += _fxRateIndex->getCode() + " and date " + valueDate.description() + ".";

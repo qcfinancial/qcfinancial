@@ -293,8 +293,9 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	
 
 	class_<qf::FXVariation >("FXVariation", init<double, double>())
+		.def_readwrite("interest_variation", &qf::FXVariation::interestVariation)
 		.def_readwrite("nominal_variation", &qf::FXVariation::nominalVariation)
-		.def_readwrite("interest_variation", &qf::FXVariation::interestVariation);
+		;
 
 	class_<qf::FixedRateMultiCurrencyCashflow, std::shared_ptr<qf::FixedRateMultiCurrencyCashflow>, 
 		bases<qf::FixedRateCashflow>>("FixedRateMultiCurrencyCashflow",
@@ -339,12 +340,38 @@ BOOST_PYTHON_MODULE(QC_Financial)
 							 .def("set_amortization", &qf::IborCashflow::setAmortization)
 							 .def("get_amortization", &qf::IborCashflow::getAmortization)
 							 ;
-
 	PyObject* (*show2)(qf::IborCashflow) = wrappers::show;
 	def("show", show2);
 
 	PyObject* (*show21)(std::shared_ptr<qf::IborCashflow>) = wrappers::show;
 	def("show", show21);
+
+	class_<qf::IborMultiCurrencyCashflow, std::shared_ptr<qf::IborMultiCurrencyCashflow>,
+		bases<qf::IborCashflow >> ("IborMultiCurrencyCashflow",
+		init < std::shared_ptr<qf::InterestRateIndex>,
+		const QCDate&, const QCDate&, const QCDate&, const QCDate&,
+		double, double, bool,
+		std::shared_ptr<QCCurrency>,
+		double, double,
+		const QCDate&,
+		std::shared_ptr<QCCurrency>,
+		std::shared_ptr<qf::FXRateIndex>,
+		double>())
+		.def("amount", &qf::IborMultiCurrencyCashflow::amount)
+		.def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCcy)
+		.def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
+		.def("accrued_interest", &qf::IborCashflow::accruedInterest)
+		.def("accrued_interest", &qf::IborMultiCurrencyCashflow::accruedInterest)
+		.def("accrued_fx_variation", &qf::IborMultiCurrencyCashflow::accruedFXVariation)
+		.def("wrap", &qf::IborMultiCurrencyCashflow::wrap)
+		;
+
+	PyObject* (*show20)(qf::IborMultiCurrencyCashflow) = wrappers::show;
+	def("show", show20);
+
+	PyObject* (*show201)(std::shared_ptr<qf::IborMultiCurrencyCashflow>) = wrappers::show;
+	def("show", show201);
+
 
 	implicitly_convertible<std::shared_ptr<qf::SimpleCashflow>, std::shared_ptr<qf::Cashflow>>();
 

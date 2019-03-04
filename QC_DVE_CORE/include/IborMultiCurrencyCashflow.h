@@ -200,26 +200,6 @@ namespace QCode
 
 			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
-
-			/**
-			 * @fn	bool IborMultiCurrencyCashflow::_checkFXRateIndexValues(const QCDate& date, const TimeSeries& fxRateIndexValues);
-			 *
-			 * @brief	Checks whether a value for FX rate exists for the given date.
-			 *
-			 * @author	A Diaz V
-			 * @date	28-02-2019
-			 *
-			 * @param	date			 	The date.
-			 * @param	fxRateIndexValues	The FX rate index values.
-			 *
-			 * @returns	True if it succeeds, false if it fails.
-			 */
-			bool _checkFXRateIndexValues(const QCDate& date, const TimeSeries& fxRateIndexValues);
-
-
-
-
-
 		};
 	}
 }

@@ -18,37 +18,10 @@ namespace QCode
 		typedef std::map<QCDate, double> TimeSeries;
 
 		/**
-		 * @fn	bool isDateInTimeSeries(const QCDate& date, const TimeSeries& timeSeries)
-		 *
-		 * @brief	Query if 'date' is date in time series
-		 *
-		 * @author	A Diaz V
-		 * @date	01-03-2019
-		 *
-		 * @param	date	  	The date.
-		 * @param	timeSeries	The time series.
-		 *
-		 * @returns	True if date in time series, false if not.
-		 */
-
-		bool isDateInTimeSeries(const QCDate& date, const TimeSeries& timeSeries)
-		{
-			if (timeSeries.find(date) == timeSeries.end())
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
-
-
-		/**
 		 * @typedef	std::map<std::string, std::map<QCDate, double>> ManyTimeSeries
 		 *
 		 * @brief	Defines an alias representing a container with many TimeSeries objects. The key for the outer std::map
-		 * 			is a std::string that corresponds to the code of the financial index to which the time series corresponds.
+		 * 			is a std::string equal to the code of the financial index to which the time series corresponds.
 		 */
 		typedef std::map<std::string, std::map<QCDate, double>> ManyTimeSeries;
 
@@ -63,7 +36,7 @@ namespace QCode
 		*/
 		struct FXVariation
 		{
-			FXVariation(double nominal, double interest) : nominalVariation(nominal), interestVariation(interest)
+			FXVariation(double interest, double nominal) : interestVariation(interest), nominalVariation(nominal)
 			{
 			}
 

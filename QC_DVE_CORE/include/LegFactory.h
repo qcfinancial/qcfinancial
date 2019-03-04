@@ -56,7 +56,7 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet fixed rate leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	recPay				 	The record pay.
