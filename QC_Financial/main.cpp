@@ -1,5 +1,5 @@
 #define BOOST_PYTHON_STATIC_LIB
-#define BOOST_PYTHON_MAX_ARITY 20
+#define BOOST_PYTHON_MAX_ARITY 25
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
@@ -549,10 +549,14 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	class_<qf::LegFactory>("LegFactory", no_init)
 		.def("build_bullet_fixed_rate_leg", &qf::LegFactory::buildBulletFixedRateLeg)
 		.staticmethod("build_bullet_fixed_rate_leg")
+		.def("build_bullet_fixed_rate_mccy_leg", &qf::LegFactory::buildBulletFixedRateMultiCurrencyLeg)
+		.staticmethod("build_bullet_fixed_rate_mccy_leg")
 		.def("build_custom_amort_fixed_rate_leg", &qf::LegFactory::buildCustomAmortFixedRateLeg)
 		.staticmethod("build_custom_amort_fixed_rate_leg")
 		.def("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
 		.staticmethod("build_bullet_ibor_leg")
+		.def("build_bullet_ibor_mccy_leg", &qf::LegFactory::buildBulletIborMultiCurrencyLeg)
+		.staticmethod("build_bullet_ibor_mccy_leg")
 		.def("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
 		.staticmethod("build_custom_amort_ibor_leg")
 		.def("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)

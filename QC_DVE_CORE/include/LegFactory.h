@@ -7,6 +7,7 @@
 #include "FixedRateCashflow.h"
 #include "Leg.h"
 #include "InterestRateIndex.h"
+#include "FXRateIndex.h"
 #include "Tenor.h"
 
 #include "QCInterestRateLeg.h"
@@ -23,7 +24,7 @@ namespace QCode
 		 * @brief	A leg factory. This class provides many static methods that allow the user to build
 		 * 			often used Legs (fixed rate legs, floating rate legs etc.).
 		 *
-		 * @author	Alvaro D�az V.
+		 * @author	Alvaro Diaz V.
 		 * @date	07/07/2018
 		 */
 		class LegFactory
@@ -59,7 +60,7 @@ namespace QCode
 			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -95,14 +96,64 @@ namespace QCode
 				bool forBonds = false);
 
 			/**
+			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
+			 *
+			 * @brief	Builds bullet fixed rate multi currency leg
+			 *
+			 * @author	A Diaz V
+			 * @date	05-03-2019
+			 *
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+			 * @param	startDate			 	The start date.
+			 * @param	endDate				 	The end date.
+			 * @param	endDateAdjustment	 	The end date adjustment.
+			 * @param	settlementPeriodicity	The settlement periodicity.
+			 * @param	settlementStubPeriod 	The settlement stub period.
+			 * @param	settlementCalendar   	The settlement calendar.
+			 * @param	settlementLag		 	The settlement lag.
+			 * @param	notional			 	The notional.
+			 * @param	doesAmortize		 	True to does amortize.
+			 * @param	rate				 	The rate.
+			 * @param	notionalCurrency	 	The notional currency.
+			 * @param	settlementCurrency   	The settlement currency.
+			 * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
+			 * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
+			 * @param	forBonds			 	(Optional) True to for bonds. This forces settlement
+			 * 									date to coincide with end date for each period.
+			 * 									This allows the correct calculation of present value
+			 * 									using yield to maturity and the usual fixed rate market
+			 * 									conventions.
+			 *
+			 * @returns	A Leg.
+			 */
+			static Leg buildBulletFixedRateMultiCurrencyLeg(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				double notional,
+				bool doesAmortize,
+				QCInterestRate rate,
+				std::shared_ptr<QCCurrency> notionalCurrency,
+				std::shared_ptr<QCCurrency> settlementCurrency,
+				std::shared_ptr<FXRateIndex> fxRateIndex,
+				unsigned int fxRateIndexFixingLag,
+				bool forBonds = false);
+
+
+			/**
 			 * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
 			 *
 			 * @brief	Builds custom amort fixed rate leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -136,8 +187,58 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet ibor leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
+			 *
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+			 * @param	startDate			 	The start date.
+			 * @param	endDate				 	The end date.
+			 * @param	endDateAdjustment	 	The end date adjustment.
+			 * @param	settlementPeriodicity	The settlement periodicity.
+			 * @param	settlementStubPeriod 	The settlement stub period.
+			 * @param	settlementCalendar   	The settlement calendar.
+			 * @param	settlementLag		 	The settlement lag.
+			 * @param	fixingPeriodicity	 	The fixing periodicity.
+			 * @param	fixingStubPeriod	 	The fixing stub period.
+			 * @param	fixingCalendar		 	The fixing calendar.
+			 * @param	fixingLag			 	The fixing lag.
+			 * @param	index				 	Zero-based index of the.
+			 * @param	notional			 	The notional.
+			 * @param	doesAmortize		 	True to does amortize.
+			 * @param	currency			 	The currency.
+			 * @param	spread				 	The spread.
+			 * @param	gearing				 	The gearing.
+			 *
+			 * @returns	A Leg.
+			 */
+			static Leg buildBulletIborLeg(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				Tenor fixingPeriodicity,
+				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+				QCBusinessCalendar fixingCalendar,
+				unsigned int fixingLag,
+				std::shared_ptr<InterestRateIndex> index,
+				double notional,
+				bool doesAmortize,
+				std::shared_ptr<QCCurrency> currency,
+				double spread,
+				double gearing);
+
+
+			/**
+			 * @fn	static Leg LegFactory::buildBulletIborMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
+			 *
+			 * @brief	Builds bullet ibor multi currency leg
+			 *
+			 * @author	A Diaz V
+			 * @date	05-03-2019
 			 *
 			 * @param	recPay				 	The record pay.
 			 * @param	startDate			 	The start date.
@@ -157,38 +258,50 @@ namespace QCode
 			 * @param	currency			 	The currency.
 			 * @param	spread				 	The spread.
 			 * @param	gearing				 	The gearing.
+			 * @param	settlementCurrency   	The settlement currency.
+			 * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
+			 * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
 			 *
-			 * @return	A Leg.
+			 * @returns	A Leg.
 			 */
-			static Leg buildBulletIborLeg(
-				RecPay recPay,					
-				QCDate startDate,				
-				QCDate endDate,						
-				QCDate::QCBusDayAdjRules endDateAdjustment, 
+
+			static Leg buildBulletIborMultiCurrencyLeg(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
 				Tenor settlementPeriodicity,
 				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 				QCBusinessCalendar settlementCalendar,
 				unsigned int settlementLag,
-				Tenor fixingPeriodicity,					
+				Tenor fixingPeriodicity,
 				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-				QCBusinessCalendar fixingCalendar,				
+				QCBusinessCalendar fixingCalendar,
 				unsigned int fixingLag,
-				std::shared_ptr<InterestRateIndex> index,	
+				std::shared_ptr<InterestRateIndex> index,
 				double notional,
 				bool doesAmortize,
-				std::shared_ptr<QCCurrency> currency,
+				std::shared_ptr<QCCurrency> notionalCurrency,
 				double spread,
-				double gearing);
+				double gearing,
+				std::shared_ptr<QCCurrency> settlementCurrency,
+				std::shared_ptr<FXRateIndex> fxRateIndex,
+				unsigned int fxRateIndexFixingLag
+				);
+
+
+
+
 
 			/**
 			 * @fn	static Leg LegFactory::buildCustomAmortIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
 			 *
 			 * @brief	Builds custom amort ibor leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -234,10 +347,10 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet icp clp leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -271,10 +384,10 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort icp clp leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -308,10 +421,10 @@ namespace QCode
 			 *
 			 * @brief	Builds bullet icp clf leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -345,10 +458,10 @@ namespace QCode
 			 *
 			 * @brief	Builds custom amort icp clf leg
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 *
-			 * @param	recPay				 	The record pay.
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
 			 * @param	startDate			 	The start date.
 			 * @param	endDate				 	The end date.
 			 * @param	endDateAdjustment	 	The end date adjustment.
@@ -383,10 +496,10 @@ namespace QCode
 			*
 			* @brief	Customize amortization
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Diaz V.
 			* @date	07/07/2018
 			*
-			* @param 		  	recPay				The record pay.
+			* @param	        recPay				Indicates if the cashflows in the leg are received or payed.
 			* @param [in,out]	leg					The leg.
 			* @param 		  	notionalAndAmort	The notional and amort.
 			* @param 		  	typeOfCashflow  	Type of the cashflow.
@@ -401,7 +514,7 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 */
 			~LegFactory();
@@ -412,7 +525,7 @@ namespace QCode
 			 *
 			 * @brief	Default constructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Diaz V.
 			 * @date	07/07/2018
 			 */
 			LegFactory();

@@ -10,6 +10,10 @@ namespace QCode
 {
 	namespace Financial
 	{
+
+		/** @brief	The default FX rate index value used when constructing multicurrency cashflows*/
+		const double DEFAULT_FX_RATE_INDEX_VALUE = 1.00;
+
 		/**
 		 * @typedef	std::map<QCDate, double> TimeSeries
 		 *

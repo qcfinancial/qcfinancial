@@ -54,6 +54,11 @@ namespace QCode
 				return _fxRate->weakCcyCode();
 			}
 
+			QCBusinessCalendar& getCalendar()
+			{
+				return _calendar;
+			}
+
 			double convert(double notional, QCCurrency ccy, double value)
 			{
 				if (ccy.getIsoCode() == strongCcyCode())

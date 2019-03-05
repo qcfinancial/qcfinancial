@@ -747,7 +747,7 @@ namespace wrappers
 			PyErr_SetString(qcfError, "fxRateIndexCode");
 			return NULL;
 		}
-
+		
 		success = PyTuple_SetItem(result, 18, PyFloat_FromDouble(fxRateIndexValue));
 		if (success != 0)
 		{
