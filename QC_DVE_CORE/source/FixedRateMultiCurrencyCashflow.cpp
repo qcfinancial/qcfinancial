@@ -105,6 +105,13 @@ namespace QCode
 								 ccyConverter.convert(_nominal, _currency, fx1, *_fxRateIndex) };
 		}
 
+		double FixedRateMultiCurrencyCashflow::getAmortization(const TimeSeries& fxRateIndexValues)
+		{
+			double amort = FixedRateCashflow::getAmortization();
+			QCCurrencyConverter converter;
+			return converter.convert(amort, _currency, fxRateIndexValues.at(_fxRateIndexFixingDate), *_fxRateIndex);
+		}
+
 		std::string FixedRateMultiCurrencyCashflow::getFXRateIndexCode() const
 		{
 			return _fxRateIndex->getCode();

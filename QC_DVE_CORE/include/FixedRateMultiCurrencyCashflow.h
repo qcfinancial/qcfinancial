@@ -133,6 +133,21 @@ namespace QCode
 			double accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
 
 			/**
+			 * @fn	double FixedRateMultiCurrencyCashflow::getAmortization(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
+			 *
+			 * @brief	Gets the amortization expressed in settlement currency
+			 *
+			 * @author	A Diaz V
+			 * @date	15-03-2019
+			 *
+			 * @param	valueDate		 	The value date.
+			 * @param	fxRateIndexValues	The FX rate index values.
+			 *
+			 * @returns	The amortization.
+			 */
+			double getAmortization(const TimeSeries& fxRateIndexValues);
+
+			/**
 			 * @fn	FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 			 *
 			 * @brief	Calculates accrued FX variation expressed in settlement currency

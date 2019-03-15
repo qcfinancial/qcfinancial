@@ -30,14 +30,15 @@ namespace QCode
 		typedef std::map<std::string, std::map<QCDate, double>> ManyTimeSeries;
 
 		/**
-		* @struct	FXVariation
-		*
-		* @brief	Provides a container for the FX variation (reajustes) associated to interest and nominal
-		* 			for interest rate type cashflows.
-		*
-		* @author	A Diaz V
-		* @date	28-02-2019
-		*/
+		 * @struct	FXVariation
+		 *
+		 * @brief	Provides a container for the FX variation (reajustes) associated to interest and
+		 * 			nominal for interest rate type cashflows.
+		 *
+		 * @author	A Diaz V
+		 * @date	28-02-2019
+		 */
+
 		struct FXVariation
 		{
 			FXVariation(double interest, double nominal) : interestVariation(interest), nominalVariation(nominal)
