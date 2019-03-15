@@ -149,6 +149,18 @@ namespace QCode
 			FXVariation accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 
 			/**
+			 * @fn	std::string FixedRateMultiCurrencyCashflow::getFXIndexCode() const;
+			 *
+			 * @brief	Gets the code corresponding to the cashflow's associated FX index
+			 *
+			 * @author	A Diaz V
+			 * @date	15-03-2019
+			 *
+			 * @returns	The FX index code.
+			 */
+			std::string getFXRateIndexCode() const;
+
+			/**
 			 * @fn		std::shared_ptr<FixedRateMultiCurrencyCashflowWrapper> FixedRateMultiCurrencyCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a FixedRateMultiCurrencyCashflowWrapper

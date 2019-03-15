@@ -311,6 +311,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("accrued_interest", &qf::FixedRateCashflow::accruedInterest)
 		.def("accrued_interest", &qf::FixedRateMultiCurrencyCashflow::accruedInterest)
 		.def("accrued_fx_variation", &qf::FixedRateMultiCurrencyCashflow::accruedFXVariation)
+		.def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
 		.def("wrap", &qf::FixedRateMultiCurrencyCashflow::wrap)
 		;
 
