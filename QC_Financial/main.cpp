@@ -26,6 +26,7 @@
 #include "QCCurve.h"
 #include "QCInterpolator.h"
 #include "QCLinearInterpolator.h"
+#include "QCCurrencyConverter.h"
 
 #include "Cashflow.h"
 #include "FixedRateCashflow.h"
@@ -252,6 +253,10 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.value("PAY", qf::Pay)
 		;
 
+	class_<QCCurrencyConverter>("CurrencyConverter")
+		.def<double (QCCurrencyConverter::*)(double, shared_ptr<QCCurrency>, double, QCode::Financial::FXRateIndex&)>("convert", &QCCurrencyConverter::convert)
+		;
+
 	class_<wrappers::CashflowWrap, boost::noncopyable>("Cashflow")
 		.def("amount", pure_virtual(&qf::Cashflow::amount))
 		.def("date", pure_virtual(&qf::Cashflow::date))
@@ -313,6 +318,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("get_amortization", &qf::FixedRateCashflow::getAmortization)
 		.def("get_amortization", &qf::FixedRateMultiCurrencyCashflow::getAmortization)
 		.def("accrued_fx_variation", &qf::FixedRateMultiCurrencyCashflow::accruedFXVariation)
+		.def("get_fx_rate_index", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndex)
 		.def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
 		.def("wrap", &qf::FixedRateMultiCurrencyCashflow::wrap)
 		;

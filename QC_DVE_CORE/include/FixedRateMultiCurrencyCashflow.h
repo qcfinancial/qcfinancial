@@ -176,6 +176,18 @@ namespace QCode
 			std::string getFXRateIndexCode() const;
 
 			/**
+			 * @fn	shared_ptr<FXRateIndex> FixedRateMultiCurrencyCashflow::getFXRateIndex() const;
+			 *
+			 * @brief	Gets FX rate index
+			 *
+			 * @author	A Diaz V
+			 * @date	18-03-2019
+			 *
+			 * @returns	A shared pointer containing the FX rate index.
+			 */
+			shared_ptr<FXRateIndex> getFXRateIndex() const;
+
+			/**
 			 * @fn		std::shared_ptr<FixedRateMultiCurrencyCashflowWrapper> FixedRateMultiCurrencyCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a FixedRateMultiCurrencyCashflowWrapper

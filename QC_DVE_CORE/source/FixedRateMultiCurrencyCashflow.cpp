@@ -117,6 +117,11 @@ namespace QCode
 			return _fxRateIndex->getCode();
 		}
 
+		shared_ptr<FXRateIndex> FixedRateMultiCurrencyCashflow::getFXRateIndex() const
+		{
+			return _fxRateIndex;
+		}
+
 		std::shared_ptr<FixedRateMultiCurrencyCashflowWrapper> FixedRateMultiCurrencyCashflow::wrap()
 		{
 			QCCurrencyConverter ccyConverter;
