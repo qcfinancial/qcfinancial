@@ -8,6 +8,7 @@
 #include <boost/python/wrapper.hpp>
 
 #include "Cashflow.h"
+#include "LinearinterestRateCashflow.h"
 #include "FixedRateCashflow.h"
 #include "FixedRateMultiCurrencyCashflow.h"
 #include "IborCashflow.h"
@@ -19,6 +20,7 @@
 #include "InterestRateCurve.h"
 #include "ZeroCouponCurve.h"
 #include "PresentValue.h"
+#include "TypeAliases.h"
 
 #include "QCDate.h"
 #include "QCCurrency.h"
@@ -1659,6 +1661,7 @@ namespace wrappers
 
 	class CashflowWrap : public qf::Cashflow, public boost::python::wrapper<qf::Cashflow>
 	{
+	public:
 		double amount()
 		{
 			return this->get_override("amount")();
@@ -1674,6 +1677,112 @@ namespace wrappers
 			return this->get_override("date")();
 		}
 	};
+
+	class LinearInterestRateCashflowWrap : public qf::LinearInterestRateCashflow, public boost::python::wrapper<qf::LinearInterestRateCashflow>
+	{
+	public:
+		double amount()
+		{
+			return this->get_override("amount")();
+
+		}
+
+		shared_ptr<QCCurrency> ccy()
+		{
+			return this->get_override("ccy")();
+		}
+
+		QCDate date()
+		{
+			return this->get_override("date")();
+
+		}
+
+		const QCDate& getStartDate() const
+		{
+			return this->get_override("getStartDate")();
+		}
+
+
+		const QCDate& getEndDate() const
+		{
+			return this->get_override("getEndDate")();
+		}
+
+
+		const QCDate& getSettlementDate() const
+		{
+			return this->get_override("getSettlementDate")();
+		}
+
+
+		const QCode::Financial::DateList& getFixingDates() const
+		{
+			return this->get_override("getFixingDates")();
+		}
+
+
+		double getNominal() const
+		{
+			return this->get_override("getNominal")();
+		}
+
+
+		double getAmortization() const
+		{
+			return this->get_override("getAmortization")();
+		}
+
+
+		double interest()
+		{
+			return this->get_override("interest")();
+		}
+
+
+		double interest(const qf::TimeSeries& fixings)
+		{
+			return this->get_override("interest")(fixings);
+		}
+
+
+		double fixing()
+		{
+			return this->get_override("fixing")();
+		}
+
+
+		double fixing(const qf::TimeSeries& fixings)
+		{
+			return this->get_override("fixing")(fixings);
+		}
+
+
+		double accruedInterest(const QCDate& fecha)
+		{
+			return this->get_override("accruedInterest")(fecha);
+		}
+
+
+		double accruedInterest(const QCDate& fecha, const qf::TimeSeries& fixings)
+		{
+			return this->get_override("accruedInterest")(fecha, fixings);
+		}
+
+
+		double accruedFixing(const QCDate& fecha)
+		{
+			return this->get_override("accruedFixing")(fecha);
+		}
+
+
+		double accruedFixing(const QCDate& fecha, const qf::TimeSeries& fixings)
+		{
+			return this->get_override("accruedFixing")(fecha, fixings);
+		}
+
+	};
+
 
 	QCDate buildQCDateFromString(const std::string& fechaString)
 	{

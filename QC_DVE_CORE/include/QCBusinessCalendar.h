@@ -9,15 +9,9 @@
 #include <memory>
 
 #include "QCDate.h"
+#include "TypeAliases.h"
 
 using namespace std;
-
-/**
- * @typedef	std::vector<QCDate> DateList
- *
- * @brief	Defines an alias representing a list (std::vector) of dates.
- */
-typedef std::vector<QCDate> DateList;
 
 /*!
  * @brief La clase QCBusinessCalendar representa días feriados de una jurisdicción.
@@ -82,12 +76,12 @@ class QCBusinessCalendar
 		 *
 		 * @return	The holidays.
 		 */
-		DateList getHolidays();
+		QCode::Financial::DateList getHolidays();
 
     private:
         QCDate _startDate;
         int _length;
-        DateList _holydays;
+		QCode::Financial::DateList _holydays;
         QCDate::QCWeekDay _firstDayOfWeekend;
         QCDate::QCWeekDay _secondDayOfweekEnd;
         void insertNewYear();

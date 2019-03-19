@@ -126,7 +126,7 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
     return result;
 }
 
-DateList QCBusinessCalendar::getHolidays()
+QCode::Financial::DateList QCBusinessCalendar::getHolidays()
 {
 	return _holydays;
 }

@@ -76,7 +76,7 @@ namespace QCode
 			 *
 			 * @return	A double.
 			 */
-			virtual double amount();
+			virtual double amount() override;
 
 			/**
 			 * @fn	QCCurrency FixedRateCashflow::ccy();
@@ -88,7 +88,7 @@ namespace QCode
 			 *
 			 * @return	A QCCurrency.
 			 */
-			shared_ptr<QCCurrency> ccy();
+			shared_ptr<QCCurrency> ccy() override;
 
 			/**
 			 * @fn	QCDate FixedRateCashflow::date();
@@ -100,7 +100,7 @@ namespace QCode
 			 *
 			 * @return	A QCDate.
 			 */
-			QCDate date();
+			QCDate date() override;
 
 			/**
 			* @fn	QCDate FixedRateCashflow::getStartDate();
