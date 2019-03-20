@@ -55,9 +55,19 @@ namespace QCode
 				return _strongCcy->getIsoCode() + _weakCcy->getIsoCode();
 			}
 
+			std::shared_ptr<QCCurrency> getStrongCcy() const
+			{
+				return _strongCcy;
+			}
+
 			std::string strongCcyCode()
 			{
 				return _strongCcy->getIsoCode();
+			}
+			
+			std::shared_ptr<QCCurrency> getWeakCcy() const
+			{
+				return _weakCcy;
 			}
 
 			std::string weakCcyCode()

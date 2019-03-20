@@ -31,6 +31,11 @@ namespace QCode
 			{
 			}
 
+			std::shared_ptr<FXRate> getFxRate() const
+			{
+				return _fxRate;
+			}
+
 			QCDate fixingDate(QCDate& publishDate)
 			{
 				// Sólo se consideran los días de _fixingRule.

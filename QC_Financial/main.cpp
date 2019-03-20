@@ -48,6 +48,7 @@
 #include "ChileanFixedRateBond.h"
 #include "ForwardRates.h"
 #include "TypeAliases.h"
+#include "Quanto.h"
 
 #include "FixedRateCashflow2.h"
 
@@ -297,17 +298,42 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	class_<qf::FixedRateCashflow2, std::shared_ptr<qf::FixedRateCashflow2>, bases<qf::LinearInterestRateCashflow>>
 		("FixedRateCashflow2", init < QCDate&, QCDate&, QCDate&, double, double, bool, const QCInterestRate&, shared_ptr < QCCurrency >> ())
 		.def("amount", &qf::FixedRateCashflow2::amount)
-		.def<double (qf::FixedRateCashflow2::*)(const QCDate&)>("accrued_interest", &qf::FixedRateCashflow2::accruedInterest)
 		.def("ccy", &qf::FixedRateCashflow2::ccy)
+		.def("date", &qf::FixedRateCashflow2::date)
 		.def("get_start_date", &qf::FixedRateCashflow2::getStartDate, return_value_policy<copy_const_reference>())
 		.def("get_end_date", &qf::FixedRateCashflow2::getEndDate, return_value_policy<copy_const_reference>())
 		.def("get_settlement_date", &qf::FixedRateCashflow2::getSettlementDate, return_value_policy<copy_const_reference>())
 		.def("get_fixing_dates", &qf::FixedRateCashflow2::getFixingDates, return_value_policy<copy_const_reference>())
 		.def("get_nominal", &qf::FixedRateCashflow2::getNominal)
 		.def("get_amortization", &qf::FixedRateCashflow2::getAmortization)
+		.def<double (qf::FixedRateCashflow2::*)()>("interest", &qf::FixedRateCashflow2::interest)
+		.def<double (qf::FixedRateCashflow2::*)(const qf::TimeSeries&)>("interest", &qf::FixedRateCashflow2::interest)
+		.def<double(qf::FixedRateCashflow2::*)()>("fixing", &qf::FixedRateCashflow2::fixing)
+		.def<double(qf::FixedRateCashflow2::*)(const qf::TimeSeries&)>("fixing", &qf::FixedRateCashflow2::fixing)
+		.def<double (qf::FixedRateCashflow2::*)(const QCDate&)>("accrued_interest", &qf::FixedRateCashflow2::accruedInterest)
+		.def<double (qf::FixedRateCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_interest", &qf::FixedRateCashflow2::accruedInterest)
+		.def<double (qf::FixedRateCashflow2::*)(const QCDate&)>("accrued_fixing", &qf::FixedRateCashflow2::accruedFixing)
+		.def<double (qf::FixedRateCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_fixing", &qf::FixedRateCashflow2::accruedFixing)
+		.def("does_amortize", &qf::FixedRateCashflow2::doesAmortize)
 		;
 
 	implicitly_convertible<std::shared_ptr<qf::FixedRateCashflow>, std::shared_ptr<qf::Cashflow>>();
+
+	class_ < qf::QuantoCashflow, std::shared_ptr<qf::QuantoCashflow>, bases<qf::Cashflow>>
+		("QuantoCashflow", init<std::shared_ptr<qf::Cashflow>, qf::FXRateIndex, const qf::TimeSeries&>())
+		.def("amount", &qf::QuantoCashflow::amount)
+		.def("ccy", &qf::QuantoCashflow::ccy)
+		.def("date", &qf::QuantoCashflow::date)
+		;
+
+	//implicitly_convertible<std::shared_ptr<qf::Quanto<qf::Cashflow>>,
+	//	std::shared_ptr<qf::Cashflow >> ();
+
+	//class_ < qf::Quanto<qf::LinearInterestRateCashflow>, std::shared_ptr<qf::Quanto<qf::LinearInterestRateCashflow>>>
+	//	("QuantoLinearInterestRateCashflow", init<std::shared_ptr<qf::LinearInterestRateCashflow>, qf::FXRateIndex>())
+	//	//.def("amount", &qf::Quanto<qf::LinearInterestRateCashflow>::amount)
+	//	//.def("get_cashflow", &qf::Quanto<qf::LinearInterestRateCashflow>::getCashflow)
+	//	;
 
 	class_<qf::FixedRateCashflow, std::shared_ptr<qf::FixedRateCashflow>, bases<qf::Cashflow>>
 		("FixedRateCashflow",

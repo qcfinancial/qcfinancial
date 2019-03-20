@@ -1781,6 +1781,10 @@ namespace wrappers
 			return this->get_override("accruedFixing")(fecha, fixings);
 		}
 
+		bool doesAmortize()
+		{
+			return this->get_override("doesAmortize")();
+		}
 	};
 
 
