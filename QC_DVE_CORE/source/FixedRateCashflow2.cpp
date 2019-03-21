@@ -30,6 +30,12 @@ namespace QCode
 			_fixingDates.resize(1);
 			_fixingDates.at(0) = _startDate;
 		}
+
+		shared_ptr<QCCurrency> FixedRateCashflow2::getInitialCcy() const
+		{
+			return _currency;
+		}
+
 		double FixedRateCashflow2::_calculateInterest(const QCDate& fecha)
 		{
 			auto fecha1 = fecha;
@@ -77,6 +83,11 @@ namespace QCode
 		}
 
 		double FixedRateCashflow2::getNominal() const
+		{
+			return _nominal;
+		}
+
+		double FixedRateCashflow2::nominal(const QCDate& fecha) const
 		{
 			return _nominal;
 		}
@@ -165,6 +176,21 @@ namespace QCode
 				_validateMsg += "Amortization is gt nominal.";
 			}
 			return result;
+		}
+
+		shared_ptr<FixedRateCashflowWrapper> FixedRateCashflow2::wrap()
+		{
+			FixedRateCashflowWrapper tup = std::make_tuple(_startDate,
+				_endDate,
+				_settlementDate,
+				_nominal,
+				_amortization,
+				interest(),
+				_doesAmortize,
+				_currency,
+				_rate);
+
+			return std::make_shared<FixedRateCashflowWrapper>(tup);
 		}
 
 		FixedRateCashflow2::~FixedRateCashflow2()

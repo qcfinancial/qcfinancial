@@ -55,6 +55,19 @@ namespace QCode
 			shared_ptr<QCCurrency> ccy() override;
 
 			/**
+			* @fn	virtual std::shared_ptr<QCCurrency> LinearInterestRateCashflow::getInitialCcy() const = 0;
+			*
+			* @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide this method even when the cashflow
+			* 			has been quantized.
+			*
+			* @author	A Diaz V
+			* @date	21-03-2019
+			*
+			* @returns	The initial ccy.
+			*/
+			shared_ptr<QCCurrency> getInitialCcy() const override;
+
+			/**
 			* @fn	QCDate FixedRateCashflow::date();
 			*
 			* @brief	Gets the payment date of the cashflow.
@@ -125,6 +138,20 @@ namespace QCode
 			* @returns	The nominal.
 			*/
 			virtual double getNominal() const override;
+
+			/**
+			* @fn	virtual double LinearInterestRateCashflow::nominal(const QCDate& fecha) const = 0;
+			*
+			* @brief	Returns the nominal. Subclasses should, in this method, apply all relevant calculations.
+			*
+			* @author	A Diaz V
+			* @date	21-03-2019
+			*
+			* @param	fecha	The fecha.
+			*
+			* @returns	A double.
+			*/
+			virtual double nominal(const QCDate& fecha) const;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getAmortization() const = 0;
@@ -275,6 +302,18 @@ namespace QCode
 			 * @returns	True if amortization is a cashflow, false if it is not.
 			 */
 			virtual bool doesAmortize() const override;
+
+			/**
+			 * @fn	FixedRateCashflowWrapper FixedRateCashflow2::wrap() const;
+			 *
+			 * @brief	Returns the cashflow wrapped in a ad-hoc std::tuple
+			 *
+			 * @author	A Diaz V
+			 * @date	21-03-2019
+			 *
+			 * @returns	A FixedRateCashflowWrapper.
+			 */
+			std::shared_ptr<FixedRateCashflowWrapper> wrap();
 
 			/**
 			 * @fn	virtual FixedRateCashflow2::~FixedRateCashflow2();

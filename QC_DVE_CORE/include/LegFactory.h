@@ -96,6 +96,48 @@ namespace QCode
 				bool forBonds = false);
 
 			/**
+			 * @fn	static Leg LegFactory::buildBulletFixedRateLeg2( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency, bool forBonds = false);
+			 *
+			 * @brief	Builds bullet fixed rate leg 2 (cashflows are of type FixedRateCashflow2)
+			 *
+			 * @author	A Diaz V
+			 * @date	21-03-2019
+			 *
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+			 * @param	startDate			 	The start date.
+			 * @param	endDate				 	The end date.
+			 * @param	endDateAdjustment	 	The end date adjustment.
+			 * @param	settlementPeriodicity	The settlement periodicity.
+			 * @param	settlementStubPeriod 	The settlement stub period.
+			 * @param	settlementCalendar   	The settlement calendar.
+			 * @param	settlementLag		 	The settlement lag.
+			 * @param	notional			 	The notional.
+			 * @param	doesAmortize		 	True to does amortize.
+			 * @param	rate				 	The rate.
+			 * @param	currency			 	The currency.
+			 * @param	forBonds			 	(Optional) True to for bonds. This forces settlement
+			 * 									date to coincide with end date for each period.
+			 * 									This allows the correct calculation of present value
+			 * 									using yield to maturity and the usual fixed rate market
+			 * 									conventions.
+			 *
+			 * @returns	A Leg.
+			 */
+			static Leg buildBulletFixedRateLeg2(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				double notional,
+				bool doesAmortize,
+				QCInterestRate rate,
+				std::shared_ptr<QCCurrency> currency,
+				bool forBonds = false);
+			/**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
 			 *
 			 * @brief	Builds bullet fixed rate multi currency leg

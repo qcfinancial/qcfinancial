@@ -20,6 +20,20 @@ namespace QCode
 		class LinearInterestRateCashflow : public Cashflow
 		{
 		public:
+
+			/**
+			 * @fn	virtual std::shared_ptr<QCCurrency> LinearInterestRateCashflow::getInitialCcy() const = 0;
+			 *
+			 * @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide this method even when the cashflow
+			 * 			has been quantized.
+			 *
+			 * @author	A Diaz V
+			 * @date	21-03-2019
+			 *
+			 * @returns	The initial ccy.
+			 */
+			virtual std::shared_ptr<QCCurrency> getInitialCcy() const = 0;
+
 			/**
 			 * @fn	virtual const QCDate& LinearInterestRateCashflow::getStartDate() const = 0;
 			 *
@@ -79,6 +93,20 @@ namespace QCode
 			 * @returns	The nominal.
 			 */
 			virtual double getNominal() const = 0;
+
+			/**
+			 * @fn	virtual double LinearInterestRateCashflow::nominal(const QCDate& fecha) const = 0;
+			 *
+			 * @brief	Returns the nominal. Subclasses should, in this method, apply all relevant calculations.
+			 *
+			 * @author	A Diaz V
+			 * @date	21-03-2019
+			 *
+			 * @param	fecha	The fecha.
+			 *
+			 * @returns	A double.
+			 */
+			virtual double nominal(const QCDate& fecha) const = 0;
 
 			/**
 			 * @fn	virtual double LinearInterestRateCashflow::getAmortization() const = 0;

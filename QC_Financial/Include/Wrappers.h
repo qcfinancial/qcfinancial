@@ -165,7 +165,7 @@ namespace wrappers
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
-			PyErr_SetString(qcfError, "currency");
+			PyErr_SetString(qcfError, "type of rate");
 			return NULL;
 		}
 
@@ -1692,6 +1692,11 @@ namespace wrappers
 			return this->get_override("ccy")();
 		}
 
+		shared_ptr<QCCurrency> getInitialCcy() const
+		{
+			return this->get_override("getInitialCcy")();
+		}
+
 		QCDate date()
 		{
 			return this->get_override("date")();
@@ -1728,9 +1733,27 @@ namespace wrappers
 		}
 
 
+		double nominal(const QCDate& fecha) const
+		{
+			return this->get_override("nominal")(fecha);
+		}
+
+
 		double getAmortization() const
 		{
 			return this->get_override("getAmortization")();
+		}
+
+
+		double amortization() const
+		{
+			return this->get_override("amortization")();
+		}
+
+
+		bool doesAmortize() const
+		{
+			return this->get_override("doesAmortize")();
 		}
 
 
@@ -1787,7 +1810,6 @@ namespace wrappers
 		}
 	};
 
-
 	QCDate buildQCDateFromString(const std::string& fechaString)
 	{
 		std::string fechaStr {fechaString};
@@ -1804,6 +1826,52 @@ namespace wrappers
 		return std::get<1>(tupla);
 	}
 
+	// *********** Getter functions for a FixedRateCashflowWrapper *********************
+	QCDate startDate(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<0>(wrapper);
+	}
+
+	QCDate endDate(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<1>(wrapper);
+	}
+
+	QCDate settlementDate(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<2>(wrapper);
+	}
+
+	double nominal(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<3>(wrapper);
+	}
+
+	double amortization(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<4>(wrapper);
+	}
+
+	double totalFlow(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<5>(wrapper);
+	}
+
+	bool doesAmortize(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<6>(wrapper);
+	}
+
+	std::shared_ptr<QCCurrency> currency(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<7>(wrapper);
+	}
+
+	QCInterestRate interestRate(qf::FixedRateCashflowWrapper wrapper)
+	{
+		return std::get<8>(wrapper);
+	}
+	// *********************************************************************************
 }
 
 

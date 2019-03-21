@@ -8,26 +8,12 @@
 #include "QCDate.h"
 #include "QCInterestRate.h"
 #include "QCCurrency.h"
+#include "TypeAliases.h"
 
 namespace QCode
 {
 	namespace Financial
 	{
-		/**
-		 * @typedef	std::tuple<QCDate, QCDate, QCDate, double, double, double, bool, shared_ptr<QCCurrency>, QCInterestRate> FixedRateCashflowWrapper
-		 *
-		 * @brief	Defines an alias representing a FixedRateCashflow wrapper
-		 */
-		typedef std::tuple<QCDate,
-			               QCDate,
-						   QCDate,
-			               double,
-						   double,
-						   double,
-						   bool,
-			               shared_ptr<QCCurrency>,
-			               QCInterestRate> FixedRateCashflowWrapper;
-
 		/**
 		 * @class	FixedRateCashflow
 		 *

@@ -49,12 +49,12 @@ namespace QCode
 				return _calendar.shift(fixingDate(publishDate), _valueDateRule.getDays());
 			}
 
-			std::string strongCcyCode()
+			std::string strongCcyCode() const
 			{
 				return _fxRate->strongCcyCode();
 			}
 
-			std::string weakCcyCode()
+			std::string weakCcyCode() const
 			{
 				return _fxRate->weakCcyCode();
 			}

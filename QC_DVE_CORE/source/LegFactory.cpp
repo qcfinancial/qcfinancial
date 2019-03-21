@@ -4,6 +4,7 @@
 
 #include "LegFactory.h"
 #include "FixedRateCashflow.h"
+#include "FixedRateCashflow2.h"
 #include "FixedRateMultiCurrencyCashflow.h"
 #include "IborCashflow.h"
 #include "IborMultiCurrencyCashflow.h"
@@ -84,7 +85,72 @@ namespace QCode
 
 			return fixedRateleg;
 		}
+		
+		Leg LegFactory::buildBulletFixedRateLeg2(
+			RecPay recPay,
+			QCDate startDate,
+			QCDate endDate,
+			QCDate::QCBusDayAdjRules endDateAdjustment,
+			Tenor settlementPeriodicity,
+			QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+			QCBusinessCalendar settlementCalendar,
+			unsigned int settlementLag,
+			double notional,
+			bool doesAmortize,
+			QCInterestRate rate,
+			std::shared_ptr<QCCurrency> currency,
+			bool forBonds)
+		{
+			auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
+			// Make all the holidays in the calendar into a shared_ptr.
+			auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
 
+			// Minus sign is set if cashflows are paid.
+			int sign;
+			if (recPay == Receive)
+			{
+				sign = 1;
+			}
+			else
+			{
+				sign = -1;
+			}
+
+			// Instantiate factory and build the corresponding periods.
+			QCInterestRatePeriodsFactory pf{ startDate, endDate, endDateAdjustment,
+				settlementPeriodicityString, settlementStubPeriod, settCal, settlementLag,
+				// The next parameters are useful only for IborLegs. Arbitrary values
+				// are given to them in this case.
+				settlementPeriodicityString, settlementStubPeriod, settCal, 0, 0, settlementPeriodicityString };
+			auto periods = pf.getPeriods();
+
+			// Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+			Leg fixedRateleg;
+			size_t numPeriods = periods.size();
+			fixedRateleg.resize(numPeriods);
+			size_t i = 0;
+			for (const auto& period : periods)
+			{
+				QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
+				QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
+				QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
+				// For the correct calculation of present values using market yields according
+				// to the usual conventions in fixed income markets.
+				if (forBonds) settlementDate = thisEndDate;
+				double amort = 0.0;
+				if (i == numPeriods - 1)
+				{
+					amort = sign * notional;
+				}
+				FixedRateCashflow2 frc{ thisStartDate, thisEndDate, settlementDate,
+					sign * notional, amort, doesAmortize, rate, currency };
+				fixedRateleg.setCashflowAt(std::make_shared<FixedRateCashflow2>(frc), i);
+				++i;
+			}
+
+			return fixedRateleg;
+		}
+		
 		Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg(
 			RecPay recPay,
 			QCDate startDate,

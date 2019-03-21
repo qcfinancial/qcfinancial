@@ -164,6 +164,40 @@ public:
 		}
 	}
 
+	/**
+	 * @fn	double QCCurrencyConverter::convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, const QCode::Financial::FXRateIndex& fxRateIndex)
+	 *
+	 * @brief	Converts an amount in currency to another currency using the fx rate given.
+	 *
+	 * @author	A Diaz V
+	 * @date	21-03-2019
+	 *
+	 * @exception	invalid_argument	Thrown when an invalid argument error condition occurs.
+	 *
+	 * @param	amount	   	The amount to convert.
+	 * @param	currency   	The currency of the amount.
+	 * @param	fxRateValue	The fx rate value.
+	 * @param	fxRateIndex	The fx rate index.
+	 *
+	 * @returns	A double.
+	 */
+	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, const QCode::Financial::FXRateIndex& fxRateIndex)
+	{
+		if (fxRateIndex.strongCcyCode() == currency->getIsoCode())
+		{
+			return amount * fxRateValue;
+		}
+		else if (fxRateIndex.weakCcyCode() == currency->getIsoCode())
+		{
+			return amount / fxRateValue;
+		}
+		else
+		{
+			throw invalid_argument("Fx Rate for conversion does not apply to this currency.");
+		}
+	}
+
+
 	/*!
 	* Retorna el enum de una divisa si se da el código en texto.
 	*/

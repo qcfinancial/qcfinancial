@@ -3,8 +3,11 @@
 
 #include <map>
 #include <string>
+#include <tuple>
 
 #include "QCDate.h"
+#include "QCInterestRate.h"
+#include "QCCurrency.h"
 
 namespace QCode
 {
@@ -44,7 +47,6 @@ namespace QCode
 		 * @author	A Diaz V
 		 * @date	28-02-2019
 		 */
-
 		struct FXVariation
 		{
 			FXVariation(double interest, double nominal) : interestVariation(interest), nominalVariation(nominal)
@@ -55,7 +57,22 @@ namespace QCode
 			double nominalVariation;
 		};
 
-
+		/**
+		* @typedef	std::tuple<QCDate, QCDate, QCDate, double, double, double, bool, shared_ptr<QCCurrency>, QCInterestRate> FixedRateCashflowWrapper
+		*
+		* @brief	Defines an alias representing a tuple which in turn represents a FixedRateCashflow.
+		* 			The fields in the tuple correspond to:
+		* 			start date, end date, settlement date, nominal, amortization, total flow, amortization is cashflow, currency and interest rate. 
+		*/
+		typedef std::tuple<QCDate,
+			QCDate,
+			QCDate,
+			double,
+			double,
+			double,
+			bool,
+			shared_ptr<QCCurrency>,
+			QCInterestRate> FixedRateCashflowWrapper;
 	}
 }
 
