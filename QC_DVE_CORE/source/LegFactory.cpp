@@ -253,6 +253,38 @@ namespace QCode
 			return fixedRateLeg;
 		}
 
+		Leg LegFactory::buildCustomAmortFixedRateLeg2(
+			RecPay recPay,
+			QCDate startDate,
+			QCDate endDate,
+			QCDate::QCBusDayAdjRules endDateAdjustment,
+			Tenor settlementPeriodicity,
+			QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+			QCBusinessCalendar settlementCalendar,
+			unsigned int settlementLag,
+			CustomNotionalAmort notionalAndAmort,
+			bool doesAmortize,
+			QCInterestRate rate,
+			std::shared_ptr<QCCurrency> currency)
+		{
+			Leg fixedRateLeg = buildBulletFixedRateLeg2(
+				recPay,
+				startDate,
+				endDate,
+				endDateAdjustment,
+				settlementPeriodicity,
+				settlementStubPeriod,
+				settlementCalendar,
+				settlementLag,
+				1.0,
+				doesAmortize,
+				rate,
+				currency);
+
+			customizeAmortization(recPay, fixedRateLeg, notionalAndAmort, LegFactory::fixedRateCashflow2);
+			return fixedRateLeg;
+		}
+
 		Leg LegFactory::buildBulletIborLeg(
 			RecPay recPay,
 			QCDate startDate,
@@ -496,6 +528,19 @@ namespace QCode
 						->setNominal(sign * std::get<0>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
 					std::dynamic_pointer_cast<FixedRateCashflow>(leg.getCashflowAt(legSize - 1 - i))
 						->setAmortization(sign * std::get<1>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+				}
+			}
+
+			if (typeOfCashflow == LegFactory::fixedRateCashflow2)
+			{
+				for (size_t i = 0; i < minSize; ++i)
+				{
+					auto c = std::dynamic_pointer_cast<FixedRateCashflow2>(leg.getCashflowAt(legSize - 1 - i));
+					auto nominal = sign * std::get<0>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]);
+					auto amort = sign * std::get<1>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]);
+					auto newC = FixedRateCashflow2(c->getStartDate(), c->getEndDate(), c->getSettlementDate(), nominal, amort,
+						c->doesAmortize(), std::get<8>(*(c->wrap())), c->ccy());
+						leg.setCashflowAt(std::make_shared<FixedRateCashflow2>(newC), legSize - 1 - i);
 				}
 			}
 

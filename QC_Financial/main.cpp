@@ -16,6 +16,7 @@
 #include "QCAct365.h"
 #include "QC30360.h"
 #include "QCAct30.h"
+#include "QC3030.h"
 #include "QCWealthFactor.h"
 #include "QCLinearWf.h"
 #include "QCCompoundWf.h"
@@ -192,6 +193,18 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("__str__", &QC30360::description)
 		;
 
+	implicitly_convertible<std::shared_ptr<QC3030>, std::shared_ptr<QCYearFraction>>();
+
+	double (QC3030::*yf1_3030)(long) = &QC3030::yf;
+	double (QC3030::*yf2_3030)(const QCDate&, const QCDate&) = &QC3030::yf;
+
+	class_<QC3030, std::shared_ptr<QC3030>, bases<QCYearFraction>>("QC3030")
+		.def("yf", yf1_3030)
+		.def("yf", yf2_3030)
+		.def("count_days", &QC3030::countDays)
+		.def("__str__", &QC3030::description)
+		;
+
 	implicitly_convertible<std::shared_ptr<QCAct30>, std::shared_ptr<QCYearFraction>>();
 
 	double (QCAct30::*yf1_Act30)(long) = &QCAct30::yf;
@@ -330,7 +343,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("settlement_date", wrappers::settlementDate)
 		.def("nominal", wrappers::nominal)
 		.def("amortization", wrappers::amortization)
-		.def("total_cashflow", wrappers::totalFlow)
+		.def("interest", wrappers::interest)
 		.def("does_amortize", wrappers::doesAmortize)
 		.def("currency", wrappers::currency)
 		.def("interest_rate", wrappers::interestRate)
@@ -668,6 +681,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.staticmethod("build_bullet_fixed_rate_mccy_leg")
 		.def("build_custom_amort_fixed_rate_leg", &qf::LegFactory::buildCustomAmortFixedRateLeg)
 		.staticmethod("build_custom_amort_fixed_rate_leg")
+		.def("build_custom_amort_fixed_rate_leg_2", &qf::LegFactory::buildCustomAmortFixedRateLeg2)
+		.staticmethod("build_custom_amort_fixed_rate_leg_2")
 		.def("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
 		.staticmethod("build_bullet_ibor_leg")
 		.def("build_bullet_ibor_mccy_leg", &qf::LegFactory::buildBulletIborMultiCurrencyLeg)

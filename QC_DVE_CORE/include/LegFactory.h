@@ -42,6 +42,9 @@ namespace QCode
 				///< An enum constant representing the fixed rate cashflow option
 				fixedRateCashflow,
 
+				///< An enum constant representing the fixed rate cashflow option
+				fixedRateCashflow2,
+
 				///< An enum constant representing the ibor cashflow option
 				iborCashflow,
 
@@ -223,6 +226,43 @@ namespace QCode
 				bool doesAmortize,
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency); 
+
+			/**
+			 * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg2( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
+			 *
+			 * @brief	Builds custom amort fixed rate leg 2
+			 *
+			 * @author	A Diaz V
+			 * @date	22-03-2019
+			 *
+			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+			 * @param	startDate			 	The start date.
+			 * @param	endDate				 	The end date.
+			 * @param	endDateAdjustment	 	The end date adjustment.
+			 * @param	settlementPeriodicity	The settlement periodicity.
+			 * @param	settlementStubPeriod 	The settlement stub period.
+			 * @param	settlementCalendar   	The settlement calendar.
+			 * @param	settlementLag		 	The settlement lag.
+			 * @param	notionalAndAmort	 	The notional and amort.
+			 * @param	doesAmortize		 	True to does amortize.
+			 * @param	rate				 	The rate.
+			 * @param	currency			 	The currency.
+			 *
+			 * @returns	A Leg.
+			 */
+			static Leg buildCustomAmortFixedRateLeg2(
+				RecPay recPay,
+				QCDate startDate,
+				QCDate endDate,
+				QCDate::QCBusDayAdjRules endDateAdjustment,
+				Tenor settlementPeriodicity,
+				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+				QCBusinessCalendar settlementCalendar,
+				unsigned int settlementLag,
+				CustomNotionalAmort notionalAndAmort,
+				bool doesAmortize,
+				QCInterestRate rate,
+				std::shared_ptr<QCCurrency> currency);
 
 			/**
 			 * @fn	static Leg LegFactory::buildBulletIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);

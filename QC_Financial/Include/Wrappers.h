@@ -1852,7 +1852,7 @@ namespace wrappers
 		return std::get<4>(wrapper);
 	}
 
-	double totalFlow(qf::FixedRateCashflowWrapper wrapper)
+	double interest(qf::FixedRateCashflowWrapper wrapper)
 	{
 		return std::get<5>(wrapper);
 	}
