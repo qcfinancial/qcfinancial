@@ -272,6 +272,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	class_<QCCurrencyConverter>("CurrencyConverter")
 		.def<double (QCCurrencyConverter::*)(double, shared_ptr<QCCurrency>, double, QCode::Financial::FXRateIndex&)>("convert", &QCCurrencyConverter::convert)
+		.def("get_fx_rate_mkt_code", &QCCurrencyConverter::getFxRateMktCode)
 		;
 
 	class_<wrappers::CashflowWrap, boost::noncopyable>("Cashflow")
