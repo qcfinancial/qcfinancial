@@ -122,6 +122,9 @@ public:
 		_fxRateMktCode.insert(pair<std::string, std::string>("USDCLP", "USDCLP"));
 		_fxRateMktCode.insert(pair<std::string, std::string>("CLPUSD", "USDCLP"));
 
+		_fxRateMktCode.insert(pair<std::string, std::string>("USDCLF", "USDCLF"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLFUSD", "USDCLF"));
+
 		_fxRateMktCode.insert(pair<std::string, std::string>("EURUSD", "EURUSD"));
 		_fxRateMktCode.insert(pair<std::string, std::string>("USDEUR", "EURUSD"));
 
@@ -133,6 +136,18 @@ public:
 
 		_fxRateMktCode.insert(pair<std::string, std::string>("GBPUSD", "GBPUSD"));
 		_fxRateMktCode.insert(pair<std::string, std::string>("USDGBP", "GBPUSD"));
+
+		_fxRateMktCode.insert(pair<std::string, std::string>("EURCLP", "EURCLP"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLPEUR", "EURCLP"));
+
+		_fxRateMktCode.insert(pair<std::string, std::string>("JPYCLP", "JPYCLP"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLPJPY", "JPYCLP"));
+
+		_fxRateMktCode.insert(pair<std::string, std::string>("GBPCLP", "GBPCLP"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLPGBP", "GBPCLP"));
+
+		_fxRateMktCode.insert(pair<std::string, std::string>("CHFCLP", "CHFCLP"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLPCHF", "CHFCLP"));
 
 	}
 
@@ -304,6 +319,20 @@ public:
 		throw invalid_argument("No corresponding Fx Rate for these currencies in QCCurrencyConverter.");
 	}
 
+	/**
+	 * @fn	std::string QCCurrencyConverter::getFxRateMktCode(std::string code)
+	 *
+	 * @brief	Gets effects rate mkt code
+	 *
+	 * @author	A Diaz V
+	 * @date	26-04-2019
+	 *
+	 * @exception	invalid_argument	Thrown when an invalid argument error condition occurs.
+	 *
+	 * @param	code	The code.
+	 *
+	 * @returns	The FX rate mkt code.
+	 */
 	std::string getFxRateMktCode(std::string code)
 	{
 		if (_fxRateMktCode.find(code) != _fxRateMktCode.end())
@@ -316,6 +345,7 @@ public:
 		}
 
 	}
+
 private:
 	/*!
 	* Variable donde se almacenan los códigos textuales de los tipos de cambio.

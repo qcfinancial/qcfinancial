@@ -385,4 +385,5 @@ public:
 	}
 };
 
+
 #endif //QCCURRENCY_H

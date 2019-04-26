@@ -41,7 +41,9 @@
 #include "LegFactory.h"
 #include "Tenor.h"
 #include "Leg.h"
+#include "AssetFactory.h"
 #include "FXRate.h"
+#include "IndexFactory.h"
 #include "FXRateIndex.h"
 #include "InterestRateCurve.h"
 #include "PresentValue.h"
@@ -98,6 +100,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	implicitly_convertible<std::shared_ptr<QCJPY>, shared_ptr<QCCurrency>>();
 	class_<QCJPY, std::shared_ptr<QCJPY>, bases<QCCurrency>>("QCJPY");
+
+	def("get_qccurrency_from_code", &qf::getQCCurrencyFromCode);
 
 	std::tuple<unsigned long, int>(QCDate::*mddiff_1)(const QCDate&, std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const = 
 		&QCDate::monthDiffDayRemainder;
@@ -705,12 +709,16 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("get_code", &qf::FXRate::getCode)
 		;
 
+	def("get_fx_rate_from_code", &qf::getFXRateFromCode);
+
 	class_<qf::FXRateIndex, std::shared_ptr<qf::FXRateIndex>, bases<qf::FinancialIndex>>
 		("FXRateIndex", init<std::shared_ptr<qf::FXRate>, std::string, qf::Tenor, qf::Tenor, QCBusinessCalendar>())
 		.def("fixing_date", &qf::FXRateIndex::fixingDate)
 		.def("value_date", &qf::FXRateIndex::valueDate)
 		.def("convert", &qf::FXRateIndex::convert)
 		;
+
+	def("get_fx_rate_index_from_fx_rate_code", &qf::getFXRateIndexFromFXRateCode);
 
 	class_<std::vector<long>>("long_vec")
 		.def(vector_indexing_suite<std::vector<long>>())
