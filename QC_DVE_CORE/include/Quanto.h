@@ -61,7 +61,7 @@ namespace QCode
 				const TimeSeries& fxRateIndexValues, QCDate fxRateFixingDate)
 				: _cashflow(cashflow), _fxRateIndex(fxRateIndex), _fxRateIndexValues(fxRateIndexValues), _fxRateFixingDate(fxRateFixingDate)
 			{}
-
+			// Otrs constructor que reciba un shared_pointer de TimeSeries
 			double amount() override
 			{
 				QCCurrencyConverter converter;
@@ -211,10 +211,15 @@ namespace QCode
 				return _cashflow->accruedFixing(fecha, fixings);
 			}
 
+			virtual std::shared_ptr<LinearInterestRateCashflow> originalCashflow()
+			{
+				return _cashflow;
+			}
+
 		private:
 			std::shared_ptr<LinearInterestRateCashflow> _cashflow;
 			FXRateIndex _fxRateIndex;
-			TimeSeries _fxRateIndexValues;
+			const TimeSeries& _fxRateIndexValues;
 			QCDate _fxRateFixingDate;
 
 		};

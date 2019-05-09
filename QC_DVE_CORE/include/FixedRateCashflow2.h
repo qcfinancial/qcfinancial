@@ -316,6 +316,30 @@ namespace QCode
 			std::shared_ptr<FixedRateCashflowWrapper> wrap();
 
 			/**
+			 * @fn	virtual double FixedRateCashflow2::getInterestRateValue() const;
+			 *
+			 * @brief	Gets the value of the corresponding interest rate
+			 *
+			 * @author	A Diaz V
+			 * @date	03-05-2019
+			 *
+			 * @returns	The interest rate value.
+			 */
+			virtual double getInterestRateValue() const;
+
+			/**
+			 * @fn	virtual std::string FixedRateCashflow2::getInterestRateType() const;
+			 *
+			 * @brief	Gets interest rate type (LinAct360, Com30360 ...)
+			 *
+			 * @author	A Diaz V
+			 * @date	03-05-2019
+			 *
+			 * @returns	The interest rate type.
+			 */
+			virtual std::string getInterestRateType() const;
+
+			/**
 			 * @fn	virtual FixedRateCashflow2::~FixedRateCashflow2();
 			 *
 			 * @brief	Destructor

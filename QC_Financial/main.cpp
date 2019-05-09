@@ -330,6 +330,8 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("get_nominal", &qf::FixedRateCashflow2::getNominal)
 		.def("nominal", &qf::FixedRateCashflow2::nominal)
 		.def("get_amortization", &qf::FixedRateCashflow2::getAmortization)
+		.def("get_interest_rate_value", &qf::FixedRateCashflow2::getInterestRateValue)
+		.def("get_interest_rate_type", &qf::FixedRateCashflow2::getInterestRateType)
 		.def<double (qf::FixedRateCashflow2::*)()>("interest", &qf::FixedRateCashflow2::interest)
 		.def<double (qf::FixedRateCashflow2::*)(const qf::TimeSeries&)>("interest", &qf::FixedRateCashflow2::interest)
 		.def<double(qf::FixedRateCashflow2::*)()>("fixing", &qf::FixedRateCashflow2::fixing)
@@ -366,8 +368,10 @@ BOOST_PYTHON_MODULE(QC_Financial)
 
 	implicitly_convertible<std::shared_ptr<qf::QuantoCashflow>, std::shared_ptr<qf::Cashflow>>();
 
+	// Change the constructor's signature
 	class_ < qf::QuantoLinearInterestRateCashflow, std::shared_ptr<qf::QuantoLinearInterestRateCashflow>>
 		("QuantoLinearInterestRateCashflow", init<std::shared_ptr<qf::LinearInterestRateCashflow>, qf::FXRateIndex, const qf::TimeSeries&, QCDate>())
+		.def("original_cashflow", &qf::QuantoLinearInterestRateCashflow::originalCashflow)
 		.def("amount", &qf::QuantoLinearInterestRateCashflow::amount)
 		.def("ccy", &qf::QuantoLinearInterestRateCashflow::ccy)
 		.def("get_initial_ccy", &qf::QuantoLinearInterestRateCashflow::getInitialCcy)

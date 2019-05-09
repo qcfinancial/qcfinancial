@@ -193,6 +193,20 @@ namespace QCode
 			return std::make_shared<FixedRateCashflowWrapper>(tup);
 		}
 
+		double FixedRateCashflow2::getInterestRateValue() const
+		{
+			auto tasa = _rate;
+			return tasa.getValue();
+		}
+
+		std::string FixedRateCashflow2::getInterestRateType() const
+		{
+			auto tasa = _rate;
+			auto yf = tasa.getYearFraction()->description();
+			auto wf = tasa.getWealthFactor()->description();
+			return wf + yf;
+		}
+
 		FixedRateCashflow2::~FixedRateCashflow2()
 		{
 		}
