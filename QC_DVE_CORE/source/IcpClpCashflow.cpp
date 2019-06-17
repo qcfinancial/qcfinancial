@@ -60,10 +60,18 @@ namespace QCode
 
 		double IcpClpCashflow::getTna(QCDate date, double icpValue)
 		{
+			unsigned int LIMIT_TNA_DECIMAL_PLACES = 15;
 			double yf = _rate.yf(_startDate, date);
 			double tna = (icpValue / _startDateICP - 1) / yf;
-			double factor = std::pow(10, _tnaDecimalPlaces);
-			return round(tna * factor) / factor;
+			if (_tnaDecimalPlaces > LIMIT_TNA_DECIMAL_PLACES)
+			{
+				return tna;
+			}
+			else
+			{
+				double factor = std::pow(10, _tnaDecimalPlaces);
+				return round(tna * factor) / factor;
+			}
 		}
 
 		double IcpClpCashflow::accruedInterest(QCDate& accrualDate, double icpValue)

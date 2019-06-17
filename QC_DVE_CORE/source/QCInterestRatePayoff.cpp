@@ -177,6 +177,7 @@ double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 	for (const auto& cshflw : _payoffs)
 	{
 		long d = _valueDate.dayDiff(get<0>(cshflw));
+		cout << "dias a pago: " << d << endl;
 		bool condition;
 		if (includeFirstCashflow == true)
 		{

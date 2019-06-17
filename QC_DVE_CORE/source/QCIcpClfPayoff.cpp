@@ -10,7 +10,7 @@ QCIcpClfPayoff::QCIcpClfPayoff(QCIntrstRtShrdPtr floatingRate,
 	QCDate valueDate,
 	QCTimeSeriesShrdPtr fixingData, //En este map deben venir los ICP
 	QCTimeSeriesShrdPtr fixingDataUF) :
-	QCInterestRatePayoff(floatingRate, irLeg, valueDate, discountCurve, discountCurve, fixingData),
+	QCInterestRatePayoff(floatingRate, irLeg, valueDate, projectingCurve, discountCurve, fixingData),
 	_additiveSpread(additiveSpread), _multipSpread(multipSpread), _fixingDataUF(fixingDataUF)
 {
 	_setAllRates();

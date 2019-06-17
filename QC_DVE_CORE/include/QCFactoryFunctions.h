@@ -10,6 +10,7 @@
 #include "QCDefinitions.h"
 #include "QCDate.h"
 #include "QCInterestRateCurve.h"
+#include "QCCurrency.h"
 
 using namespace std;
 

@@ -55,6 +55,10 @@ void QCIcpClpPayoff::_setAllRates()
 			//hasta _valueDate. El redondeo se aplica para que al final del periodo 
 			//el cashflow coincida con el de contrato.
 			int pTNA = startDate.dayDiff(_valueDate);
+
+			//Esta linea debe reemplazar la anterior
+			pTNA = _rate->getYearFraction()->countDays(startDate, _valueDate);
+
 			double TNA;
 			if (pTNA == 0)
 			{
@@ -62,7 +66,11 @@ void QCIcpClpPayoff::_setAllRates()
 			}
 			else
 			{
-				TNA = round((icpValue / icpStart - 1)*360.0 / (double)pTNA * 10000) / 10000.0;
+				TNA = round((icpValue / icpStart - 1) * 360.0 / (double)pTNA * 10000) / 10000.0;
+
+				// Esta linea reemplaza a la anterior
+				TNA = round(_rate->getRateFromWf(icpValue / icpStart, pTNA) * 10000) / 10000.0;
+
 				/* cout << "icp inicio: " << icpValue << endl;
 				cout << "icp hoy: " << icpStart << endl;
 				cout << "TNA: " << TNA << endl;
@@ -86,6 +94,12 @@ void QCIcpClpPayoff::_setAllRates()
 			{
 				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
 					* wfTNA * 360.0 / (pZ + pTNA);
+
+				// Esta linea reemplaza la anterior. El plazo Actual se reemplaza por el plazo
+				// de la tasa definida en el payoff.
+                tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+                                * wfTNA / _rate->getYearFraction()->yf(startDate, endDate) ;
+
 				//cout << "der: " << j << ": " << tempDer.at(j) << endl;
 				//(wfTNA*wfZ-1)*360/(pZ+pTNA)
 				//wfTNA*wfZ*360/(pZ+pTNA)-360/(pZ+pTNA)
@@ -95,11 +109,20 @@ void QCIcpClpPayoff::_setAllRates()
 
 			//Se calcula y guarda la tasa forward z a partir de wfZ
 			double z = _rate->getRateFromWf(wfZ, pZ);
+
+			// Las siguientes dos lineas reemplazan a la anterior
+			pZ = _rate->getYearFraction()->countDays(_valueDate, endDate);
+			z =  _rate->getRateFromWf(wfZ, pZ); // La definición de pZ cambió
 			_forwardRates.at(i) = z;
 
 			//Calcula tasa asociada a este wf y guardar en _allRates
 			_allRates.at(i) = (_rate->getRateFromWf(wfTNA * wfZ, pZ + pTNA)
 				+ _additiveSpread) * _multipSpread;
+
+			// La siguiente linea reemplaza a la anterior
+            _allRates.at(i) = (_rate->getRateFromWf(wfTNA * wfZ, startDate, endDate)
+                               + _additiveSpread) * _multipSpread;
+
 			//cout << "all rates: " << i << " " << _allRates.at(i) << endl;
 		}
 		else
@@ -122,6 +145,11 @@ void QCIcpClpPayoff::_setAllRates()
 			{
 				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
 					* 360.0 / (d2 - d1);
+
+				// Esta linea reemplaza la anterior
+                tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
+                                / _rate->getYearFraction()->yf(date1, date2);
+
 				//cout << "d1: " << d1 << endl;
 				//cout << "d2: " << d2 << endl;
 			}
@@ -129,6 +157,9 @@ void QCIcpClpPayoff::_setAllRates()
 
 			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = _rate->getRateFromWf(wfFwd, d2 - d1);
+
+			// Esta linea reemplaza a la anterior
+            _forwardRates.at(i) = _rate->getRateFromWf(wfFwd, date1, date2);
 
 			//Se aplican los spreads y se guarda la tasa en _allRates
 			_allRates.at(i) = (_forwardRates.at(i) + _additiveSpread) * _multipSpread;

@@ -27,9 +27,10 @@ namespace QCode
 			double,                  /* Total cashflow */
 			shared_ptr<QCCurrency>,  /* Nominal currency */
 			std::string,             /* Interest rate index code */
-			QCInterestRate,          /* Interest rate */
+			QCInterestRate,			 /* Interest rate */
 			double,                  /* Spread */
-			double                   /* Gearing */
+			double,                  /* Gearing */
+			double					 /* Interest rate value */
 		> IborCashflowWrapper;
 
 		/**
@@ -37,53 +38,12 @@ namespace QCode
 		 *
 		 * @brief	An Ibor based cashflow.
 		 *
-		 * @author	Alvaro Díaz V.
+		 * @author	Alvaro Diaz V.
 		 * @date	29/09/2017
 		 */
 		class IborCashflow : public Cashflow
 		{
 		public:
-
-			/**
-			* @enum	Element
-			*
-			* @brief	Values that represent the different elements of an IborCashflow
-			*/
-			enum Element
-			{
-				///< An enum constant representing the start date
-				startDate,
-
-				///< An enum constant representing the end date
-				endDate,
-
-				///< An enum constant representing the fixing date
-				fixingDate,
-
-				///< An enum constant representing the settlement date
-				settlementDate,
-
-				///< An enum constant representing the notional
-				notional,
-
-				///< An enum constant representing the amortization
-				amortization,
-
-				///< An enum constant representing the interest
-				interest,
-
-				///< An enum constant representing the amort is cashflow
-				amortIsCashflow,
-
-				///< An enum constant representing the currency
-				currency,
-				
-				///< An enum constant representing the spread
-				spread,
-				
-				///< An enum constant representing the gearing
-				gearing
-			};
 
 			/**
 			 * @fn	IborCashflow::IborCashflow(std::shared_ptr<InterestRateIndex> index,
@@ -95,10 +55,10 @@ namespace QCode
 			 *
 			 * @brief	Constructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 *
-			 * @param	iborIndexCode 	The associated Ibor code.
+			 * @param	iborIndexCode 	The associated interest rate index.
 			 * @param	startDate	  	The start date.
 			 * @param	endDate		  	The end date.
 			 * @param	fixingDate	  	The fixing date.
@@ -126,9 +86,9 @@ namespace QCode
 			/**
 			 * @fn	double IborCashflow::amount();
 			 *
-			 * @brief	Gets the amount
+			 * @brief	Gets the amount.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 *
 			 * @return	A double.
@@ -140,7 +100,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the ccy
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 *
 			 * @return	A shared_ptr&lt;QCCurrency&gt;
@@ -152,7 +112,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the date
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 *
 			 * @return	A QCDate.
@@ -164,7 +124,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the start date of the cashflow
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @return	The start date.
@@ -176,7 +136,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the end date of the cashflow (date used to calculate interest)
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @return	The end date.
@@ -188,7 +148,7 @@ namespace QCode
 			*
 			* @brief	Returns the fixing date.
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	    05/12/2017
 			*
 			* @return	QCDate;
@@ -196,11 +156,35 @@ namespace QCode
 			QCDate getFixingDate() const;
 
 			/**
+			 * @fn	QCDate IborCashflow::getIndexStartDate() const;
+			 *
+			 * @brief	Gets the interest rate index start date
+			 *
+			 * @author	A Diaz V
+			 * @date	21-01-2019
+			 *
+			 * @returns	The index start date.
+			 */
+			QCDate getIndexStartDate();
+
+			/**
+			 * @fn	QCDate IborCashflow::getindexEndDate() const;
+			 *
+			 * @brief	Get the interest rate index end date
+			 *
+			 * @author	A Diaz V
+			 * @date	21-01-2019
+			 *
+			 * @returns	A QCDate.
+			 */
+			QCDate getIndexEndDate();
+
+			/**
 			* @fn	void iborCashflow::setNominal(double nominal);
 			*
 			* @brief	Sets the nominal amount.
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	05/10/2017
 			*
 			* @param	nominal	The nominal.
@@ -212,7 +196,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the nominal
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @return	The nominal.
@@ -224,7 +208,7 @@ namespace QCode
 			*
 			* @brief	Sets the amortization
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	05/10/2017
 			*
 			* @param	amortization	The amortization.
@@ -236,7 +220,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the amortization
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @return	The amortization.
@@ -248,7 +232,7 @@ namespace QCode
 			*
 			* @brief	Sets the rate value of the interest rate index 
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	    05/12/2017
 			*
 			* @param	value	The value of the interest rate.
@@ -260,7 +244,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the value of the interest rate index.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	24/09/2018
 			 *
 			 * @return	The interest rate value.
@@ -272,7 +256,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the accrued interest given a value date.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @param	valueDate	The value date.
@@ -286,7 +270,7 @@ namespace QCode
 			 *
 			 * @brief	Wraps the cashflow in a IborCashflowWrapper
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 *
 			 * @return	A shared_ptr&lt;IborCashflowWrapper&gt;
@@ -298,19 +282,21 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 */
 			virtual ~IborCashflow();
 
 		protected:
+			/** @brief	The interest rate index value */
+			double _rateValue;
 
 			/**
 			 * @fn	void IborCashflow::_calculateInterest();
 			 *
 			 * @brief	Calculates the interest using (rate*gearing + spread)
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	29/09/2017
 			 */
 			void _calculateInterest();
@@ -363,7 +349,7 @@ namespace QCode
 			 * 			- settlementDate >= endDate  
 			 * 			- fixingDate <= startDate
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	23/09/2018
 			 *
 			 * @return	True if it succeeds, false if it fails.

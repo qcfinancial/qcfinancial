@@ -6,6 +6,7 @@
 
 #include "FixedRateCashflow.h"
 #include "FXRateIndex.h"
+#include "TypeAliases.h"
 
 namespace QCode
 {
@@ -37,59 +38,6 @@ namespace QCode
 		class FixedRateMultiCurrencyCashflow : public FixedRateCashflow
 		{
 		public:
-
-			/**
-			 * @enum	element
-			 *
-			 * @brief	Values that represent the elements of a FixedRateMultiCurrencyCashflowWrapper
-			 */
-			enum element
-			{
-				///< An enum constant representing the start date option
-				startDate,
-
-				///< An enum constant representing the end date option
-				endDate,
-
-				///< An enum constant representing the settlement date option
-				settDate,
-
-				///< An enum constant representing the notional option
-				notional,
-
-				///< An enum constant representing the amortization option
-				amortization,
-
-				///< An enum constant representing the interest option
-				interest,
-
-				///< An enum constant representing the amortization is cashflow option
-				amortIsCashflow,
-
-				///< An enum constant representing the notional currency option
-				notionalCurrency,
-
-				///< An enum constant representing the interest rate option
-				interestRate,
-
-				///< An enum constant representing the fx index fixing date option
-				fxIndexFixingDate,
-
-				///< An enum constant representing the settlement currency option
-				settCurrency,
-
-				///< An enum constant representing the fx rate index code option
-				fxRateIndexCode,
-
-				///< An enum constant representing the fx rate index value option
-				fxRateIndexValue,
-
-				///< An enum constant representing the amortization in settlement currency option
-				amortInSettCurrency,
-
-				///< An enum constant representing the interest in settlement currency option
-				interestInSettCurrency
-			};
 
 			/**
 			 * @fn	FixedRateMultiCurrencyCashflow::FixedRateMultiCurrencyCashflow(
@@ -167,6 +115,79 @@ namespace QCode
 			void setFxRateIndexValue(double fxRateIndexValue);
 
 			/**
+			 * @fn	double FixedRateMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate,
+			 * 		const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+			 *
+			 * @brief	Calculates accrued interest in settlement currency
+			 *
+			 * @author	A Diaz V
+			 * @date	28-02-2019
+			 *
+			 * @param	valueDate		 	The value date or date for which interest will be calculated.
+			 * @param	fxRateIndexDate  	The FX rate index date. Corresponds to the date of the fx rate index used to express interest
+			 * 								in settlement currency.
+			 * @param	fxRateIndexValues	The FX rate index values.
+			 *
+			 * @returns	A double.
+			 */
+			double accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+
+			/**
+			 * @fn	double FixedRateMultiCurrencyCashflow::getAmortization(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
+			 *
+			 * @brief	Gets the amortization expressed in settlement currency
+			 *
+			 * @author	A Diaz V
+			 * @date	15-03-2019
+			 *
+			 * @param	valueDate		 	The value date.
+			 * @param	fxRateIndexValues	The FX rate index values.
+			 *
+			 * @returns	The amortization.
+			 */
+			double getAmortization(const TimeSeries& fxRateIndexValues);
+
+			/**
+			 * @fn	FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
+			 *
+			 * @brief	Calculates accrued FX variation expressed in settlement currency
+			 *
+			 * @author	A Diaz V
+			 * @date	28-02-2019
+			 *
+			 * @param	valueDate		 	The value date or date for which interest will be calculated. This date will also be used
+			 * 								for the value of the FX rate index used to convert to settlement currency.
+			 * @param	fxRateIndexValues	The FX rate index values.
+			 *
+			 * @returns	A FXVariation.
+			 */
+			FXVariation accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
+
+			/**
+			 * @fn	std::string FixedRateMultiCurrencyCashflow::getFXIndexCode() const;
+			 *
+			 * @brief	Gets the code corresponding to the cashflow's associated FX index
+			 *
+			 * @author	A Diaz V
+			 * @date	15-03-2019
+			 *
+			 * @returns	The FX index code.
+			 */
+			std::string getFXRateIndexCode() const;
+
+			/**
+			 * @fn	shared_ptr<FXRateIndex> FixedRateMultiCurrencyCashflow::getFXRateIndex() const;
+			 *
+			 * @brief	Gets FX rate index
+			 *
+			 * @author	A Diaz V
+			 * @date	18-03-2019
+			 *
+			 * @returns	A shared pointer containing the FX rate index.
+			 */
+			shared_ptr<FXRateIndex> getFXRateIndex() const;
+
+			/**
 			 * @fn		std::shared_ptr<FixedRateMultiCurrencyCashflowWrapper> FixedRateMultiCurrencyCashflow::wrap();
 			 *
 			 * @brief	Wraps the cashflow in a FixedRateMultiCurrencyCashflowWrapper
@@ -214,7 +235,6 @@ namespace QCode
 
 			/** @brief	The fx rate index value */
 			double _fxRateIndexValue;
-
 		};
 
 	}

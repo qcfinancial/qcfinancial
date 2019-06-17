@@ -16,7 +16,7 @@ namespace QCode
 		/**
 		* @class	PresentValue
 		*
-		* @brief	Class that calculates the present value ande derivatives of a cashflow
+		* @brief	Class that calculates the present value and derivatives of a cashflow
 		*           using a disocunting curve.
 		*
 		* @author	Alvaro Díaz V.

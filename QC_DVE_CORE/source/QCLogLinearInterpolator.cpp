@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "QCLogLinearInterpolator.h"
 
 QCLogLinearInterpolator::QCLogLinearInterpolator(shared_ptr<QCCurve<long>> curve) :

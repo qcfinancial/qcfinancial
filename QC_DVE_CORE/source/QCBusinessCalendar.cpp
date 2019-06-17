@@ -92,25 +92,22 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
 QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays)
 {
     if (nDays == 0) return fecha;
-    long serial = fecha.excelSerial();
-    QCDate result;
-
-    if (nDays > 0)
-    {
-        for (int i = 1; i < nDays + 1; ++i)
-        {
-            result.setDateFromExcelSerial(++serial);
-            result.setDateFromExcelSerial((this->nextBusinessDay(result)).excelSerial());
-        }
-    }
-    else
-    {
-        for (int i = 1; i < -nDays + 1; ++i)
-        {
-            result.setDateFromExcelSerial(--serial);
-            result.setDateFromExcelSerial((this->previousBusinessDay(result)).excelSerial());
-        }
-    }
+	QCDate result = fecha;
+	if (nDays > 0)
+	{
+		for (int i = 1; i <= nDays; ++i)
+		{
+			result = nextBusinessDay(result.addDays(1));
+		}
+	}
+	else
+	{
+		nDays = -1 * nDays;
+		for (int i = 1; i <= nDays; ++i)
+		{
+			result = previousBusinessDay(result.addDays(-1));
+		}
+	}
 
     return result;
 }
@@ -129,7 +126,7 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
     return result;
 }
 
-DateList QCBusinessCalendar::getHolidays()
+QCode::Financial::DateList QCBusinessCalendar::getHolidays()
 {
 	return _holydays;
 }

@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <string>
-#include<vector>
+#include <vector>
 #include <tuple>
 #include <memory>
 
@@ -212,16 +212,15 @@ class QCDate
 		* @param otherDate
 		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
 		*/
-		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate,
-			vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
+		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate, vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
+
 		/*!
 		* Calcula el número de meses enteros entre otherDate y sí misma.
 		* Sera > 0 si otherDate es mayor que sí misma. Entrega el resto en dias.
 		* @param otherDate
 		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
 		*/
-		tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
-			shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate, shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
         /*!
          * Calcula la fecha que resulta de sumar un número de días a si misma
          * @param nDays número de días a sumar
@@ -315,7 +314,7 @@ class QCDate
 		 * es 'yyyy-mm-dd'.
 		 * @return (std::string)
          */
-        string description(bool dmy = true);
+        string description(bool dmy = true) const;
 
     private:
         int _day;

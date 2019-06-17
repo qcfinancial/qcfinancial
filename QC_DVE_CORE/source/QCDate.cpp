@@ -3,9 +3,11 @@
 //
 
 #include "QCDate.h"
+#include "QCBusinessCalendar.h"
 #include <sstream>
 #include <exception>
 #include <algorithm>
+#include <math.h>
 //
 //  QCDate.cpp
 //  QC-FXOptions
@@ -240,7 +242,7 @@ QCDate::QCWeekDay QCDate::weekDay() const
     return QCWeekDay((auxYear + auxYear/4 - auxYear/100 + auxYear/400 + t[_month-1] + _day) % 7);
 }
 
-std::string QCDate::description(bool dmy)
+std::string QCDate::description(bool dmy) const
 {
     std::stringstream ss;
     std::string auxDay = "";
@@ -261,8 +263,14 @@ std::string QCDate::description(bool dmy)
 QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
 {
 	//Solo esta implementado el caso FOLLOW
+
 	QCDate result{ _day, _month, _year };
-	switch (rule)
+	QCBusinessCalendar busCal{ result, 1 };
+	for (const auto &fecha : calendar)
+	{
+		busCal.addHolyday(fecha);
+	}
+	/*switch (rule)
 	{
 	case QCDate::qcNo:
 		break;
@@ -335,92 +343,39 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 
 	default:
 		break;
-	}
+	}*/
 
+	switch (rule)
+	{
+	case QCDate::qcNo:
+		break;
+
+	case QCDate::qcFollow:
+		result = busCal.nextBusinessDay(result);
+		break;
+
+	case QCDate::qcModFollow:
+		result = busCal.modNextBusinessDay(result);
+		break;
+
+	case QCDate::qcPrev:
+		result = busCal.previousBusinessDay(result);
+		break;
+
+	case QCDate::qcModPrev:
+		result = busCal.previousBusinessDay(result);
+		break;
+
+	default:
+		break;
+	}
 	return result;
 }
 
 QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
 {
-	//Solo esta implementado el caso FOLLOW, MOD_FOLLOW y PREV
-	QCDate result{ _day, _month, _year };
-	switch (rule)
-	{
-	case QCDate::qcNo:
-		break;
-
-	case QCDate::qcFollow:
-		if (result.weekDay() == 6)
-		{
-			result = result.addDays(2);
-		}
-		if (result.weekDay() == 0)
-		{
-			result = result.addDays(1);
-		}
-		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
-		{
-			result = result.addDays(1);
-			if (result.weekDay() == 6)
-			{
-				result = result.addDays(2);
-			}
-		}
-		break;
-
-	case QCDate::qcModFollow:
-		if (result.weekDay() == qcSaturday)
-		{
-			int month = result.month();
-			result = result.addDays(2);
-			if (result.month() != month)
-				result = result.addDays(-3);
-		}
-		if (result.weekDay() == qcSunday)
-		{
-			int month = result.month();
-			result = result.addDays(1);
-			if (result.month() != month)
-				result = result.addDays(-3);
-		}
-		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
-		{
-			result = result.addDays(-1);
-		}
-		break;
-
-	case QCDate::qcPrev:
-		if (result.weekDay() == 6)
-		{
-			result = result.addDays(-1);
-		}
-		if (result.weekDay() == 0)
-		{
-			result = result.addDays(-2);
-		}
-		while (find(calendar->begin(), calendar->end(), result) != calendar->end())
-		{
-			result = result.addDays(-1);
-			if (result.weekDay() == 6)
-			{
-				result = result.addDays(-1);
-			}
-			if (result.weekDay() == 0)
-			{
-				result = result.addDays(-2);
-			}
-		}
-
-		break;
-
-	case QCDate::qcModPrev:
-		break;
-
-	default:
-		break;
-	}
-
-	return result;
+	auto derefCal = *calendar;
+	return businessDay(derefCal, rule);
 }
 
 QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,

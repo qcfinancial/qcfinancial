@@ -1017,6 +1017,10 @@ PyObject* boot_zero_rates_fixed_legs(PyObject* self, PyObject* args)
 				get<7>(swapIndexVector.at(i)),			//amortization
 				amortIfCustom,							//amortization and notional by date
 				get<9>(swapIndexVector.at(i)));			//notional
+			if (i == 7)
+			{
+				cout << get<2>(swapIndexVector.at(i)) << endl;
+			}
 			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
 
 			//buildFixedRatePayoff
@@ -3050,8 +3054,9 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 
 		string strDate{ fecha };
 		QCDate allValueDate{ strDate };
-
+		cout << "FECHA: " + allValueDate.description() << endl;
 		map <long, shared_ptr<QCInterestRatePayoff>> payoffs;
+		auto temp = 0;
 		for (unsigned long i = 0; i < PyList_Size(legCharacteristics); ++i)
 		{
 			string wf = PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 15));
@@ -3062,6 +3067,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
 			numOp = (long long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
+			if (numOp == 1814.0) temp = i;
 			cout << "numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (string(PyString_AsString(PyList_GetItem(
@@ -3118,6 +3124,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 		unsigned long counter = 0;
 		for (const auto& payoff : payoffs)
 		{
+			cout << "SE VALORIZA: " << payoff.first << endl;
 			m2m = payoff.second->presentValue();
 			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int discVertices = payoff.second->discountCurveLength();

@@ -115,7 +115,7 @@ namespace QCode
 			* Este método es un getter que retorna el largo de la curva
 			* @return largo de la curva.
 			*/
-			size_t getLength()
+			size_t getLength() const
 			{
 				return _curve->getLength();
 			}

@@ -479,6 +479,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 		stubPeriod = QCInterestRateLeg::qcShortFront;
 	}
 	bool easyCase = remainderInDays == 0 && remainderInMonths == 0;
+	cout << "whole periods: " << numWholePeriods << " months: " << remainderInMonths << " days: " << remainderInDays << endl;
 	if (easyCase)
 	{
 		bool easyStub = stubPeriod != QCInterestRateLeg::qcLongFront2 &&
@@ -694,40 +695,53 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 	}
 	if (stubPeriod == QCInterestRateLeg::qcShortFront)
 	{
-		unsigned int numPeriods = numWholePeriods + 1;
-		periods.resize(numPeriods);
-
-		QCDate fechaInicioPeriodo = _startDate;
-		QCDate fechaFinalPeriodo;
-
-		if (numPeriods == 1)
+		bool nuevaVersion = false;
+		if (nuevaVersion)
 		{
-			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
-			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
-				businessDay(calendar, _endDateAdjustment);
-			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+
 		}
-
-		if (numPeriods > 1)
+		else
 		{
-			fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
-			fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
-			periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-			fechaInicioPeriodo = fechaFinalPeriodo;
+			unsigned int numPeriods = numWholePeriods + 1;
+			periods.resize(numPeriods);
 
-			QCDate pseudoStartDate = fechaFinalPeriodo;
+			QCDate fechaInicioPeriodo = _startDate;
+			QCDate fechaFinalPeriodo;
 
-			for (unsigned int i = 1; i < numPeriods; ++i)
+			if (numPeriods == 1)
 			{
-				fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i)
-					.businessDay(calendar, _endDateAdjustment);
-				periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
-				fechaInicioPeriodo = fechaFinalPeriodo;
+				fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+				fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward).
+					businessDay(calendar, _endDateAdjustment);
+				periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 			}
-			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-			//consecuencia de la fecha inicial del segundo período.
-			get<1>(periods.at(0)) = get<1>(periods.at(0)).businessDay(calendar, _endDateAdjustment);
-			get<0>(periods.at(1)) = get<1>(periods.at(0));
+
+			if (numPeriods > 1)
+			{
+				fechaFinalPeriodo = _startDate.addMonths(remainderInMonths);
+				// Se habian agregado estas lineas para corregir el problema de la operacion 1856.
+				//if (remainderInMonths != 0)
+				//{
+				//	fechaFinalPeriodo = fechaFinalPeriodo.addDays(remainderInDays);
+				//}
+				fechaFinalPeriodo = fechaFinalPeriodo.moveToDayOfMonth(_endDate.day(), QCDate::qcForward);
+				periods.at(0) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+				fechaInicioPeriodo = fechaFinalPeriodo;
+
+				QCDate pseudoStartDate = fechaFinalPeriodo;
+
+				for (unsigned int i = 1; i < numPeriods; ++i)
+				{
+
+					fechaFinalPeriodo = pseudoStartDate.addMonths(QCHelperFunctions::tenor(periodicity) * i).businessDay(calendar, _endDateAdjustment);
+					periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
+					fechaInicioPeriodo = fechaFinalPeriodo;
+				}
+				//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
+				//consecuencia de la fecha inicial del segundo período.
+				get<1>(periods.at(0)) = get<1>(periods.at(0)).businessDay(calendar, _endDateAdjustment);
+				get<0>(periods.at(1)) = get<1>(periods.at(0));
+			}
 		}
 
 	}
