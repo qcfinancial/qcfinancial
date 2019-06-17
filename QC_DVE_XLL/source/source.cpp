@@ -40,8 +40,94 @@
 
 using namespace std;
 
-#define BASIS_POINT .0001
-const string LICENSE_MSG = "Creasys Front Desk: producto no licenciado.";
+/**
+ * @fn	string QCGetMacAddress()
+ *
+ * @brief	Get MAC address of the host PC.
+ *
+ * @author	Alvaro Díaz V.
+ * @date	04/11/2018
+ *
+ * @exception	runtime_error	Raised when a runtime error condition occurs.
+ *
+ * @return	A string.
+ */
+string QCGetMacAddress()
+{
+	if (!HelperFunctions::checkAuthKey())
+		throw runtime_error(LICENSE_MSG);
+
+	char* result = HelperFunctions::getMAC();
+	return string(result);
+}
+
+/**
+ * @fn	string QCSha256(string input)
+ *
+ * @brief	Calculates sha 256
+ *
+ * @author	Alvaro Díaz V.
+ * @date	04/11/2018
+ *
+ * @param	input	The input.
+ *
+ * @return	A string.
+ */
+string QCSha256(string input)
+{
+	char* cstr = &input[0u];;
+	return Sha256::SHA256(cstr);
+}
+
+/**
+ * @fn	string QCGetAuthKey()
+ *
+ * @brief	Get the authentication key corresponding to the host PC
+ *
+ * @author	Alvaro Díaz V.
+ * @date	04/11/2018
+ *
+ * @return	A string.
+ */
+string QCGetAuthKey()
+{
+	return HelperFunctions::getAuthKey();
+}
+
+/**
+ * @fn	string QCGenerateKey(string password)
+ *
+ * @brief	Generate authentication key for the host PC. This function needs to be run only once,
+ * 			when this Excel add-in is installed for the first time. 
+ *
+ * @author	Alvaro Díaz V.
+ * @date	04/11/2018
+ *
+ * @param	password	The password used to generate the authentication key.
+ *
+ * @return	A string.
+ */
+string QCGenerateKey(string password)
+{
+	if (password != AUTH_PASSWORD)
+		return "Password invalida.";
+
+	string paddedMac = KEY_PREFIX + string(HelperFunctions::getMAC()) + KEY_POSTFIX;
+	char* cstr = &paddedMac[0u];
+	string key = Sha256::SHA256(cstr);
+	ofstream keyFile(AUTH_KEY_FILE);
+	if (keyFile.is_open())
+	{
+		keyFile << key << endl;
+		keyFile.close();
+		return "Archivo de licencia creado.";
+	}
+	else
+	{
+		return "No se pudo crear el archivo de licencia.";
+	}
+}
+
 
 CellMatrix QCBootZeroRatesFixedLegs(int xlValueDate,
 	CellMatrix xlInputRates,
@@ -3803,43 +3889,3 @@ CellMatrix buildInterestRateLeg(double startDate,
 	return result;
 }
 
-string QCGetMacAddress()
-{
-	if (!HelperFunctions::checkAuthKey())
-		throw runtime_error(LICENSE_MSG);
-
-	char* result = HelperFunctions::getMAC();
-	return string(result);
-}
-
-string QCSha256(string input)
-{	
-	char* cstr = &input[0u];;
-	return Sha256::SHA256(cstr);
-}
-
-string QCGetAuthKey()
-{
-	return HelperFunctions::getAuthKey();
-}
-
-string QCGenerateKey(string password)
-{
-	if (password != "3141-YYZ-217-APDV")
-		return "Password invalida.";
-
-	string paddedMac = "rockandroll" + string(HelperFunctions::getMAC()) + "heavymetal";
-	char* cstr = &paddedMac[0u];
-	string key = Sha256::SHA256(cstr);
-	ofstream keyFile("C:\\Creasys\\FrontDesk\\XLL\\auth_key.txt");
-	if (keyFile.is_open())
-	{
-		keyFile << key << endl;
-		keyFile.close();
-		return "Archivo de licencia creado.";
-	}
-	else
-	{
-		return "No se pudo crear el archivo de licencia.";
-	}
-}

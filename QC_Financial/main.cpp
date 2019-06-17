@@ -521,6 +521,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		("FXRateIndex", init<std::shared_ptr<qf::FXRate>, std::string, qf::Tenor, qf::Tenor, QCBusinessCalendar>())
 		.def("fixing_date", &qf::FXRateIndex::fixingDate)
 		.def("value_date", &qf::FXRateIndex::valueDate)
+		.def("convert", &qf::FXRateIndex::convert)
 		;
 
 	class_<std::vector<long>>("long_vec")

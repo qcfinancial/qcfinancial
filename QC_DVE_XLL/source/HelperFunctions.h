@@ -24,8 +24,81 @@
 using namespace xlw;
 using namespace std;
 
+#define BASIS_POINT .0001
+const string LICENSE_MSG = "Creasys Front Desk: producto no licenciado.";
+const string AUTH_PASSWORD = "3141-YYZ-217-APDV";
+const string KEY_PREFIX = "rockandroll";
+const string KEY_POSTFIX = "heavymetal";
+const string AUTH_KEY_FILE = "C:\\Creasys\\FrontDesk\\XLL\\auth_key.txt";
+
 namespace HelperFunctions
 {
+	char* getMAC()
+	{
+		PIP_ADAPTER_INFO AdapterInfo;
+		DWORD dwBufLen = sizeof(AdapterInfo);
+		char* mac_addr = (char*)malloc(17);
+
+		AdapterInfo = (IP_ADAPTER_INFO *)malloc(sizeof(IP_ADAPTER_INFO));
+		if (AdapterInfo == NULL) {
+			printf("Error allocating memory needed to call GetAdaptersinfo\n");
+
+		}
+
+		// Make an initial call to GetAdaptersInfo to get the necessary size into the dwBufLen variable
+		if (GetAdaptersInfo(AdapterInfo, &dwBufLen) == ERROR_BUFFER_OVERFLOW) {
+
+			AdapterInfo = (IP_ADAPTER_INFO *)malloc(dwBufLen);
+			if (AdapterInfo == NULL) {
+				printf("Error allocating memory needed to call GetAdaptersinfo\n");
+			}
+		}
+
+		if (GetAdaptersInfo(AdapterInfo, &dwBufLen) == NO_ERROR) {
+			PIP_ADAPTER_INFO pAdapterInfo = AdapterInfo;// Contains pointer to current adapter info
+			do {
+				sprintf(mac_addr, "%02X:%02X:%02X:%02X:%02X:%02X",
+					pAdapterInfo->Address[0], pAdapterInfo->Address[1],
+					pAdapterInfo->Address[2], pAdapterInfo->Address[3],
+					pAdapterInfo->Address[4], pAdapterInfo->Address[5]);
+				printf("Address: %s, mac: %s\n", pAdapterInfo->IpAddressList.IpAddress.String, mac_addr);
+				return mac_addr;
+
+				printf("\n");
+				pAdapterInfo = pAdapterInfo->Next;
+			} while (pAdapterInfo);
+		}
+		free(AdapterInfo);
+	}
+
+	string getAuthKey()
+	{
+		string line;
+		ifstream authKeyFile(AUTH_KEY_FILE);
+		if (authKeyFile.is_open())
+		{
+			getline(authKeyFile, line);
+			authKeyFile.close();
+		}
+		else
+		{
+			throw runtime_error("No se puede abrir el archivo de licencia.");
+		}
+		return line;
+	}
+
+	bool checkAuthKey()
+	{
+		string key = getAuthKey();
+		string paddedMac = KEY_PREFIX + string(getMAC()) + KEY_POSTFIX;
+		char* cstr = &paddedMac[0u];
+		string calcKey = Sha256::SHA256(cstr);
+		if (calcKey == key)
+			return true;
+		else
+			return false;
+	}
+
 	typedef tuple<string, string, string, string> string4;
 
 	//start_date, end_date, value, yf, wf
@@ -517,72 +590,6 @@ namespace HelperFunctions
 		QCHelperFunctions::lowerCase(curveWf);
 		return QCFactoryFunctions::zrCpnCrvShrdPtr(tenors,
 			rates, curveInterpolator, curveYf, curveWf);
-	}
-
-	char* getMAC()
-	{
-		PIP_ADAPTER_INFO AdapterInfo;
-		DWORD dwBufLen = sizeof(AdapterInfo);
-		char* mac_addr = (char*)malloc(17);
-
-		AdapterInfo = (IP_ADAPTER_INFO *)malloc(sizeof(IP_ADAPTER_INFO));
-		if (AdapterInfo == NULL) {
-			printf("Error allocating memory needed to call GetAdaptersinfo\n");
-
-		}
-
-		// Make an initial call to GetAdaptersInfo to get the necessary size into the dwBufLen variable
-		if (GetAdaptersInfo(AdapterInfo, &dwBufLen) == ERROR_BUFFER_OVERFLOW) {
-
-			AdapterInfo = (IP_ADAPTER_INFO *)malloc(dwBufLen);
-			if (AdapterInfo == NULL) {
-				printf("Error allocating memory needed to call GetAdaptersinfo\n");
-			}
-		}
-
-		if (GetAdaptersInfo(AdapterInfo, &dwBufLen) == NO_ERROR) {
-			PIP_ADAPTER_INFO pAdapterInfo = AdapterInfo;// Contains pointer to current adapter info
-			do {
-				sprintf(mac_addr, "%02X:%02X:%02X:%02X:%02X:%02X",
-					pAdapterInfo->Address[0], pAdapterInfo->Address[1],
-					pAdapterInfo->Address[2], pAdapterInfo->Address[3],
-					pAdapterInfo->Address[4], pAdapterInfo->Address[5]);
-				printf("Address: %s, mac: %s\n", pAdapterInfo->IpAddressList.IpAddress.String, mac_addr);
-				return mac_addr;
-
-				printf("\n");
-				pAdapterInfo = pAdapterInfo->Next;
-			} while (pAdapterInfo);
-		}
-		free(AdapterInfo);
-	}
-
-	string getAuthKey() 
-	{
-		string line;
-		ifstream authKeyFile("C:\\Creasys\\FrontDesk\\XLL\\auth_key.txt");
-		if (authKeyFile.is_open())
-		{
-			getline(authKeyFile, line);
-			authKeyFile.close();
-		}
-		else
-		{
-			throw runtime_error("No se puede abrir el archivo de licencia.");
-		}
-		return line;
-	}
-
-	bool checkAuthKey()
-	{
-		string key = getAuthKey();
-		string paddedMac = "rockandroll" + string(getMAC()) + "heavymetal";
-		char* cstr = &paddedMac[0u];
-		string calcKey = Sha256::SHA256(cstr);
-		if (calcKey == key)
-			return true;
-		else
-			return false;
 	}
 
 	vector<QCDate> getHolidays(map<string, vector<QCDate>>& hm, string name)

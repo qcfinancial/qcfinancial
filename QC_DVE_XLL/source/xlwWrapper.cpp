@@ -41,8 +41,6 @@ LibraryName,
 );
 }
 
-
-
 extern "C"
 {
 LPXLFOPER EXCEL_EXPORT
@@ -88,7 +86,6 @@ QCSha256Args,
 ,false
 );
 }
-
 
 
 extern "C"
