@@ -112,6 +112,15 @@ BOOST_PYTHON_MODULE(QC_Financial)
 	def("first", &wrappers::first);
 	def("second", &wrappers::second);
 
+	struct qcdate_pickle_suite : boost::python::pickle_suite
+	{
+		static
+			boost::python::tuple
+			getinitargs(QCDate const& w)
+		{
+			return boost::python::make_tuple(w.day(), w.month(), w.year());
+		}
+	};
 	class_<QCDate>("QCDate", init<int, int, int>())
 		.def(init<>())
 		.def(init<long>())
@@ -136,6 +145,7 @@ BOOST_PYTHON_MODULE(QC_Financial)
 		.def("__gt__", &QCDate::operator>)
 		.def("__hash__", &QCDate::excelSerial)
 		.def(self_ns::str(self_ns::self))
+		.def_pickle(qcdate_pickle_suite())
 		;
 
 	def("build_qcdate_from_string", &wrappers::buildQCDateFromString);

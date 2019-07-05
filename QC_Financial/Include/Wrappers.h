@@ -1,6 +1,8 @@
 #ifndef WRAPPERS_H
 #define WRAPPERS_H
 
+#include "Python.h"
+
 #include<memory>
 #include<string>
 
@@ -29,9 +31,19 @@
 #include "QCInterestRate.h"
 
 namespace qf = QCode::Financial;
+#ifdef PYTHON37
+#define PYSTRING2STRING PyUnicode_FromString
+#else
+#define PYSTRING2STRING PyString_FromString
+#endif
 
 namespace wrappers
 {
+	boost::python::tuple getinitargs(QCDate const& w)
+	{
+		return boost::python::make_tuple(w.day(), w.month(), w.year());
+	}
+
 	PyObject* show(std::shared_ptr<qf::FixedRateCashflow> cshflwPtr)
 	{
 		// The types inside the wrapper are:
@@ -78,7 +90,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(11);
 		int success;
 		
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -86,7 +98,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -94,7 +106,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -143,7 +155,7 @@ namespace wrappers
 				return NULL;
 			}
 
-		success = PyTuple_SetItem(result, 8, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 8, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -161,7 +173,7 @@ namespace wrappers
 
 		std::string wf = std::get<8>(*cashflow).getWealthFactor()->description();
 		std::string yf = std::get<8>(*cashflow).getYearFraction()->description();
-		success = PyTuple_SetItem(result, 10, PyString_FromString((wf + yf).c_str()));
+		success = PyTuple_SetItem(result, 10, PYSTRING2STRING((wf + yf).c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -215,7 +227,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(11);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -223,7 +235,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -231,7 +243,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -280,7 +292,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 8, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 8, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -299,7 +311,7 @@ namespace wrappers
 
 		std::string wf = std::get<8>(*cashflow).getWealthFactor()->description();
 		std::string yf = std::get<8>(*cashflow).getYearFraction()->description();
-		success = PyTuple_SetItem(result, 10, PyString_FromString((wf + yf).c_str()));
+		success = PyTuple_SetItem(result, 10, PYSTRING2STRING((wf + yf).c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -367,7 +379,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(17);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -375,7 +387,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -383,7 +395,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -432,7 +444,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 8, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 8, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -451,7 +463,7 @@ namespace wrappers
 
 		std::string wf = std::get<8>(*cashflow).getWealthFactor()->description();
 		std::string yf = std::get<8>(*cashflow).getYearFraction()->description();
-		success = PyTuple_SetItem(result, 10, PyString_FromString((wf + yf).c_str()));
+		success = PyTuple_SetItem(result, 10, PYSTRING2STRING((wf + yf).c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -459,7 +471,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 11, PyString_FromString(fixingDate.c_str()));
+		success = PyTuple_SetItem(result, 11, PYSTRING2STRING(fixingDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -467,7 +479,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 12, PyString_FromString(settCurrency.c_str()));
+		success = PyTuple_SetItem(result, 12, PYSTRING2STRING(settCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -475,7 +487,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 13, PyString_FromString(fxRateIndex.c_str()));
+		success = PyTuple_SetItem(result, 13, PYSTRING2STRING(fxRateIndex.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -606,7 +618,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(21);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -614,7 +626,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -622,7 +634,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(fixingDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(fixingDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -630,7 +642,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 3, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 3, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -678,7 +690,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 9, PyString_FromString(nominalCurrency.c_str()));
+		success = PyTuple_SetItem(result, 9, PYSTRING2STRING(nominalCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -686,7 +698,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 10, PyString_FromString(interestRateIndexCode.c_str()));
+		success = PyTuple_SetItem(result, 10, PYSTRING2STRING(interestRateIndexCode.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -718,7 +730,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 14, PyString_FromString(typeRate.c_str()));
+		success = PyTuple_SetItem(result, 14, PYSTRING2STRING(typeRate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -726,7 +738,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 15, PyString_FromString(fxRateIndexDate.c_str()));
+		success = PyTuple_SetItem(result, 15, PYSTRING2STRING(fxRateIndexDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -734,7 +746,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 16, PyString_FromString(settCurrency.c_str()));
+		success = PyTuple_SetItem(result, 16, PYSTRING2STRING(settCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -742,7 +754,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 17, PyString_FromString(fxRateIndexCode.c_str()));
+		success = PyTuple_SetItem(result, 17, PYSTRING2STRING(fxRateIndexCode.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -852,7 +864,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(15);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -860,7 +872,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -868,7 +880,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(fixingDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(fixingDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -876,7 +888,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 3, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 3, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -924,7 +936,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 9, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 9, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -933,7 +945,7 @@ namespace wrappers
 		}
 
 		const char* cCode = code.c_str();
-		success = PyTuple_SetItem(result, 10, PyString_FromString(cCode));
+		success = PyTuple_SetItem(result, 10, PYSTRING2STRING(cCode));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -967,7 +979,7 @@ namespace wrappers
 
 		std::string wf = std::get<11>(*cashflow).getWealthFactor()->description();
 		std::string yf = std::get<11>(*cashflow).getYearFraction()->description();
-		success = PyTuple_SetItem(result, 14, PyString_FromString((wf + yf).c_str()));
+		success = PyTuple_SetItem(result, 14, PYSTRING2STRING((wf + yf).c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1030,7 +1042,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(3);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1046,7 +1058,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1105,7 +1117,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(8);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1121,7 +1133,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(currency.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(currency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1129,7 +1141,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 3, PyString_FromString(fxRateFixingDate.c_str()));
+		success = PyTuple_SetItem(result, 3, PYSTRING2STRING(fxRateFixingDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1137,7 +1149,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 4, PyString_FromString(settlementCurrency.c_str()));
+		success = PyTuple_SetItem(result, 4, PYSTRING2STRING(settlementCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1145,7 +1157,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 5, PyString_FromString(fxRateIndexCode.c_str()));
+		success = PyTuple_SetItem(result, 5, PYSTRING2STRING(fxRateIndexCode.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1244,7 +1256,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(15);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1252,7 +1264,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1260,7 +1272,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1300,7 +1312,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 7, PyString_FromString(nominalCurrency.c_str()));
+		success = PyTuple_SetItem(result, 7, PYSTRING2STRING(nominalCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1356,7 +1368,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 14, PyString_FromString("LinAct360"));
+		success = PyTuple_SetItem(result, 14, PYSTRING2STRING("LinAct360"));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1446,7 +1458,7 @@ namespace wrappers
 		PyObject* result = PyTuple_New(17);
 		int success;
 
-		success = PyTuple_SetItem(result, 0, PyString_FromString(startDate.c_str()));
+		success = PyTuple_SetItem(result, 0, PYSTRING2STRING(startDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1454,7 +1466,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 1, PyString_FromString(endDate.c_str()));
+		success = PyTuple_SetItem(result, 1, PYSTRING2STRING(endDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1462,7 +1474,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 2, PyString_FromString(settlementDate.c_str()));
+		success = PyTuple_SetItem(result, 2, PYSTRING2STRING(settlementDate.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1502,7 +1514,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 7, PyString_FromString(nominalCurrency.c_str()));
+		success = PyTuple_SetItem(result, 7, PYSTRING2STRING(nominalCurrency.c_str()));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);
@@ -1574,7 +1586,7 @@ namespace wrappers
 			return NULL;
 		}
 
-		success = PyTuple_SetItem(result, 16, PyString_FromString("LinAct360"));
+		success = PyTuple_SetItem(result, 16, PYSTRING2STRING("LinAct360"));
 		if (success != 0)
 		{
 			PyObject* qcfError = PyErr_NewException("QC_Financial Error", NULL, NULL);

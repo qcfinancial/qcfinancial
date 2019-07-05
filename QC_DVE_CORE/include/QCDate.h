@@ -81,6 +81,7 @@ class QCDate
          */
         QCDate(int d, int m, int y);
 
+
 		/*!
 		* Constructor
 		* @param stringDate yyyy/mm/dd o yyyy-mm-dd

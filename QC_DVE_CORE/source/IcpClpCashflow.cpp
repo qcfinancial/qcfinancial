@@ -62,6 +62,10 @@ namespace QCode
 		{
 			unsigned int LIMIT_TNA_DECIMAL_PLACES = 15;
 			double yf = _rate.yf(_startDate, date);
+			if (yf == 0.0)
+			{
+				return 0.0;
+			}
 			double tna = (icpValue / _startDateICP - 1) / yf;
 			if (_tnaDecimalPlaces > LIMIT_TNA_DECIMAL_PLACES)
 			{

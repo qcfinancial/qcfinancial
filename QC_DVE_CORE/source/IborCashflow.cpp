@@ -35,6 +35,7 @@ namespace QCode
 				throw std::invalid_argument(_validateMsg);
 			}
 #endif
+			_rateValue = index->getRate().getValue();
             _calculateInterest();
         }
 
