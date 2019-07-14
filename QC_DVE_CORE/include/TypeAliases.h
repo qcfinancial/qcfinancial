@@ -29,15 +29,7 @@ namespace QCode
 		 * @brief	Defines an alias representing a time series. The key is a date represented by a QCDate object and the value is a double.
 		 */
 		typedef std::map<QCDate, double> TimeSeries;
-
-		/**
-		 * @typedef	std::map<std::string, std::map<QCDate, double>> ManyTimeSeries
-		 *
-		 * @brief	Defines an alias representing a container with many TimeSeries objects. The key for the outer std::map
-		 * 			is a std::string equal to the code of the financial index to which the time series corresponds.
-		 */
-		typedef std::map<std::string, std::map<QCDate, double>> ManyTimeSeries;
-
+		
 		/**
 		 * @struct	FXVariation
 		 *
