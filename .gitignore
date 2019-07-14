@@ -141,7 +141,7 @@ x64/Release/.ipynb_checkpoints/Ejemplos QC_Financial 2-checkpoint.ipynb
 x64/Release/.ipynb_checkpoints/Tabla de Desarrollo a Pata Fija-checkpoint.ipynb
 x64/Release/.ipynb_checkpoints/QCCurve Family-checkpoint.ipynb
 x64/Release/.ipynb_checkpoints/Prueba_Val_Depo-checkpoint.ipynb
-x64/Release/.ipynb_checkpoints/Prueba Valorización Cartera al 15-6-checkpoint.ipynb
+x64/Release/.ipynb_checkpoints/Prueba Valorizaciï¿½n Cartera al 15-6-checkpoint.ipynb
 x64/Release/.ipynb_checkpoints/Fixed Rate Bonds-checkpoint.ipynb
 QC_DVE_XLL/x64_Release/obj/QC_DVE_XLL.vcxprojResolveAssemblyReference.cache
 QC_DVE_XLL/Release/obj/QC_DVE_XLL.vcxprojResolveAssemblyReference.cache
@@ -157,3 +157,9 @@ QC_Financial/QC_Financial.vcxproj
 QC_DVE_PYBIND/QC_DVE_PYBIND.vcxproj.filters
 QC_DVE_PYBIND/QC_DVE_PYBIND.vcxproj
 QC_DVE_CORE/.idea/
+*.out
+*.bin
+*.o
+*.a
+QC_DVE_CORE/cmake-build-debug/QC_DVE_CORE_TESTS
+QC_DVE_CORE/cmake-build-release/QC_DVE_CORE_TESTS
