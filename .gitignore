@@ -1,9 +1,4 @@
-.idea/QCDValuationEngine.iml
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
+.idea/
 QC_DVE.sdf
 QC_DVE.sln
 QC_DVE.v12.suo
@@ -161,5 +156,5 @@ QC_DVE_CORE/.idea/
 *.bin
 *.o
 *.a
-QC_DVE_CORE/cmake-build-debug/QC_DVE_CORE_TESTS
-QC_DVE_CORE/cmake-build-release/QC_DVE_CORE_TESTS
+QC_DVE_CORE/cmake-build-debug
+QC_DVE_CORE/cmake-build-release
