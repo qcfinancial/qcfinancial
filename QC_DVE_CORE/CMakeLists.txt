@@ -1,67 +1,79 @@
 cmake_minimum_required(VERSION 3.13)
 project(QC_DVE_CORE)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
-include_directories(include)
+set(CMAKE_STATIC_LIBRARY_PREFIX "")
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-add_library(QC_DVE_CORE STATIC
-        source/ChileanFixedRateBond.cpp
-        source/FixedRateBond.cpp
-        source/FixedRateCashflow.cpp
-        source/FixedRateMultiCurrencyCashflow.cpp
-        source/IborCashflow.cpp
-        source/IcpClfCashflow.cpp
-        source/IcpClpCashflow.cpp
-        source/InterestRateIndex.cpp
-        source/Leg.cpp
-        source/LegFactory.cpp
-        source/QC30360.cpp
-        source/QCAct30.cpp
-        source/QCAct360.cpp
-        source/QCAct365.cpp
-        source/QCActAct.cpp
-        source/QCBusinessCalendar.cpp
-        source/QCClampedSpline.cpp
-        source/QCCompoundWf.cpp
-        source/QCContinousWf.cpp
-        source/QCDate.cpp
-        source/QCDiscountBondPayoff.cpp
-        source/QCFactoryFunctions.cpp
-        source/QCFixedRatePayoff.cpp
-        source/QCFloatingRatePayoff.cpp
-        source/QCFXForward.cpp
-        source/QCHelperFunctions.cpp
-        source/QCIcpClfPayoff.cpp
-        source/QCIcpClpPayoff.cpp
-        source/QCInterestRate.cpp
-        source/QCInterestRateBasisSwap.cpp
-        source/QCInterestRateLeg.cpp
-        source/QCInterestRatePayoff.cpp
-        source/QCInterestRatePeriodsFactory.cpp
-        source/QCInterpolator.cpp
-        source/QCLinearInterpolator.cpp
-        source/QCLinearWf.cpp
-        source/QCLogLinearInterpolator.cpp
-        source/QCProjectingInterestRateCurve.cpp
-        source/QCTest.cpp
-        source/QCTimeDepositPayoff.cpp
-        source/QCWealthFactor.cpp
-        source/QCZeroCouponCurve.cpp
-        source/QCZeroCouponDiscountFactorCurve.cpp
-        source/QCZeroCouponInterestRateCurve.cpp
-        source/QCZeroCurveBootstrappingFromRates.cpp
-        source/QCZeroCurveBootstrappingFromRatesAndFixedLegs.cpp
-        source/QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
-        source/QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
-        source/QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        source/SimpleCashflow.cpp
-        source/SimpleMultiCurrencyCashflow.cpp
-        source/Tenor.cpp
-        source/ZeroCouponCurve.cpp)
+if (APPLE)
+    set(PYTHON2_LIB /System/Library/Frameworks/Python.framework/Versions/Current/lib/)
+    set(PYTHON3_LIB /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/lib/)
+    set(BOOST_PYTHON2_LIB /usr/local/Cellar/boost-python/1.70.0/lib/)
+    set(BOOST_PYTHON3_LIB /usr/local/Cellar/boost-python3/1.70.0_1/lib/)
+elseif(WIN32)
+    set(PYTHON2_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python27/libs/)
+    set(PYTHON3_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python37/libs/)
+    set(BOOST_PYTHON_LIB C:/boost_1_70_0/stage/lib/)
+else()
+    set(PYTHON2_LIB /usr/lib64/)
+    set(PYTHON3_LIB /usr/local/lib/)
+    set(BOOST_PYTHON_LIB /usr/lib/)
+endif()
 
-add_executable(QC_DVE_CORE_TESTS
-        Tests/CatchMain.cpp
-        Tests/QCDateTests.cpp)
+add_library(QC_DVE_CORE STATIC "")
+target_compile_options(QC_DVE_CORE PRIVATE -fPIC)
+
+add_library(QC_DVE_PYBIND SHARED "")
+add_library(QC_Financial SHARED "")
+add_library(QC_Financial_3 SHARED "")
+
+add_executable(QC_DVE_CORE_TESTS)
+add_subdirectory(source)
+add_subdirectory(Tests)
+
+if (APPLE)
+    target_link_libraries(QC_DVE_PYBIND
+            ${PYTHON2_LIB}libpython2.7.dylib)
+
+    target_link_libraries(QC_Financial
+            ${PYTHON2_LIB}libpython2.7.dylib
+            ${BOOST_PYTHON2_LIB}libboost_python27-mt.dylib )
+
+    target_link_libraries(QC_Financial_3
+            ${PYTHON3_LIB}libpython3.7.dylib
+            ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
+
+elseif(WIN32)
+
+    target_link_libraries(QC_DVE_PYBIND
+            ${PYTHON2_LIB}python27.lib)
+
+    target_link_libraries(QC_Financial
+            ${PYTHON2_LIB}ython2.7.dylib
+            ${BOOST_PYTHON2_LIB}libboost_python27-mt.dylib )
+
+    target_link_libraries(QC_Financial_3
+            ${PYTHON3_LIB}libpython3.7.dylib
+            ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
+
+    target_link_libraries(QC_Financial_Pybind ${PYTHON3_LIB}libpython3.7.dylib)
+
+else()
+
+    target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
+    target_link_libraries(QC_DVE_PYBIND
+            ${PYTHON2_LIB}libpython2.7.so.1.0)
+
+    target_link_libraries(QC_Financial
+            ${PYTHON2_LIB}libpython2.7.so.1.0
+            ${BOOST_PYTHON_LIB}libboost_python27.so)
+
+    target_link_libraries(QC_Financial_3
+            ${PYTHON3_LIB}libpython3.7m.so.1.0
+            ${BOOST_PYTHON_LIB}libboost_python37.so)
+
+endif()
+
 
 target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

@@ -200,8 +200,8 @@ class QCDate
         long excelSerial() const;
 
         /*!
-         * Calcula el número de días reales entre otherDate y sí misma
-		 * Sera > 0 si otherDate es mayor que sí misma.
+         * Calcula el número de días reales entre otherDate y si misma
+		 * Será > 0 si otherDate es mayor que si misma.
          * @param otherDate
          * @return (long) número de días calculados
          */
