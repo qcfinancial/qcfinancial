@@ -57,8 +57,6 @@ elseif(WIN32)
             ${PYTHON3_LIB}libpython3.7.dylib
             ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
 
-    target_link_libraries(QC_Financial_Pybind ${PYTHON3_LIB}libpython3.7.dylib)
-
 else()
 
     target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
