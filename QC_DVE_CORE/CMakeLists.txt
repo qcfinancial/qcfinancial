@@ -55,13 +55,10 @@ elseif(WIN32)
             ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib )
 
     target_link_libraries(QC_Financial_3
-<<<<<<< HEAD
             ${PYTHON3_LIB}libpython37.lib
-            ${BOOST_PYTHON3_LIB}libboost_python37-vc120-mt-x64-1_70.lib)
-=======
+            ${BOOST_PYTHON3_LIB}libboost_python37-vc120-mt-x64-1_70.lib
             ${PYTHON3_LIB}libpython3.7.dylib
             ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
->>>>>>> 1f93a8ee8e1b9a1f67184420cdcd40f4fab07c66
 
 else()
 
