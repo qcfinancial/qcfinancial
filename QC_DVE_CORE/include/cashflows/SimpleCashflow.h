@@ -1,7 +1,7 @@
 #ifndef SIMPLECASHFLOW_H
 #define SIMPLECASHFLOW_H
 
-#include "Cashflows/Cashflow.h"
+#include "cashflows/Cashflow.h"
 
 namespace QCode
 {

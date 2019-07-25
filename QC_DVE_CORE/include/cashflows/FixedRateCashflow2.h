@@ -1,7 +1,7 @@
 #ifndef FIXEDRATECASHFLOW2_H
 #define FIXEDRATECASHFLOW2_H
 
-#include "Cashflows/LinearInterestRateCashflow.h"
+#include "cashflows/LinearInterestRateCashflow.h"
 #include "asset_classes/QCInterestRate.h"
 #include "asset_classes/QCCurrency.h"
 
@@ -39,6 +39,7 @@ namespace QCode
 				bool doesAmortize,
 				const QCInterestRate& rate,
 				std::shared_ptr<QCCurrency> currency);
+
 
 			virtual double amount() override;
 
@@ -151,7 +152,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double nominal(const QCDate& fecha) const;
+			virtual double nominal(const QCDate& fecha) const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getAmortization() const = 0;

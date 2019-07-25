@@ -4,7 +4,7 @@
 #include<tuple>
 #include<memory>
 
-#include "Cashflows/FixedRateCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
 #include "asset_classes/FXRateIndex.h"
 #include "TypeAliases.h"
 

@@ -15,12 +15,12 @@ public:
 	*
 	* @brief	Gets the description. In this case "Exp".
 	*
-	* @author	Alvaro Díaz V.
+	* @author	Alvaro Dï¿½az V.
 	* @date	28/09/2017
 	*
 	* @return	A std::string.
 	*/
-	virtual std::string description();
+	virtual std::string description() override;
 
 	~QCContinousWf();
 };

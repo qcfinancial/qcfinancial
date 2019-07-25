@@ -4,7 +4,7 @@
 #include<tuple>
 #include<memory>
 
-#include "Cashflows/Cashflow.h"
+#include "cashflows/Cashflow.h"
 #include "asset_classes/QCInterestRate.h"
 #include "asset_classes/QCAct360.h"
 #include "asset_classes/QCLinearWf.h"

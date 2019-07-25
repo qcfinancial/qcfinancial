@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "Cashflows/Cashflow.h"
-#include "Cashflows/LinearInterestRateCashflow.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/LinearInterestRateCashflow.h"
 #include "asset_classes/FXRateIndex.h"
 #include "TypeAliases.h"
 #include "asset_classes/QCCurrencyConverter.h"
@@ -84,7 +84,7 @@ namespace QCode
 				}
 			}
 
-			virtual shared_ptr<QCCurrency> getInitialCcy() const
+			virtual shared_ptr<QCCurrency> getInitialCcy() const override
 			{
 				return _cashflow->getInitialCcy();
 			}
@@ -124,7 +124,7 @@ namespace QCode
 				return _cashflow->getNominal();
 			}
 
-			virtual double nominal(const QCDate& fecha) const
+			virtual double nominal(const QCDate& fecha) const override
 			{
 				QCCurrencyConverter converter;
 				double valor = _fxRateIndexValues.at(fecha);

@@ -5,7 +5,7 @@
 #include<vector>
 #include<memory>
 
-#include "Cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClpCashflow.h"
 #include "asset_classes/QCInterestRate.h"
 #include "asset_classes/QCAct360.h"
 #include "asset_classes/QCLinearWf.h"

@@ -1,7 +1,7 @@
 #ifndef INTERESTRATECASHFLOW_H
 #define INTERESTRATECASHFLOW_H
 
-#include "Cashflows/Cashflow.h"
+#include "cashflows/Cashflow.h"
 #include "time/QCDate.h"
 #include "TypeAliases.h"
 

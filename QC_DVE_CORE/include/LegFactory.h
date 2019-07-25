@@ -3,8 +3,8 @@
 
 #include<memory>
 
-#include "Cashflows/Cashflow.h"
-#include "Cashflows/FixedRateCashflow.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/FixedRateCashflow.h"
 #include "Leg.h"
 #include "asset_classes/InterestRateIndex.h"
 #include "asset_classes/FXRateIndex.h"

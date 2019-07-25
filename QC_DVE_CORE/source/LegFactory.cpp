@@ -3,13 +3,13 @@
 #include<tuple>
 
 #include "LegFactory.h"
-#include "Cashflows/FixedRateCashflow.h"
-#include "Cashflows/FixedRateCashflow2.h"
-#include "Cashflows/FixedRateMultiCurrencyCashflow.h"
-#include "Cashflows/IborCashflow.h"
-#include "Cashflows/IborMultiCurrencyCashflow.h"
-#include "Cashflows/IcpClpCashflow.h"
-#include "Cashflows/IcpClfCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
+#include "cashflows/FixedRateCashflow2.h"
+#include "cashflows/FixedRateMultiCurrencyCashflow.h"
+#include "cashflows/IborCashflow.h"
+#include "cashflows/IborMultiCurrencyCashflow.h"
+#include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClfCashflow.h"
 
 #include "QCInterestRatePeriodsFactory.h"
 

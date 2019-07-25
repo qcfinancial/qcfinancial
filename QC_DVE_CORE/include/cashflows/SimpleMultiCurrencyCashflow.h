@@ -1,7 +1,7 @@
 #ifndef SIMPLEMULTICURRENCYCASHFLOW_H
 #define SIMPLEMULTICURRENCYCASHFLOW_H
 
-#include "Cashflows/SimpleCashflow.h"
+#include "cashflows/SimpleCashflow.h"
 #include "asset_classes/FXRateIndex.h"
 
 namespace QCode

@@ -5,7 +5,7 @@
 #include<memory>
 #include<string>
 
-#include "Cashflows/Cashflow.h"
+#include "cashflows/Cashflow.h"
 #include "time/QCDate.h"
 #include "asset_classes/QCInterestRate.h"
 #include "asset_classes/QCCurrency.h"

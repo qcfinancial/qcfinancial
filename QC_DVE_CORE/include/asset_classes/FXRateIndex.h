@@ -15,16 +15,9 @@ namespace QCode
 {
 	namespace Financial
 	{
-
-
 		class FXRateIndex : public FinancialIndex
 		{
 		public:
-			static std::shared_ptr<FXRateIndex> getFxRateIndex(std::string indexCode, std::string fxRateCode)
-			{
-
-			}
-
 			FXRateIndex(std::shared_ptr<FXRate> fxRate,
 						std::string code,
 						Tenor fixingRule,

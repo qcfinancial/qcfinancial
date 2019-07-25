@@ -31,16 +31,19 @@ namespace QCode
 			_fixingDates.at(0) = _startDate;
 		}
 
+
 		shared_ptr<QCCurrency> FixedRateCashflow2::getInitialCcy() const
 		{
 			return _currency;
 		}
+
 
 		double FixedRateCashflow2::_calculateInterest(const QCDate& fecha)
 		{
 			auto fecha1 = fecha;
 			return _nominal * (_rate.wf(_startDate, fecha1) - 1.0);
 		}
+
 
 		double FixedRateCashflow2::amount()
 		{
@@ -52,50 +55,60 @@ namespace QCode
 			return  amort + _calculateInterest(_endDate);
 		}
 
+
 		shared_ptr<QCCurrency> FixedRateCashflow2::ccy()
 		{
 			return _currency;
 		}
+
 
 		QCDate FixedRateCashflow2::date()
 		{
 			return _settlementDate;
 		}
 
+
 		const QCDate& FixedRateCashflow2::getStartDate() const
 		{
 			return _startDate;
 		}
+
 
 		const QCDate& FixedRateCashflow2::getEndDate() const
 		{
 			return _endDate;
 		}
 
+
 		const QCDate& FixedRateCashflow2::getSettlementDate() const
 		{
 			return _settlementDate;
 		}
+
 
 		const DateList& FixedRateCashflow2::getFixingDates() const
 		{
 			return _fixingDates;
 		}
 
+
 		double FixedRateCashflow2::getNominal() const
 		{
 			return _nominal;
 		}
+
 
 		double FixedRateCashflow2::nominal(const QCDate& fecha) const
 		{
 			return _nominal;
 		}
 
+
 		double FixedRateCashflow2::getAmortization() const
 		{
 			return _amortization;
 		}
+
 
 		double FixedRateCashflow2::amortization() const
 		{
@@ -103,29 +116,34 @@ namespace QCode
 			return result;
 		}
 
+
 		double FixedRateCashflow2::interest()
 		{
 			return _calculateInterest(_endDate);
 		}
+
 
 		double FixedRateCashflow2::interest(const TimeSeries& fixings)
 		{
 			return interest();
 		}
 
+
 		double FixedRateCashflow2::fixing()
 		{
 			return _rate.getValue();
 		}
 
+
 		double FixedRateCashflow2::fixing(const TimeSeries& fixings)
 		{
-			return _rate.getValue();
+			return fixing();
 		}
+
 
 		double FixedRateCashflow2::accruedInterest(const QCDate& valueDate)
 		{
-			if (Cashflow::isExpired(valueDate) || valueDate < _startDate)
+			if (valueDate < _startDate || _endDate >= valueDate)
 			{
 				return 0.0;
 			}
@@ -133,10 +151,12 @@ namespace QCode
 			return _nominal * (_rate.wf(_startDate, temp) - 1.0);
 		}
 
+
 		double FixedRateCashflow2::accruedInterest(const QCDate& valueDate, const TimeSeries& fixings)
 		{
 			return accruedInterest(valueDate);
 		}
+
 
 		double FixedRateCashflow2::accruedFixing(const QCDate& fecha)
 		{
@@ -145,13 +165,15 @@ namespace QCode
 
 		double FixedRateCashflow2::accruedFixing(const QCDate& fecha, const TimeSeries& fixings)
 		{
-			return _rate.getValue();
+			return accruedFixing(fecha);
 		}
+
 
 		bool FixedRateCashflow2::doesAmortize() const
 		{
 			return _doesAmortize;
 		}
+
 
 		bool FixedRateCashflow2::_validate()
 		{
@@ -178,6 +200,7 @@ namespace QCode
 			return result;
 		}
 
+
 		shared_ptr<FixedRateCashflowWrapper> FixedRateCashflow2::wrap()
 		{
 			FixedRateCashflowWrapper tup = std::make_tuple(_startDate,
@@ -193,11 +216,13 @@ namespace QCode
 			return std::make_shared<FixedRateCashflowWrapper>(tup);
 		}
 
+
 		double FixedRateCashflow2::getInterestRateValue() const
 		{
 			auto tasa = _rate;
 			return tasa.getValue();
 		}
+
 
 		std::string FixedRateCashflow2::getInterestRateType() const
 		{
@@ -206,6 +231,7 @@ namespace QCode
 			auto wf = tasa.getWealthFactor()->description();
 			return wf + yf;
 		}
+
 
 		FixedRateCashflow2::~FixedRateCashflow2()
 		{

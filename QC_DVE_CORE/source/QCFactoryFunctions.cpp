@@ -156,30 +156,35 @@ shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(vector<long>
 		interpol = make_shared<QCLinearInterpolator>(crvPtr);
 	}
 
-	//definir un interest rate y meterlo al constructor
+	// Definir un interest rate y meterlo al constructor
 	shared_ptr<QCYearFraction> yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
 	shared_ptr<QCWealthFactor> wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
 	QCInterestRate intRate{ 0, yfShrdPtr, wfShrdPtr };
+
 	if (typeCurve == QCInterestRateCurve::qcProjectingCurve)
 	{
 		auto result = make_shared<QCProjectingInterestRateCurve>(
 			QCProjectingInterestRateCurve{ interpol, intRate });
 		return result;
 	}
-
-	if (typeCurve == QCInterestRateCurve::qcZeroCouponCurve)
+	else if (typeCurve == QCInterestRateCurve::qcZeroCouponCurve)
 	{
 		auto result = make_shared<QCZeroCouponInterestRateCurve>(
 			QCZeroCouponInterestRateCurve{ interpol, intRate });
 		return result;
 	}
-	
-	if (typeCurve == QCInterestRateCurve::qcDiscountFactorCurve)
+	else if (typeCurve == QCInterestRateCurve::qcDiscountFactorCurve)
 	{
 		auto result = make_shared<QCZeroCouponDiscountFactorCurve>(
 			QCZeroCouponDiscountFactorCurve{ interpol, intRate });
 		return result;
 	}
+	else
+    {
+        auto result = make_shared<QCZeroCouponInterestRateCurve>(
+                QCZeroCouponInterestRateCurve{ interpol, intRate });
+        return result;
+    }
 }
 
 QCIntRtCrvShrdPtr QCFactoryFunctions::discFctrCrvShrdPtr(vector<long>& tenors, vector<double>& dfs,

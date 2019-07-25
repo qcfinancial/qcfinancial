@@ -4,8 +4,8 @@
 #include<memory>
 #include<vector>
 
-#include "Cashflows/Cashflow.h"
-#include "Cashflows/FixedRateCashflow.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/FixedRateCashflow.h"
 
 namespace QCode
 {
