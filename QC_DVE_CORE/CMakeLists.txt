@@ -23,7 +23,8 @@ if (APPLE)
     set(BOOST_PYTHON3_LIB /usr/local/Cellar/boost-python3/1.70.0_1/lib/)
 elseif(WIN32)
     target_compile_options(QC_Financial PRIVATE /bigobj)
-    set(PYTHON2_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python27-16/libs/)
+    target_compile_options(QC_Financial_3 PRIVATE /bigobj)
+    set(PYTHON2_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python27/libs/)
     set(PYTHON3_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python37/libs/)
     set(BOOST_PYTHON_LIB C:/boost_1_70_0/stage/lib/)
 else()
@@ -48,20 +49,16 @@ if (APPLE)
 elseif(WIN32)
 
     target_link_libraries(QC_DVE_PYBIND
-            ${PYTHON2_LIB}python27.dll)
+            ${PYTHON2_LIB}python27.lib)
 
     target_link_libraries(QC_Financial
-            ${PYTHON2_LIB}python27.dll
+            ${PYTHON2_LIB}python27.lib
             ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib )
 
     target_link_libraries(QC_Financial_3
-            ${PYTHON3_LIB}libpython37.lib
-            ${BOOST_PYTHON3_LIB}libboost_python37-vc120-mt-x64-1_70.lib
-            ${PYTHON3_LIB}libpython3.7.dylib
-            ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
-
+            ${PYTHON3_LIB}python37.lib
+            ${BOOST_PYTHON_LIB}libboost_python37-vc120-mt-x64-1_70.lib)
 else()
-
     target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
     target_link_libraries(QC_DVE_PYBIND
             ${PYTHON2_LIB}libpython2.7.so.1.0)

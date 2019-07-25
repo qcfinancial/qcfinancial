@@ -4,8 +4,8 @@
 #include<memory>
 #include<vector>
 
-#include "Cashflow.h"
-#include "FixedRateCashflow.h"
+#include "Cashflows/Cashflow.h"
+#include "Cashflows/FixedRateCashflow.h"
 
 namespace QCode
 {
@@ -18,7 +18,7 @@ namespace QCode
 		 *
 		 * @brief	Wrapper class that provides the basis for an arbitrary leg of a financial product .
 		 *
-		 * @author	Alvaro Díaz V.
+		 * @author	Alvaro Dï¿½az V.
 		 * @date	07/07/2018
 		 */
 		class Leg
@@ -30,7 +30,7 @@ namespace QCode
 			 *
 			 * @brief	Default constructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 */
 			Leg();
@@ -40,7 +40,7 @@ namespace QCode
 			 *
 			 * @brief	Gets cashflow at position. Position must be between 0 and number of cashflows - 1.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	pos	The position of the cashflow.
@@ -54,7 +54,7 @@ namespace QCode
 			 *
 			 * @brief	Sets cashflow at the specified position.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	cashflow	The cashflow.
@@ -67,7 +67,7 @@ namespace QCode
 			 *
 			 * @brief	Appends a cashflow (at the last position).
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	cashflow	The cashflow.
@@ -79,7 +79,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the size of the leg (number of cashflows).
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @return	A size_t.
@@ -91,7 +91,7 @@ namespace QCode
 			 *
 			 * @brief	Resizes the Leg given the new size
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 *
 			 * @param	newSize	Size of the new.
@@ -103,7 +103,7 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	07/07/2018
 			 */
 			virtual ~Leg();

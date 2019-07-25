@@ -5,9 +5,9 @@
 #include <string>
 #include <tuple>
 
-#include "QCDate.h"
-#include "QCInterestRate.h"
-#include "QCCurrency.h"
+#include "time/QCDate.h"
+#include "asset_classes/QCInterestRate.h"
+#include "asset_classes/QCCurrency.h"
 
 namespace QCode
 {
