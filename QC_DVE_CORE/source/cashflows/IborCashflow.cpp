@@ -39,6 +39,7 @@ namespace QCode
             _calculateInterest();
         }
 
+
         double IborCashflow::amount()
         {
             double amort{ 0.0 };
@@ -49,60 +50,72 @@ namespace QCode
             return  amort + _interest;
         }
 
+
         shared_ptr<QCCurrency> IborCashflow::ccy()
         {
             return _currency;
         }
+
 
         QCDate IborCashflow::date()
         {
             return _settlementDate;
         }
 
+
         QCDate IborCashflow::getStartDate() const
         {
             return _startDate;
         }
+
 
         QCDate IborCashflow::getEndDate() const
         {
             return _endDate;
         }
 
+
         QCDate IborCashflow::getFixingDate() const
         {
             return _fixingDate;
         }
+
 
         QCDate IborCashflow::getIndexStartDate()
         {
             return _index->getStartDate(_fixingDate);
         }
 
+
         QCDate IborCashflow::getIndexEndDate()
         {
             return _index->getEndDate(_fixingDate);
         }
+
 
         void IborCashflow::setNominal(double nominal)
         {
             _nominal = nominal;
         }
 
+
         double IborCashflow::getNominal() const
         {
             return _nominal;
         }
+
 
         void IborCashflow::setAmortization(double amortization)
         {
             _amortization = amortization;
         }
 
+
         double IborCashflow::getAmortization() const
         {
             return _amortization;
         }
+
 
         void IborCashflow::setInterestRateValue(double value)
         {
@@ -111,10 +124,12 @@ namespace QCode
             _calculateInterest();
         }
 
+
         double IborCashflow::getInterestRateValue() const
         {
             return _rateValue;
         }
+
 
         double IborCashflow::accruedInterest(const QCDate& valueDate)
         {
@@ -129,6 +144,7 @@ namespace QCode
             _index->setRateValue(indexValue);
             return result;
         }
+
 
         shared_ptr<IborCashflowWrapper> IborCashflow::wrap()
         {
@@ -151,6 +167,7 @@ namespace QCode
             return std::make_shared<IborCashflowWrapper>(tup);
         }
 
+
         void IborCashflow::_calculateInterest()
         {
             _index->setRateValue(_rateValue * _gearing + _spread);
@@ -161,6 +178,7 @@ namespace QCode
             _interest = _nominal * (_index->getRate().wf(_startDate, _endDate) - 1.0);
             _index->setRateValue(_rateValue);
         }
+
 
         bool IborCashflow::_validate()
         {
@@ -186,6 +204,7 @@ namespace QCode
             }
             return result;
         }
+
 
         IborCashflow::~IborCashflow()
         {

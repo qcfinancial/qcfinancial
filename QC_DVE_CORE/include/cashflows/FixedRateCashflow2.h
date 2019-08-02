@@ -80,16 +80,19 @@ namespace QCode
 			*/
 			QCDate date() override;
 
-			/**
-			* @fn	virtual const QCDate& LinearInterestRateCashflow::getStartDate() const = 0;
-			*
-			* @brief	Gets the start date. It corresponds to the first date used when calculating interest.
-			*
-			* @author	A Diaz V
-			* @date	19-03-2019
-			*
-			* @returns	The start date.
-			*/
+
+            std::string getType() const override;
+
+            /**
+            * @fn	virtual const QCDate& LinearInterestRateCashflow::getStartDate() const = 0;
+            *
+            * @brief	Gets the start date. It corresponds to the first date used when calculating interest.
+            *
+            * @author	A Diaz V
+            * @date	19-03-2019
+            *
+            * @returns	The start date.
+            */
 			virtual const QCDate& getStartDate() const override;
 
 			/**
@@ -365,7 +368,7 @@ namespace QCode
 			QCDate _settlementDate;
 
 
-			/** @brief	List of dates corresponding to ficing dates. In this case only contains start date */
+			/** @brief	List of dates corresponding to fixing dates. In this case only contains start date */
 			vector<QCDate> _fixingDates;
 
 			/** @brief	The nominal */

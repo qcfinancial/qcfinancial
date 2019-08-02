@@ -150,6 +150,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/FixedRateCashflow2.cpp
         cashflows/FixedRateMultiCurrencyCashflow.cpp
         cashflows/IborCashflow.cpp
+        cashflows/IborCashflow2.cpp
         cashflows/IborMultiCurrencyCashflow.cpp
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
