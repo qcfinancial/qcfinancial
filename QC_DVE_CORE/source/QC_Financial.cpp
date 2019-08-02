@@ -10,51 +10,51 @@
 #include<string>
 #include <tuple>
 
-#include "QCCurrency.h"
-#include "QCYearFraction.h"
-#include "QCDate.h"
-#include "QCAct360.h"
-#include "QCAct365.h"
-#include "QC30360.h"
-#include "QCAct30.h"
-#include "QC3030.h"
-#include "QCWealthFactor.h"
-#include "QCLinearWf.h"
-#include "QCCompoundWf.h"
-#include "QCContinousWf.h"
-#include "QCInterestRate.h"
-#include "QCBusinessCalendar.h"
+#include "asset_classes/QCCurrency.h"
+#include "asset_classes/QCYearFraction.h"
+#include "time/QCDate.h"
+#include "asset_classes/QCAct360.h"
+#include "asset_classes/QCAct365.h"
+#include "asset_classes/QC30360.h"
+#include "asset_classes/QCAct30.h"
+#include "asset_classes/QC3030.h"
+#include "asset_classes/QCWealthFactor.h"
+#include "asset_classes/QCLinearWf.h"
+#include "asset_classes/QCCompoundWf.h"
+#include "asset_classes/QCContinousWf.h"
+#include "asset_classes/QCInterestRate.h"
+#include "time/QCBusinessCalendar.h"
 #include "QCInterestRateLeg.h"
-#include "QCCurve.h"
-#include "QCInterpolator.h"
-#include "QCLinearInterpolator.h"
-#include "QCCurrencyConverter.h"
+#include "curves/QCCurve.h"
+#include "curves/QCInterpolator.h"
+#include "curves/QCLinearInterpolator.h"
+#include "asset_classes/QCCurrencyConverter.h"
 
-#include "Cashflow.h"
-#include "LinearInterestRateCashflow.h"
-#include "FixedRateCashflow.h"
-#include "FixedRateMultiCurrencyCashflow.h"
-#include "IborCashflow.h"
-#include "SimpleCashflow.h"
-#include "IcpClpCashflow.h"
-#include "IcpClfCashflow.h"
-#include "InterestRateIndex.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/LinearInterestRateCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
+#include "cashflows/FixedRateMultiCurrencyCashflow.h"
+#include "cashflows/IborCashflow.h"
+#include "cashflows/SimpleCashflow.h"
+#include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClfCashflow.h"
+#include "asset_classes/InterestRateIndex.h"
 #include "LegFactory.h"
-#include "Tenor.h"
+#include "asset_classes/Tenor.h"
 #include "Leg.h"
-#include "AssetFactory.h"
-#include "FXRate.h"
-#include "IndexFactory.h"
-#include "FXRateIndex.h"
-#include "InterestRateCurve.h"
-#include "PresentValue.h"
+#include "asset_classes/AssetFactory.h"
+#include "asset_classes/FXRate.h"
+#include "asset_classes/IndexFactory.h"
+#include "asset_classes/FXRateIndex.h"
+#include "asset_classes/InterestRateCurve.h"
+#include "present_value/PresentValue.h"
 #include "FixedRateBond.h"
 #include "ChileanFixedRateBond.h"
-#include "ForwardRates.h"
+#include "present_value/ForwardRates.h"
 #include "TypeAliases.h"
-#include "Quanto.h"
+#include "cashflows/Quanto.h"
 
-#include "FixedRateCashflow2.h"
+#include "cashflows/FixedRateCashflow2.h"
 
 #include "Wrappers.h"
 
@@ -354,17 +354,24 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("wrap", &qf::FixedRateCashflow2::wrap)
         ;
 
-        class_<qf::FixedRateCashflowWrapper, std::shared_ptr<qf::FixedRateCashflowWrapper>>("FixedRateCashflowWrapper", no_init)
-        .def("start_date", wrappers::startDate)
-        .def("end_date", wrappers::endDate)
-        .def("settlement_date", wrappers::settlementDate)
-        .def("nominal", wrappers::nominal)
-        .def("amortization", wrappers::amortization)
-        .def("interest", wrappers::interest)
-        .def("does_amortize", wrappers::doesAmortize)
-        .def("currency", wrappers::currency)
-        .def("interest_rate", wrappers::interestRate)
-        ;
+        PyObject* (*show7)(qf::FixedRateCashflow2) = wrappers::show;
+        def("show", show7);
+
+        PyObject* (*show71)(std::shared_ptr<qf::FixedRateCashflow2>) = wrappers::show;
+        def("show", show71);
+
+
+//        class_<qf::FixedRateCashflowWrapper, std::shared_ptr<qf::FixedRateCashflowWrapper>>("FixedRateCashflowWrapper", no_init)
+//        .def("start_date", wrappers::startDate)
+//        .def("end_date", wrappers::endDate)
+//        .def("settlement_date", wrappers::settlementDate)
+//        .def("nominal", wrappers::nominal)
+//        .def("amortization", wrappers::amortization)
+//        .def("interest", wrappers::interest)
+//        .def("does_amortize", wrappers::doesAmortize)
+//        .def("currency", wrappers::currency)
+//        .def("interest_rate", wrappers::interestRate)
+//        ;
 
 
         implicitly_convertible<std::shared_ptr<qf::FixedRateCashflow>, std::shared_ptr<qf::Cashflow>>();
@@ -420,6 +427,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("get_settlement_date", &qf::FixedRateCashflow::date)
         .def("get_start_date", &qf::FixedRateCashflow::getStartDate)
         .def("get_end_date", &qf::FixedRateCashflow::getEndDate)
+        .def("get_rate", &qf::FixedRateCashflow::getRate, return_value_policy<reference_existing_object>())
         .def("wrap", &qf::FixedRateCashflow::wrap)
         .def("set_nominal", &qf::FixedRateCashflow::setNominal)
         .def("get_nominal", &qf::FixedRateCashflow::getNominal)

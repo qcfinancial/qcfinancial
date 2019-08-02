@@ -1,4 +1,4 @@
-#include "QCProjectingInterestRateCurve.h"
+#include "curves/QCProjectingInterestRateCurve.h"
 
 
 QCProjectingInterestRateCurve::QCProjectingInterestRateCurve(shared_ptr<QCInterpolator> curve,

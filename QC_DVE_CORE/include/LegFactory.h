@@ -3,16 +3,16 @@
 
 #include<memory>
 
-#include "Cashflow.h"
-#include "FixedRateCashflow.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/FixedRateCashflow.h"
 #include "Leg.h"
-#include "InterestRateIndex.h"
-#include "FXRateIndex.h"
-#include "Tenor.h"
+#include "asset_classes/InterestRateIndex.h"
+#include "asset_classes/FXRateIndex.h"
+#include "asset_classes/Tenor.h"
 
 #include "QCInterestRateLeg.h"
-#include "QCBusinessCalendar.h"
-#include "QCInterestRate.h"
+#include "time/QCBusinessCalendar.h"
+#include "asset_classes/QCInterestRate.h"
 
 namespace QCode
 {

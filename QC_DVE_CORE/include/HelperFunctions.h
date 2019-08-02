@@ -1,7 +1,7 @@
 #ifndef HELPERFUNCTIONS_H
 #define HELPERFUNCTIONS_H
 
-#include "QCDate.h"
+#include "time/QCDate.h"
 #include "TypeAliases.h"
 
 namespace QCode

@@ -6,10 +6,10 @@
 #include <array>
 
 #include "QCDefinitions.h"
-#include "QCDate.h"
+#include "time/QCDate.h"
 #include "QCInterestRateLeg.h"
 #include "QCZeroCouponCurve.h"
-#include "QCInterestRate.h"
+#include "asset_classes/QCInterestRate.h"
 
 /*!
 * @brief QCInterestRatePayoff define una interfaz general para estructura de flujos de caja

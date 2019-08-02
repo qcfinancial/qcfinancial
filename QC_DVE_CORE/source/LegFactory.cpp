@@ -3,13 +3,13 @@
 #include<tuple>
 
 #include "LegFactory.h"
-#include "FixedRateCashflow.h"
-#include "FixedRateCashflow2.h"
-#include "FixedRateMultiCurrencyCashflow.h"
-#include "IborCashflow.h"
-#include "IborMultiCurrencyCashflow.h"
-#include "IcpClpCashflow.h"
-#include "IcpClfCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
+#include "cashflows/FixedRateCashflow2.h"
+#include "cashflows/FixedRateMultiCurrencyCashflow.h"
+#include "cashflows/IborCashflow.h"
+#include "cashflows/IborMultiCurrencyCashflow.h"
+#include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClfCashflow.h"
 
 #include "QCInterestRatePeriodsFactory.h"
 
@@ -499,7 +499,7 @@ namespace QCode
 											   CustomNotionalAmort notionalAndAmort,
 											   TypeOfCashflow typeOfCashflow)
 		{
-			// Ahora modificar nominal y amortización en el objeto Leg recién construido.
+			// Ahora modificar nominal y amortizaciï¿½n en el objeto Leg reciï¿½n construido.
 			size_t notionalAndAmortSize = notionalAndAmort.getSize();
 			size_t legSize = leg.size();
 			if (legSize == 0)

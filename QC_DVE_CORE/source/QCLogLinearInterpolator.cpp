@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "QCLogLinearInterpolator.h"
+#include "curves/QCLogLinearInterpolator.h"
 
 QCLogLinearInterpolator::QCLogLinearInterpolator(shared_ptr<QCCurve<long>> curve) :
 QCInterpolator(curve)

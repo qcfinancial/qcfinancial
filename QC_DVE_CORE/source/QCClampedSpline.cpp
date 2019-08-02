@@ -1,4 +1,4 @@
-#include "QCClampedSpline.h"
+#include "curves/QCClampedSpline.h"
 #include <math.h>
 
 double QCClampedSpline::interpolateAt(long value)
