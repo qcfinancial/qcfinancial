@@ -68,7 +68,13 @@ namespace QCode
 		}
 
 
-		const QCDate& FixedRateCashflow2::getStartDate() const
+        std::string FixedRateCashflow2::getType() const
+        {
+            return "FIXED_RATE";
+        }
+
+
+        const QCDate& FixedRateCashflow2::getStartDate() const
 		{
 			return _startDate;
 		}
@@ -143,7 +149,7 @@ namespace QCode
 
 		double FixedRateCashflow2::accruedInterest(const QCDate& valueDate)
 		{
-			if (valueDate < _startDate || _endDate >= valueDate)
+			if (valueDate < _startDate || _endDate <= valueDate)
 			{
 				return 0.0;
 			}
@@ -162,6 +168,7 @@ namespace QCode
 		{
 			return _rate.getValue();
 		}
+
 
 		double FixedRateCashflow2::accruedFixing(const QCDate& fecha, const TimeSeries& fixings)
 		{
@@ -236,5 +243,5 @@ namespace QCode
 		FixedRateCashflow2::~FixedRateCashflow2()
 		{
 		}
-	}
+    }
 }

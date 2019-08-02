@@ -191,21 +191,22 @@ public:
 	 *
 	 * @return	A double.
 	 */
-	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, QCode::Financial::FXRateIndex& fxRateIndex)
-	{
-		if (fxRateIndex.strongCcyCode() == currency->getIsoCode() )
-		{
-			return amount * fxRateValue;
-		}
-		else if (fxRateIndex.weakCcyCode() == currency->getIsoCode())
-		{
-			return amount / fxRateValue;
-		}
-		else
-		{
-			throw invalid_argument("Fx Rate for conversion does not apply to this currency.");
-		}
-	}
+//	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue,
+//	        QCode::Financial::FXRateIndex& fxRateIndex)
+//	{
+//		if (fxRateIndex.strongCcyCode() == currency->getIsoCode() )
+//		{
+//			return amount * fxRateValue;
+//		}
+//		else if (fxRateIndex.weakCcyCode() == currency->getIsoCode())
+//		{
+//			return amount / fxRateValue;
+//		}
+//		else
+//		{
+//			throw invalid_argument("Fx Rate for conversion does not apply to this currency.");
+//		}
+//	}
 
 	/**
 	 * @fn	double QCCurrencyConverter::convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, const QCode::Financial::FXRateIndex& fxRateIndex)
@@ -224,7 +225,8 @@ public:
 	 *
 	 * @returns	A double.
 	 */
-	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, const QCode::Financial::FXRateIndex& fxRateIndex)
+	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue,
+	        QCode::Financial::FXRateIndex fxRateIndex)
 	{
 		if (fxRateIndex.strongCcyCode() == currency->getIsoCode())
 		{

@@ -21,6 +21,8 @@ namespace QCode
 		{
 		public:
 
+		    virtual std::string getType() const = 0;
+
 			/**
 			 * @fn	virtual std::shared_ptr<QCCurrency> LinearInterestRateCashflow::getInitialCcy() const = 0;
 			 *

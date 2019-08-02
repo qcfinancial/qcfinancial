@@ -72,7 +72,8 @@ namespace QCode
 			*/
 			virtual QCDate date() = 0;
 
-			/**
+
+             /**
 			* @fn	bool Cashflow::isExpired(const QCDate& refDate)
 			*
 			* @brief	Query if the cashflow is expired with respect to 'refDate'.
@@ -84,7 +85,7 @@ namespace QCode
 			*
 			* @return	True if expired, false if not.
 			*/
-			bool isExpired(const QCDate& refDate)
+             virtual bool isExpired(const QCDate& refDate)
 			{
 				return refDate > date();
 			}

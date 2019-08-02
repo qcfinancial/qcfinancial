@@ -21,12 +21,14 @@ QCDate::QCDate() : _day(12), _month(1), _year(1969)
 {
 }
 
+
 QCDate::QCDate(const QCDate& otherDate)
 {
     _day = otherDate.day();
     _month = otherDate.month();
     _year = otherDate.year();
 }
+
 
 QCDate::QCDate(int d, int m, int y)
 {
@@ -42,6 +44,7 @@ QCDate::QCDate(int d, int m, int y)
         throw invalid_argument("Invalid day, month and year");
     }
 }
+
 
 QCDate::QCDate(string& stringDate)
 {
@@ -72,10 +75,12 @@ QCDate::QCDate(string& stringDate)
 
 }
 
+
 QCDate::QCDate(long excelSerial)
 {
     setDateFromExcelSerial(excelSerial);
 }
+
 
 void QCDate::setDateFromExcelSerial(long excelSerial)
 {
@@ -110,6 +115,7 @@ void QCDate::setDateFromExcelSerial(long excelSerial)
 
     return;
 }
+
 
 bool QCDate::_validate(int d, int m, int y)
 {
@@ -155,6 +161,7 @@ bool QCDate::_validate(int d, int m, int y)
     return true;
 }
 
+
 void QCDate::setDay(int d)
 {
     if (_validate(d, _month, _year))
@@ -167,6 +174,7 @@ void QCDate::setDay(int d)
         throw invalid_argument("Invalid day");
     }
 }
+
 
 void QCDate::setMonth(int m)
 {
@@ -181,6 +189,7 @@ void QCDate::setMonth(int m)
     }
 }
 
+
 void QCDate::setYear(int y)
 {
     if (_validate(_day, _month, y))
@@ -194,20 +203,24 @@ void QCDate::setYear(int y)
     }
 }
 
+
 int QCDate::day() const
 {
     return _day;
 }
+
 
 int QCDate::month() const
 {
     return _month;
 }
 
+
 int QCDate::year() const
 {
     return _year;
 }
+
 
 long QCDate::excelSerial() const
 {
@@ -234,6 +247,7 @@ long QCDate::excelSerial() const
     return nSerialDate;
 }
 
+
 QCDate::QCWeekDay QCDate::weekDay() const
 {
     static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
@@ -241,6 +255,7 @@ QCDate::QCWeekDay QCDate::weekDay() const
     //_year -= _month < 3;
     return QCWeekDay((auxYear + auxYear/4 - auxYear/100 + auxYear/400 + t[_month-1] + _day) % 7);
 }
+
 
 std::string QCDate::description(bool dmy) const
 {
@@ -259,6 +274,7 @@ std::string QCDate::description(bool dmy) const
 	}
     return ss.str();
 }
+
 
 QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
 {
@@ -372,11 +388,13 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 	return result;
 }
 
+
 QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
 {
 	auto derefCal = *calendar;
 	return businessDay(derefCal, rule);
 }
+
 
 QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	QCDate::QCBusDayAdjRules direction) const
@@ -405,6 +423,7 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 	return result;
 }
 
+
 QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	QCDate::QCBusDayAdjRules direction) const
 {
@@ -427,6 +446,7 @@ QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	}
 	return result;
 }
+
 
 QCDate QCDate::addMonths(int nMonths) const
 {
@@ -488,10 +508,12 @@ QCDate QCDate::addMonths(int nMonths) const
     return QCDate {d, m, y};
 }
 
+
 long QCDate::dayDiff(const QCDate& otherDate) const
 {
     return otherDate.excelSerial() - this->excelSerial();
 }
+
 
 tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
@@ -517,6 +539,7 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	return make_tuple(counter, (int)lastDate.dayDiff(otherDateAdjusted));
 
 }
+
 
 tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 	shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
@@ -544,11 +567,13 @@ tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
 
 }
 
+
 QCDate QCDate::addDays(long nDays) const
 {
     long newSerial = this->excelSerial() + nDays;
     return QCDate {newSerial};
 }
+
 
 QCDate QCDate::addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
 	QCDate::QCBusDayAdjRules direction) const
@@ -567,6 +592,7 @@ QCDate QCDate::addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
 	//cout << "result: " << result.description() << endl;
 	return result;
 }
+
 
 QCDate QCDate::moveToDayOfMonth(unsigned int dayOfMonth, QCDate::QCDirection direction,
 	bool stopAtEndOfMonth) const
@@ -598,6 +624,7 @@ QCDate QCDate::moveToDayOfMonth(unsigned int dayOfMonth, QCDate::QCDirection dir
 	return result;
 }
 
+
 bool QCDate::isEndOfMonth() const
 {
 	if (this->addDays(1).month() != this->month())
@@ -610,35 +637,42 @@ bool QCDate::isEndOfMonth() const
 	}
 }
 
+
 bool QCDate::operator<(const QCDate& rhs) const
 {
     return this->excelSerial() < rhs.excelSerial();
 }
+
 
 bool QCDate::operator>(const QCDate& rhs) const
 {
     return this->excelSerial() > rhs.excelSerial();
 }
 
+
 bool QCDate::operator<=(const QCDate& rhs) const
 {
     return this->excelSerial() <= rhs.excelSerial();
 }
+
 
 bool QCDate::operator>=(const QCDate& rhs) const
 {
     return this->excelSerial() >= rhs.excelSerial();
 }
 
+
 bool QCDate::operator==(const QCDate& rhs) const
 {
     return this->excelSerial() == rhs.excelSerial();
 }
 
+
 bool QCDate::operator!=(const QCDate& rhs) const
 {
     return this->excelSerial() != rhs.excelSerial();
 }
+
 
 void QCDate::operator=(const QCDate& otherDate)
 {
@@ -646,6 +680,7 @@ void QCDate::operator=(const QCDate& otherDate)
     _month = otherDate.month();
     _year = otherDate.year();
 }
+
 
 void QCDate::setDayMonthYear(int d, int m, int y)
 {
@@ -661,6 +696,7 @@ void QCDate::setDayMonthYear(int d, int m, int y)
         throw invalid_argument("Invalid day, month and year");
     };
 }
+
 
 std::ostream& operator<<(std::ostream& ostr, const QCDate& date)
 {

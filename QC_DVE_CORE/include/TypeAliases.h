@@ -68,4 +68,4 @@ namespace QCode
 	}
 }
 
-#endif //TYPEALIASES_H
+#endif // TYPEALIASES_H
