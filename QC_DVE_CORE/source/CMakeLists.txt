@@ -1,4 +1,5 @@
 set(QC_INCLUDE ../include)
+
 if (APPLE)
     set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
     set(PYTHON3_H /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
@@ -8,8 +9,14 @@ elseif(WIN32)
     set(PYTHON3_H C:/Users/Soporte/AppData/Local/Programs/Python/Python37/include)
     set(BOOST_H /usr/local/Cellar/boost/1.70.0/include)
 else()
+    file(STRINGS /etc/os-release distro REGEX "^NAME=")
+    string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
     set(PYTHON2_H /opt/rh/python27/root/usr/include/python2.7)
-    set(PYTHON3_H /usr/local/include/python3.7m)
+    if(${distro} STREQUAL "Ubuntu")
+        set(PYTHON3_H /usr/include/python3.6)
+    else()
+        set(PYTHON3_H /usr/local/include/python3.7m)
+    endif()
     set(BOOST_H /usr/include/boost)
 endif()
 
@@ -217,7 +224,7 @@ target_sources(QC_Financial_3
 
 target_compile_definitions(QC_Financial_3
         PUBLIC
-        PYTHON37)
+        PYTHON3)
 
 if (WIN32)
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".pyd")

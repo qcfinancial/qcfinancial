@@ -16,9 +16,16 @@ elseif(WIN32)
     set(PYTHON3_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python37/libs/)
     set(BOOST_PYTHON_LIB C:/boost_1_70_0/stage/lib/)
 else()
-    set(PYTHON2_LIB /usr/lib64/)
-    set(PYTHON3_LIB /usr/local/lib/)
-    set(BOOST_PYTHON_LIB /usr/lib/)
+    file(STRINGS /etc/os-release distro REGEX "^NAME=")
+    string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
+    if(${distro} STREQUAL "Ubuntu")
+        set(PYTHON3_LIB /usr/lib/x86_64-linux-gnu/)
+        set(BOOST_PYTHON_LIB /usr/lib/x86_64-linux-gnu/)
+    else()
+        set(PYTHON2_LIB /usr/lib64/)
+        set(PYTHON3_LIB /usr/local/lib/)
+        set(BOOST_PYTHON_LIB /usr/lib/)
+    endif()
 endif()
 
 add_library(QC_DVE_CORE STATIC "")
@@ -27,7 +34,6 @@ target_compile_options(QC_DVE_CORE PRIVATE -fPIC)
 add_library(QC_DVE_PYBIND SHARED "")
 add_library(QC_Financial SHARED "")
 add_library(QC_Financial_3 SHARED "")
-
 add_executable(QC_DVE_CORE_TESTS)
 add_subdirectory(source)
 add_subdirectory(Tests)
@@ -58,7 +64,8 @@ elseif(WIN32)
             ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
 
 else()
-
+    file(STRINGS /etc/os-release distro REGEX "^NAME=")
+    string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
     target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
     target_link_libraries(QC_DVE_PYBIND
             ${PYTHON2_LIB}libpython2.7.so.1.0)
@@ -67,10 +74,15 @@ else()
             ${PYTHON2_LIB}libpython2.7.so.1.0
             ${BOOST_PYTHON_LIB}libboost_python27.so)
 
-    target_link_libraries(QC_Financial_3
-            ${PYTHON3_LIB}libpython3.7m.so.1.0
-            ${BOOST_PYTHON_LIB}libboost_python37.so)
-
+    if (${distro} STREQUAL "Ubuntu")
+        target_link_libraries(QC_Financial_3
+                ${PYTHON3_LIB}libpython3.6m.so.1.0
+                ${BOOST_PYTHON_LIB}libboost_python-py36.so)
+    else()
+        target_link_libraries(QC_Financial_3
+                ${PYTHON3_LIB}libpython3.7m.so.1.0
+                ${BOOST_PYTHON_LIB}libboost_python3.so)
+    endif ()
 endif()
 
 

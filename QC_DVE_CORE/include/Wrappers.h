@@ -12,7 +12,7 @@
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 
 #include "Cashflow.h"
-#include "LinearinterestRateCashflow.h"
+#include "LinearInterestRateCashflow.h"
 #include "FixedRateCashflow.h"
 #include "FixedRateMultiCurrencyCashflow.h"
 #include "IborCashflow.h"
@@ -34,7 +34,7 @@
 
 namespace qf = QCode::Financial;
 
-#ifdef PYTHON37
+#ifdef PYTHON3
     #define PYSTRING2STRING PyUnicode_FromString
     #define NOMBRE_MODULO QC_Financial_3
 #else
