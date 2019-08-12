@@ -94,16 +94,16 @@ namespace QCode
 				QCInterestRate& intRate)
 			{
 				auto days = valuationDate.dayDiff(cashflow->date());
-				if (days < 0)
+				if (days <= 0)
 				{
 					_derivative = 0.0;
 					return 0.0;
 				}
-				if (days == 0)
-				{
-					_derivative = 0.0;
-					return cashflow->amount();
-				}
+//				if (days == 0)
+//				{
+//					_derivative = 0.0;
+//					return cashflow->amount();
+//				}
 				else
 				{
 					double amount = cashflow->amount();
@@ -143,17 +143,17 @@ namespace QCode
 				_resetDerivatives(curve->getLength());
 
 				const auto days = valuationDate.dayDiff(cashflow->date());
-				if (days < 0)
+				if (days <= 0)
 				{
 					std::fill(_derivatives.begin(), _derivatives.end(), 0);
 					return 0.0;
 				}
-				if (days == 0)
-				{
-					std::fill(_derivatives.begin(), _derivatives.end(), 0);
-					return cashflow->amount();
-				}
-				else
+//				if (days == 0)
+//				{
+//					std::fill(_derivatives.begin(), _derivatives.end(), 0);
+//					return cashflow->amount();
+//				}
+//				else
 				{
 					const double amount = cashflow->amount();
 					const double pv = amount * curve->getDiscountFactorAt(days);
@@ -270,7 +270,7 @@ namespace QCode
 			* @fn      std::double getDerivative(): returns the derivative with respect to
 			*          a single interest rate.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A double.
@@ -284,7 +284,7 @@ namespace QCode
 			* @fn      std::double get2Derivative(): returns the 2nd derivative of the present
 			*          value of a single cashflow with respect to a single interest rate.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A double.
@@ -299,7 +299,7 @@ namespace QCode
 			* @fn      std::double getRate(): returns the rate used to calculate the pv
 			* 		   when a single rate is used.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A double.
