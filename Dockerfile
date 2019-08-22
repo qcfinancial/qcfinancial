@@ -1,4 +1,4 @@
-FROM  frontdesk/centos7_builder:latest as builder
+FROM  docker-registry.default.svc:5000/frontdesk/centos-builder:latest as builder
 
 WORKDIR /src/qcdvaluationengine/
 ADD ./QC_DVE_CORE/ /src/qcdvaluationengine
