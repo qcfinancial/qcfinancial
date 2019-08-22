@@ -1,7 +1,7 @@
 #ifndef QCZEROCURVEGENERATORFROMRATESFWDSANDFIXEDLEGS_H
 #define QCZEROCURVEGENERATORFROMRATESFWDSANDFIXEDLEGS_H
 
-#include "QCInterestRateCurveGenerator.h"
+#include "curves/QCInterestRateCurveGenerator.h"
 #include "QCTimeDepositPayoff.h"
 #include "QCFixedRatePayoff.h"
 #include "QCDefinitions.h"
@@ -16,7 +16,7 @@ public:
 	* Constructor.
 	* @param valueDate fecha a la cual se va a construir la curva.
 	* @param inputRates vector<shared_ptr<QCTimeDepositPayoff>> que representan las tasas cero
-	* (depósitos o Libor) que se utilizan como datos inciales en el proceso.
+	* (depï¿½sitos o Libor) que se utilizan como datos inciales en el proceso.
 	* @param inputForwards vector<shared_ptr<QCFXForward>> que representa las cotizaciones que se
 	* usan como ipnut en el bootstrapping
 	* @param inputFixedRateLegs vector<shared_ptr<QCInterestRatePayoff>> que representan las patas fijas de los
@@ -48,23 +48,23 @@ public:
 	virtual size_t getCurveLength() override;
 
 	/*!
-	* Devuelve la tasa en la posición i de la curva generada.
-	* @param i posición de la tasa deseada.
+	* Devuelve la tasa en la posiciï¿½n i de la curva generada.
+	* @param i posiciï¿½n de la tasa deseada.
 	* @return valor de la tasa deseada.
 	*/
 	virtual double getRateAt(size_t index) override;
 
 	/*!
 	* Calculada la derivada de una tasa generada a partir de uno de los inputs.
-	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
-	* @param derivativeIndex índice del input que se quiere usar para derivar.
+	* @param rateIndex ï¿½ndice de la tasa cuya derivada se quiere calcular
+	* @param derivativeIndex ï¿½ndice del input que se quiere usar para derivar.
 	*/
 	virtual void calculateDerivativesAt(size_t derivativeIndex) override;
 
 	/*!
 	* Devuelve la derivada de una tasa generada a partir de uno de los inputs.
-	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
-	* @param derivativeIndex índice del input que se quiere usar para derivar.
+	* @param rateIndex ï¿½ndice de la tasa cuya derivada se quiere calcular
+	* @param derivativeIndex ï¿½ndice del input que se quiere usar para derivar.
 	*/
 	virtual double getDerivativeAt(size_t rateIndex, size_t derivativeIndex) override;
 

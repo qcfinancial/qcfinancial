@@ -11,8 +11,8 @@
 #endif
 
 #include "QC_DVE_PYBIND.h"
-#include "QCCurrencyConverter.h"
-#include "QCDate.h"
+#include "asset_classes/QCCurrencyConverter.h"
+#include "time/QCDate.h"
 #include "QCDvePyBindHelperFunctions.h"
 #include "QCZeroCouponCurve.h"
 #include "QCHelperFunctions.h"

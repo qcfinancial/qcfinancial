@@ -3,22 +3,22 @@
 
 #include "QCFactoryFunctions.h"
 #include "QCHelperFunctions.h"
-#include "QCAct360.h"
-#include "QCAct365.h"
-#include "QCActAct.h"
-#include "QC30360.h"
-#include "QCLinearWf.h"
-#include "QCCompoundWf.h"
-#include "QCContinousWf.h"
-#include "QCCurve.h"
-#include "QCInterpolator.h"
-#include "QCLinearInterpolator.h"
-#include "QCLogLinearInterpolator.h"
-#include "QCInterestRateCurve.h"
-#include "QCProjectingInterestRateCurve.h"
-#include "QCZeroCouponInterestRateCurve.h"
-#include "QCZeroCouponDiscountFactorCurve.h"
-#include "QCInterestRate.h"
+#include "asset_classes/QCAct360.h"
+#include "asset_classes/QCAct365.h"
+#include "asset_classes/QCActAct.h"
+#include "asset_classes/QC30360.h"
+#include "asset_classes/QCLinearWf.h"
+#include "asset_classes/QCCompoundWf.h"
+#include "asset_classes/QCContinousWf.h"
+#include "curves/QCCurve.h"
+#include "curves/QCInterpolator.h"
+#include "curves/QCLinearInterpolator.h"
+#include "curves/QCLogLinearInterpolator.h"
+#include "curves/QCInterestRateCurve.h"
+#include "curves/QCProjectingInterestRateCurve.h"
+#include "curves/QCZeroCouponInterestRateCurve.h"
+#include "curves/QCZeroCouponDiscountFactorCurve.h"
+#include "asset_classes/QCInterestRate.h"
 #include "QCInterestRatePeriodsFactory.h"
 
 using namespace QCHelperFunctions;
@@ -156,30 +156,35 @@ shared_ptr<QCInterestRateCurve> QCFactoryFunctions::intRtCrvShrdPtr(vector<long>
 		interpol = make_shared<QCLinearInterpolator>(crvPtr);
 	}
 
-	//definir un interest rate y meterlo al constructor
+	// Definir un interest rate y meterlo al constructor
 	shared_ptr<QCYearFraction> yfShrdPtr = QCFactoryFunctions::yfSharedPtr(yf);
 	shared_ptr<QCWealthFactor> wfShrdPtr = QCFactoryFunctions::wfSharedPtr(wf);
 	QCInterestRate intRate{ 0, yfShrdPtr, wfShrdPtr };
+
 	if (typeCurve == QCInterestRateCurve::qcProjectingCurve)
 	{
 		auto result = make_shared<QCProjectingInterestRateCurve>(
 			QCProjectingInterestRateCurve{ interpol, intRate });
 		return result;
 	}
-
-	if (typeCurve == QCInterestRateCurve::qcZeroCouponCurve)
+	else if (typeCurve == QCInterestRateCurve::qcZeroCouponCurve)
 	{
 		auto result = make_shared<QCZeroCouponInterestRateCurve>(
 			QCZeroCouponInterestRateCurve{ interpol, intRate });
 		return result;
 	}
-	
-	if (typeCurve == QCInterestRateCurve::qcDiscountFactorCurve)
+	else if (typeCurve == QCInterestRateCurve::qcDiscountFactorCurve)
 	{
 		auto result = make_shared<QCZeroCouponDiscountFactorCurve>(
 			QCZeroCouponDiscountFactorCurve{ interpol, intRate });
 		return result;
 	}
+	else
+    {
+        auto result = make_shared<QCZeroCouponInterestRateCurve>(
+                QCZeroCouponInterestRateCurve{ interpol, intRate });
+        return result;
+    }
 }
 
 QCIntRtCrvShrdPtr QCFactoryFunctions::discFctrCrvShrdPtr(vector<long>& tenors, vector<double>& dfs,

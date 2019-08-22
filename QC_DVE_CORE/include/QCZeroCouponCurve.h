@@ -7,12 +7,12 @@
 #ifndef QCZEROCOUPONCURVE_H
 #define QCZEROCOUPONCURVE_H
 
-#include "QCInterestRateCurve.h"
-#include "QCInterestRate.h"
+#include "curves/QCInterestRateCurve.h"
+#include "asset_classes/QCInterestRate.h"
 #include "QCDefinitions.h"
-#include "QCInterpolator.h"
-#include "QCWealthFactor.h"
-#include "QCYearFraction.h"
+#include "curves/QCInterpolator.h"
+#include "asset_classes/QCWealthFactor.h"
+#include "asset_classes/QCYearFraction.h"
 
 /*!
 * @author Alvaro Díaz

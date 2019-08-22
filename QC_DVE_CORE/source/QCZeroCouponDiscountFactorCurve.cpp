@@ -1,4 +1,4 @@
-#include "QCZeroCouponDiscountFactorCurve.h"
+#include "curves/QCZeroCouponDiscountFactorCurve.h"
 
 
 QCZeroCouponDiscountFactorCurve::QCZeroCouponDiscountFactorCurve(

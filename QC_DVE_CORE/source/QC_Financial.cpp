@@ -5,56 +5,58 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include <boost/python/docstring_options.hpp>
+#include <boost/python/tuple.hpp>
 
 #include<memory>
 #include<string>
 #include <tuple>
 
-#include "QCCurrency.h"
-#include "QCYearFraction.h"
-#include "QCDate.h"
-#include "QCAct360.h"
-#include "QCAct365.h"
-#include "QC30360.h"
-#include "QCAct30.h"
-#include "QC3030.h"
-#include "QCWealthFactor.h"
-#include "QCLinearWf.h"
-#include "QCCompoundWf.h"
-#include "QCContinousWf.h"
-#include "QCInterestRate.h"
-#include "QCBusinessCalendar.h"
+#include "asset_classes/QCCurrency.h"
+#include "asset_classes/QCYearFraction.h"
+#include "time/QCDate.h"
+#include "asset_classes/QCAct360.h"
+#include "asset_classes/QCAct365.h"
+#include "asset_classes/QC30360.h"
+#include "asset_classes/QCAct30.h"
+#include "asset_classes/QC3030.h"
+#include "asset_classes/QCWealthFactor.h"
+#include "asset_classes/QCLinearWf.h"
+#include "asset_classes/QCCompoundWf.h"
+#include "asset_classes/QCContinousWf.h"
+#include "asset_classes/QCInterestRate.h"
+#include "time/QCBusinessCalendar.h"
 #include "QCInterestRateLeg.h"
-#include "QCCurve.h"
-#include "QCInterpolator.h"
-#include "QCLinearInterpolator.h"
-#include "QCCurrencyConverter.h"
+#include "curves/QCCurve.h"
+#include "curves/QCInterpolator.h"
+#include "curves/QCLinearInterpolator.h"
+#include "asset_classes/QCCurrencyConverter.h"
 
-#include "Cashflow.h"
-#include "LinearInterestRateCashflow.h"
-#include "FixedRateCashflow.h"
-#include "FixedRateMultiCurrencyCashflow.h"
-#include "IborCashflow.h"
-#include "SimpleCashflow.h"
-#include "IcpClpCashflow.h"
-#include "IcpClfCashflow.h"
-#include "InterestRateIndex.h"
+#include "cashflows/Cashflow.h"
+#include "cashflows/LinearInterestRateCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
+#include "cashflows/FixedRateMultiCurrencyCashflow.h"
+#include "cashflows/IborCashflow.h"
+#include <cashflows/IborCashflow2.h>
+#include "cashflows/SimpleCashflow.h"
+#include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClfCashflow.h"
+#include "asset_classes/InterestRateIndex.h"
 #include "LegFactory.h"
-#include "Tenor.h"
+#include "asset_classes/Tenor.h"
 #include "Leg.h"
-#include "AssetFactory.h"
-#include "FXRate.h"
-#include "IndexFactory.h"
-#include "FXRateIndex.h"
-#include "InterestRateCurve.h"
-#include "PresentValue.h"
+#include "asset_classes/AssetFactory.h"
+#include "asset_classes/FXRate.h"
+#include "asset_classes/IndexFactory.h"
+#include "asset_classes/FXRateIndex.h"
+#include "asset_classes/InterestRateCurve.h"
+#include "present_value/PresentValue.h"
 #include "FixedRateBond.h"
 #include "ChileanFixedRateBond.h"
-#include "ForwardRates.h"
+#include "present_value/ForwardRates.h"
 #include "TypeAliases.h"
-#include "Quanto.h"
+#include "cashflows/Quanto.h"
 
-#include "FixedRateCashflow2.h"
+#include "cashflows/FixedRateCashflow2.h"
 
 #include "Wrappers.h"
 
@@ -285,7 +287,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         ;
 
         class_<QCCurrencyConverter>("CurrencyConverter")
-        .def<double (QCCurrencyConverter::*)(double, shared_ptr<QCCurrency>, double, QCode::Financial::FXRateIndex&)>("convert", &QCCurrencyConverter::convert)
+        .def<double (QCCurrencyConverter::*)(double, shared_ptr<QCCurrency>,
+                double, QCode::Financial::FXRateIndex)>("convert", &QCCurrencyConverter::convert)
         .def("get_fx_rate_mkt_code", &QCCurrencyConverter::getFxRateMktCode)
         ;
 
@@ -300,6 +303,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         implicitly_convertible<std::shared_ptr<wrappers::CashflowWrap>, std::shared_ptr<qf::Cashflow>>();
 
         class_< wrappers::LinearInterestRateCashflowWrap, boost::noncopyable, bases<qf::Cashflow>>("LinearInterestRateCashflow")
+        .def("get_type", pure_virtual(&qf::LinearInterestRateCashflow::getType))
         .def("get_initial_currency", pure_virtual(&qf::LinearInterestRateCashflow::getInitialCcy))
         .def("does_amortize", pure_virtual(&qf::LinearInterestRateCashflow::doesAmortize))
         .def("get_start_date", pure_virtual(&qf::LinearInterestRateCashflow::getStartDate), return_value_policy<copy_const_reference>())
@@ -333,6 +337,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("amount", &qf::FixedRateCashflow2::amount)
         .def("ccy", &qf::FixedRateCashflow2::ccy)
         .def("date", &qf::FixedRateCashflow2::date)
+        .def("get_type", &qf::FixedRateCashflow2::getType)
         .def("get_start_date", &qf::FixedRateCashflow2::getStartDate, return_value_policy<copy_const_reference>())
         .def("get_end_date", &qf::FixedRateCashflow2::getEndDate, return_value_policy<copy_const_reference>())
         .def("get_settlement_date", &qf::FixedRateCashflow2::getSettlementDate, return_value_policy<copy_const_reference>())
@@ -340,6 +345,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("get_nominal", &qf::FixedRateCashflow2::getNominal)
         .def("nominal", &qf::FixedRateCashflow2::nominal)
         .def("get_amortization", &qf::FixedRateCashflow2::getAmortization)
+        .def("amortization", &qf::FixedRateCashflow2::amortization)
         .def("get_interest_rate_value", &qf::FixedRateCashflow2::getInterestRateValue)
         .def("get_interest_rate_type", &qf::FixedRateCashflow2::getInterestRateType)
         .def<double (qf::FixedRateCashflow2::*)()>("interest", &qf::FixedRateCashflow2::interest)
@@ -354,17 +360,66 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("wrap", &qf::FixedRateCashflow2::wrap)
         ;
 
-        class_<qf::FixedRateCashflowWrapper, std::shared_ptr<qf::FixedRateCashflowWrapper>>("FixedRateCashflowWrapper", no_init)
-        .def("start_date", wrappers::startDate)
-        .def("end_date", wrappers::endDate)
-        .def("settlement_date", wrappers::settlementDate)
-        .def("nominal", wrappers::nominal)
-        .def("amortization", wrappers::amortization)
-        .def("interest", wrappers::interest)
-        .def("does_amortize", wrappers::doesAmortize)
-        .def("currency", wrappers::currency)
-        .def("interest_rate", wrappers::interestRate)
-        ;
+        PyObject* (*show7)(qf::FixedRateCashflow2) = wrappers::show;
+        def("show", show7);
+
+        PyObject* (*show71)(std::shared_ptr<qf::FixedRateCashflow2>) = wrappers::show;
+        def("show", show71);
+
+        class_<qf::IborCashflow2, std::shared_ptr<qf::IborCashflow2>, bases<qf::LinearInterestRateCashflow>>
+        ("IborCashflow2", init <std::shared_ptr<qf::InterestRateIndex>, QCDate&, QCDate&, QCDate&, QCDate&,
+                double, double, bool,
+                shared_ptr <QCCurrency>,
+                double, double> ())
+            .def("amount", &qf::IborCashflow2::amount)
+            .def("ccy", &qf::IborCashflow2::ccy)
+            .def("date", &qf::IborCashflow2::date)
+            .def("get_type", &qf::IborCashflow2::getType)
+            .def("get_interest_rate_index", &qf::IborCashflow2::getInterestRateIndex)
+            .def("get_start_date", &qf::IborCashflow2::getStartDate, return_value_policy<copy_const_reference>())
+            .def("get_end_date", &qf::IborCashflow2::getEndDate, return_value_policy<copy_const_reference>())
+            .def("get_settlement_date", &qf::IborCashflow2::getSettlementDate, return_value_policy<copy_const_reference>())
+            .def("get_fixing_dates", &qf::IborCashflow2::getFixingDates, return_value_policy<copy_const_reference>())
+            .def("get_nominal", &qf::IborCashflow2::getNominal)
+            .def("nominal", &qf::IborCashflow2::nominal)
+            .def("get_amortization", &qf::IborCashflow2::getAmortization)
+            .def("amortization", &qf::IborCashflow2::amortization)
+            .def("get_spread", &qf::IborCashflow2::getSpread)
+            .def("get_gearing", &qf::IborCashflow2::getGearing)
+            .def<double (qf::IborCashflow2::*)()>("interest", &qf::IborCashflow2::interest)
+            .def<double (qf::IborCashflow2::*)(const qf::TimeSeries&)>("interest", &qf::IborCashflow2::interest)
+            .def<double(qf::IborCashflow2::*)()>("fixing", &qf::IborCashflow2::fixing)
+            .def<double(qf::IborCashflow2::*)(const qf::TimeSeries&)>("fixing", &qf::IborCashflow2::fixing)
+            .def<double (qf::IborCashflow2::*)(const QCDate&)>("accrued_interest", &qf::IborCashflow2::accruedInterest)
+            .def<double (qf::IborCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_interest",
+                    &qf::IborCashflow2::accruedInterest)
+            .def<double (qf::IborCashflow2::*)(const QCDate&)>("accrued_fixing",
+                    &qf::IborCashflow2::accruedFixing)
+            .def<double (qf::IborCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_fixing",
+                    &qf::IborCashflow2::accruedFixing)
+            .def("does_amortize", &qf::IborCashflow2::doesAmortize)
+            .def("wrap", &qf::IborCashflow2::wrap)
+            ;
+
+        PyObject* (*show8)(qf::IborCashflow2) = wrappers::show;
+        def("show", show8);
+
+        PyObject* (*show81)(std::shared_ptr<qf::IborCashflow2>) = wrappers::show;
+        def("show", show81);
+
+
+
+//        class_<qf::FixedRateCashflowWrapper, std::shared_ptr<qf::FixedRateCashflowWrapper>>("FixedRateCashflowWrapper", no_init)
+//        .def("start_date", wrappers::startDate)
+//        .def("end_date", wrappers::endDate)
+//        .def("settlement_date", wrappers::settlementDate)
+//        .def("nominal", wrappers::nominal)
+//        .def("amortization", wrappers::amortization)
+//        .def("interest", wrappers::interest)
+//        .def("does_amortize", wrappers::doesAmortize)
+//        .def("currency", wrappers::currency)
+//        .def("interest_rate", wrappers::interestRate)
+//        ;
 
 
         implicitly_convertible<std::shared_ptr<qf::FixedRateCashflow>, std::shared_ptr<qf::Cashflow>>();
@@ -380,7 +435,12 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
 
         // Change the constructor's signature
         class_ < qf::QuantoLinearInterestRateCashflow, std::shared_ptr<qf::QuantoLinearInterestRateCashflow>>
-        ("QuantoLinearInterestRateCashflow", init<std::shared_ptr<qf::LinearInterestRateCashflow>, qf::FXRateIndex, const qf::TimeSeries&, QCDate>())
+        ("QuantoLinearInterestRateCashflow",
+                init<std::shared_ptr<qf::LinearInterestRateCashflow>,
+                qf::FXRateIndex,
+                std::shared_ptr<qf::TimeSeries>,
+                QCDate>())
+        .def("get_type", &qf::QuantoLinearInterestRateCashflow::getType)
         .def("original_cashflow", &qf::QuantoLinearInterestRateCashflow::originalCashflow)
         .def("amount", &qf::QuantoLinearInterestRateCashflow::amount)
         .def("ccy", &qf::QuantoLinearInterestRateCashflow::ccy)
@@ -391,6 +451,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("get_settlement_date", &qf::QuantoLinearInterestRateCashflow::getSettlementDate, return_value_policy<copy_const_reference>())
         .def("get_fixing_dates", &qf::QuantoLinearInterestRateCashflow::getFixingDates, return_value_policy<copy_const_reference>())
         .def("get_fx_rate_index_fixing_date", &qf::QuantoLinearInterestRateCashflow::getFxRateIndexFixingDate, return_value_policy<copy_const_reference>())
+        .def("get_fx_rate_index_value", &qf::QuantoLinearInterestRateCashflow::getFxRateIndexValue)
         .def("get_nominal", &qf::QuantoLinearInterestRateCashflow::getNominal)
         .def("nominal", &qf::QuantoLinearInterestRateCashflow::nominal)
         .def("get_amortization", &qf::QuantoLinearInterestRateCashflow::getAmortization)
@@ -404,6 +465,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def<double (qf::QuantoLinearInterestRateCashflow::*)(const QCDate&)>("accrued_fixing", &qf::QuantoLinearInterestRateCashflow::accruedFixing)
         .def<double (qf::QuantoLinearInterestRateCashflow::*)(const QCDate&, const qf::TimeSeries&)>("accrued_fixing", &qf::QuantoLinearInterestRateCashflow::accruedFixing)
         ;
+
+        PyObject* (*showQuanto)(std::shared_ptr<qf::QuantoLinearInterestRateCashflow>) = wrappers::show;
+        def("show", showQuanto);
 
         implicitly_convertible<std::shared_ptr<qf::QuantoLinearInterestRateCashflow>, std::shared_ptr<qf::Cashflow>>();
         implicitly_convertible<std::shared_ptr<qf::QuantoLinearInterestRateCashflow>, std::shared_ptr<qf::LinearInterestRateCashflow>>();
@@ -420,6 +484,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("get_settlement_date", &qf::FixedRateCashflow::date)
         .def("get_start_date", &qf::FixedRateCashflow::getStartDate)
         .def("get_end_date", &qf::FixedRateCashflow::getEndDate)
+        .def("get_rate", &qf::FixedRateCashflow::getRate, return_value_policy<reference_existing_object>())
         .def("wrap", &qf::FixedRateCashflow::wrap)
         .def("set_nominal", &qf::FixedRateCashflow::setNominal)
         .def("get_nominal", &qf::FixedRateCashflow::getNominal)
@@ -609,6 +674,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         PyObject* (*show61)(std::shared_ptr<qf::IcpClfCashflow>) = wrappers::show;
         def("show", show61);
 
+        def("get_column_names", &wrappers::getColumnNames);
+
         class_<QCBusinessCalendar>("BusinessCalendar", init<const QCDate&, int>())
         .def("add_holiday", &QCBusinessCalendar::addHolyday)
         .def("next_busy_day", &QCBusinessCalendar::nextBusinessDay)
@@ -739,8 +806,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         ;
 
         class_<qf::TimeSeries>("time_series")
-        .def(map_indexing_suite<qf::TimeSeries>())
+        .def(map_indexing_suite<qf::TimeSeries, true>())
         ;
+
 
 //	class_<qf::TimeSeries>("many_time_series")
 //		.def(map_indexing_suite<qf::ManyTimeSeries>())
@@ -797,6 +865,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("pv", pv2)
         .def("pv", pv3)
         .def("pv", pv4)
+        .def("pv_quanto_original_cashflow", &qf::PresentValue::pvQuantoOriginalCashflow)
+        .def("pv_quanto_leg_original_cashflow", &qf::PresentValue::pvQuantoLegOriginalCashflow)
         .def("get_derivative", &qf::PresentValue::getDerivative)
         .def("get_derivatives", &qf::PresentValue::getDerivatives)
         .def("get_rate", &qf::PresentValue::getRate)

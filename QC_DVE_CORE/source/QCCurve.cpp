@@ -1,4 +1,4 @@
-#include "QCCurve.h"
+#include "curves/QCCurve.h"
 #include <exception>
 #include <algorithm>
 

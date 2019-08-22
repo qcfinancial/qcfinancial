@@ -2,7 +2,7 @@
 #define FIXEDRATEBOND_H
 
 #include "Leg.h"
-#include "FixedRateCashflow.h"
+#include "cashflows/FixedRateCashflow.h"
 
 namespace QCode
 {

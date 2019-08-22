@@ -1,15 +1,22 @@
 set(QC_INCLUDE ../include)
+
 if (APPLE)
     set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
     set(PYTHON3_H /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
     set(BOOST_H /usr/local/Cellar/boost/1.70.0/include)
 elseif(WIN32)
-    set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27-16/include)
+    set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
     set(PYTHON3_H C:/Users/Soporte/AppData/Local/Programs/Python/Python37/include)
     set(BOOST_H C:/boost_1_70_0)
 else()
+    file(STRINGS /etc/os-release distro REGEX "^NAME=")
+    string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
     set(PYTHON2_H /opt/rh/python27/root/usr/include/python2.7)
-    set(PYTHON3_H /usr/local/include/python3.7m)
+    if(${distro} STREQUAL "Ubuntu")
+        set(PYTHON3_H /usr/include/python3.6)
+    else()
+        set(PYTHON3_H /usr/local/include/python3.7m)
+    endif()
     set(BOOST_H /usr/include/boost)
 endif()
 
@@ -24,24 +31,24 @@ target_sources(QC_DVE_CORE
         PRIVATE
         ChileanFixedRateBond.cpp
         FixedRateBond.cpp
-        FixedRateCashflow.cpp
-        FixedRateMultiCurrencyCashflow.cpp
-        IborCashflow.cpp
-        IcpClfCashflow.cpp
-        IcpClpCashflow.cpp
-        InterestRateIndex.cpp
+        cashflows/FixedRateCashflow.cpp
+        cashflows/FixedRateMultiCurrencyCashflow.cpp
+        cashflows/IborCashflow.cpp
+        cashflows/IcpClfCashflow.cpp
+        cashflows/IcpClpCashflow.cpp
+        asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
-        QC30360.cpp
-        QCAct30.cpp
-        QCAct360.cpp
-        QCAct365.cpp
-        QCActAct.cpp
-        QCBusinessCalendar.cpp
+        asset_classes/QC30360.cpp
+        asset_classes/QCAct30.cpp
+        asset_classes/QCAct360.cpp
+        asset_classes/QCAct365.cpp
+        asset_classes/QCActAct.cpp
+        time/QCBusinessCalendar.cpp
         QCClampedSpline.cpp
         QCCompoundWf.cpp
         QCContinousWf.cpp
-        QCDate.cpp
+        time/QCDate.cpp
         QCDiscountBondPayoff.cpp
         QCFactoryFunctions.cpp
         QCFixedRatePayoff.cpp
@@ -71,8 +78,8 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        SimpleCashflow.cpp
-        SimpleMultiCurrencyCashflow.cpp
+        cashflows/SimpleCashflow.cpp
+        cashflows/SimpleMultiCurrencyCashflow.cpp
         Tenor.cpp
         ZeroCouponCurve.cpp)
 
@@ -87,13 +94,13 @@ target_include_directories(QC_DVE_PYBIND
 target_sources(QC_DVE_PYBIND
         PRIVATE
         QC_DVE_PYBIND.cpp
-        QCDate.cpp
-        QCBusinessCalendar.cpp
-        QC30360.cpp
-        QCAct30.cpp
-        QCAct360.cpp
-        QCAct365.cpp
-        QCActAct.cpp
+        time/QCDate.cpp
+        time/QCBusinessCalendar.cpp
+        asset_classes/QC30360.cpp
+        asset_classes/QCAct30.cpp
+        asset_classes/QCAct360.cpp
+        asset_classes/QCAct365.cpp
+        asset_classes/QCActAct.cpp
         QCWealthFactor.cpp
         QCLinearWf.cpp
         QCCompoundWf.cpp
@@ -139,28 +146,29 @@ set(QC_FINANCIAL_SOURCES
         QC_Financial.cpp
         ChileanFixedRateBond.cpp
         FixedRateBond.cpp
-        FixedRateCashflow.cpp
-        FixedRateCashflow2.cpp
-        FixedRateMultiCurrencyCashflow.cpp
-        IborCashflow.cpp
-        IborMultiCurrencyCashflow.cpp
-        IcpClfCashflow.cpp
-        IcpClpCashflow.cpp
-        InterestRateIndex.cpp
+        cashflows/FixedRateCashflow.cpp
+        cashflows/FixedRateCashflow2.cpp
+        cashflows/FixedRateMultiCurrencyCashflow.cpp
+        cashflows/IborCashflow.cpp
+        cashflows/IborCashflow2.cpp
+        cashflows/IborMultiCurrencyCashflow.cpp
+        cashflows/IcpClfCashflow.cpp
+        cashflows/IcpClpCashflow.cpp
+        asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
         HelperFunctions.cpp
-        QC3030.cpp
-        QC30360.cpp
-        QCAct30.cpp
-        QCAct360.cpp
-        QCAct365.cpp
-        QCActAct.cpp
-        QCBusinessCalendar.cpp
+        asset_classes/QC3030.cpp
+        asset_classes/QC30360.cpp
+        asset_classes/QCAct30.cpp
+        asset_classes/QCAct360.cpp
+        asset_classes/QCAct365.cpp
+        asset_classes/QCActAct.cpp
+        time/QCBusinessCalendar.cpp
         QCClampedSpline.cpp
         QCCompoundWf.cpp
         QCContinousWf.cpp
-        QCDate.cpp
+        time/QCDate.cpp
         QCDiscountBondPayoff.cpp
         QCFactoryFunctions.cpp
         QCFixedRatePayoff.cpp
@@ -190,8 +198,8 @@ set(QC_FINANCIAL_SOURCES
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        SimpleCashflow.cpp
-        SimpleMultiCurrencyCashflow.cpp
+        cashflows/SimpleCashflow.cpp
+        cashflows/SimpleMultiCurrencyCashflow.cpp
         Tenor.cpp
         ZeroCouponCurve.cpp)
 
@@ -217,7 +225,7 @@ target_sources(QC_Financial_3
 
 target_compile_definitions(QC_Financial_3
         PUBLIC
-        PYTHON37)
+        PYTHON3)
 
 if (WIN32)
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".pyd")
