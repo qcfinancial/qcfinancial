@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "cashflows/Cashflow.h"
+#include "cashflows/Quanto.h"
 #include "asset_classes/InterestRateCurve.h"
 #include "Leg.h"
 
@@ -153,7 +154,7 @@ namespace QCode
 //					std::fill(_derivatives.begin(), _derivatives.end(), 0);
 //					return cashflow->amount();
 //				}
-//				else
+				else
 				{
 					const double amount = cashflow->amount();
 					const double pv = amount * curve->getDiscountFactorAt(days);
@@ -166,7 +167,51 @@ namespace QCode
 				}
 			}
 
-			/**
+            /**
+            * @fn	    double PresentValue::pv(QCDate& valuationDate,
+                                    std::shared_ptr<Cashflow> cashflow,
+                                    std::shared_ptr<InterestRateCurve> curve);
+            *
+            * @brief	Calculates the present value of the original cashflow of a quanto
+            *           and its derivatives with respect to every vertex of the discounting curve.
+            *
+            * @param    valuationDate: date at which present value will be calculated.
+            * @param    cashflow: amount which will be present valued.
+            * @param	curve: curve from which to obtain the appropriate discount factor.
+            *
+            * @author	Alvaro Diaz V.
+            * @date	    28/05/2018
+            *
+            * @return	A double with the present value. Derivatives are stored in the class and have
+            *           their own set of accessors.
+            */
+            double pvQuantoOriginalCashflow(QCDate& valuationDate, const std::shared_ptr<Cashflow>& cashflow,
+                    const std::shared_ptr<InterestRateCurve>& curve)
+            {
+                _resetDerivatives(curve->getLength());
+
+                const auto days = valuationDate.dayDiff(cashflow->date());
+                if (days <= 0)
+                {
+                    std::fill(_derivatives.begin(), _derivatives.end(), 0);
+                    return 0.0;
+                }
+                else
+                {
+                    auto quanto = std::dynamic_pointer_cast<QuantoLinearInterestRateCashflow>(cashflow);
+                    const double amount = quanto->originalCashflow()->amount();
+                    const double pv = amount * curve->getDiscountFactorAt(days);
+                    _rate = curve->getRateAt(days);
+                    for (size_t i = 0; i < _derivatives.size(); ++i)
+                    {
+                        _derivatives[i] = curve->dfDerivativeAt((unsigned)i) * amount;
+                    }
+                    return pv;
+                }
+            }
+
+
+            /**
 			* @fn	    double PresentValue::pv(QCDate& valuationDate,
 			*                                   Leg& leg,
 			*                                   QCInterestRate& intRate);
@@ -236,7 +281,46 @@ namespace QCode
 				return result;
 			}
 
-			/**
+            /**
+            * @fn	    double PresentValue::pv(QCDate& valuationDate,
+            *                                   Leg& leg,
+            *                                   std::shared_ptr<InterestRateCurve> curve);
+            *
+            * @brief	Calculates the present value of each cashflow in leg and its derivatives with respect to
+            * 			every vertex of the discounting curve.
+            *
+            * @param    valuationDate: date at which present value will be calculated.
+            * @param    leg: cashflows which will be present valued.
+            * @param	curve: curve from which to obtain the appropriate discount factor.
+            *
+            * @author	Alvaro Díaz V.
+            * @date	    28/05/2018
+            *
+            * @return	A double with the present value. Derivatives are stored in the class and have
+            *           their own set of accessors.
+            */
+            double pvQuantoLegOriginalCashflow(QCDate& valuationDate, Leg& leg, const std::shared_ptr<InterestRateCurve>& curve)
+            {
+                std::vector<double> tempDerivatives;
+                tempDerivatives.resize(curve->getLength());
+                std::fill(tempDerivatives.begin(), tempDerivatives.end(), 0.0);
+                _resetDerivatives(curve->getLength());
+
+                double result = 0.0;
+                for (size_t i = 0; i < leg.size(); ++i)
+                {
+                    result += pvQuantoOriginalCashflow(valuationDate, leg.getCashflowAt(i), curve);
+                    for (size_t j = 0; j < tempDerivatives.size(); ++j)
+                    {
+                        tempDerivatives[j] += _derivatives[j];
+                    }
+                }
+                _derivatives = tempDerivatives;
+                return result;
+            }
+
+
+            /**
 			* @fn      std::vector<double> getDerivatives(): returns the derivatives with respect to 
 			*          each vertex of the discounting curve of the last present value calculated.
 			*          
