@@ -1,4 +1,4 @@
-FROM centos7_builder:latest as builder
+FROM  docker-registry-default.apps.pre.ocp.binter.cl/frontdesk/web2py-framework/centos7_builder:latest as builder
 
 WORKDIR /src/qcdvaluationengine/
 ADD ./QC_DVE_CORE/ /src/qcdvaluationengine
