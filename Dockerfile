@@ -11,5 +11,9 @@ RUN mkdir -p /output/ \
 FROM nginx:stable-alpine
 WORKDIR /output
 COPY --from=builder /output /usr/share/nginx/html
-EXPOSE 80
-
+RUN chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
+# users are not allowed to listen on priviliged ports
+RUN sed -i.bak 's/listen\(.*\)80;/listen 8081;/' /etc/nginx/conf.d/default.conf
+EXPOSE 8081
+# # comment user directive as master process is run as user in OpenShift anyhow
+RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
