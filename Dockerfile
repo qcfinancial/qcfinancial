@@ -9,9 +9,8 @@ RUN mkdir -p /output/ \
 && cp /src/qcdvaluationengine/QC_DVE_PYBIND.so /output/QC_DVE_PYBIND.so	
 
 FROM nginx:stable-alpine
-WORKDIR /output
 COPY --from=builder /output /usr/share/nginx/html
-RUN chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
+RUN chmod -R g+rwx /var/cache/nginx /run /var/log/nginx /usr/share/nginx/html
 # users are not allowed to listen on priviliged ports
 RUN sed -i.bak 's/listen\(.*\)80;/listen 8081;/' /etc/nginx/conf.d/default.conf
 EXPOSE 8081
