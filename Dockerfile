@@ -9,5 +9,5 @@ RUN mkdir -p /output/ \
 && cp /src/qcdvaluationengine/QC_DVE_PYBIND.so /output/QC_DVE_PYBIND.so	
 
 FROM apline
-RUN mkdir /output && touch /output/test
+RUN mkdir /output 
 COPY --from=builder /output /output
