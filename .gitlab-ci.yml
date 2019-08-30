@@ -17,10 +17,10 @@ build:
     - "oc project $OPENSHIFT_PROYECT_QA"
   script:
     - "oc whoami"
-    - "oc get bc centos_builder 2> /dev/null || oc new-build ./centos_builder --name=centos-builder --strategy=docker"
-    - "oc start-build $APP --from-dir=./centos_builder --follow"
-  only:
-    - docker
+    - "oc get bc $APP 2> /dev/null || oc new-build . --name=$APP --strategy=docker"
+    - "oc start-build $APP --from-dir=. --follow"
+    - "oc tag $APP:latest $APP:$TAG_DOCKER"
+
   except:
     - schedules
   tags:
