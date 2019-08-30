@@ -1,4 +1,4 @@
-#include "QCContinousWf.h"
+#include "asset_classes/QCContinousWf.h"
 #include <cmath>
 
 QCContinousWf::QCContinousWf()

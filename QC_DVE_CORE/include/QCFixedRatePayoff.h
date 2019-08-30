@@ -2,7 +2,7 @@
 #define QCFIXEDRATEPAYOFF_H
 
 #include "QCInterestRatePayoff.h"
-#include "QCInterestRate.h"
+#include "asset_classes/QCInterestRate.h"
 
 /*!
 * @brief QCFixedRatePayoff hereda de QCInterestRatePayoff e implementa la estructura de un bono
@@ -17,9 +17,9 @@ public:
 	* Constructor, se apoya en el constructor de la clase madre.
 	* @param fixedRate valor y forma de la tasa fija.
 	* @param irLeg estructura de fechas y amortizaciones.
-	* @param discountCurve curva de descuento (para la obtención del valor presente)
-	* @param valueDate fecha de valorización.
-	* @param fixingData se informa un valor NULO. Servirá para implementar patas a tasa
+	* @param discountCurve curva de descuento (para la obtenciï¿½n del valor presente)
+	* @param valueDate fecha de valorizaciï¿½n.
+	* @param fixingData se informa un valor NULO. Servirï¿½ para implementar patas a tasa
 	* fija variable en el tiempo. O sea tasas fijas conocidas desde el inicio de la estructura.
 	*/
 	QCFixedRatePayoff(QCIntrstRtShrdPtr fixedRate,
@@ -35,9 +35,9 @@ public:
 	bool operator<(const QCFixedRatePayoff& rhs);
 
 	/*!
-	* Similar al operador < pero actúa sobre shared_ptr<QCFixedRatePayoff>.
-	* @param lhs lado izquierdo de la comparación.
-	* @param rhs lado derecho de la comparación.
+	* Similar al operador < pero actï¿½a sobre shared_ptr<QCFixedRatePayoff>.
+	* @param lhs lado izquierdo de la comparaciï¿½n.
+	* @param rhs lado derecho de la comparaciï¿½n.
 	*/
 	static bool lessThan(shared_ptr<QCFixedRatePayoff> lhs, shared_ptr<QCFixedRatePayoff> rhs);
 
@@ -54,7 +54,7 @@ public:
 
 protected:
 	/*!
-	* Se fija la tasa a aplicar en cada período.
+	* Se fija la tasa a aplicar en cada perï¿½odo.
 	*/
 	virtual void _setAllRates() override;
 

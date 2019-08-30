@@ -1,4 +1,4 @@
-#include "QCCompoundWf.h"
+#include "asset_classes/QCCompoundWf.h"
 #include <cmath>
 
 QCCompoundWf::QCCompoundWf()

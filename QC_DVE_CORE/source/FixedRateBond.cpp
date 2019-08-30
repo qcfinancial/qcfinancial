@@ -1,5 +1,5 @@
 #include "FixedRateBond.h"
-#include "PresentValue.h"
+#include "present_value/PresentValue.h"
 
 namespace QCode
 {
@@ -17,7 +17,7 @@ namespace QCode
 			auto ytm = yieldToMaturity;
 			auto pv = PresentValue();
 			auto result = pv.pv(valDate, _fixedRateLeg, ytm);
-			// La duración de Macaulay es:
+			// La duraciï¿½n de Macaulay es:
 			// D = - dV / dTir * (1 + Tir) / V(Tir)
 			_duration = 0.0;
 			for (const auto& der : pv.getDerivatives())

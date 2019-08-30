@@ -1,4 +1,4 @@
-#include "QCLinearWf.h"
+#include "asset_classes/QCLinearWf.h"
 
 QCLinearWf::QCLinearWf()
 {

@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "ZeroCouponCurve.h"
+#include "asset_classes/ZeroCouponCurve.h"
 
 namespace QCode
 {

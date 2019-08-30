@@ -88,8 +88,9 @@ void QCIcpClfPayoff::_setAllRates()
 			tempDer.resize(QCInterestRatePayoff::_projectingCurve->getLength());
 			for (unsigned int j = 0; j < QCInterestRatePayoff::_projectingCurve->getLength(); ++j)
 			{
+			    // Aquí se hizo el cambio
 				tempDer.at(j) = QCInterestRatePayoff::_projectingCurve->fwdWfDerivativeAt(j)
-					* wfTRA * 360 / pZ;
+					* wfTRA * 360 / (pZ + pTRA);
 			}
 			_allRatesDerivatives.at(i) = tempDer;
 

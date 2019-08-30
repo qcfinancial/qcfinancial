@@ -5,9 +5,9 @@
 #include <string>
 
 #include "QCDefinitions.h"
-#include "QCDate.h"
+#include "time/QCDate.h"
 #include "QCInterestRateLeg.h"
-#include "QCInterestRateCurve.h"
+#include "curves/QCInterestRateCurve.h"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include <memory>
-#include "QCInterestRate.h"
+#include "asset_classes/QCInterestRate.h"
 
 QCInterestRate::QCInterestRate(double value,
 							   QCYrFrctnShrdPtr yearFraction,

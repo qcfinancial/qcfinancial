@@ -3,19 +3,19 @@
 
 #include <memory>
 
-#include "QCInterestRateCurveGenerator.h"
-#include "QCZeroCouponInterestRateCurve.h"
+#include "curves/QCInterestRateCurveGenerator.h"
+#include "curves/QCZeroCouponInterestRateCurve.h"
 #include "QCTimeDepositPayoff.h"
 #include "QCFixedRatePayoff.h"
-#include "QCInterpolator.h"
-#include "QCInterestRate.h"
+#include "curves/QCInterpolator.h"
+#include "asset_classes/QCInterestRate.h"
 #include "QCDefinitions.h"
 
 /*!
-* @author Alvaro Díaz
-* @brief Clase base abstracta para todos los tipos de generadores de curvas de tasas de interés.
-* @details Esta clase define varios métodos que las clases derivadas deben implementar.
-* Los distintos tipos de algoritmos de bootstrapping se derivan de ésta.
+* @author Alvaro Dï¿½az
+* @brief Clase base abstracta para todos los tipos de generadores de curvas de tasas de interï¿½s.
+* @details Esta clase define varios mï¿½todos que las clases derivadas deben implementar.
+* Los distintos tipos de algoritmos de bootstrapping se derivan de ï¿½sta.
 */
 
 using namespace std;
@@ -26,7 +26,7 @@ public:
 	/*!
 	* Constructor.
 	* @param valueDate fecha a la cual se va a construir la curva.
-	* @param inputRates vector<shared_ptr<QCTimeDepositPayoff>> que representan las tasas cero (depósitos
+	* @param inputRates vector<shared_ptr<QCTimeDepositPayoff>> que representan las tasas cero (depï¿½sitos
 	* o Libor que se utilizan como datos inciales en el proceso.
 	* @param inputFixedRateLegs vector<shared_ptr<QCInterestRatePayoff>> que representan las patas fijas de los
 	* swaps que se usan como input del bootstrapping.
@@ -54,23 +54,23 @@ public:
 	virtual size_t getCurveLength() override;
 
 	/*!
-	* Devuelve la tasa en la posición i de la curva generada.
-	* @param i posición de la tasa deseada.
+	* Devuelve la tasa en la posiciï¿½n i de la curva generada.
+	* @param i posiciï¿½n de la tasa deseada.
 	* @return valor de la tasa deseada.
 	*/
 	virtual double getRateAt(size_t index) override;
 
 	/*!
 	* Calculada la derivada de una tasa generada a partir de uno de los inputs.
-	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
-	* @param derivativeIndex índice del input que se quiere usar para derivar.
+	* @param rateIndex ï¿½ndice de la tasa cuya derivada se quiere calcular
+	* @param derivativeIndex ï¿½ndice del input que se quiere usar para derivar.
 	*/
 	virtual void calculateDerivativesAt(size_t derivativeIndex) override;
 
 	/*!
 	* Devuelve la derivada de una tasa generada a partir de uno de los inputs.
-	* @param rateIndex índice de la tasa cuya derivada se quiere calcular
-	* @param derivativeIndex índice del input que se quiere usar para derivar.
+	* @param rateIndex ï¿½ndice de la tasa cuya derivada se quiere calcular
+	* @param derivativeIndex ï¿½ndice del input que se quiere usar para derivar.
 	*/
 	virtual double getDerivativeAt(size_t rateIndex, size_t derivativeIndex) override;
 
