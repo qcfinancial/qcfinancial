@@ -15,7 +15,3 @@ RUN make QC_DVE_PYBIND
 RUN mkdir -p /output/ \
 && cp /src/qcdvaluationengine/QC_Financial.so /output/QC_Financial.so	\
 && cp /src/qcdvaluationengine/QC_DVE_PYBIND.so /output/QC_DVE_PYBIND.so	
-
-FROM alpine
-RUN mkdir /output 
-COPY --from=builder /output /output
