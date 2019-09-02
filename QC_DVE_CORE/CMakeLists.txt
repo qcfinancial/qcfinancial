@@ -85,5 +85,4 @@ else()
 
 endif()
 
-
 target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

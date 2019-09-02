@@ -2,7 +2,7 @@
 // Created by Alvaro Diaz Valenzuela on 2019-01-14.
 //
 
-#include "Catch/catch-2.hpp"
+#include "catch/catch-2.hpp"
 #include "time/QCDate.h"
 
 #include <array>
