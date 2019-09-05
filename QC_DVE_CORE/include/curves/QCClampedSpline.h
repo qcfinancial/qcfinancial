@@ -7,7 +7,10 @@
 class QCClampedSpline : public QCInterpolator
 {
 public:
-	//Constructors
+    /*!
+    * Constructor
+    * @param shared_ptr<QCCurve<long>> curva. Objeto que contiene las abscisas y ordenadas de la curva
+    */
 	QCClampedSpline(shared_ptr<QCCurve<long>> curva) : QCInterpolator(curva)
 	{
 		setCoefficients();
