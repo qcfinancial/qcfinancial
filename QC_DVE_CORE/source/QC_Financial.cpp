@@ -39,6 +39,7 @@
 #include <cashflows/IborCashflow2.h>
 #include "cashflows/SimpleCashflow.h"
 #include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClpCashflow2.h"
 #include "cashflows/IcpClfCashflow.h"
 #include "asset_classes/InterestRateIndex.h"
 #include "LegFactory.h"
@@ -407,6 +408,39 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         PyObject* (*show81)(std::shared_ptr<qf::IborCashflow2>) = wrappers::show;
         def("show", show81);
 
+    class_<qf::IcpClpCashflow2, std::shared_ptr<qf::IcpClpCashflow2>, bases<qf::LinearInterestRateCashflow>>
+    ("IcpClpCashflow2", init<QCDate&, QCDate&, QCDate&, double, double, bool, double, double, double, double> ())
+            .def("amount", &qf::IcpClpCashflow2::amount)
+            .def("ccy", &qf::IcpClpCashflow2::ccy)
+            .def("date", &qf::IcpClpCashflow2::date)
+            .def("get_type", &qf::IcpClpCashflow2::getType)
+            .def("get_start_date", &qf::IcpClpCashflow2::getStartDate, return_value_policy<copy_const_reference>())
+            .def("get_end_date", &qf::IcpClpCashflow2::getEndDate, return_value_policy<copy_const_reference>())
+            .def("get_settlement_date", &qf::IcpClpCashflow2::getSettlementDate, return_value_policy<copy_const_reference>())
+            .def("get_fixing_dates", &qf::IcpClpCashflow2::getFixingDates, return_value_policy<copy_const_reference>())
+            .def("get_nominal", &qf::IcpClpCashflow2::getNominal)
+            .def("nominal", &qf::IcpClpCashflow2::nominal)
+            .def("get_amortization", &qf::IcpClpCashflow2::getAmortization)
+            .def("amortization", &qf::IcpClpCashflow2::amortization)
+            .def<double (qf::IcpClpCashflow2::*)()>("interest", &qf::IcpClpCashflow2::interest)
+            .def<double (qf::IcpClpCashflow2::*)(const qf::TimeSeries&)>("interest", &qf::IcpClpCashflow2::interest)
+            .def<double(qf::IcpClpCashflow2::*)()>("fixing", &qf::IcpClpCashflow2::fixing)
+            .def<double(qf::IcpClpCashflow2::*)(const qf::TimeSeries&)>("fixing", &qf::IcpClpCashflow2::fixing)
+            .def<double (qf::IcpClpCashflow2::*)(const QCDate&)>("accrued_interest", &qf::IcpClpCashflow2::accruedInterest)
+            .def<double (qf::IcpClpCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_interest",
+                    &qf::IcpClpCashflow2::accruedInterest)
+            .def<double (qf::IcpClpCashflow2::*)(const QCDate&)>("accrued_fixing", &qf::IcpClpCashflow2::accruedFixing)
+            .def<double (qf::IcpClpCashflow2::*)(const QCDate&, const qf::TimeSeries&)>("accrued_fixing",
+                    &qf::IcpClpCashflow2::accruedFixing)
+            .def("does_amortize", &qf::IcpClpCashflow2::doesAmortize)
+            .def("wrap", &qf::IcpClpCashflow2::wrap)
+            ;
+
+    PyObject* (*show9)(qf::IborCashflow2) = wrappers::show;
+    def("show", show9);
+
+    PyObject* (*show91)(std::shared_ptr<qf::IborCashflow2>) = wrappers::show;
+    def("show", show91);
 
 
 //        class_<qf::FixedRateCashflowWrapper, std::shared_ptr<qf::FixedRateCashflowWrapper>>("FixedRateCashflowWrapper", no_init)

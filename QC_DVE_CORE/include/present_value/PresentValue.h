@@ -223,7 +223,7 @@ namespace QCode
 			* @param    leg: cashflows which will be present valued.
 			* @param	intRate: interest rate from which to obtain the appropriate discount factor.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A double with the present value. Derivatives are stored in the class and have
@@ -255,7 +255,7 @@ namespace QCode
 			* @param    leg: cashflows which will be present valued.
 			* @param	curve: curve from which to obtain the appropriate discount factor.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A double with the present value. Derivatives are stored in the class and have
@@ -324,11 +324,11 @@ namespace QCode
 			* @fn      std::vector<double> getDerivatives(): returns the derivatives with respect to 
 			*          each vertex of the discounting curve of the last present value calculated.
 			*          
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A std::vector<double> with the derivatives. The indexes of this vector
-			*           coincides with the indices of the vertices of the curve.
+			*           coincide with the indices of the vertices of the curve.
 			*/
 			std::vector<double> getDerivatives() const
 			{
@@ -339,7 +339,7 @@ namespace QCode
 			* @fn      std::vector<double> getDerivatives(): returns the 2nd derivatives of the present
 			*          value of a single cashflow with respect to each vertex of the discounting curve.
 			*         
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    28/05/2018
 			*
 			* @return	A std::vector<double> with the derivatives. The indexes of this vector

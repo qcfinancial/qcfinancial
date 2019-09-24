@@ -26,8 +26,8 @@ namespace QCode
 			/**
 			 * @fn	virtual std::shared_ptr<QCCurrency> LinearInterestRateCashflow::getInitialCcy() const = 0;
 			 *
-			 * @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide this method even when the cashflow
-			 * 			has been quantized.
+			 * @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide
+			 *          this method even when the cashflow has been quantized.
 			 *
 			 * @author	A Diaz V
 			 * @date	21-03-2019

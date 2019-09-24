@@ -73,7 +73,7 @@ namespace QCode
 			}
 			else
 			{
-				double factor = std::pow(10, _tnaDecimalPlaces);
+				long double factor = std::pow(10, _tnaDecimalPlaces);
 				return round(tna * factor) / factor;
 			}
 		}

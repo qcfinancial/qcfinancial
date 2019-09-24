@@ -34,7 +34,7 @@ public:
 	/*!
 	* Ejecuta el procedimiento que genera la curva.
 	*/
-	virtual void generateCurve();
+	virtual void generateCurve() override;
 
 	/*!
 	* Ejecuta el procedimiento que genera la curva y calcula todas las derivadas.
