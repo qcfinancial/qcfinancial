@@ -438,6 +438,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("get_end_date_icp", &qf::IcpClpCashflow2::getEndDateICP)
             .def("get_rate_value", &qf::IcpClpCashflow2::getRateValue)
             .def("get_type_of_rate", &qf::IcpClpCashflow2::getTypeOfRate)
+            .def("set_tna_decimal_places", &qf::IcpClpCashflow2::setTnaDecimalPlaces)
             ;
 
     PyObject* (*show9)(qf::IborCashflow2) = wrappers::show;
