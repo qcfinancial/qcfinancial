@@ -443,12 +443,13 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("set_amortization", &qf::IcpClpCashflow2::setAmortization)
             .def("set_start_date_icp", &qf::IcpClpCashflow2::setStartDateICP)
             .def("set_end_date_icp", &qf::IcpClpCashflow2::setEndDateICP)
+            .def("get_tna", &qf::IcpClpCashflow2::getTna)
             ;
 
-    PyObject* (*show9)(qf::IborCashflow2) = wrappers::show;
+    PyObject* (*show9)(qf::IcpClpCashflow2) = wrappers::show;
     def("show", show9);
 
-    PyObject* (*show91)(std::shared_ptr<qf::IborCashflow2>) = wrappers::show;
+    PyObject* (*show91)(std::shared_ptr<qf::IcpClpCashflow2>) = wrappers::show;
     def("show", show91);
 
 
