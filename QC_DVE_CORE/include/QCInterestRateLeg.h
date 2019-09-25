@@ -24,7 +24,7 @@ public:
 		intRtPrdElmntStartDate,		/*!< Fecha de inicio del período */
 		intRtPrdElmntEndDate,		/*!< Fecha final del período */
 		intRtPrdElmntSettlmntDate,	/*!< Fecha de pago del flujo */
-		//Las siguientes 3 son para patas flotantes
+		// Las siguientes 3 son para patas flotantes
 		intRtPrdElmntFxngDate,		/*!< Fecha de fixing del índice */
 		intRtPrdElmntFxngInitDate,	/*!< Fecha de inicio de devengo (fecha de valor) del índice */
 		intRtPrdElmntFxngEndDate,	/*!< Fecha final de devengo del índice */

@@ -39,10 +39,10 @@ void QCFloatingRatePayoff::_setAllRates()
 	{
 		auto per = _irLeg->getPeriodAt(i);
 		//Si el fixing date es menor que _valueDate lo va a calcular con fixingData
-		QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(per);
+		QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
 		if (_valueDate >= temp)
 		{
-			QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
+			// QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
 			cout << get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per).description() << endl;
 			_allRates.at(i) = _fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
 				* _multipSpread + _additiveSpread;
@@ -59,23 +59,23 @@ void QCFloatingRatePayoff::_setAllRates()
 		}
 		else
 		{
-			//Si no calcula el factor de descuento fwd segun los parametros del periodo
+			//Si no calcula el factor de descuento fwd según los parámetros del período
 			QCDate date1 = get<QCInterestRateLeg::intRtPrdElmntFxngInitDate>(per);
 			QCDate date2 = get<QCInterestRateLeg::intRtPrdElmntFxngEndDate>(per);
 			long d1 = _valueDate.dayDiff(date1);
 			long d2 = _valueDate.dayDiff(date2);
 			
-			//La tasa fwd se expresa en la convencion en que se construyo
-			//la curva de proyeccion. Al fabricar el payoff se debe poner atencion
-			//a que esta coincida con las caracteristicas del swap.
+			//La tasa fwd se expresa en la convención en que se construyo
+			//la curva de proyección. Al fabricar el payoff se debe poner atención
+			//a que esta coincida con las características del swap.
 			double tasaFwd = QCInterestRatePayoff::_projectingCurve->
 				getForwardRate(*(QCInterestRatePayoff::_rate),  d1, d2);
 			
-			//Los siguientes dos calculos son necesarios para el calculo de derivadas
+			//Los siguientes dos cálculos son necesarios para el cálculo de derivadas
 			double wfFwd = QCInterestRatePayoff::_projectingCurve->getForwardWf(d1, d2);
 			double yf = _rate->yf(date1, date2);
 
-			//Cada tasa fwd (o fijacion anterior) se guarda en _forwardRates
+			//Cada tasa fwd (o fijación anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = tasaFwd;
 			cout << "forward rates: " << i << ": " << _forwardRates.at(i) << endl;
 
