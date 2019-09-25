@@ -1,5 +1,5 @@
-#include "QCInterpolator.h"
-#include "QCDate.h"
+#include "curves/QCInterpolator.h"
+#include "time/QCDate.h"
 
 #include <exception>
 

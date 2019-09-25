@@ -1,4 +1,4 @@
-#include "QCWealthFactor.h"
+#include "asset_classes/QCWealthFactor.h"
 
 QCWealthFactor::QCWealthFactor()
 {

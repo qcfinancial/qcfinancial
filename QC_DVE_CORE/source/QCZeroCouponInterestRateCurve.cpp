@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "QCZeroCouponInterestRateCurve.h"
+#include "curves/QCZeroCouponInterestRateCurve.h"
 
 
 QCZeroCouponInterestRateCurve::QCZeroCouponInterestRateCurve(

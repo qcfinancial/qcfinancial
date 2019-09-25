@@ -1,4 +1,4 @@
-#include "QCLinearInterpolator.h"
+#include "curves/QCLinearInterpolator.h"
 
 QCLinearInterpolator::QCLinearInterpolator(shared_ptr<QCCurve<long>> curve) :
 	QCInterpolator(curve)

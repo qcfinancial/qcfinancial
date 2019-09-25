@@ -2,8 +2,8 @@
 // Created by Alvaro Diaz Valenzuela on 2019-01-14.
 //
 
-#include "catch-2.hpp"
-#include "QCDate.h"
+#include "catch/catch-2.hpp"
+#include "time/QCDate.h"
 
 #include <array>
 #include <algorithm> // for std::find

@@ -4,13 +4,13 @@
 #include <memory>
 #include <string>
 
-#include "QCYearFraction.h"
-#include "QCWealthFactor.h"
+#include "asset_classes/QCYearFraction.h"
+#include "asset_classes/QCWealthFactor.h"
 #include "QCInterestRateLeg.h"
 #include "QCDefinitions.h"
-#include "QCDate.h"
-#include "QCInterestRateCurve.h"
-#include "QCCurrency.h"
+#include "time/QCDate.h"
+#include "curves/QCInterestRateCurve.h"
+#include "asset_classes/QCCurrency.h"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ namespace QCFactoryFunctions
 		const string& interpolator, const string& yf, const string& wf, const string& typeCurve);
 
 	/*!
-	* Construye una tasa de interés Lin Act/360 c0n valor 0.
+	* Construye una tasa de interï¿½s Lin Act/360 c0n valor 0.
 	*/
 	shared_ptr<QCInterestRate> zeroIntRateSharedPtr();
 

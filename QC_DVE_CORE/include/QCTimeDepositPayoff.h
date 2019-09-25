@@ -2,8 +2,8 @@
 #define QCTIMEDEPOSITPAYOFF_H
 
 #include "QCInterestRatePayoff.h"
-#include "QCInterestRate.h"
-#include "QCCurrencyConverter.h"
+#include "asset_classes/QCInterestRate.h"
+#include "asset_classes/QCCurrencyConverter.h"
 
 /*!
 * @brief QCDiscountBondPayoff hereda de QCInterestRatePayoff e implementa la estructura de un bono
@@ -17,10 +17,10 @@ public:
 	* Constructor, se apoya en el constructor de la clase madre.
 	* @param rate valor y forma de la tasa fija.
 	* @param irLeg estructura de fechas y amortizaciones. En este caso, irLeg debe consistir
-	* de un único período con amortización bullet que constituye flujo y disposición inicial
+	* de un ï¿½nico perï¿½odo con amortizaciï¿½n bullet que constituye flujo y disposiciï¿½n inicial
 	* que constituye flujo.
-	* @param discountCurve curva de descuento (para la obtención del valor presente)
-	* @param valueDate fecha de valorización.
+	* @param discountCurve curva de descuento (para la obtenciï¿½n del valor presente)
+	* @param valueDate fecha de valorizaciï¿½n.
 	*/
 	QCTimeDepositPayoff(QCIntrstRtShrdPtr rate,
 		shared_ptr<QCInterestRateLeg> irLeg,
@@ -29,9 +29,9 @@ public:
 		);
 
 	/*!
-	* Retorna el período en el índice solicitado
-	* @param n índice del período
-	* @return período
+	* Retorna el perï¿½odo en el ï¿½ndice solicitado
+	* @param n ï¿½ndice del perï¿½odo
+	* @return perï¿½odo
 	*/
 	QCInterestRateLeg::QCInterestRatePeriod getPeriodAt(unsigned int n) const;
 
@@ -43,14 +43,14 @@ public:
 	bool operator<(const QCTimeDepositPayoff& rhs) const;
 
 	/*!
-	* Función similar al operador < pero que actúa sobre shared_ptr<QCTimeDeposit>
+	* Funciï¿½n similar al operador < pero que actï¿½a sobre shared_ptr<QCTimeDeposit>
 	* @param rhs
 	* @return (bool)
 	*/
 	static bool lessThan(shared_ptr<QCTimeDepositPayoff> lhs, shared_ptr<QCTimeDepositPayoff> rhs);
 
 	/*!
-	* Devuelve el valor de la tasa del depósito
+	* Devuelve el valor de la tasa del depï¿½sito
 	* @return valor de la tasa
 	*/
 	double getRateValue();
@@ -62,7 +62,7 @@ public:
 
 protected:
 	/*!
-	* Se fija la tasa a aplicar en cada período. En este caso se define rate en el único
+	* Se fija la tasa a aplicar en cada perï¿½odo. En este caso se define rate en el ï¿½nico
 	* pago del payoff.
 	*/
 	virtual void _setAllRates() override;

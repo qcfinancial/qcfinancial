@@ -2,8 +2,8 @@
 #define QCDISCOUNTBONDPAYOFF_H
 
 #include "QCInterestRatePayoff.h"
-#include "QCInterestRate.h"
-#include "QCCurrencyConverter.h"
+#include "asset_classes/QCInterestRate.h"
+#include "asset_classes/QCCurrencyConverter.h"
 
 /*!
 * @brief QCDiscountBondPayoff hereda de QCInterestRatePayoff e implementa la estructura de un bono
@@ -17,9 +17,9 @@ public:
 	* Constructor, se apoya en el constructor de la clase madre.
 	* @param fixedRate valor y forma de la tasa fija.
 	* @param irLeg estructura de fechas y amortizaciones. En este caso, irLeg debe consistir
-	* de un único período con amortización bullet que constituye flujo.
-	* @param discountCurve curva de descuento (para la obtención del valor presente)
-	* @param valueDate fecha de valorización.
+	* de un ï¿½nico perï¿½odo con amortizaciï¿½n bullet que constituye flujo.
+	* @param discountCurve curva de descuento (para la obtenciï¿½n del valor presente)
+	* @param valueDate fecha de valorizaciï¿½n.
 	*/
 	QCDiscountBondPayoff(shared_ptr<QCInterestRateLeg> irLeg,
 		QCIntRtCrvShrdPtr discountCurve,
@@ -30,8 +30,8 @@ public:
 		);
 
 	/*!
-	* Este override de presentValue() llama el método de la clase madre y luego ajusta el valor
-	* del cashflow en value date transformándolo a la moneda de liquidación.
+	* Este override de presentValue() llama el mï¿½todo de la clase madre y luego ajusta el valor
+	* del cashflow en value date transformï¿½ndolo a la moneda de liquidaciï¿½n.
 	*/
 	double presentValue();
 
@@ -42,8 +42,8 @@ public:
 	QCCurrencyConverter::QCCurrencyEnum getNotionalCurrency();
 
 	/*!
-	* Entrega el período de tasa de interés
-	* @return único QCInterestRatePeriod de este payoff.
+	* Entrega el perï¿½odo de tasa de interï¿½s
+	* @return ï¿½nico QCInterestRatePeriod de este payoff.
 	*/
 	QCInterestRateLeg::QCInterestRatePeriod getPeriod() const;
 
@@ -54,7 +54,7 @@ public:
 
 protected:
 	/*!
-	* Se fija la tasa a aplicar en cada período. En este caso se define 0 en el único
+	* Se fija la tasa a aplicar en cada perï¿½odo. En este caso se define 0 en el ï¿½nico
 	* pago del payoff.
 	*/
 	virtual void _setAllRates() override;
@@ -66,7 +66,7 @@ protected:
 
 	/*!
 	* Variable donde se almacena el tipo de fx rate que se usa para convertir.
-	* Con tipo nos referimos a la descripcion MX1MX2 donde MXi es el código de una divisa.
+	* Con tipo nos referimos a la descripcion MX1MX2 donde MXi es el cï¿½digo de una divisa.
 	*/
 	QCCurrencyConverter::QCFxRateEnum _fxRate;
 };
