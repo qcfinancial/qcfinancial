@@ -9,7 +9,9 @@
 #include "cashflows/IborCashflow.h"
 #include "cashflows/IborMultiCurrencyCashflow.h"
 #include "cashflows/IcpClpCashflow.h"
+#include "cashflows/IcpClpCashflow2.h"
 #include "cashflows/IcpClfCashflow.h"
+
 
 #include "QCInterestRatePeriodsFactory.h"
 
@@ -611,10 +613,11 @@ namespace QCode
 				settlementPeriodicity.getString(), settlementStubPeriod, settCal, settlementLag,
 				// The next parameters are useful only for IborLegs. Arbitrary values
 				// are given to them in this case.
-				settlementPeriodicity.getString(), settlementStubPeriod, settCal, 0, 0, settlementPeriodicity.getString() };
+				settlementPeriodicity.getString(), settlementStubPeriod, settCal, 0, 0,
+				settlementPeriodicity.getString() };
 			auto periods = pf.getPeriods();
 
-			// Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+			// Load the periods into the structure of FixedRateCashflow and construct the Leg.
 			Leg icpClpLeg;
 			size_t numPeriods = periods.size();
 			icpClpLeg.resize(numPeriods);
@@ -638,7 +641,72 @@ namespace QCode
 			return icpClpLeg;
 		}
 
-		Leg LegFactory::buildCustomAmortIcpClpLeg(
+
+        Leg LegFactory::buildBulletIcpClp2Leg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                double notional,
+                bool doesAmortize,
+                double spread,
+                double gearing)
+        {
+            // Make all the holidays in the calendar into a shared_ptr.
+            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+
+            // Minus sign is set if cashflows are paid.
+            int sign;
+            if (recPay == Receive)
+            {
+                sign = 1;
+            }
+            else
+            {
+                sign = -1;
+            }
+
+            // Instantiate factory and build the corresponding periods.
+            QCInterestRatePeriodsFactory pf{ startDate, endDate, endDateAdjustment,
+                                             settlementPeriodicity.getString(), settlementStubPeriod, settCal, settlementLag,
+                    // The next parameters are useful only for IborLegs. Arbitrary values
+                    // are given to them in this case.
+                                             settlementPeriodicity.getString(), settlementStubPeriod, settCal, 0, 0,
+                                             settlementPeriodicity.getString() };
+            auto periods = pf.getPeriods();
+
+            // Load the periods into the structure of FixedRateCashflow and construct the Leg.
+            Leg icpClpLeg;
+            size_t numPeriods = periods.size();
+            icpClpLeg.resize(numPeriods);
+            size_t i = 0;
+            for (const auto& period : periods)
+            {
+                QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
+                QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
+                QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
+                double amort = 0.0;
+                if (i == numPeriods - 1)
+                {
+                    amort = sign * notional;
+                }
+                // This is the only difference with respect to the method that returns
+                // a Leg with cashflows of type IcpClpCashflow
+                IcpClpCashflow2 icpclpc{ thisStartDate, thisEndDate, settlementDate,
+                                        sign * notional, amort, doesAmortize, spread, gearing, DEFAULT_ICP, DEFAULT_ICP };
+                icpClpLeg.setCashflowAt(std::make_shared<IcpClpCashflow2>(icpclpc), i);
+                ++i;
+            }
+
+            return icpClpLeg;
+        }
+
+
+        Leg LegFactory::buildCustomAmortIcpClpLeg(
 			RecPay recPay,
 			QCDate startDate,
 			QCDate endDate,
@@ -671,7 +739,42 @@ namespace QCode
 
 		}
 
-		Leg LegFactory::buildBulletIcpClfLeg(
+
+        Leg LegFactory::buildCustomAmortIcpClp2Leg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                CustomNotionalAmort notionalAndAmort,
+                bool doesAmortize,
+                double spread,
+                double gearing)
+        {
+            Leg icpClpLeg = buildBulletIcpClp2Leg(recPay,
+                                                 startDate,
+                                                 endDate,
+                                                 endDateAdjustment,
+                                                 settlementPeriodicity,
+                                                 settlementStubPeriod,
+                                                 settlementCalendar,
+                                                 settlementLag,
+                                                 100.0,
+                                                 doesAmortize,
+                                                 spread,
+                                                 gearing);
+
+            std::cout << "custom amort icp clp leg: done bullet" << std::endl;
+            customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);
+            return icpClpLeg;
+
+        }
+
+
+        Leg LegFactory::buildBulletIcpClfLeg(
 			RecPay recPay,
 			QCDate startDate,
 			QCDate endDate,

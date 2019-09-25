@@ -140,6 +140,7 @@ namespace QCode
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency,
 				bool forBonds = false);
+
 			/**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
 			 *
@@ -346,7 +347,6 @@ namespace QCode
 			 *
 			 * @returns	A Leg.
 			 */
-
 			static Leg buildBulletIborMultiCurrencyLeg(
 				RecPay recPay,
 				QCDate startDate,
@@ -370,9 +370,6 @@ namespace QCode
 				std::shared_ptr<FXRateIndex> fxRateIndex,
 				unsigned int fxRateIndexFixingLag
 				);
-
-
-
 
 
 			/**
@@ -461,7 +458,45 @@ namespace QCode
 				double spread,
 				double gearing);
 
-			/**
+
+            /**
+            * @fn	static Leg LegFactory::buildBulletIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
+            *
+            * @brief	Builds bullet icp clp leg
+            *
+            * @author	Alvaro Diaz V.
+            * @date	07/07/2018
+            *
+            * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+            * @param	startDate			 	The start date.
+            * @param	endDate				 	The end date.
+            * @param	endDateAdjustment	 	The end date adjustment.
+            * @param	settlementPeriodicity	The settlement periodicity.
+            * @param	settlementStubPeriod 	The settlement stub period.
+            * @param	settlementCalendar   	The settlement calendar.
+            * @param	settlementLag		 	The settlement lag.
+            * @param	notional			 	The notional.
+            * @param	doesAmortize		 	True to does amortize.
+            * @param	spread				 	The spread.
+            * @param	gearing				 	The gearing.
+            *
+            * @return	A Leg.
+            */
+            static Leg buildBulletIcpClp2Leg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing);
+
+            /**
 			 * @fn	static Leg LegFactory::buildCustomAmortIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
 			 *
 			 * @brief	Builds custom amort icp clp leg
@@ -498,7 +533,45 @@ namespace QCode
 				double spread,
 				double gearing);
 
-			/**
+
+            /**
+            * @fn	static Leg LegFactory::buildCustomAmortIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
+            *
+            * @brief	Builds custom amort icp clp leg
+            *
+            * @author	Alvaro Diaz V.
+            * @date	07/07/2018
+            *
+            * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+            * @param	startDate			 	The start date.
+            * @param	endDate				 	The end date.
+            * @param	endDateAdjustment	 	The end date adjustment.
+            * @param	settlementPeriodicity	The settlement periodicity.
+            * @param	settlementStubPeriod 	The settlement stub period.
+            * @param	settlementCalendar   	The settlement calendar.
+            * @param	settlementLag		 	The settlement lag.
+            * @param	notionalAndAmort	 	The notional and amort.
+            * @param	doesAmortize		 	True to does amortize.
+            * @param	spread				 	The spread.
+            * @param	gearing				 	The gearing.
+            *
+            * @return	A Leg.
+            */
+            static Leg buildCustomAmortIcpClp2Leg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing);
+
+            /**
 			 * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
 			 *
 			 * @brief	Builds bullet icp clf leg

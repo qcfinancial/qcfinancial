@@ -85,40 +85,48 @@ namespace QCode
             return _endDate;
         }
 
+
         const QCDate& IcpClpCashflow2::getSettlementDate() const
         {
             return _settlementDate;
         }
+
 
         const DateList& IcpClpCashflow2::getFixingDates() const
         {
             return _fixingDates;
         }
 
+
         double IcpClpCashflow2::getNominal() const
         {
             return _nominal;
         }
+
 
         double IcpClpCashflow2::nominal(const QCDate& fecha) const
         {
             return _nominal;
         }
 
+
         double IcpClpCashflow2::getAmortization() const
         {
             return _amortization;
         }
+
 
         double IcpClpCashflow2::amortization() const
         {
             return _amortization;
         }
 
+
         double IcpClpCashflow2::interest()
         {
             return _calculateInterest(_endDate, _endDateICP);
         }
+
 
         double IcpClpCashflow2::interest(const TimeSeries& fixings)
         {
@@ -144,10 +152,12 @@ namespace QCode
             return _calculateInterest(_endDate, _endDateICP);
         }
 
+
         double IcpClpCashflow2::fixing()
         {
             return getTna(_endDate, _endDateICP);
         }
+
 
         double IcpClpCashflow2::fixing(const TimeSeries& fixings)
         {
@@ -164,11 +174,13 @@ namespace QCode
             return getTna(_endDate, _endDateICP);
         }
 
+
         double IcpClpCashflow2::accruedInterest(const QCDate& fecha)
         {
             throw invalid_argument("Accrued interest requires ICP value. Use overload with 2nd argument a "
                                    "time series.");
         }
+
 
         double IcpClpCashflow2::accruedInterest(const QCDate& fecha, const TimeSeries& fixings)
         {
@@ -186,11 +198,13 @@ namespace QCode
             return _calculateInterest(fechaOk, icpValue);
         }
 
+
         double IcpClpCashflow2::accruedFixing(const QCDate& fecha)
         {
             throw invalid_argument("Accrued fixing requires ICP value. Use overload with 2nd argument a "
                                    "time series.");
         }
+
 
         double IcpClpCashflow2::accruedFixing(const QCDate& fecha, const TimeSeries& fixings)
         {
@@ -208,6 +222,7 @@ namespace QCode
             return getTna(fechaOk, icpValue);
         }
 
+
         bool IcpClpCashflow2::doesAmortize() const
         {
             return _doesAmortize;
@@ -220,6 +235,7 @@ namespace QCode
         {
             _tnaDecimalPlaces = decimalPlaces;
         }
+
 
         double IcpClpCashflow2::getTna(QCDate date, double icpValue)
         {
@@ -243,15 +259,18 @@ namespace QCode
                 }
         }
 
+
         void IcpClpCashflow2::setStartDateICP(double icpValue)
         {
             _startDateICP = icpValue;
         }
 
+
         double IcpClpCashflow2::getStartDateICP() const
         {
             return _startDateICP;
         }
+
 
         double IcpClpCashflow2::getEndDateICP() const
         {

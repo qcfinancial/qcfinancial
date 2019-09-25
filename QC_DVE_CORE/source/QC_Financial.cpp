@@ -819,10 +819,19 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_bullet_ibor_mccy_leg")
         .def("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
         .staticmethod("build_custom_amort_ibor_leg")
+
         .def("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)
         .staticmethod("build_bullet_icp_clp_leg")
+
+        .def("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
+        .staticmethod("build_bullet_icp_clp2_leg")
+
         .def("build_custom_amort_icp_clp_leg", &qf::LegFactory::buildCustomAmortIcpClpLeg)
         .staticmethod("build_custom_amort_icp_clp_leg")
+
+        .def("build_custom_amort_icp_clp2_leg", &qf::LegFactory::buildCustomAmortIcpClp2Leg)
+        .staticmethod("build_custom_amort_icp_clp2_leg")
+
         .def("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
         .staticmethod("build_bullet_icp_clf_leg")
         .def("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
