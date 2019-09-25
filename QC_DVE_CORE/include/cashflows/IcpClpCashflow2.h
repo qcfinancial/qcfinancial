@@ -111,6 +111,10 @@ namespace QCode
 
             std::string getTypeOfRate();
 
+            double getSpread() const;
+
+            double getGearing() const;
+
             virtual ~IcpClpCashflow2();
 
         protected:

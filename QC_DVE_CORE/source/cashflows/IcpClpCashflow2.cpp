@@ -331,6 +331,16 @@ namespace QCode
             return _rate.getValue();
         }
 
+        double IcpClpCashflow2::getSpread() const
+        {
+            return _spread;
+        }
+
+        double IcpClpCashflow2::getGearing() const
+        {
+            return _gearing;
+        }
+
         std::string IcpClpCashflow2::getTypeOfRate()
         {
             return _rate.getWealthFactor()->description() + _rate.getYearFraction()->description();

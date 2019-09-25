@@ -444,6 +444,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("set_start_date_icp", &qf::IcpClpCashflow2::setStartDateICP)
             .def("set_end_date_icp", &qf::IcpClpCashflow2::setEndDateICP)
             .def("get_tna", &qf::IcpClpCashflow2::getTna)
+            .def("get_spread", &qf::IcpClpCashflow2::getSpread)
+            .def("get_gearing", &qf::IcpClpCashflow2::getGearing)
             ;
 
     PyObject* (*show9)(qf::IcpClpCashflow2) = wrappers::show;
