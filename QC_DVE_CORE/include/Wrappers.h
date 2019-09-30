@@ -1907,10 +1907,10 @@ namespace wrappers
 
 
     PyObject* show(std::shared_ptr<qf::IcpClpCashflow2> cshflwPtr)
-{
-    qf::IcpClpCashflow2 cshflw = *cshflwPtr;
-    return show(cshflw);
-}
+    {
+        qf::IcpClpCashflow2 cshflw = *cshflwPtr;
+        return show(cshflw);
+    }
 
 
 	PyObject* show(std::shared_ptr<qf::IcpClpCashflow> cshflwPtr)
@@ -2139,7 +2139,27 @@ namespace wrappers
 	}
 
 
-	boost::python::tuple getColumnNames(const std::string& cashflowType, const std::string& cashflowSubtype = "")
+    qf::DateList keys(qf::TimeSeries ts)
+    {
+        qf::DateList result;
+        for (auto& k: ts)
+        {
+            result.push_back(k.first);
+        }
+        return result;
+    }
+
+    std::vector<double> values(qf::TimeSeries ts)
+    {
+        std::vector<double> result;
+        for (auto& k: ts)
+        {
+            result.push_back(k.second);
+        }
+        return result;
+    }
+
+boost::python::tuple getColumnNames(const std::string& cashflowType, const std::string& cashflowSubtype = "")
     {
 	    if (cashflowType == "FixedRateCashflow" || cashflowType == "FixedRateCashflow2")
         {

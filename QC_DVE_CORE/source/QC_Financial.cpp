@@ -864,6 +864,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def(map_indexing_suite<qf::TimeSeries, true>())
         ;
 
+        def("time_series_dates", &wrappers::keys);
+        def("time_series_values", &wrappers::values);
 
 //	class_<qf::TimeSeries>("many_time_series")
 //		.def(map_indexing_suite<qf::ManyTimeSeries>())
