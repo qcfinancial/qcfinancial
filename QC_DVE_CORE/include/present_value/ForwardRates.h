@@ -21,22 +21,23 @@ namespace QCode
 			ForwardRates()
 			{}
 
-			std::shared_ptr<IborCashflow> setRateIborCashflow(const QCDate& valuationDate, Cashflow& iborCashflow,
+			std::shared_ptr<IborCashflow2> setRateIborCashflow(const QCDate& valuationDate, Cashflow& iborCashflow,
 				ZeroCouponCurve& curve)
 			{
-				auto iborCashflow_ = dynamic_cast<IborCashflow&>(iborCashflow);
+				auto iborCashflow_ = dynamic_cast<IborCashflow2&>(iborCashflow);
 				std::vector<double> derivatives(curve.getLength(), 0.0);
-				if (valuationDate > iborCashflow_.getFixingDate())
+				auto fixingDate = iborCashflow_.getFixingDates()[0];
+				if (valuationDate > fixingDate)
 				{
-					return std::make_shared<IborCashflow>(iborCashflow_);
+					return std::make_shared<IborCashflow2>(iborCashflow_);
 				}
-				QCDate fecha1 = iborCashflow_.getIndexStartDate();
-				QCDate fecha2 = iborCashflow_.getIndexEndDate();
+				QCDate fecha1 = iborCashflow_.getInterestRateIndex()->getStartDate(fixingDate);
+				QCDate fecha2 = iborCashflow_.getInterestRateIndex()->getEndDate(fixingDate);
 				long t1 = valuationDate.dayDiff(fecha1);
 				long t2 = valuationDate.dayDiff(fecha2);
 				auto tasaForward = curve.getForwardRate(t1, t2);
-				iborCashflow_.setInterestRateValue(tasaForward);
-				return std::make_shared<IborCashflow>(iborCashflow_);
+				iborCashflow_.getInterestRateIndex()->setRateValue(tasaForward);
+				return std::make_shared<IborCashflow2>(iborCashflow_);
 			}
 
 			void setRatesIborLeg(const QCDate& valuationDate, Leg& iborLeg, ZeroCouponCurve& curve)

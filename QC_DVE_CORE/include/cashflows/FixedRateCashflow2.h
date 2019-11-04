@@ -172,7 +172,8 @@ namespace QCode
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::amortization() const = 0;
 			*
-			* @brief	Gets the amortization if doesAmortize = true. Subclasses should, in this method, apply all relevant calculations.
+			* @brief	Gets the amortization if doesAmortize = true. Subclasses should, in this method,
+			 * apply all relevant calculations.
 			*
 			* @author	A Diaz V
 			* @date	20-03-2019
