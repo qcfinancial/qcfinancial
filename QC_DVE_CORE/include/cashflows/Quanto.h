@@ -242,7 +242,7 @@ namespace QCode
 			virtual double accruedInterest(const QCDate& fecha) override
 			{
 				double interes = _cashflow->accruedInterest(fecha);
-				auto valor = _fxRateIndexValues->at(_fxRateFixingDate);
+				auto valor = _fxRateIndexValues->at(fecha);
 				QCCurrencyConverter converter;
 				return converter.convert(interes, _cashflow->ccy(), valor, _fxRateIndex);
 			}
@@ -251,7 +251,7 @@ namespace QCode
 			virtual double accruedInterest(const QCDate& fecha, const TimeSeries& fixings) override
 			{
 				double interes = _cashflow->accruedInterest(fecha, fixings);
-				auto valor = _fxRateIndexValues->at(_fxRateFixingDate);
+				auto valor = _fxRateIndexValues->at(fecha);
 				QCCurrencyConverter converter;
 				return converter.convert(interes, _cashflow->ccy(), valor, _fxRateIndex);
 			}
