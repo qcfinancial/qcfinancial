@@ -62,7 +62,8 @@ namespace QCode
 				{
 					return std::make_shared<IcpClpCashflow2>(icpClpCashflow_);
 				}
-				else if ((icpClpCashflow_.getStartDate() < valuationDate) && (valuationDate < icpClpCashflow_.getEndDate()))
+				else if ((icpClpCashflow_.getStartDate() < valuationDate) &&
+				(valuationDate < icpClpCashflow_.getEndDate()))
 				{
 					auto t = valuationDate.dayDiff(icpClpCashflow_.getEndDate());
 					icpClpCashflow_.setEndDateICP(icpValuationDate / curve.getDiscountFactorAt(t));
@@ -92,7 +93,8 @@ namespace QCode
 				_derivatives2.resize(icpClpLeg.size(), vector<double>(curve.getLength(), 0.0));
 				for (size_t i = 0; i < icpClpLeg.size(); ++i)
 				{
-					auto cashflow = setRateIcpClpCashflow(valuationDate, icpValuationDate, *(icpClpLeg.getCashflowAt(i)), curve);
+					auto cashflow = setRateIcpClpCashflow(valuationDate, icpValuationDate,
+					        *(icpClpLeg.getCashflowAt(i)), curve);
 					icpClpLeg.setCashflowAt(cashflow, i);
 				}
 			}

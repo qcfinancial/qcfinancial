@@ -2172,7 +2172,7 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
                     "nominal", "amortizacion", "interes", "amort_es_flujo", "flujo",
                     "moneda", "codigo_indice_tasa", "valor_tasa", "spread", "gearing", "tipo_tasa");
         }
-	    else if (cashflowType == "IcpClpCashflow")
+	    else if (cashflowType == "IcpClpCashflow" || cashflowType == "IcpClpCashflow2" )
         {
             return boost::python::make_tuple("fecha_inicial", "fecha_final", "fecha_pago", "nominal",
                     "amortizacion", "amort_es_flujo", "flujo", "moneda", "icp_inicial", "icp_final",

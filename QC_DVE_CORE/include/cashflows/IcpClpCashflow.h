@@ -43,7 +43,7 @@ namespace QCode
 			*
 			* @brief	Constructor
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    17/11/2017
 			*
 			* @param	startDate	  	The start date.

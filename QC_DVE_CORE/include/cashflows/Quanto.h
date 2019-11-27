@@ -174,7 +174,8 @@ namespace QCode
                 {
                     throw std::invalid_argument(fecha.description(false));
                 }
-                 return converter.convert(_cashflow->nominal(fecha), _cashflow->ccy(), valor, _fxRateIndex);
+                 return converter.convert(_cashflow->nominal(fecha),
+                         _cashflow->ccy(), valor, _fxRateIndex);
 			}
 
 

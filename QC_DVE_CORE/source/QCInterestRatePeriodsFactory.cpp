@@ -143,7 +143,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	return result;
 }
 
-//Con _getPeriods3() se va a cambiar la lógica de construcción de las fechas de fixing
+//Con _getPeriods3() se va a cambiar la lÃ³gica de construcciÃ³n de las fechas de fixing
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods3()
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
@@ -737,8 +737,8 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 					periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 					fechaInicioPeriodo = fechaFinalPeriodo;
 				}
-				//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-				//consecuencia de la fecha inicial del segundo período.
+				//Ejecuta el end_date_adjustment de la fecha final del primer perï¿½odo y en 
+				//consecuencia de la fecha inicial del segundo perï¿½odo.
 				get<1>(periods.at(0)) = get<1>(periods.at(0)).businessDay(calendar, _endDateAdjustment);
 				get<0>(periods.at(1)) = get<1>(periods.at(0));
 			}
@@ -779,8 +779,8 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 				periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 				fechaInicioPeriodo = fechaFinalPeriodo;
 			}
-			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-			//consecuencia de la fecha inicial del segundo período.
+			//Ejecuta el end_date_adjustment de la fecha final del primer perï¿½odo y en 
+			//consecuencia de la fecha inicial del segundo perï¿½odo.
 			get<1>(periods.at(0)) = get<1>(periods.at(0)).businessDay(calendar, _endDateAdjustment);
 			get<0>(periods.at(1)) = get<1>(periods.at(0));
 		}
@@ -818,8 +818,8 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 				tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 				fechaInicioPeriodo = fechaFinalPeriodo;
 			}
-			//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-			//consecuencia de la fecha inicial del segundo período.
+			//Ejecuta el end_date_adjustment de la fecha final del primer perï¿½odo y en 
+			//consecuencia de la fecha inicial del segundo perï¿½odo.
 			get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
 			get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
 		}
@@ -983,8 +983,8 @@ void QCInterestRatePeriodsFactory::_auxWithLongFrontNNotEasyCase(unsigned int di
 			tempPeriods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 			fechaInicioPeriodo = fechaFinalPeriodo;
 		}
-		//Ejecuta el end_date_adjustment de la fecha final del primer período y en 
-		//consecuencia de la fecha inicial del segundo período.
+		//Ejecuta el end_date_adjustment de la fecha final del primer perï¿½odo y en 
+		//consecuencia de la fecha inicial del segundo perï¿½odo.
 		get<1>(tempPeriods.at(0)) = get<1>(tempPeriods.at(0)).businessDay(calendar, _endDateAdjustment);
 		get<0>(tempPeriods.at(1)) = get<1>(tempPeriods.at(0));
 	}
