@@ -748,6 +748,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .value("LONGFRONT10", QCInterestRateLeg::qcLongFront10)
         .value("LONGFRONT11", QCInterestRateLeg::qcLongFront11)
         .value("LONGFRONT12", QCInterestRateLeg::qcLongFront12)
+        .value("LONGFRONT13", QCInterestRateLeg::qcLongFront13)
+        .value("LONGFRONT14", QCInterestRateLeg::qcLongFront14)
         ;
 
         class_<qf::Leg>("Leg")

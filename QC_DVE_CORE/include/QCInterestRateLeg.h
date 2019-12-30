@@ -57,8 +57,8 @@ public:
 		qcLongFront10,	/*!< Período largo al inicio agrupando 10 */
 		qcLongFront11,	/*!< Período largo al inicio agrupando 11 */
 		qcLongFront12,	/*!< Período largo al inicio agrupando 12 */
-		qcLongFront120,	/*!< Período largo al inicio agrupando 120 */
-		qcLongFront121	/*!< Período largo al inicio agrupando 121 */
+		qcLongFront13,	/*!< Período largo al inicio agrupando 13 */
+		qcLongFront14	/*!< Período largo al inicio agrupando 14 */
 	};
 
 	/*!

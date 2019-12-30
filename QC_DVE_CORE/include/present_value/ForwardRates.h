@@ -11,6 +11,7 @@
 #include "cashflows/IborCashflow2.h"
 #include "cashflows/IcpClpCashflow.h"
 #include "cashflows/IcpClpCashflow2.h"
+#include "cashflows/LinearInterestRateCashflow.h"
 #include "Leg.h"
 
 namespace QCode
@@ -42,7 +43,7 @@ namespace QCode
 				return std::make_shared<IborCashflow2>(iborCashflow_);
 			}
 
-			void setRatesIborLeg(const QCDate& valuationDate, Leg& iborLeg, ZeroCouponCurve& curve)
+            void setRatesIborLeg(const QCDate& valuationDate, Leg& iborLeg, ZeroCouponCurve& curve)
 			{
 				_derivatives2.resize(iborLeg.size(), vector<double>(curve.getLength(), 0.0));
 				for (size_t i = 0; i < iborLeg.size(); ++i)
