@@ -149,15 +149,11 @@ namespace QCode
 					std::fill(_derivatives.begin(), _derivatives.end(), 0);
 					return 0.0;
 				}
-//				if (days == 0)
-//				{
-//					std::fill(_derivatives.begin(), _derivatives.end(), 0);
-//					return cashflow->amount();
-//				}
 				else
 				{
 					const double amount = cashflow->amount();
-					const double pv = amount * curve->getDiscountFactorAt(days);
+					auto df = curve->getDiscountFactorAt(days);
+					const double pv = amount * df;
 					_rate = curve->getRateAt(days);
 					for (size_t i = 0; i < _derivatives.size(); ++i)
 					{
@@ -417,7 +413,14 @@ namespace QCode
 			*/
 			std::vector<double> _derivatives;
 
-			/**
+            /**
+            * @brief	Variable that holds the derivatives of the present value of a single
+            *           cashflow with respect to the vertices of a projecting curve.
+            */
+            std::vector<double> _projDerivatives;
+
+
+            /**
 			* @brief	Variable that holds the 2nd derivatives of the present value of a single
 			*           cashflow with respect to the vertices of a discounting curve.
 			*/
@@ -430,7 +433,11 @@ namespace QCode
 			{
 				_derivatives.clear();
 				_derivatives.resize(newSize);
-				_derivatives2.clear();
+
+                _projDerivatives.clear();
+                _projDerivatives.resize(newSize);
+
+                _derivatives2.clear();
 				_derivatives2.resize(newSize);
 				return;
 			}

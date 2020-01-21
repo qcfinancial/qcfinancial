@@ -25,7 +25,7 @@ namespace QCode
 			 *
 			 * @brief	Constructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	curve  	The values of the curve (x's and y's) with an associated
@@ -46,7 +46,7 @@ namespace QCode
 			 * @brief	Gets rate at maturity d. This method uses the interpolation defined
 			 * 			in the parameter curve used when constructing an instance of this class.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	d	A long representing the maturity of the rate.
@@ -72,12 +72,12 @@ namespace QCode
 			virtual double getDiscountFactorAt(long d) = 0;
 
 			/*!
-			* Retorna la tasa forward entre los plazos d1 y d2 en la convenci�n de intRate.
-			* @param intRate convenci�n de la tasa forward que se debe calcular.
-			* @param d1 plazo m�s corto de la tasa forward.
-			* @param d2 plazo m�s largo de la tasa forward.
+			* Retorna la tasa forward entre los plazos d1 y d2 en la convención de intRate.
+			* @param intRate convención de la tasa forward que se debe calcular.
+			* @param d1 plazo más corto de la tasa forward.
+			* @param d2 plazo más largo de la tasa forward.
 			* @return valor de la tasa forward calculada.
-			* Probablemente este m�todo puede mejorarse haciendo que retorne void y el valor de la
+			* Probablemente este método puede mejorarse haciendo que retorne void y el valor de la
 			* tasa forward calculada se almacene dentro de la variable intRate.
 			*/
 			virtual double getForwardRateWithRate(QCInterestRate& intRate, long d1, long d2) = 0;
@@ -91,20 +91,26 @@ namespace QCode
 			virtual double getForwardRate(long d1, long d2) = 0;
 
 			/*!
-			* Retorna la factor de capitalizaci�n forward entre los plazos d1 y d2.
-			* @param d1 plazo m�s corto del factor forward.
-			* @param d2 plazo m�s largo del factor forward.
+			* Retorna la factor de capitalización forward entre los plazos d1 y d2.
+			* @param d1 plazo más corto del factor forward.
+			* @param d2 plazo más largo del factor forward.
 			* @return valor del factor forward calculado.
 			*/
 			virtual double getForwardWf(long d1, long d2) = 0;
 
 			/*!
-			* Este m�todo es un getter que retorna la derivada del �ltimo factor de capitalizaci�n calculado.
+			* Este método es un getter que retorna la derivada del último factor de descuento calculado.
 			* @return valor de la derivada.
 			*/
 			virtual double dfDerivativeAt(unsigned int index) = 0;
 
-			/*!
+            /*!
+            * Este método es un getter que retorna la derivada del último factor de descuento calculado.
+            * @return valor de la derivada.
+            */
+            virtual double wfDerivativeAt(unsigned int index) = 0;
+
+            /*!
 			* Este m�todo es un getter que retorna la derivada del �ltimo factor de capitalizaci�n
 			* forward calculado.
 			* @return valor de la derivada.
@@ -112,7 +118,7 @@ namespace QCode
 			virtual double fwdWfDerivativeAt(unsigned int index) = 0;
 
 			/*!
-			* Este m�todo es un getter que retorna el largo de la curva
+			* Este método es un getter que retorna el largo de la curva
 			* @return largo de la curva.
 			*/
 			size_t getLength() const
@@ -121,8 +127,8 @@ namespace QCode
 			}
 
 			/*!
-			* Retorna el valor de la tasa en la posici�n index
-			* @param �ndice de la tasa buscada
+			* Retorna el valor de la tasa en la posición index
+			* @param índice de la tasa buscada
 			* @return valor de la tasa
 			*/
 			double getRateAtIndex(size_t index)
@@ -131,9 +137,9 @@ namespace QCode
 			}
 
 			/*!
-			* Este m�todo borra abscisas y ordenadas de la curva y vuelve a definir el tama�o de los
+			* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tamaño de los
 			* vectores de abscisa y ordenadas.
-			* @param newSize nuevo tama�o de la curva
+			* @param newSize nuevo tamaño de la curva
 			*/
 			void reset(unsigned long newSize)
 			{
@@ -143,9 +149,9 @@ namespace QCode
 			}
 
 			/*!
-			* Este m�todo actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
+			* Este método actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
 			* a un par ya existente, entonces sobre escribe los valores existentes. Si la abscisa no existe,
-			* se inserta un nuevo par en la posici�n que corresponda (ordenado por abscisa ascendente).
+			* se inserta un nuevo par en la posición que corresponda (ordenado por abscisa ascendente).
 			* @param x abscisa
 			* @param y ordenada
 			*/
@@ -155,7 +161,7 @@ namespace QCode
 			}
 
 			/*!
-			* M�todo que actualiza el valor de la ordenada en una posici�n dada.
+			* Método que actualiza el valor de la ordenada en una posición dada.
 			* @param pos
 			* @param value
 			*/

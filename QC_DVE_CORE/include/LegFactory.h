@@ -494,7 +494,8 @@ namespace QCode
                     double notional,
                     bool doesAmortize,
                     double spread,
-                    double gearing);
+                    double gearing,
+                    bool isAct360 = false);
 
             /**
 			 * @fn	static Leg LegFactory::buildCustomAmortIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
@@ -569,7 +570,8 @@ namespace QCode
                     CustomNotionalAmort notionalAndAmort,
                     bool doesAmortize,
                     double spread,
-                    double gearing);
+                    double gearing,
+                    bool isAct360 = false);
 
             /**
 			 * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);

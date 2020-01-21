@@ -654,7 +654,8 @@ namespace QCode
                 double notional,
                 bool doesAmortize,
                 double spread,
-                double gearing)
+                double gearing,
+                bool isAct360)
         {
             // Make all the holidays in the calendar into a shared_ptr.
             auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
@@ -697,7 +698,8 @@ namespace QCode
                 // This is the only difference with respect to the method that returns
                 // a Leg with cashflows of type IcpClpCashflow
                 IcpClpCashflow2 icpclpc{ thisStartDate, thisEndDate, settlementDate,
-                                        sign * notional, amort, doesAmortize, spread, gearing, DEFAULT_ICP, DEFAULT_ICP };
+                                        sign * notional, amort, doesAmortize, spread, gearing,
+                                         isAct360, DEFAULT_ICP, DEFAULT_ICP };
                 icpClpLeg.setCashflowAt(std::make_shared<IcpClpCashflow2>(icpclpc), i);
                 ++i;
             }
@@ -752,7 +754,8 @@ namespace QCode
                 CustomNotionalAmort notionalAndAmort,
                 bool doesAmortize,
                 double spread,
-                double gearing)
+                double gearing,
+                bool isAct360)
         {
             Leg icpClpLeg = buildBulletIcpClp2Leg(recPay,
                                                  startDate,
@@ -765,7 +768,8 @@ namespace QCode
                                                  100.0,
                                                  doesAmortize,
                                                  spread,
-                                                 gearing);
+                                                 gearing,
+                                                 isAct360);
 
             std::cout << "custom amort icp clp leg: done bullet" << std::endl;
             customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);

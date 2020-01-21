@@ -39,6 +39,7 @@ namespace QCode
                            bool doesAmortize,
                            double spread,
                            double gearing,
+                           bool isAct360,
                            double startDateICP = QCode::Financial::DEFAULT_ICP,
                            double endDateICP = QCode::Financial::DEFAULT_ICP);
 
@@ -89,17 +90,31 @@ namespace QCode
             virtual bool doesAmortize() const override;
 
             // Methods specific to this class
+            std::vector<double> getAmountDerivatives() const;
+
             void setTnaDecimalPlaces(unsigned int decimalPlaces);
 
             double getTna(QCDate date, double icpValue);
 
             void setStartDateICP(double icpValue);
 
+            void setStartDateICPDerivatives(std::vector<double> der);
+
+            std::vector<double> getStartDateICPDerivatives() const;
+
             double getStartDateICP() const;
 
             double getEndDateICP() const;
 
             void setEndDateICP(double icpValue);
+
+            void setEndDateICPDerivatives(std::vector<double> der);
+
+            std::vector<double> getEndDateICPDerivatives() const;
+
+            void setDf(double df);
+
+            double getDf() const;
 
             void setNominal(double nominal);
 
@@ -120,9 +135,8 @@ namespace QCode
         protected:
             /** @brief	The interest rate index. It is always Lin ACT360. */
             QCInterestRate 	_rate = QCInterestRate(0.0,
-                                                     std::make_shared<QCAct360>(QCAct360()),
-                                                     std::make_shared<QCLinearWf>(QCLinearWf())
-            );
+                    std::make_shared<QCAct360>(QCAct360()),
+                    std::make_shared<QCLinearWf>(QCLinearWf()));;
 
             /** @brief	The default amount of decimal places for TNA. */
             unsigned int _tnaDecimalPlaces;
@@ -133,8 +147,24 @@ namespace QCode
             /** @brief	ICP at start date */
             double _startDateICP;
 
+            /** @brief	Stores de derivatives of ICP at start date with respect to rates belonging to zero
+             * coupon rate.
+            */
+            std::vector<double> _startDateICPDerivatives;
+
+
+            /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
+            * coupon rate.
+            */
+            std::vector<double> _amountDerivatives;
+
             /** @brief	ICP at end date */
             double _endDateICP;
+
+            /** @brief	Stores de derivatives of ICP at end date with respect to rates belonging to zero
+            * coupon rate.
+            */
+            std::vector<double> _endDateICPDerivatives;
 
             /** @brief	The start date */
             QCDate _startDate;
@@ -144,6 +174,9 @@ namespace QCode
 
             /** @brief	The settlement date */
             QCDate _settlementDate;
+
+            /** @brief	The discount factor calculated when setting forward rates */
+            double _df;
 
             /** @brief	List of dates corresponding to fixing dates. In this case only contains start date */
             vector<QCDate> _fixingDates;

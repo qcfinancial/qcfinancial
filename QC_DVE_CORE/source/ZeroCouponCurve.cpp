@@ -10,6 +10,7 @@ namespace QCode
 			shared_ptr<QCInterpolator> curve,
 			QCInterestRate intRate) : InterestRateCurve(curve, intRate)
 		{
+            _wfDerivatives.resize(_curve->getLength());
 		}
 
 		double ZeroCouponCurve::getRateAt(long d)
@@ -87,6 +88,7 @@ namespace QCode
 			for (unsigned int i = 0; i < _curve->getLength(); ++i)
 			{
 				_dfDerivatives.at(i) = -pow(wf, -2.0) * _curve->rateDerivativeAt(i) * _intRate.dwf(d);
+				_wfDerivatives.at(i) = -_dfDerivatives.at(i) * pow(wf, 2);
 			}
 
 			return 1 / wf;
@@ -97,7 +99,12 @@ namespace QCode
 			return _dfDerivatives.at(index);
 		}
 
-		double ZeroCouponCurve::fwdWfDerivativeAt(unsigned int index)
+        double ZeroCouponCurve::wfDerivativeAt(unsigned int index)
+        {
+            return _wfDerivatives.at(index);
+        }
+
+        double ZeroCouponCurve::fwdWfDerivativeAt(unsigned int index)
 		{
 			return _fwdWfDerivatives.at(index);
 		}

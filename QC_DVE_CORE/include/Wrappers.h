@@ -2276,7 +2276,12 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
 			return this->get_override("dfDerivativeAt")();
 		}
 
-		double fwdWfDerivativeAt(unsigned int index)
+        double wfDerivativeAt(unsigned int index)
+        {
+            return this->get_override("wfDerivativeAt")();
+        }
+
+        double fwdWfDerivativeAt(unsigned int index)
 		{
 			return this->get_override("fwdWfDerivativeAt")();
 		}

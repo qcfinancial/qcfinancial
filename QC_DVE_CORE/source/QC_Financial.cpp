@@ -446,6 +446,11 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("get_tna", &qf::IcpClpCashflow2::getTna)
             .def("get_spread", &qf::IcpClpCashflow2::getSpread)
             .def("get_gearing", &qf::IcpClpCashflow2::getGearing)
+            .def("get_start_date_icp_derivatives", &qf::IcpClpCashflow2::getStartDateICPDerivatives)
+            .def("get_amount_derivatives", &qf::IcpClpCashflow2::getAmountDerivatives)
+            .def("get_end_date_icp_derivatives", &qf::IcpClpCashflow2::getEndDateICPDerivatives)
+            .def("set_df", &qf::IcpClpCashflow2::setDf)
+            .def("get_df", &qf::IcpClpCashflow2::getDf)
             ;
 
     PyObject* (*show9)(qf::IcpClpCashflow2) = wrappers::show;
@@ -906,6 +911,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("get_forward_rate", pure_virtual(&qf::InterestRateCurve::getForwardRate))
         .def("get_forward_wf", pure_virtual(&qf::InterestRateCurve::getForwardWf))
         .def("df_derivative_at", pure_virtual(&qf::InterestRateCurve::dfDerivativeAt))
+        .def("wf_derivative_at", pure_virtual(&qf::InterestRateCurve::wfDerivativeAt))
         .def("fwd_wf_derivative_at", pure_virtual(&qf::InterestRateCurve::fwdWfDerivativeAt))
         ;
 

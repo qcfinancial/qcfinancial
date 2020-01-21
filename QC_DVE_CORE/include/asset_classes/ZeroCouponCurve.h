@@ -19,8 +19,12 @@ namespace QCode
 			double getForwardRate(long d1, long d2) override;
 			double getForwardWf(long d1, long d2) override;
 			double dfDerivativeAt(unsigned int index) override;
+            double wfDerivativeAt(unsigned int index) override;
 			double fwdWfDerivativeAt(unsigned int index) override;
 			virtual ~ZeroCouponCurve();
+
+        protected:
+		    std::vector<double> _wfDerivatives;
 
 		};
 	}

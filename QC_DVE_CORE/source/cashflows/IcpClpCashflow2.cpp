@@ -14,6 +14,7 @@ namespace QCode
                             bool doesAmortize,
                             double spread,
                             double gearing,
+                            bool isAct360,
                             double startDateICP,
                             double endDateICP) :
                             _startDate(startDate),
@@ -40,18 +41,61 @@ namespace QCode
             _fixingDates.at(0) = _startDate;
             _fixingDates.at(1) = _endDate;
 
+            if (!isAct360)
+            {
+                _rate = QCInterestRate(0.0,
+                                       std::make_shared<QC30360>(QC30360()),
+                                       std::make_shared<QCLinearWf>(QCLinearWf()));
+            }
         }
 
 
         // Overriding methods in Cashflow
         double IcpClpCashflow2::amount()
         {
-            auto interest = _calculateInterest(_endDate, _endDateICP);
-            if (_doesAmortize) {
-                return _amortization + interest;
-            } else {
-                return interest;
+//            auto interest = _calculateInterest(_endDate, _endDateICP);
+//            if (_doesAmortize) {
+//                return _amortization + interest;
+//            } else {
+//                return interest;
+//            }
+            auto wf = _endDateICP / _startDateICP;
+            auto interest = _nominal * (wf - 1.0);
+            _rate.setValue(_spread);
+            auto spreadInterest = _nominal * (_rate.wf(_startDate, _endDate) - 1.0);
+            _rate.setValue(getTna(_endDate, _endDateICP));
+            if (_startDateICPDerivatives.size() == _endDateICPDerivatives.size())
+            {
+                _amountDerivatives.resize(_startDateICPDerivatives.size());
+                for (size_t i = 0; i < _startDateICPDerivatives.size(); ++i)
+                {
+                    _amountDerivatives.at(i) = _nominal * _df *
+                            ((_endDateICPDerivatives.at(i) * _startDateICP -
+                              _endDateICP * _startDateICPDerivatives.at(i)) /
+                                    pow(_startDateICP, 2.0)
+                                    );
+                }
             }
+            else
+            {
+                std::vector<double> zeroDerivatives(_startDateICPDerivatives.size(), 0.0);
+                _amountDerivatives.resize(_startDateICPDerivatives.size());
+                _amountDerivatives = zeroDerivatives;
+            }
+
+            if (_doesAmortize)
+            {
+                return _amortization + interest + spreadInterest;
+            }
+            else
+            {
+                return interest + spreadInterest;
+            }
+        }
+
+        std::vector<double> IcpClpCashflow2::getAmountDerivatives() const
+        {
+            return _amountDerivatives;
         }
 
         shared_ptr<QCCurrency> IcpClpCashflow2::ccy()
@@ -246,7 +290,9 @@ namespace QCode
                 return 0.0;
             }
 
-            long double tna = (icpValue / _startDateICP - 1) / yf;
+            long double wf = icpValue / _startDateICP;
+            long double tna =_rate.getRateFromWf(wf, _startDate, date);
+            //= (icpValue / _startDateICP - 1) / yf;
 
             if (_tnaDecimalPlaces > LIMIT_TNA_DECIMAL_PLACES)
             {
@@ -266,6 +312,20 @@ namespace QCode
         }
 
 
+        void IcpClpCashflow2::setStartDateICPDerivatives(std::vector<double> der)
+        {
+            _startDateICPDerivatives.resize(der.size());
+            for (size_t i = 0; i < der.size(); ++i)
+            {
+                _startDateICPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+        std::vector<double> IcpClpCashflow2::getStartDateICPDerivatives() const
+        {
+            return _startDateICPDerivatives;
+        }
+
         double IcpClpCashflow2::getStartDateICP() const
         {
             return _startDateICP;
@@ -277,9 +337,36 @@ namespace QCode
             return _endDateICP;
         }
 
+
         void IcpClpCashflow2::setEndDateICP(double icpValue)
         {
             _endDateICP = icpValue;
+        }
+
+
+        void IcpClpCashflow2::setEndDateICPDerivatives(std::vector<double> der)
+        {
+            _endDateICPDerivatives.resize(der.size());
+            for (size_t i = 0; i < der.size(); ++i)
+            {
+                _endDateICPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        std::vector<double> IcpClpCashflow2::getEndDateICPDerivatives() const
+        {
+            return _endDateICPDerivatives;
+        }
+
+        void IcpClpCashflow2::setDf(double df)
+        {
+            _df = df;
+        }
+
+        double IcpClpCashflow2::getDf() const
+        {
+            return _df;
         }
 
         void IcpClpCashflow2::setNominal(double nominal)
@@ -287,10 +374,12 @@ namespace QCode
             _nominal = nominal;
         }
 
+
         void IcpClpCashflow2::setAmortization(double amortization)
         {
             _amortization = amortization;
         }
+
 
         shared_ptr<IcpClpCashflow2Wrapper> IcpClpCashflow2::wrap()
         {
@@ -317,7 +406,7 @@ namespace QCode
                                                         _currency,
                                                         _startDateICP,
                                                         _endDateICP,
-                                                        _rate.getValue(),
+                                                        getTna(_endDate, _endDateICP),
                                                         interest(),
                                                         _spread,
                                                         _gearing);
@@ -326,25 +415,30 @@ namespace QCode
 
         }
 
+
         double IcpClpCashflow2::getRateValue()
         {
             return _rate.getValue();
         }
+
 
         double IcpClpCashflow2::getSpread() const
         {
             return _spread;
         }
 
+
         double IcpClpCashflow2::getGearing() const
         {
             return _gearing;
         }
 
+
         std::string IcpClpCashflow2::getTypeOfRate()
         {
             return _rate.getWealthFactor()->description() + _rate.getYearFraction()->description();
         }
+
 
         bool IcpClpCashflow2::_validate()
         {
@@ -370,6 +464,7 @@ namespace QCode
             }
             return result;
         }
+
 
         double IcpClpCashflow2::_calculateInterest(QCDate& date, double icpValue)
         {
