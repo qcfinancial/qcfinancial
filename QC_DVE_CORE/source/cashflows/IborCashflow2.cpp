@@ -49,11 +49,39 @@ std::shared_ptr<QCode::Financial::InterestRateIndex> QCode::Financial::IborCashf
 double QCode::Financial::IborCashflow2::amount()
 {
     double amort{ 0.0 };
+    _amountDerivatives.resize(_forwardRateWfDerivatives.size());
+    for (size_t i = 0; i < _forwardRateWfDerivatives.size(); ++i)
+    {
+        _amountDerivatives.at(i) = _nominal * _forwardRateWfDerivatives.at(i);
+    }
     if (_doesAmortize)
     {
         amort = _amortization;
     }
     return  amort + _interest;
+}
+
+
+std::vector<double> QCode::Financial::IborCashflow2::getAmountDerivatives() const
+{
+    return _amountDerivatives;
+}
+
+
+void QCode::Financial::IborCashflow2::setRateValue(double rateValue)
+{
+    _rateValue = rateValue;
+    _calculateInterest();
+}
+
+
+void QCode::Financial::IborCashflow2::setForwardRateWfDerivatives(const std::vector<double>& der)
+{
+    _forwardRateWfDerivatives.resize(der.size());
+    for (size_t i = 0; i < der.size(); ++i)
+    {
+        _forwardRateWfDerivatives.at(i) = der.at(i);
+    }
 }
 
 

@@ -38,23 +38,58 @@ namespace QCode
 			_rate.setValue(getTra(_endDate, icpAndUf[1], icpAndUf[3]));
 		}
 
-		void IcpClfCashflow::setTraDecimalPlaces(unsigned int decimalPlaces)
+        double IcpClfCashflow::amount()
+        {
+		    // Se calcula el interés sin considerar los redondeos de TRA y TNA
+            auto interest = _nominal * (_endDateICP / _startDateICP * _startDateUF / _endDateUF - 1.0);
+            interest += _nominal * _spread * _rate.yf(_startDate, _endDate);
+
+            // Derivadas respecto a la curva de proyección de ICP
+            size_t lengthICP = _startDateICPDerivatives.size();
+            _amountICPDerivatives.resize(lengthICP);
+            for (size_t i = 0; i < lengthICP; ++i)
+            {
+                _amountICPDerivatives.at(i) = _nominal * ((_endDateICPDerivatives.at(i) * _startDateICP -
+                        _startDateICPDerivatives.at(i) * _endDateICP) * pow(_startDateICP, -2.0) *
+                                _startDateUF / _endDateUF);
+            }
+
+            // Derivadas respecto a la curva CLP en la proyección de UF
+            size_t lengthUFCLP = _startDateUFCLPDerivatives.size();
+            _amountUFCLPDerivatives.resize(lengthUFCLP);
+            auto icpForward = _endDateICP / _startDateICP;
+            for (size_t i = 0; i < lengthUFCLP; ++i)
+            {
+                _amountUFCLPDerivatives.at(i) = _nominal * ((_startDateUFCLPDerivatives.at(i) * _endDateUF -
+                        _endDateUFCLPDerivatives.at(i) * _startDateUF) *
+                                pow(_endDateUF, -2.0) * icpForward);
+            }
+
+            // Derivadas respecto a la curva CLF en la proyección de UF
+            size_t lengthUFCLF = _startDateUFCLFDerivatives.size();
+            _amountUFCLFDerivatives.resize(lengthUFCLF);
+            for (size_t i = 0; i < lengthUFCLF; ++i)
+            {
+                _amountUFCLFDerivatives.at(i) = _nominal * ((_startDateUFCLFDerivatives.at(i) * _endDateUF -
+                                                  _endDateUFCLFDerivatives.at(i) * _startDateUF) *
+                                                          pow(_endDateUF, -2.0) * icpForward);
+            }
+
+            // Se agrega la amortización si corresponde
+            if (_doesAmortize)
+            {
+                return _amortization + interest;
+            }
+            else
+            {
+                return interest;
+            }
+        }
+
+        void IcpClfCashflow::setTraDecimalPlaces(unsigned int decimalPlaces)
 		{
 			_traDecimalPlaces = decimalPlaces;
 			_rate.setValue(getTra(_endDate, _endDateICP, _endDateUF));
-		}
-
-		double IcpClfCashflow::amount()
-		{
-			auto interest = _calculateInterest(_endDate, _endDateICP, _endDateUF);
-			if (_doesAmortize)
-			{
-				return _amortization + interest;
-			}
-			else
-			{
-				return interest;
-			}
 		}
 
 		double IcpClfCashflow::getTra(QCDate& accrualDate, double icpValue, double ufValue)
@@ -74,13 +109,13 @@ namespace QCode
 
 		double IcpClfCashflow::_calculateInterest(QCDate& date, double icpValue, double ufValue)
 		{
-			// C�lculo de TRA
+			// Cálculo de TRA
 			double tra = getTra(date, icpValue, ufValue);
 
 			// Seteo del valor de la tasa interna
 			_rate.setValue(tra * _gearing + _spread);
 
-			// C�lculo de inter�s
+			// Cálculo de inter�s
 			return _nominal * (_rate.wf(_startDate, date) - 1);
 		}
 
@@ -134,7 +169,7 @@ namespace QCode
 				//double,                 /* Spread */
 				//double                  /* Gearing */
 
-			//Se precalcula el inter�s porque eso permite asegurar que el valor
+			//Se precalcula el interés porque eso permite asegurar que el valor
 			//de la tasa es consistente con los valores de ICP y UF ingresados.
 			double interest = accruedInterest(_endDate, _endDateICP, _endDateUF);
 			IcpClfCashflowWrapper tup = std::make_tuple(_startDate,
@@ -157,8 +192,93 @@ namespace QCode
 
 		}
 
-		IcpClfCashflow::~IcpClfCashflow()
-		{
-		}
-	}
+        void IcpClfCashflow::setStartDateICPDerivatives(std::vector<double> der)
+        {
+		    size_t size = der.size();
+		    _startDateICPDerivatives.resize(size);
+		    for (size_t i = 0; i < size; ++i)
+            {
+                _startDateICPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        void IcpClfCashflow::setEndDateICPDerivatives(std::vector<double> der)
+        {
+            size_t size = der.size();
+            _endDateICPDerivatives.resize(size);
+            for (size_t i = 0; i < size; ++i)
+            {
+                _endDateICPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        void IcpClfCashflow::setStartDateUFCLPDerivatives(std::vector<double> der)
+        {
+            size_t size = der.size();
+            _startDateUFCLPDerivatives.resize(size);
+            for (size_t i = 0; i < size; ++i)
+            {
+                _startDateUFCLPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        void IcpClfCashflow::setEndDateUFCLPDerivatives(std::vector<double> der)
+        {
+            size_t size = der.size();
+            _endDateUFCLPDerivatives.resize(size);
+            for (size_t i = 0; i < size; ++i)
+            {
+                _endDateUFCLPDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        void IcpClfCashflow::setStartDateUFCLFDerivatives(std::vector<double> der)
+        {
+            size_t size = der.size();
+            _startDateUFCLFDerivatives.resize(size);
+            for (size_t i = 0; i < size; ++i)
+            {
+                _startDateUFCLFDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        void IcpClfCashflow::setEndDateUFCLFDerivatives(std::vector<double> der)
+        {
+            size_t size = der.size();
+            _endDateUFCLFDerivatives.resize(size);
+            for (size_t i = 0; i < size; ++i)
+            {
+                _endDateUFCLFDerivatives.at(i) = der.at(i);
+            }
+        }
+
+
+        IcpClfCashflow::~IcpClfCashflow()
+        {
+        }
+
+
+        std::vector<double> IcpClfCashflow::getAmountICPDerivatives() const
+        {
+            return _amountICPDerivatives;
+        }
+
+
+        std::vector<double> IcpClfCashflow::getAmountUFCLPDerivatives() const
+        {
+            return _amountUFCLPDerivatives;
+        }
+
+
+        std::vector<double> IcpClfCashflow::getAmountUFCLFDerivatives() const
+        {
+            return _amountUFCLFDerivatives;
+        }
+
+    }
 }

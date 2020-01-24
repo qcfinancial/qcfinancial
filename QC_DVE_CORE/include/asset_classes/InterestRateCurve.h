@@ -111,7 +111,7 @@ namespace QCode
             virtual double wfDerivativeAt(unsigned int index) = 0;
 
             /*!
-			* Este m�todo es un getter que retorna la derivada del �ltimo factor de capitalizaci�n
+			* Este método es un getter que retorna la derivada del último factor de capitalización
 			* forward calculado.
 			* @return valor de la derivada.
 			*/
@@ -171,7 +171,7 @@ namespace QCode
 			}
 
 			/*!
-			* M�todo que actualiza el valor de la abscisa en una posici�n dada.
+			* Método que actualiza el valor de la abscisa en una posición dada.
 			* @param pos
 			* @param value
 			*/
@@ -181,9 +181,9 @@ namespace QCode
 			}
 
 			/*!
-			* Devuelve el par de la curva en una posici�n.
-			* @param position posici�n buscada.
-			* @return par en la posici�n.
+			* Devuelve el par de la curva en una posición.
+			* @param position posición buscada.
+			* @return par en la posición.
 			*/
 			pair<long, double> getValuesAt(unsigned long position)
 			{
@@ -199,12 +199,14 @@ namespace QCode
 		protected:
 			shared_ptr<QCInterpolator> _curve;	/*!< Plazos y valores de la curva.*/
 
-			QCInterestRate _intRate;			/*!> Tipo de tasa de inter�s de la curva*/
+
+			QCInterestRate _intRate;			/*!> Tipo de tasa de interés de la curva*/
+
 
 			vector<double> _dfDerivatives;		/*!< Derivadas del factor de descuento interpolado
 												respecto a las tasas de la curva.*/
 
-			vector<double> _fwdWfDerivatives;	/*!< Derivadas del factor de capitalizacion forward
+			vector<double> _fwdWfDerivatives;	/*!< Derivadas del factor de capitalización forward
 												respecto a las tasas de la curva.*/
 		};
 	}

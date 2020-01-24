@@ -8,7 +8,7 @@ QCLinearInterpolator::QCLinearInterpolator(shared_ptr<QCCurve<long>> curve) :
 
 double QCLinearInterpolator::interpolateAt(long value)
 {
-	for (unsigned int j = 0; j < _derivatives.size(); ++j)
+	for (size_t j = 0; j < _derivatives.size(); ++j)
 	{
 		_derivatives.at(j) = 0;
 	}
@@ -39,8 +39,8 @@ double QCLinearInterpolator::interpolateAt(long value)
 			_derivatives.at(i + 1) = 1.0;
 			return y2;
 		}
-		_derivatives.at(i) = -1 / (x2 - x1) * (value - x1) + 1;
-		_derivatives.at(i + 1) = 1 / (x2 - x1) * (value - x1);
+		_derivatives.at(i) = - ((value - x1) / (x2 - x1) - 1);
+		_derivatives.at(i + 1) = (value - x1) / (x2 - x1);
 
 		return (y2 - y1) / (x2 - x1) * (value - x1) + y1;
 	}

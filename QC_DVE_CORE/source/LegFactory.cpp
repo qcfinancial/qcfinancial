@@ -1,6 +1,7 @@
 #include<memory>
 #include<algorithm>
 #include<tuple>
+#include <cashflows/IborCashflow2.h>
 
 #include "LegFactory.h"
 #include "cashflows/FixedRateCashflow.h"
@@ -364,6 +365,85 @@ namespace QCode
 			return iborLeg;
 
 		}
+
+        Leg LegFactory::buildBulletIbor2Leg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                Tenor fixingPeriodicity,
+                QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                QCBusinessCalendar fixingCalendar,
+                unsigned int fixingLag,
+                std::shared_ptr<InterestRateIndex> index,
+                double notional,
+                bool doesAmortize,
+                std::shared_ptr<QCCurrency> currency,
+                double spread,
+                double gearing)
+        {
+            // Make all the holidays in the calendar into a shared_ptr.
+            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto fixCal = std::make_shared<DateList>(fixingCalendar.getHolidays());
+
+            // Minus sign is set if cashflows are paid.
+            int sign;
+            if (recPay == Receive)
+            {
+                sign = 1;
+            }
+            else
+            {
+                sign = -1;
+            }
+
+            //Se da de alta la fabrica de periods
+            QCInterestRatePeriodsFactory factory{ startDate, endDate,
+                                                  endDateAdjustment,
+                                                  settlementPeriodicity.getString(),
+                                                  settlementStubPeriod,
+                                                  settCal,
+                                                  settlementLag,
+                                                  fixingPeriodicity.getString(),
+                                                  fixingStubPeriod,
+                                                  fixCal,
+                                                  fixingLag,
+                                                  index->getDaysOfStartLag(),
+                                                  index->getTenor().getString() };
+
+            //Se generan los periodos
+            auto periods = factory.getPeriods();
+
+            // Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+            Leg iborLeg;
+            size_t numPeriods = periods.size();
+            iborLeg.resize(numPeriods);
+            size_t i = 0;
+            for (const auto& period : periods)
+            {
+                QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
+                QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
+                QCDate thisFixingDate = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(period);
+                QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
+                double amort = 0.0;
+                if (i == numPeriods - 1)
+                {
+                    amort = sign * notional;
+                }
+                IborCashflow2 frc{ index, thisStartDate, thisEndDate, thisFixingDate, settlementDate,
+                                  sign * notional, amort, doesAmortize, currency, spread, gearing };
+                iborLeg.setCashflowAt(std::make_shared<IborCashflow2>(frc), i);
+                ++i;
+            }
+
+            return iborLeg;
+
+        }
+
 
 			Leg LegFactory::buildBulletIborMultiCurrencyLeg(
 				RecPay recPay,

@@ -105,7 +105,7 @@ public:
 	/**
 	* @fn	double QCInterestRate::dwf(QCDate& startDate, QCDate& endDate);
 	*
-	* @brief	Returns the 2nd derivative wrt to rate of the wf calculated given
+	* @brief	Returns the derivative wrt to rate of the wf calculated given
 	* 			'startDate' and 'endDate'.
 	*
 	* @author	Alvaro D�az V.

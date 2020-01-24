@@ -26,7 +26,7 @@ namespace QCode
                 double,                 /* Interest */
                 double,                 /* Spread */
                 double                  /* Gearing */
-        > IcpClpCashflow2Wrapper;
+                > IcpClpCashflow2Wrapper;
 
         class IcpClpCashflow2 : public LinearInterestRateCashflow
         {
@@ -112,10 +112,6 @@ namespace QCode
 
             std::vector<double> getEndDateICPDerivatives() const;
 
-            void setDf(double df);
-
-            double getDf() const;
-
             void setNominal(double nominal);
 
             void setAmortization(double amortization);
@@ -148,13 +144,13 @@ namespace QCode
             double _startDateICP;
 
             /** @brief	Stores de derivatives of ICP at start date with respect to rates belonging to zero
-             * coupon rate.
+             * coupon curve.
             */
             std::vector<double> _startDateICPDerivatives;
 
 
             /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
-            * coupon rate.
+            * coupon curve.
             */
             std::vector<double> _amountDerivatives;
 
@@ -162,7 +158,7 @@ namespace QCode
             double _endDateICP;
 
             /** @brief	Stores de derivatives of ICP at end date with respect to rates belonging to zero
-            * coupon rate.
+            * coupon curve.
             */
             std::vector<double> _endDateICPDerivatives;
 
@@ -174,9 +170,6 @@ namespace QCode
 
             /** @brief	The settlement date */
             QCDate _settlementDate;
-
-            /** @brief	The discount factor calculated when setting forward rates */
-            double _df;
 
             /** @brief	List of dates corresponding to fixing dates. In this case only contains start date */
             vector<QCDate> _fixingDates;

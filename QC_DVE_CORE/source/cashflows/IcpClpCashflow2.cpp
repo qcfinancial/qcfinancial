@@ -69,7 +69,7 @@ namespace QCode
                 _amountDerivatives.resize(_startDateICPDerivatives.size());
                 for (size_t i = 0; i < _startDateICPDerivatives.size(); ++i)
                 {
-                    _amountDerivatives.at(i) = _nominal * _df *
+                    _amountDerivatives.at(i) = _nominal *
                             ((_endDateICPDerivatives.at(i) * _startDateICP -
                               _endDateICP * _startDateICPDerivatives.at(i)) /
                                     pow(_startDateICP, 2.0)
@@ -359,15 +359,6 @@ namespace QCode
             return _endDateICPDerivatives;
         }
 
-        void IcpClpCashflow2::setDf(double df)
-        {
-            _df = df;
-        }
-
-        double IcpClpCashflow2::getDf() const
-        {
-            return _df;
-        }
 
         void IcpClpCashflow2::setNominal(double nominal)
         {

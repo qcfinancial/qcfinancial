@@ -11,6 +11,7 @@ namespace QCode
 			QCInterestRate intRate) : InterestRateCurve(curve, intRate)
 		{
             _wfDerivatives.resize(_curve->getLength());
+            _fwdWfDerivatives.resize(_curve->getLength());
 		}
 
 		double ZeroCouponCurve::getRateAt(long d)
@@ -33,36 +34,85 @@ namespace QCode
 				d2 = d1;
 				d1 = d;
 			}
-			double rate1 = _curve->interpolateAt(d1);
-			_intRate.setValue(rate1);
-			double wf1 = _intRate.wf(d1);
-			double dwf1 = _intRate.dwf(d1);
 
-			double rate2 = _curve->interpolateAt(d2);
-			_intRate.setValue(rate2);
-			double wf2 = _intRate.wf(d2);
-			double dwf2 = _intRate.dwf(d2);
+			size_t curveLength = _curve->getLength();
 
-			for (unsigned int i = 0; i < _curve->getLength(); ++i)
-			{
-				rate1 = _curve->interpolateAt(d1);
-				double der = _curve->rateDerivativeAt(i);
-				double ddwf1 = dwf1 * der;
+			double rate1;
+			double wf1;
+			double dwf1;
+            std::vector<double> der1;
+            der1.resize(curveLength);
+			if (d1 > 0)
+            {
+			    rate1 = _curve->interpolateAt(d1);
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    der1.at(i) = _curve->rateDerivativeAt(i);
+                }
+                _intRate.setValue(rate1);
+                wf1 = _intRate.wf(d1);
+                dwf1 = _intRate.dwf(d1);
+            }
+			else
+            {
+			    wf1 = 1.0;
+			    dwf1 = 1.0;
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    der1.at(i) = 0.0;
+                }
+            }
 
-				rate2 = _curve->interpolateAt(d2);
-				der = _curve->rateDerivativeAt(i);
-				double ddwf2 = dwf2 * der;
+			double rate2;
+			double wf2;
+			double dwf2;
+            std::vector<double> der2;
+            der2.resize(curveLength);
+			if (d2 > 0)
+            {
+                rate2 = _curve->interpolateAt(d2);
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    der2.at(i) = _curve->rateDerivativeAt(i);
+                }
+                _intRate.setValue(rate2);
+                wf2 = _intRate.wf(d2);
+                dwf2 = _intRate.dwf(d2);
+            }
+			else
+            {
+                wf2 = 1.0;
+                dwf2 = 1.0;
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    der2.at(i) = 0.0;
+                }
+            }
 
-				if (d1 <= 0)
-				{
-					_fwdWfDerivatives.at(i) = ddwf2;
-				}
-				else
-				{
-					_fwdWfDerivatives.at(i) = pow(wf1, -2.0) * (ddwf2 * wf1 - wf2 * ddwf1);
-				}
-			}
 			//Se loopea para tener las derivadas
+			if (d1 <= 0 && d2 <= 0)
+            {
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    _fwdWfDerivatives.at(i) = 0.0;
+                }
+            }
+			else if (d1 <= 0 && d2 > 0)
+            {
+                for (size_t i = 0; i < curveLength; ++i)
+                {
+                    _fwdWfDerivatives.at(i) = dwf2 * der2.at(i);
+                }
+            }
+			else
+            {
+                for (size_t i = 0; i < curveLength; ++i)
+			    {
+                    _fwdWfDerivatives.at(i) = pow(wf1, -2.0) *
+                            (dwf2 * der2.at(i) * wf1 - wf2 * dwf1 * der1.at(i));
+                }
+            }
+
 			double result = wf2 / wf1;
 			return result;
 		}

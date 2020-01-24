@@ -15,35 +15,42 @@ void QCInterpolator::reset(unsigned long newSize)
 	_derivatives.resize(newSize);
 }
 
+
 void QCInterpolator::setPair(long x, double y)
 {
 	_curve->setPair(x, y);
 }
+
 
 void QCInterpolator::setOrdinateAtWithValue(unsigned long position, double value)
 {
 	_curve->setOrdinateAtWithValue(position, value);
 }
 
+
 void QCInterpolator::setAbscissaAtWithValue(unsigned long position, long value)
 {
 	_curve->setAbscissaAtWithValue(position, value);
 }
+
 
 size_t QCInterpolator::getLength()
 {
 	return _curve->getLength();
 }
 
+
 double QCInterpolator::rateDerivativeAt(unsigned long rateIndex)
 {
 	return _derivatives.at(rateIndex);
 }
 
+
 pair<long, double> QCInterpolator::getValuesAt(size_t position)
 {
 	return _curve->getValuesAt(position);
 }
+
 
 long QCInterpolator::_index(long arg)
 {
@@ -85,6 +92,7 @@ long QCInterpolator::_index(long arg)
 
     return indice;
 }
+
 
 QCInterpolator::~QCInterpolator(void)
 {}

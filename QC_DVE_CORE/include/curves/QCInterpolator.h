@@ -26,20 +26,20 @@ public:
 	/*!
 	* Constructor.
 	* @param curve En este objeto de tipo QCCurve vienen los pares de abscisas y ordenadas sobre los cuales
-	* se desea realizar interpolaciones.Notar que el template QCCurve est� especificado con abscisa
+	* se desea realizar interpolaciones. Notar que el template QCCurve está especificado con abscisa
 	* que es un entero relativo (long).
 	*/
 	QCInterpolator(shared_ptr<QCCurve<long>> curve);
 
 	/*!
-	* Este m�todo borra abscisas y ordenadas de la curva y vuelve a definir el tama�o de los
+	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tama�o de los
 	* vectores de abscisa y ordenadas.
 	* @param newSize nuevo tama�o de la curva
 	*/
 	void reset(unsigned long newSize);
 
 	/*!
-	* Este m�todo actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
+	* Este método actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
 	* a un par ya existente, entonces sobre escribe los valores existentes. Si la abscisa no existe,
 	* se inserta un nuevo par en la posici�n que corresponda (ordenado por abscisa ascendente).
 	* @param x abscisa
@@ -62,9 +62,9 @@ public:
 	void setAbscissaAtWithValue(unsigned long position, long value);
 
 	/*!
-	* Aplica el m�todo de interpolaci�n implementado. Adem�s calcula las derivadas de la tasa
-	* interpolada, respecto a todos las tasas de la curva. El resultado del c�lculo de derivadas
-	* se almacena internamente y puede consultarse con el m�todo rateDerivativeAt(unsigned long rateIndex).
+	* Aplica el método de interpolación implementado. Además calcula las derivadas de la tasa
+	* interpolada, respecto a todos las tasas de la curva. El resultado del cálculo de derivadas
+	* se almacena internamente y puede consultarse con el método rateDerivativeAt(unsigned long rateIndex).
 	* @param value abscisa en la que se debe interpolar.
 	* @return valor interpolado.
 	*/

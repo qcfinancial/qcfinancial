@@ -93,14 +93,14 @@ namespace QCode
 			*
 			* @return	A double.
 			*/
-			double amount();
+			double amount() override ;
 
 			/**
 			 * @fn	    double IcpClfCashflow::getRateValue();
 			 *
 			 * @brief	Gets the value of the associated interest rate
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	25/09/2018
 			 *
 			 * @return	The rate value.
@@ -187,19 +187,38 @@ namespace QCode
 			*
 			* @brief	Gets the ccy which in this case is always CLF
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    24/11/2017
 			*
 			* @return	A shared_ptr&lt;QCCurrency&gt;
 			*/
-			shared_ptr<QCCurrency> ccy();
+			shared_ptr<QCCurrency> ccy() override;
 
-			/**
+            void setStartDateICPDerivatives(std::vector<double> der);
+
+            void setEndDateICPDerivatives(std::vector<double> der);
+
+            void setStartDateUFCLPDerivatives(std::vector<double> der);
+
+            void setEndDateUFCLPDerivatives(std::vector<double> der);
+
+            void setStartDateUFCLFDerivatives(std::vector<double> der);
+
+            void setEndDateUFCLFDerivatives(std::vector<double> der);
+
+            std::vector<double> getAmountICPDerivatives() const;
+
+            std::vector<double> getAmountUFCLPDerivatives() const;
+
+            std::vector<double> getAmountUFCLFDerivatives() const;
+
+
+            /**
 			* @fn	shared_ptr<IcpClfCashflowWrapper> IcpClfCashflow::wrap();
 			*
 			* @brief	Wraps the cashflow in a IcpClpCashflowWrapper
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    24/11/2017
 			*
 			* @return	A shared_ptr&lt;IcpClfCashflowWrapper&gt;
@@ -234,7 +253,34 @@ namespace QCode
 
 			/** @brief	UF at end date */
 			double _endDateUF;
-		};
+
+            /** @brief	Derivatives of start date with respect to ICP projecting curve */
+            std::vector<double> _startDateICPDerivatives;
+
+            /** @brief	Derivatives of end date ICP with respect to ICP projecting curve */
+            std::vector<double> _endDateICPDerivatives;
+
+            /** @brief	Derivatives of start date UF with respect to CLP projecting curve */
+            std::vector<double> _startDateUFCLPDerivatives;
+
+            /** @brief	Derivatives of end date UF with respect to CLP projecting curve */
+            std::vector<double> _endDateUFCLPDerivatives;
+
+            /** @brief	Derivatives of start date UF with respect to CLF projecting curve */
+            std::vector<double> _startDateUFCLFDerivatives;
+
+            /** @brief	Derivatives of end date UF with respect to CLF projecting curve */
+            std::vector<double> _endDateUFCLFDerivatives;
+
+            /** @brief	Derivatives of amount with respect to ICP projecting curve */
+            std::vector<double> _amountICPDerivatives;
+
+            /** @brief	Derivatives of amount with respect to UFCLP projecting curve */
+            std::vector<double> _amountUFCLPDerivatives;
+
+            /** @brief	Derivatives of amount with respect to UFCLF projecting curve */
+            std::vector<double> _amountUFCLFDerivatives;
+        };
 	}
 }
 #endif //ICPCLPCASHFLOW_H

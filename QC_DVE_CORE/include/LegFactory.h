@@ -314,6 +314,25 @@ namespace QCode
 				double spread,
 				double gearing);
 
+            static Leg buildBulletIbor2Leg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    shared_ptr<InterestRateIndex> index,
+                    double notional,
+                    bool doesAmortize,
+                    shared_ptr<QCCurrency> currency,
+                    double spread,
+                    double gearing);
 
 			/**
 			 * @fn	static Leg LegFactory::buildBulletIborMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
@@ -676,7 +695,7 @@ namespace QCode
 			 */
 			~LegFactory();
 
-		private:
+        private:
 			/**
 			 * @fn	LegFactory::LegFactory();
 			 *
@@ -686,7 +705,8 @@ namespace QCode
 			 * @date	07/07/2018
 			 */
 			LegFactory();
-		};
+
+        };
 
 	}
 }

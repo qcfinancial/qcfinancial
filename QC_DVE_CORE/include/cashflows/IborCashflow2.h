@@ -55,6 +55,9 @@ namespace QCode
 
             shared_ptr<QCCurrency> getInitialCcy() const override;
 
+            void setRateValue(double rateValue);
+
+
             const QCDate& getStartDate() const override;
 
             const QCDate& getEndDate() const override;
@@ -96,6 +99,10 @@ namespace QCode
             double getGearing() const;
 
             shared_ptr<IborCashflow2Wrapper> wrap();
+
+            void setForwardRateWfDerivatives(const std::vector<double>& der);
+
+            std::vector<double> getAmountDerivatives() const;
 
             ~IborCashflow2() override;
 
@@ -144,6 +151,17 @@ namespace QCode
 
             /** @brief	Message that describes errors encountered when constructing the object */
             std::string _validateMsg;
+
+            /** @brief	Stores de derivatives of forward rate wealth factor with respect to rates belonging to zero
+             * coupon curve.
+            */
+            std::vector<double> _forwardRateWfDerivatives;
+
+            /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
+            * coupon curve.
+            */
+            std::vector<double> _amountDerivatives;
+
 
             /**
              * @fn	bool IborCashflow2::_validate();

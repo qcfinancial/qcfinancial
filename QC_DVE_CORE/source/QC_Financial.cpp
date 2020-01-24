@@ -387,6 +387,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("amortization", &qf::IborCashflow2::amortization)
             .def("get_spread", &qf::IborCashflow2::getSpread)
             .def("get_gearing", &qf::IborCashflow2::getGearing)
+            .def("set_rate_value", &qf::IborCashflow2::setRateValue)
+            .def("get_amount_derivatives", &qf::IborCashflow2::getAmountDerivatives)
             .def<double (qf::IborCashflow2::*)()>("interest", &qf::IborCashflow2::interest)
             .def<double (qf::IborCashflow2::*)(const qf::TimeSeries&)>("interest", &qf::IborCashflow2::interest)
             .def<double(qf::IborCashflow2::*)()>("fixing", &qf::IborCashflow2::fixing)
@@ -449,8 +451,6 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
             .def("get_start_date_icp_derivatives", &qf::IcpClpCashflow2::getStartDateICPDerivatives)
             .def("get_amount_derivatives", &qf::IcpClpCashflow2::getAmountDerivatives)
             .def("get_end_date_icp_derivatives", &qf::IcpClpCashflow2::getEndDateICPDerivatives)
-            .def("set_df", &qf::IcpClpCashflow2::setDf)
-            .def("get_df", &qf::IcpClpCashflow2::getDf)
             ;
 
     PyObject* (*show9)(qf::IcpClpCashflow2) = wrappers::show;
@@ -717,6 +717,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("set_end_date_uf", &qf::IcpClfCashflow::setEndDateUf)
         .def("get_end_date_uf", &qf::IcpClfCashflow::getEndDateUf)
         .def("set_tra_decimal_places", &qf::IcpClfCashflow::setTraDecimalPlaces)
+        .def("get_amount_icp_derivatives", &qf::IcpClfCashflow::getAmountICPDerivatives)
+        .def("get_amount_ufclp_derivatives", &qf::IcpClfCashflow::getAmountUFCLPDerivatives)
+        .def("get_amount_ufclf_derivatives", &qf::IcpClfCashflow::getAmountUFCLFDerivatives)
         ;
 
         PyObject* (*show6)(qf::IcpClfCashflow) = wrappers::show;
@@ -824,6 +827,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_custom_amort_fixed_rate_leg_2")
         .def("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
         .staticmethod("build_bullet_ibor_leg")
+        .def("build_bullet_ibor2_leg", &qf::LegFactory::buildBulletIbor2Leg)
+        .staticmethod("build_bullet_ibor2_leg")
         .def("build_bullet_ibor_mccy_leg", &qf::LegFactory::buildBulletIborMultiCurrencyLeg)
         .staticmethod("build_bullet_ibor_mccy_leg")
         .def("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
@@ -960,6 +965,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
         .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
         .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
+        .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
+        .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
         ;
 
         };
