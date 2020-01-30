@@ -51,7 +51,11 @@ namespace QCode
 				///< An enum constant representing the icp clp cashflow option
 				icpClpCashflow,
 
-				///< An enum constant representing the icp clf cashflow option
+                ///< An enum constant representing the icp clp cashflow2 option
+                icpClpCashflow2,
+
+
+                ///< An enum constant representing the icp clf cashflow option
 				icpClfCashflow
 			};
 

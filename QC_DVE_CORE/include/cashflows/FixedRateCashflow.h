@@ -270,7 +270,7 @@ namespace QCode
 			 *
 			 * @brief	Default constructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/10/2017
 			 */
 			CustomNotionalAmort()

@@ -850,6 +850,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_bullet_icp_clf_leg")
         .def("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
         .staticmethod("build_custom_amort_icp_clf_leg")
+
+        .def("customize_amortization", &qf::LegFactory::customizeAmortization)
+        .staticmethod("customize_amortization")
         ;
 
         class_<qf::FXRate, std::shared_ptr<qf::FXRate>>
