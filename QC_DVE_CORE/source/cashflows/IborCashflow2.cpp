@@ -281,6 +281,16 @@ double QCode::Financial::IborCashflow2::getGearing() const
     return _gearing;
 }
 
+void QCode::Financial::IborCashflow2::setNominal(double nominal)
+{
+    _nominal = nominal;
+}
+
+void QCode::Financial::IborCashflow2::setAmortization(double amortization)
+{
+    _amortization = amortization;
+}
+
 
 std::shared_ptr<QCode::Financial::IborCashflow2::IborCashflow2Wrapper> QCode::Financial::IborCashflow2::wrap()
 {

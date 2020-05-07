@@ -98,6 +98,10 @@ namespace QCode
 
             double getGearing() const;
 
+            void setNominal(double nominal);
+
+            void setAmortization(double amortization);
+
             shared_ptr<IborCashflow2Wrapper> wrap();
 
             void setForwardRateWfDerivatives(const std::vector<double>& der);

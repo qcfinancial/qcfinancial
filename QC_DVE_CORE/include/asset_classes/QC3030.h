@@ -10,35 +10,35 @@
 #include "QCYearFraction.h"
 
 /*!
-* @brief La clase QC30360 implementa el método 30/360.
+* @brief La clase QC30360 implementa el mÃ©todo 30/360.
 * Hereda de la clase abstracta QCYearFraction
-* @author Alvaro Díaz
+* @author Alvaro Dï¿½az
 */
 class QC3030 : public QCYearFraction
 {
 public:
 	/*!
-	* La función yf devuelve la fracción de año entre dos fechas en convención 30/360.
-	* @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
-	* @param secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
-	* @return un double con la fracción de año calculada
+	* La funciï¿½n yf devuelve la fracciÃ³n de aï¿½o entre dos fechas en convenciÃ³n 30/360.
+	* @param firstDate es la fecha mÃ¡s antigua de las dos si se desea retornar un valor positivo
+	* @param secondDate es la fecha mÃ¡s reciente de las dos si se desea retornar un valor positivo
+	* @return un double con la fracciÃ³n de aÃ±o calculada
 	*/
 	double yf(const QCDate& firstDate, const QCDate& secondDate);
 
 	/*!
-	* La función countDays devuelve el número de días entre firstDate y secondDate en 30/360.
-	* Si se desea un número positivo firstDate debe ser menor que secondDate
-	* @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo
-	* @param secondDate es la fecha más reciente de las dos si se desea retornar un valor positivo
-	* @return un long con el número de días calculados
+	* La funciï¿½n countDays devuelve el nÃºmero de dÃ­as entre firstDate y secondDate en 30/360.
+	* Si se desea un nÃºmero positivo firstDate debe ser menor que secondDate
+	* @param firstDate es la fecha mÃ¡s antigua de las dos si se desea retornar un valor positivo
+	* @param secondDate es la fecha mÃ¡s reciente de las dos si se desea retornar un valor positivo
+	* @return un long con el nÃºmero de dÃ­as calculados
 	*/
 	long countDays(const QCDate& firstDate, const QCDate& secondDate);
 
 	/*!
-	* La función yf devuelve un proxy de la fracción de año cuando el argumento es un
-	* numero de dias.
-	* @param days corresponde a un numero de dias suponiendo que este numero ya esta bien calculado
-	* @return un double con la fracción de año calculada
+	* La funciÃ³n yf devuelve un proxy de la fracciÃ³n de aÃ±o cuando el argumento es un
+	* nÃºmero de dias.
+	* @param days corresponde a un nÃºmero de dias suponiendo que este nÃºmero ya estÃ¡ bien calculado
+	* @return un double con la fracciÃ³n de aÃ±o calculada
 	*/
 	virtual double yf(long days);
 
@@ -47,7 +47,7 @@ public:
 	*
 	* @brief	Gets the description. In this case "30360"
 	*
-	* @author	Alvaro Díaz V.
+	* @author	Alvaro DÃ­az V.
 	* @date	28/09/2017
 	*
 	* @return	A std::string.

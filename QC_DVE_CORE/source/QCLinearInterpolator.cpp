@@ -54,7 +54,7 @@ double QCLinearInterpolator::derivativeAt(long value)
 
 	if (i == _curve->getLength() - 1 || i == 0)
 	{
-		//Retorna la primera o ultima y de la curva
+		//Retorna la primera o última y de la curva
 		return _curve->getValuesAt(i).second;
 	}
 
@@ -79,7 +79,7 @@ double QCLinearInterpolator::derivativeAt(long value)
 		y2 = _curve->getValuesAt(i + 1).second;
 	}
 
-	return (y2 - y1) / (x2 - x1); //Aqui estamos entregando la derivada de izquierda hacia derecha
+	return (y2 - y1) / (x2 - x1); // Aquí estamos entregando la derivada de izquierda hacia derecha.
 }
 
 double QCLinearInterpolator::secondDerivativeAt(long value)

@@ -41,7 +41,7 @@ namespace QCode
 				std::shared_ptr<QCCurrency> currency);
 
 
-			virtual double amount() override;
+			double amount() override;
 
 			/**
 			* @fn	QCCurrency FixedRateCashflow::ccy();
@@ -58,8 +58,8 @@ namespace QCode
 			/**
 			* @fn	virtual std::shared_ptr<QCCurrency> LinearInterestRateCashflow::getInitialCcy() const = 0;
 			*
-			* @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide this method even when the cashflow
-			* 			has been quantized.
+			* @brief	Gets initial currency. Subclasses must preserve the currency of the cashflow and provide
+			* this method even when the cashflow has been quantized.
 			*
 			* @author	A Diaz V
 			* @date	21-03-2019
@@ -73,7 +73,7 @@ namespace QCode
 			*
 			* @brief	Gets the payment date of the cashflow.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*
 			* @return	A QCDate.
@@ -122,7 +122,8 @@ namespace QCode
 			/**
 			* @fn	virtual const std::vector<QCDate>& LinearInterestRateCashflow::getFixingDates() const = 0;
 			*
-			* @brief	Gets fixing dates. Corresponds to the fixing dates of the index used to calculate the final fixing.
+			* @brief	Gets fixing dates. Corresponds to the fixing dates of the index used to calculate
+			* the final fixing.
 			*
 			* @author	A Diaz V
 			* @date	19-03-2019
@@ -160,7 +161,8 @@ namespace QCode
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getAmortization() const = 0;
 			*
-			* @brief	Gets the amortization of the cashflow. It is a pure getter, it will return a value even when the amortization is not a real cashflow.
+			* @brief	Gets the amortization of the cashflow. It is a pure getter, it will return a value even when
+			* the amortization is not a real cashflow.
 			*
 			* @author	A Diaz V
 			* @date	19-03-2019
@@ -173,7 +175,7 @@ namespace QCode
 			* @fn	virtual double LinearInterestRateCashflow::amortization() const = 0;
 			*
 			* @brief	Gets the amortization if doesAmortize = true. Subclasses should, in this method,
-			 * apply all relevant calculations.
+			* apply all relevant calculations.
 			*
 			* @author	A Diaz V
 			* @date	20-03-2019
@@ -208,7 +210,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double interest(const TimeSeries& fixings) override;
+			double interest(const TimeSeries& fixings) override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::fixing() = 0;
@@ -221,7 +223,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double fixing() override;
+			double fixing() override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::fixing(const TimeSeries& fixings);
@@ -236,7 +238,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double fixing(const TimeSeries& fixings) override;
+			double fixing(const TimeSeries& fixings) override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::accruedInterest(const QCDate& fecha) = 0;
@@ -250,7 +252,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double accruedInterest(const QCDate& fecha) override;
+			double accruedInterest(const QCDate& fecha) override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::accruedInterest(const QCDate& fecha, const TimeSeries& fixings) = 0;
@@ -265,7 +267,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double accruedInterest(const QCDate& fecha, const TimeSeries& fixings) override;
+			double accruedInterest(const QCDate& fecha, const TimeSeries& fixings) override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::accruedFixing(const QCDate& fecha) = 0;
@@ -279,7 +281,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double accruedFixing(const QCDate& fecha) override;
+			double accruedFixing(const QCDate& fecha) override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::accruedFixing(const QCDate& fecha, const TimeSeries& fixings) = 0;
@@ -294,7 +296,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) override;
+			double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) override;
 
 			/**
 			 * @fn	virtual bool FixedRateCashflow2::doesAmortize() const override;
@@ -306,7 +308,7 @@ namespace QCode
 			 *
 			 * @returns	True if amortization is a cashflow, false if it is not.
 			 */
-			virtual bool doesAmortize() const override;
+			bool doesAmortize() const override;
 
 			/**
 			 * @fn	FixedRateCashflowWrapper FixedRateCashflow2::wrap() const;

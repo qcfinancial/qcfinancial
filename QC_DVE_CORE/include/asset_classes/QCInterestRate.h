@@ -11,7 +11,7 @@
  * @brief	A class that models an interest rate; it's value, it's year fraction and it's
  * 			compounding method.
  *
- * @author	Alvaro D�az V.
+ * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
 class QCInterestRate
@@ -23,7 +23,7 @@ public:
 	 *
 	 * @brief	Constructor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param	value			The value.
@@ -39,7 +39,7 @@ public:
 	 *
 	 * @brief	Copy constructor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	23/09/2018
 	 *
 	 * @param	otherRate	The other rate.
@@ -54,7 +54,7 @@ public:
 	 *
 	 * @brief	Gets the value of the interest rate
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @return	The value.
@@ -66,7 +66,7 @@ public:
 	 *
 	 * @brief	Sets a value for the rate.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param	value	The value.
@@ -78,7 +78,7 @@ public:
 	 *
 	 * @brief	Calculates the value of the wf given a start date and an end date.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param [in,out]	startDate	The start date.
@@ -93,7 +93,7 @@ public:
 	 *
 	 * @brief	Calculates the value of the wf given a number of days.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param	days	The days.
@@ -108,7 +108,7 @@ public:
 	* @brief	Returns the derivative wrt to rate of the wf calculated given
 	* 			'startDate' and 'endDate'.
 	*
-	* @author	Alvaro D�az V.
+	* @author	Alvaro Díaz V.
 	* @date	27/09/2017
 	*
 	* @param [in,out]	startDate	The start date.
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @brief	Returns the derivative wrt to rate of the wf calculated given 'days'.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param	days	The days.
@@ -137,7 +137,7 @@ public:
 	*
 	* @brief	Returns 2nd the derivative wrt to rate of the wf calculated given 'days'.
 	*
-	* @author	Alvaro D�az V.
+	* @author	Alvaro Díaz V.
 	* @date		15/06/2018
 	*
 	* @param	days	The days.
@@ -152,7 +152,7 @@ public:
 	* @brief	Returns the derivative wrt to rate of the wf calculated given
 	* 			'startDate' and 'endDate'.
 	*
-	* @author	Alvaro D�az V.
+	* @author	Alvaro Díaz V.
 	* @date	15/06/2018
 	*
 	* @param [in,out]	startDate	The start date.
@@ -167,7 +167,7 @@ public:
 	 *
 	 * @brief	Gets rate from a wealth factor 'wf' and 'startDate' and 'endDate'.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param 		  	wf		 	The wf.
@@ -183,7 +183,7 @@ public:
 	 *
 	 * @brief	Gets rate from wealth factor 'wf' given 'days'.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param	wf  	The wf.
@@ -198,7 +198,7 @@ public:
 	 *
 	 * @brief	Returns the year fraction given start date and end date.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 *
 	 * @param [in,out]	startDate	The start date.
@@ -213,7 +213,7 @@ public:
 	 *
 	 * @brief	Gets wealth factor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	28/09/2017
 	 *
 	 * @return	The wealth factor.
@@ -225,7 +225,7 @@ public:
 	 *
 	 * @brief	Gets year fraction
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	28/09/2017
 	 *
 	 * @return	The year fraction.
@@ -237,7 +237,7 @@ public:
 	 *
 	 * @brief	Gets the description of the rate. Includes the value, yf and wf.
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	20/09/2018
 	 *
 	 * @return	A std::string.
@@ -249,7 +249,7 @@ public:
 	 *
 	 * @brief	Destructor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 */
 	~QCInterestRate();

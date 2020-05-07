@@ -16,7 +16,7 @@ public:
 	*
 	* @brief	Gets the description. In this case "Lin".
 	*
-	* @author	Alvaro Díaz V.
+	* @author	Alvaro DÃ­az V.
 	* @date	28/09/2017
 	*
 	* @return	A std::string.

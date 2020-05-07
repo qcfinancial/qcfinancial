@@ -147,6 +147,7 @@ namespace QCode
 				}
 			}
 
+
             void setRatesIcpClpLeg(const QCDate& valuationDate, double icpValuationDate, Leg& icpClpLeg,
                                    ZeroCouponCurve& curve)
             {

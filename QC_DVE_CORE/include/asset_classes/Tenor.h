@@ -13,7 +13,7 @@ namespace QCode
 		 *
 		 * @brief	A class that represents a financial tenor (1D, 1M, 1Y ...).
 		 *
-		 * @author	Alvaro Díaz V.
+		 * @author	Alvaro DÃ­az V.
 		 * @date	14/09/2018
 		 */
 		class Tenor
@@ -27,7 +27,7 @@ namespace QCode
 			 * 			is a regular expression where the characters "d", "m" and "y" are preceded by a
 			 * 			positive integer.
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @param	tenor	The tenor.
@@ -39,7 +39,7 @@ namespace QCode
 			 *
 			 * @brief	Sets a tenor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @param	tenor	The tenor.
@@ -51,7 +51,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the number of years
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro Dï¿½az V.
 			 * @date	14/09/2018
 			 *
 			 * @return	The years.
@@ -63,7 +63,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the number of months
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @return	The months.
@@ -75,7 +75,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the number of days
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @return	The days.
@@ -87,7 +87,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the minimal string needed to represent the tenor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @return	The string.
@@ -99,7 +99,7 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 */
 			~Tenor();
@@ -114,7 +114,7 @@ namespace QCode
 			 *
 			 * @brief	Validates the string given to represent the tenor
 			 *
-			 * @author	Alvaro Díaz V.
+			 * @author	Alvaro DÃ­az V.
 			 * @date	14/09/2018
 			 *
 			 * @param	tenor	The tenor.

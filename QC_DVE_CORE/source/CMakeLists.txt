@@ -2,7 +2,7 @@ set(QC_INCLUDE ../include)
 
 if (APPLE)
     set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
-    set(PYTHON3_H /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
+    set(PYTHON3_H /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/include/python3.7m)
     set(BOOST_H /usr/local/Cellar/boost/1.70.0/include)
 elseif(WIN32)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)

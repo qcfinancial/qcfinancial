@@ -15,7 +15,7 @@
  * @brief	Class that holds the basic data and methods related to a currency.
  * 			For convenience it should be subclassed to hold a particular currency.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro DÃ­az V.
  * @date	21/09/2017
  */
 
@@ -28,7 +28,7 @@ public:
 	 *
 	 * @brief	Default constructor. Returns USD.
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	02/10/2017
 	 */
 	QCCurrency() : _name("U. S. Dollar"), _isoCode("USD"), _isoNumber(840), _decimalPlaces(0)
@@ -43,7 +43,7 @@ public:
 	*
 	* @brief	Constructor
 	*
-	* @author	Alvaro Díaz V.
+	* @author	Alvaro Dï¿½az V.
 	* @date	21/09/2017
 	*
 	* @param	name		 	The name of the currency, e. g. Chilean Peso.
@@ -67,7 +67,7 @@ public:
 	 *
 	 * @brief	Gets the name
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 *
 	 * @return	The name.
@@ -82,7 +82,7 @@ public:
 	 *
 	 * @brief	Gets ISO code
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 *
 	 * @return	The ISO code.
@@ -97,7 +97,7 @@ public:
 	 *
 	 * @brief	Gets ISO number
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 *
 	 * @return	The ISO number.
@@ -112,7 +112,7 @@ public:
 	 *
 	 * @brief	Gets decimal places
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 *
 	 * @return	The decimal places.
@@ -128,7 +128,7 @@ public:
 	 * @brief	Returns the properly rounded amount of currency given the unrounded amount.
 	 * 			Should be used for actual cashflows.
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 *
 	 * @param	amount	The amount of currency to be rounded.
@@ -146,7 +146,7 @@ public:
 	 *
 	 * @brief	Destructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	21/09/2017
 	 */
 	~QCCurrency()
@@ -174,7 +174,7 @@ private:
  *
  * @brief	Representation for CLF (ISO Code and Number are ficticious).
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	09/10/2017
  */
 class QCCLF : public QCCurrency
@@ -186,7 +186,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	09/10/2017
 	 */
 	QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 4)
@@ -199,7 +199,7 @@ public:
  *
  * @brief	Representation for BRL.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro DÃ­az V.
  * @date	27/09/2017
  */
 class QCBRL : public QCCurrency
@@ -211,7 +211,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro DÃ­az V.
 	 * @date	27/09/2017
 	 */
 	QCBRL() : QCCurrency("Brazilian Real", "BRL", 986, 2)
@@ -224,7 +224,7 @@ public:
  *
  * @brief	Representation for CLP.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro DÃ­az V.
  * @date	27/09/2017
  */
 class QCCLP : public QCCurrency
@@ -236,7 +236,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCCLP() : QCCurrency("Chilean Peso", "CLP", 152, 0)
@@ -249,7 +249,7 @@ public:
  *
  * @brief	Representation for MXN.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	27/09/2017
  */
 class QCMXN : public QCCurrency
@@ -261,7 +261,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCMXN() : QCCurrency("Mexican Peso", "MXN", 484, 2)
@@ -274,7 +274,7 @@ public:
  *
  * @brief	Representation for CAD.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	27/09/2017
  */
 class QCCAD : public QCCurrency
@@ -286,7 +286,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCCAD() : QCCurrency("Canadian Dollar", "CAD", 124, 2)
@@ -299,7 +299,7 @@ public:
  *
  * @brief	Representation for USD.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	27/09/2017
  */
 class QCUSD : public QCCurrency
@@ -311,7 +311,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCUSD() : QCCurrency("U. S. Dollar", "USD", 840, 2)
@@ -324,7 +324,7 @@ public:
  *
  * @brief	Representation for EUR.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	27/09/2017
  */
 class QCEUR : public QCCurrency
@@ -336,7 +336,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCEUR() : QCCurrency("European Euro", "EUR", 978, 2)
@@ -349,7 +349,7 @@ public:
  *
  * @brief	Representation for GBP.
  *
- * @author	Alvaro Díaz V.
+ * @author	Alvaro Dï¿½az V.
  * @date	27/09/2017
  */
 class QCGBP : public QCCurrency
@@ -361,7 +361,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro Díaz V.
+	 * @author	Alvaro Dï¿½az V.
 	 * @date	27/09/2017
 	 */
 	QCGBP() : QCCurrency("British Pound Sterling", "GBP", 826, 2)
@@ -374,7 +374,7 @@ public:
 *
 * @brief	Default constructor
 *
-* @author	Alvaro Díaz V.
+* @author	Alvaro Dï¿½az V.
 * @date	07/01/2019
 */
 class QCJPY : public QCCurrency
