@@ -215,7 +215,7 @@ namespace QCode
                 if (forBonds) settlementDate = thisEndDate;
                 double amort = cuota - tempNotional * r;
                 FixedRateCashflow2 frc{ thisStartDate, thisEndDate, settlementDate,
-                                        sign * notional, amort, doesAmortize, rate, currency };
+                                        sign * tempNotional, amort, doesAmortize, rate, currency };
                 fixedRateleg.setCashflowAt(std::make_shared<FixedRateCashflow2>(frc), i);
                 ++i;
                 tempNotional -= amort;
