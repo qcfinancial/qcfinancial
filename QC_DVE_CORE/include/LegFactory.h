@@ -145,6 +145,21 @@ namespace QCode
 				std::shared_ptr<QCCurrency> currency,
 				bool forBonds = false);
 
+            static Leg buildFrenchFixedRateLeg2(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    QCInterestRate rate,
+                    std::shared_ptr<QCCurrency> currency,
+                    bool forBonds);
+
 			/**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
 			 *
@@ -521,7 +536,11 @@ namespace QCode
                     bool isAct360 = false);
 
             /**
-			 * @fn	static Leg LegFactory::buildCustomAmortIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
+			 * @fn	static Leg LegFactory::buildCustomAmortIcpClpLeg(RecPay recPay, QCDate startDate, QCDate endDate,
+             * QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity,
+             * QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar,
+             * unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread,
+             * double gearing);
 			 *
 			 * @brief	Builds custom amort icp clp leg
 			 *

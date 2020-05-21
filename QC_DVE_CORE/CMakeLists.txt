@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-add_library(QC_DVE_CORE STATIC "" include/cashflows/IcpClpCashflow2.h source/cashflows/IcpClpCashflow2.cpp)
+add_library(QC_DVE_CORE STATIC "")
 add_library(QC_DVE_PYBIND SHARED "")
-add_library(QC_Financial SHARED "" include/cashflows/IcpClpCashflow2.h source/cashflows/IcpClpCashflow2.cpp)
-add_library(QC_Financial_3 SHARED "" include/cashflows/IcpClpCashflow2.h source/cashflows/IcpClpCashflow2.cpp)
+add_library(QC_Financial SHARED "")
+add_library(QC_Financial_3 SHARED "")
 add_executable(QC_DVE_CORE_TESTS)
 
 add_subdirectory(source)

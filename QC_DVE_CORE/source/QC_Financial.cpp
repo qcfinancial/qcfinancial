@@ -738,7 +738,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("mod_next_busy_day", &QCBusinessCalendar::modNextBusinessDay)
         .def("prev_busy_day", &QCBusinessCalendar::previousBusinessDay)
         .def("shift", &QCBusinessCalendar::shift)
-        .def("get_holydays", &QCBusinessCalendar::getHolidays)
+        .def("get_holidays", &QCBusinessCalendar::getHolidays)
         ;
 
         enum_<QCInterestRateLeg::QCStubPeriod>("StubPeriod")
@@ -825,6 +825,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_bullet_fixed_rate_mccy_leg")
         .def("build_custom_amort_fixed_rate_leg", &qf::LegFactory::buildCustomAmortFixedRateLeg)
         .staticmethod("build_custom_amort_fixed_rate_leg")
+        .def("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
+        .staticmethod("build_custom_amort_fixed_rate_leg")
         .def("build_custom_amort_fixed_rate_leg_2", &qf::LegFactory::buildCustomAmortFixedRateLeg2)
         .staticmethod("build_custom_amort_fixed_rate_leg_2")
         .def("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
@@ -835,24 +837,18 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_bullet_ibor_mccy_leg")
         .def("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
         .staticmethod("build_custom_amort_ibor_leg")
-
         .def("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)
         .staticmethod("build_bullet_icp_clp_leg")
-
         .def("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
         .staticmethod("build_bullet_icp_clp2_leg")
-
         .def("build_custom_amort_icp_clp_leg", &qf::LegFactory::buildCustomAmortIcpClpLeg)
         .staticmethod("build_custom_amort_icp_clp_leg")
-
         .def("build_custom_amort_icp_clp2_leg", &qf::LegFactory::buildCustomAmortIcpClp2Leg)
         .staticmethod("build_custom_amort_icp_clp2_leg")
-
         .def("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
         .staticmethod("build_bullet_icp_clf_leg")
         .def("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
         .staticmethod("build_custom_amort_icp_clf_leg")
-
         .def("customize_amortization", &qf::LegFactory::customizeAmortization)
         .staticmethod("customize_amortization")
         ;

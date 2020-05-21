@@ -512,19 +512,19 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
 }
 
 QCInterestRateLeg QCFactoryFunctions::buildFrenchFixedRateLeg(
-	QCDate valueDate,			//value date
-	string receivePay,			//receive or pay
-	QCDate startDate,			//start date
-	QCDate endDate,				//end date
-	vector<QCDate> calendar,	//settlement calendar
-	int settlementLag,			//settlement lag
-	QCInterestRateLeg::QCStubPeriod stubPeriod,	//stub period
-	string periodicity,			//periodicity
-	QCDate::QCBusDayAdjRules endDateAdjustment,		//end date adjustment
-	QCInterestRateLeg::QCAmortization amortization,	//amortization
-	vector<tuple<QCDate, double, double>> amortNotionalByDate, //amortization and notional by date
-	double notional,			//notional
-	shared_ptr<QCInterestRate> intRate //interest rate
+	QCDate valueDate,			                                //value date
+	string receivePay,			                                //receive or pay
+	QCDate startDate,			                                //start date
+	QCDate endDate,				                                //end date
+	vector<QCDate> calendar,	                                //settlement calendar
+	int settlementLag,			                                //settlement lag
+	QCInterestRateLeg::QCStubPeriod stubPeriod,	                //stub period
+	string periodicity,			                                //periodicity
+	QCDate::QCBusDayAdjRules endDateAdjustment,		            //end date adjustment
+	QCInterestRateLeg::QCAmortization amortization,	            //amortization
+	vector<tuple<QCDate, double, double>> amortNotionalByDate,  //amortization and notional by date
+	double notional,			                                //notional
+	shared_ptr<QCInterestRate> intRate                          //interest rate
 	)
 {
 	if (amortization != QCInterestRateLeg::qcFrenchAmort)

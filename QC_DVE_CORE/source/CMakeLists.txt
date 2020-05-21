@@ -31,11 +31,16 @@ target_sources(QC_DVE_CORE
         PRIVATE
         ChileanFixedRateBond.cpp
         FixedRateBond.cpp
+        cashflows/SimpleCashflow.cpp
+        cashflows/SimpleMultiCurrencyCashflow.cpp
         cashflows/FixedRateCashflow.cpp
+        cashflows/FixedRateCashflow2.cpp
         cashflows/FixedRateMultiCurrencyCashflow.cpp
         cashflows/IborCashflow.cpp
+        cashflows/IborCashflow2.cpp
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
+        cashflows/IcpClpCashflow2.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
@@ -78,8 +83,6 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        cashflows/SimpleCashflow.cpp
-        cashflows/SimpleMultiCurrencyCashflow.cpp
         Tenor.cpp
         ZeroCouponCurve.cpp)
 
@@ -146,6 +149,8 @@ set(QC_FINANCIAL_SOURCES
         QC_Financial.cpp
         ChileanFixedRateBond.cpp
         FixedRateBond.cpp
+        cashflows/SimpleCashflow.cpp
+        cashflows/SimpleMultiCurrencyCashflow.cpp
         cashflows/FixedRateCashflow.cpp
         cashflows/FixedRateCashflow2.cpp
         cashflows/FixedRateMultiCurrencyCashflow.cpp
@@ -154,6 +159,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/IborMultiCurrencyCashflow.cpp
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
+        cashflows/IcpClpCashflow2.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
@@ -198,8 +204,6 @@ set(QC_FINANCIAL_SOURCES
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        cashflows/SimpleCashflow.cpp
-        cashflows/SimpleMultiCurrencyCashflow.cpp
         Tenor.cpp
         ZeroCouponCurve.cpp)
 
