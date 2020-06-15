@@ -17,6 +17,7 @@
 class QC30360 : public QCYearFraction
 {
 public:
+    QC30360() = default;
     /*!
       * La función yf devuelve la fracción de año entre dos fechas en convención 30/360.
       * @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo

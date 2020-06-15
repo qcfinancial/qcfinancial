@@ -104,6 +104,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         implicitly_convertible<std::shared_ptr<QCJPY>, shared_ptr<QCCurrency>>();
         class_<QCJPY, std::shared_ptr<QCJPY>, bases<QCCurrency>>("QCJPY");
 
+        implicitly_convertible<std::shared_ptr<QCCHF>, shared_ptr<QCCurrency>>();
+        class_<QCCHF, std::shared_ptr<QCCHF>, bases<QCCurrency>>("QCCHF");
+
         def("get_qccurrency_from_code", &qf::getQCCurrencyFromCode);
 
         std::tuple<unsigned long, int>(QCDate::*mddiff_1)(const QCDate&, std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const =
@@ -124,6 +127,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
                 return boost::python::make_tuple(w.day(), w.month(), w.year());
             }
         };
+
         class_<QCDate>("QCDate", init<int, int, int>())
         .def(init<>())
         .def(init<long>())
@@ -152,7 +156,6 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         ;
 
         def("build_qcdate_from_string", &wrappers::buildQCDateFromString);
-
 
         enum_<QCDate::QCWeekDay>("WeekDay")
         .value("MON", QCDate::qcMonday)
@@ -333,7 +336,24 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def(vector_indexing_suite<QCode::Financial::DateList>())
         ;
 
-        class_<qf::FixedRateCashflow2, std::shared_ptr<qf::FixedRateCashflow2>, bases<qf::LinearInterestRateCashflow>>
+    class_<qf::manyCae>("many_cae");
+    def("get_cae_legs_by_deal_number", &wrappers::getCaeBayDealNumber);
+
+    class_<qf::oneCae>("one_cae");
+    def("get_cae_leg_at", &wrappers::loanAt);
+    def("get_number_cae_legs", &wrappers::getNumberCaeLegs);
+
+    class_<qf::oneCaeLeg>("cae_leg");
+    def("get_prob_from_cae_leg", &wrappers::getProbabilityFromCaeLeg);
+    def("get_leg_from_cae_leg", &wrappers::getLegFromCaeLeg);
+
+    class_<qf::dataOneCae>("data_one_cae");
+    def("make_data_one_cae", &wrappers::makeDataOneCae);
+
+    class_<qf::dataManyCae>("data_many_cae");
+    def("append_data_to", &wrappers::appendDataTo);
+
+    class_<qf::FixedRateCashflow2, std::shared_ptr<qf::FixedRateCashflow2>, bases<qf::LinearInterestRateCashflow>>
         ("FixedRateCashflow2", init < QCDate&, QCDate&, QCDate&, double, double, bool, const QCInterestRate&, shared_ptr < QCCurrency >> ())
         .def("amount", &qf::FixedRateCashflow2::amount)
         .def("ccy", &qf::FixedRateCashflow2::ccy)
@@ -851,6 +871,12 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_custom_amort_icp_clf_leg")
         .def("customize_amortization", &qf::LegFactory::customizeAmortization)
         .staticmethod("customize_amortization")
+        .def("make_loan", &qf::LegFactory::makeLoan)
+        .staticmethod("make_loan")
+        .def("build_cae", &qf::LegFactory::buildCae)
+        .staticmethod("build_cae")
+        .def("build_bulk_cae", &qf::LegFactory::buildBulkCae)
+        .staticmethod("build_bulk_cae")
         ;
 
         class_<qf::FXRate, std::shared_ptr<qf::FXRate>>

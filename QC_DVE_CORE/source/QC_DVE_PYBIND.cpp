@@ -2289,7 +2289,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 	try
 	{
 		map<string, vector<QCDate>> mapHolidays;
-		QCDvePyBindHelperFunctions:: (holidays, mapHolidays);
+		QCDvePyBindHelperFunctions::buildHolidays(holidays, mapHolidays);
 		cout << "	Finished map holidays" << endl;
 
 		if (PyList_Size(curveValues) == 0)

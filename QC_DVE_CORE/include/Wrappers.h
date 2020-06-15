@@ -2471,6 +2471,51 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
 		return std::get<1>(tupla);
 	}
 
+    double getProbabilityFromCaeLeg(std::tuple<double, qf::Leg> tupla)
+    {
+        return std::get<0>(tupla);
+    }
+
+
+    qf::Leg getLegFromCaeLeg(std::tuple<double, qf::Leg> tupla)
+    {
+        return std::get<1>(tupla);
+    }
+
+    std::tuple<double, qf::Leg> loanAt(int i, const qf::oneCae& caeVec)
+    {
+	    return caeVec.at(i);
+    }
+
+    size_t getNumberCaeLegs(qf::oneCae legs)
+    {
+        return legs.size();
+    }
+
+    qf::oneCae getCaeBayDealNumber(std::string dealNumber, qf::manyCae portfolio)
+    {
+	    return portfolio[dealNumber];
+    }
+
+    qf::dataOneCae makeDataOneCae(std::string dealNumber,
+            std::string fechaCalculo,
+            int ultimoGiro,
+            double giroPromedio,
+            double saldo,
+            int girosTotales,
+            int plazoCredito,
+            std::string fechaProximoGiro,
+            double tasa)
+    {
+	    return std::make_tuple(dealNumber, fechaCalculo, ultimoGiro, giroPromedio, saldo,
+	            girosTotales, plazoCredito, fechaProximoGiro, tasa);
+    }
+
+    void appendDataTo(qf::dataManyCae& dataAll, qf::dataOneCae dataOne)
+    {
+	    dataAll.push_back(dataOne);
+    }
+
 
 	// *********** Getter functions for a FixedRateCashflowWrapper *********************
 	QCDate startDate(qf::FixedRateCashflowWrapper wrapper)

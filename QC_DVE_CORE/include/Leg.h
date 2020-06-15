@@ -18,7 +18,7 @@ namespace QCode
 		 *
 		 * @brief	Wrapper class that provides the basis for an arbitrary leg of a financial product .
 		 *
-		 * @author	Alvaro D�az V.
+		 * @author	Alvaro Díaz V.
 		 * @date	07/07/2018
 		 */
 		class Leg
@@ -30,7 +30,7 @@ namespace QCode
 			 *
 			 * @brief	Default constructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 */
 			Leg();
@@ -40,7 +40,7 @@ namespace QCode
 			 *
 			 * @brief	Gets cashflow at position. Position must be between 0 and number of cashflows - 1.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	pos	The position of the cashflow.
@@ -54,7 +54,7 @@ namespace QCode
 			 *
 			 * @brief	Sets cashflow at the specified position.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	cashflow	The cashflow.
@@ -67,7 +67,7 @@ namespace QCode
 			 *
 			 * @brief	Appends a cashflow (at the last position).
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @param	cashflow	The cashflow.
@@ -79,7 +79,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the size of the leg (number of cashflows).
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	07/07/2018
 			 *
 			 * @return	A size_t.

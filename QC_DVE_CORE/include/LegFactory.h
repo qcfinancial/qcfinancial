@@ -2,6 +2,9 @@
 #define LEGFACTORY_H
 
 #include<memory>
+#include <vector>
+#include <tuple>
+#include <map>
 
 #include "cashflows/Cashflow.h"
 #include "cashflows/FixedRateCashflow.h"
@@ -18,6 +21,21 @@ namespace QCode
 {
 	namespace Financial
 	{
+	    typedef std::tuple<double, Leg> oneCaeLeg;
+	    typedef std::vector<std::tuple<double, Leg>> oneCae;
+	    typedef std::map<std::string, oneCae> manyCae;
+	    typedef std::tuple<std::string,        // dealNumber
+	                       std::string,        // fechaCalculo
+	                       int,                // ultimoGiro
+	                       double,             // giroPromedio
+                           double,             // saldo
+                           int,                // girosTotales
+                           int,                // plazoCredito
+                           std::string,        // fechaProximoGiro
+                           double              // tasa
+                           > dataOneCae;
+	    typedef std::vector<dataOneCae> dataManyCae;
+
 		/**
 		 * @class	LegFactory
 		 *
@@ -159,6 +177,27 @@ namespace QCode
                     QCInterestRate rate,
                     std::shared_ptr<QCCurrency> currency,
                     bool forBonds);
+
+            static Leg makeLoan(
+                    double monto,
+                    int plazo,
+                    double tasa,
+                    std::string fechaInicio
+                    );
+
+            static oneCae buildCae(
+                    std::string fechaCalculo,
+                    int ultimoGiro,
+                    double giroPromedio,
+                    double saldo,
+                    int girosTotales,
+                    int plazoCredito,
+                    std::string fechaProximoGiro,
+                    double tasa,
+                    const std::vector<double>& probabilidades
+                    );
+
+            static manyCae buildBulkCae(const dataManyCae& data, const std::vector<double>& probabilidades);
 
 			/**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);

@@ -186,10 +186,12 @@ namespace QCode
 
             // Instantiate factory and build the corresponding periods.
             QCInterestRatePeriodsFactory pf{ startDate, endDate, endDateAdjustment,
-                                             settlementPeriodicityString, settlementStubPeriod, settCal, settlementLag,
+                                             settlementPeriodicityString, settlementStubPeriod,
+                                             settCal, settlementLag,
                     // The next parameters are useful only for IborLegs. Arbitrary values
                     // are given to them in this case.
-                                             settlementPeriodicityString, settlementStubPeriod, settCal, 0, 0, settlementPeriodicityString };
+                                             settlementPeriodicityString, settlementStubPeriod,
+                                             settCal, 0, 0, settlementPeriodicityString };
             auto periods = pf.getPeriods();
 
             //Con esas fechas residuales y el notional calcular la cuota
@@ -205,6 +207,7 @@ namespace QCode
             size_t i = 0;
             auto tempNotional = notional;
             r = rate.getValue() / 12.0;
+            std::cout << "rate description: " << rate.description() << std::endl;
             for (const auto& period : periods)
             {
                 QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
@@ -223,7 +226,122 @@ namespace QCode
 
             return fixedRateleg;
         }
-		
+
+        Leg LegFactory::makeLoan(
+                double monto,
+                int plazo,
+                double tasa,
+                std::string fechaInicio)
+        {
+            // Se da de alta los parámetros requeridos
+            auto rp = RecPay::Receive;
+            auto qcFechaInicio = QCDate {fechaInicio};
+            auto qcFechaFinal =  qcFechaInicio.addMonths(plazo * 12);
+            auto busAdjmntRule = QCDate::QCBusDayAdjRules::qcNo;
+            auto periodicidad = Tenor {"1M"};
+
+            // Con período irregular las cuotas no quedan iguales
+            auto periodoIrregular = QCInterestRateLeg::QCStubPeriod::qcNoStubPeriod;
+
+            auto calendario = QCBusinessCalendar {qcFechaInicio, 20};
+            calendario.addHolyday(QCDate(31, 12, 2020));
+            unsigned int lagPago = 0;
+            auto nominal = monto;
+            auto amortEsFlujo = true;
+
+            // Si la tasa es Act/360 o Act/365 las cuotas no van a quedar iguales
+            QCYrFrctnShrdPtr yf = std::make_shared<QC30360>(QC30360());
+            QCWlthFctrShrdPtr wf = std::make_shared<QCLinearWf>(QCLinearWf());
+            QCInterestRate tasaCupon {tasa, yf, wf};
+
+            auto moneda = std::make_shared<QCCurrency>(QCCLF());
+            auto esBono = false;
+
+            // Se da de alta el objeto
+            auto frenchFixedRateLeg2 = buildFrenchFixedRateLeg2(
+                    rp,
+                    qcFechaInicio,
+                    qcFechaFinal,
+                    busAdjmntRule,
+                    periodicidad,
+                    periodoIrregular,
+                    calendario,
+                    lagPago,
+                    nominal,
+                    amortEsFlujo,
+                    tasaCupon,
+                    moneda,
+                    esBono);
+
+            return frenchFixedRateLeg2;
+        }
+
+        std::vector<std::tuple<double, Leg>> LegFactory::buildCae(
+                std::string fechaCalculo,
+                int ultimoGiro,
+                double giroPromedio,
+                double saldo,
+                int girosTotales,
+                int plazoCredito,
+                std::string fechaProximoGiro,
+                double tasa,
+                const std::vector<double>& probabilidades)
+        {
+            auto girosAdicionales = girosTotales - ultimoGiro;
+            std::vector<std::tuple<double, Leg>> creditos;
+            auto fechaHoy = QCDate(fechaCalculo);
+            auto qcFechaProximoGiro = QCDate(fechaProximoGiro);
+            double probabilidadAcumulada {0.0};
+            for (size_t i = 0; i < girosAdicionales + 1; ++i)
+            {
+                saldo *= 1 + tasa * fechaHoy.dayDiff(qcFechaProximoGiro) / 360.0;
+                auto qcFechaInicio = qcFechaProximoGiro.addMonths(24);
+                auto monto = saldo * (1 + tasa * qcFechaProximoGiro.dayDiff(qcFechaInicio) / 360.0);
+                if (i < girosAdicionales)
+                {
+                    creditos.push_back(
+                            std::make_tuple(probabilidades[ultimoGiro + 1],
+                                    makeLoan(monto, plazoCredito, tasa, qcFechaInicio.description(false))
+                            )
+                    );
+                    probabilidadAcumulada += probabilidades.at(ultimoGiro + 1);
+                }
+                else
+                {
+                    creditos.push_back(
+                            std::make_tuple(
+                                    1 - probabilidadAcumulada,
+                                    makeLoan(monto, plazoCredito, tasa, qcFechaInicio.description(false))
+                                    ));
+                    fechaHoy = qcFechaProximoGiro;
+                    qcFechaProximoGiro = qcFechaProximoGiro.addMonths(24);
+                    saldo += giroPromedio;
+                }
+            }
+
+            return creditos;
+        }
+
+        manyCae LegFactory::buildBulkCae(const dataManyCae& data,
+                const std::vector<double>& probabilidades)
+        {
+		    manyCae result;
+		    for (const auto& dato : data)
+            {
+		        result[std::get<0>(dato)] = buildCae(
+		                std::get<1>(dato),
+                        std::get<2>(dato),
+                        std::get<3>(dato),
+                        std::get<4>(dato),
+                        std::get<5>(dato),
+                        std::get<6>(dato),
+                        std::get<7>(dato),
+                        std::get<8>(dato),
+                        probabilidades);
+            }
+		    return result;
+        }
+
 		Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg(
 			RecPay recPay,
 			QCDate startDate,

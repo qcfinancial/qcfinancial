@@ -29,7 +29,7 @@ namespace QCFactoryFunctions
 		const string& interpolator, const string& yf, const string& wf, const string& typeCurve);
 
 	/*!
-	* Construye una tasa de inter�s Lin Act/360 c0n valor 0.
+	* Construye una tasa de interés Lin Act/360 c0n valor 0.
 	*/
 	shared_ptr<QCInterestRate> zeroIntRateSharedPtr();
 

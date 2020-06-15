@@ -1,10 +1,37 @@
 set(QC_INCLUDE ../include)
 
-target_include_directories(QC_DVE_CORE_TESTS
+target_include_directories(manual_tests
         PRIVATE
         ${QC_INCLUDE})
 
-target_sources(QC_DVE_CORE_TESTS
+target_sources(manual_tests
         PRIVATE
-        CatchMain.cpp
-        QCDateTests.cpp)
+        manualTests.cpp
+        ../source/Leg.cpp
+        ../source/LegFactory.cpp
+        ../source/QCInterestRatePeriodsFactory.cpp
+        ../source/QCHelperFunctions.cpp
+        ../source/time/QCDate.cpp
+        ../source/time/QCBusinessCalendar.cpp
+        ../source/Tenor.cpp
+        ../source/cashflows/IborCashflow.cpp
+        ../source/cashflows/IborCashflow2.cpp
+        ../source/cashflows/FixedRateCashflow.cpp
+        ../source/cashflows/FixedRateCashflow2.cpp
+        ../source/cashflows/FixedRateMultiCurrencyCashflow.cpp
+        ../source/cashflows/IcpClpCashflow.cpp
+        ../source/cashflows/IcpClpCashflow2.cpp
+        ../source/cashflows/IcpClfCashflow.cpp
+        ../source/cashflows/IborMultiCurrencyCashflow.cpp
+        ../source/asset_classes/InterestRateIndex.cpp
+        ../source/asset_classes/QC3030.cpp
+        ../source/asset_classes/QC30360.cpp
+        ../source/asset_classes/QCAct30.cpp
+        ../source/asset_classes/QCAct360.cpp
+        ../source/asset_classes/QCAct365.cpp
+        ../source/QCInterestRate.cpp
+        ../source/QCWealthFactor.cpp
+        ../source/QCLinearWf.cpp
+        ../source/HelperFunctions.cpp
+        ../source/QCHelperFunctions.cpp
+        )

@@ -11,16 +11,18 @@ add_library(QC_DVE_PYBIND SHARED "")
 add_library(QC_Financial SHARED "")
 add_library(QC_Financial_3 SHARED "")
 add_executable(QC_DVE_CORE_TESTS)
+add_executable(manual_tests)
 
 add_subdirectory(source)
 add_subdirectory(Tests)
+add_subdirectory(ManualTests)
 
 if (APPLE)
     target_compile_options(QC_DVE_CORE PRIVATE -fPIC)
-    set(PYTHON2_LIB /System/Library/Frameworks/Python.framework/Versions/Current/lib/)
-    set(PYTHON3_LIB /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/)
-    set(BOOST_PYTHON2_LIB /usr/local/Cellar/boost-python/1.70.0/lib/)
-    set(BOOST_PYTHON3_LIB /usr/local/Cellar/boost-python3/1.70.0_1/lib/)
+    set(PYTHON2_LIB /System/Library/Frameworks/Python.framework/Versions/Current/lib)
+    set(PYTHON3_LIB /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/lib/)
+    set(BOOST_PYTHON2_LIB /usr/local/lib/)
+    set(BOOST_PYTHON3_LIB /usr/local/lib/)
 elseif(WIN32)
     target_compile_options(QC_Financial PRIVATE /bigobj)
     target_compile_options(QC_Financial_3 PRIVATE /bigobj)
@@ -49,8 +51,8 @@ if (APPLE)
             ${BOOST_PYTHON2_LIB}libboost_python27-mt.dylib )
 
     target_link_libraries(QC_Financial_3
-            ${PYTHON3_LIB}libpython3.7.dylib
-            ${BOOST_PYTHON3_LIB}libboost_python37-mt.dylib)
+            ${PYTHON3_LIB}libpython3.8.dylib
+            ${BOOST_PYTHON3_LIB}libboost_python38.dylib)
 
 elseif(WIN32)
 

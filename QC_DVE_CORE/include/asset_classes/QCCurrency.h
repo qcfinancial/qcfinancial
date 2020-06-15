@@ -236,12 +236,29 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 */
 	QCCLP() : QCCurrency("Chilean Peso", "CLP", 152, 0)
 	{
 	}
+};
+
+class QCCHF : public QCCurrency
+{
+public:
+
+    /**
+     * @fn	QCCHF::QCCHF()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro Díaz V.
+     * @date	15/06/2020
+     */
+    QCCHF() : QCCurrency("Franco Suizo", "CHF", 756, 2)
+    {
+    }
 };
 
 /**
