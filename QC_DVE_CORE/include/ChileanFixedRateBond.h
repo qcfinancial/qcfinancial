@@ -25,6 +25,15 @@ namespace QCode
 			double price(const QCDate& valueDate, const QCInterestRate& yieldToMaturity) override;
 			double settlementValue(double notional, std::shared_ptr<QCCurrency> currency,
 				const QCDate& valueDate, const QCInterestRate& yieldToMaturity);
+            double price2(const QCDate& valueDate,
+                    const QCInterestRate& yieldToMaturity,
+                    unsigned int decimalPlaces
+                    );
+            double settlementValue2(double notional, std::shared_ptr<QCCurrency> currency,
+                    const QCDate& valueDate,
+                    const QCInterestRate& yieldToMaturity,
+                    unsigned int decimalPlaces
+                    );
 
 		private:
 			QCInterestRate _tera;

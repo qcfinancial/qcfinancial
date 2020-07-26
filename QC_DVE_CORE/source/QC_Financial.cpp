@@ -985,6 +985,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .def("valor_par", &qf::ChileanFixedRateBond::valorPar)
         .def("precio", &qf::ChileanFixedRateBond::price)
         .def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
+        .def("precio2", &qf::ChileanFixedRateBond::price2)
+        .def("valor_pago2", &qf::ChileanFixedRateBond::settlementValue2)
         ;
 
         class_<qf::ForwardRates>("ForwardRates")
