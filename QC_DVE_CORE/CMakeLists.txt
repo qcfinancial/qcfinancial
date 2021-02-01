@@ -38,7 +38,7 @@ else()
     else()
         set(PYTHON2_LIB /usr/lib64/)
         set(PYTHON3_LIB /usr/local/lib/)
-        set(BOOST_PYTHON_LIB /usr/lib/)
+        set(BOOST_PYTHON_LIB /usr/lib64/boost169/)
     endif()
 endif()
 
@@ -69,10 +69,10 @@ elseif(WIN32)
 else()
     target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
     target_link_libraries(QC_DVE_PYBIND
-            ${PYTHON2_LIB}libpython2.7.so.1.0)
+            ${PYTHON2_LIB}libpython2.7.so)
 
     target_link_libraries(QC_Financial
-            ${PYTHON2_LIB}libpython2.7.so.1.0
+            ${PYTHON2_LIB}libpython2.7.so
             ${BOOST_PYTHON_LIB}libboost_python27.so)
 
     if (${distro} STREQUAL "Ubuntu")
