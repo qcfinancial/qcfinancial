@@ -174,9 +174,9 @@ namespace QCDvePyBindHelperFunctions
 	void buildAuxTenorsAndRates(PyObject* auxCurveValues, vector<long>& auxTenors, vector<double>& auxRates,
 		string queCurva)
 	{
-		cout << "Enter buildAuxTenorsAndRates" << endl;
+		// cout << "Enter buildAuxTenorsAndRates" << endl;
 		size_t numValues = PyList_Size(auxCurveValues);
-		//cout << "\tnumValues: " << numValues << endl;
+		// cout << "\tnumValues: " << numValues << endl;
 		string name;
 		for (size_t i = 0; i < numValues; ++i)
 		{
@@ -197,13 +197,13 @@ namespace QCDvePyBindHelperFunctions
 		//(nombre, start_date_rule, tenor, calendar, yf, wf, valor)
 		size_t numRates = PyList_Size(input);
 		zeroRateVector.resize(numRates);
-		cout << "Enter buildZeroRateVector" << endl;
-		cout << "Process date: " << processDate.description() << endl;
+		// cout << "Enter buildZeroRateVector" << endl;
+		// cout << "Process date: " << processDate.description() << endl;
 		for (size_t i = 0; i < numRates; ++i)
 		{
 			ZeroRate temp;
 
-			cout << "\t" << PyString_AsString(PyTuple_GetItem((PyList_GetItem(input, i)), 0)) << endl;
+			// cout << "\t" << PyString_AsString(PyTuple_GetItem((PyList_GetItem(input, i)), 0)) << endl;
 			//Build start date
 			string rule = PyString_AsString(PyTuple_GetItem((PyList_GetItem(input, i)), 1));
 			unsigned int lag = QCHelperFunctions::tenor(rule);
@@ -216,14 +216,14 @@ namespace QCDvePyBindHelperFunctions
 			{
 				get<0>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
 			}
-			cout << "\tlag: " << lag << endl;
-			cout << "\tbuildZeroRateVector: start_date " + get<0>(temp).description() << endl;
+			// cout << "\tlag: " << lag << endl;
+			// cout << "\tbuildZeroRateVector: start_date " + get<0>(temp).description() << endl;
 
 			//Build end date
 			rule = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 2));
 			lag = QCHelperFunctions::tenor(rule);
 			QCHelperFunctions::lowerCase(rule);
-			cout << "\tend date rule: " << rule << endl;;
+			// cout << "\tend date rule: " << rule << endl;;
 			if (rule.substr(rule.size() - 1, 1) == "d")
 			{
 				lag = QCHelperFunctions::tenor(rule);
@@ -242,24 +242,24 @@ namespace QCDvePyBindHelperFunctions
 					QCDate::QCBusDayAdjRules::qcFollow);
 			}
 			
-			cout << "\tlag: " << lag << endl;
-			cout << "\tbuildZeroRateVector: end_date " + get<1>(temp).description() << endl;
+			// cout << "\tlag: " << lag << endl;
+			// cout << "\tbuildZeroRateVector: end_date " + get<1>(temp).description() << endl;
 
 			//Build value
 			get<2>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 6));
-			cout << "\tbuildZeroRateVector: rate " << get<2>(temp) << endl;
+			// cout << "\tbuildZeroRateVector: rate " << get<2>(temp) << endl;
 			
 			//Build yf
 			string tempStr = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 4));
 			QCHelperFunctions::lowerCase(tempStr);
 			get<3>(temp) = tempStr;
-			cout << "\tbuildZeroRateVector: yf " << get<3>(temp) << endl;
+			// cout << "\tbuildZeroRateVector: yf " << get<3>(temp) << endl;
 
 			//Build wf
 			tempStr = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 5));
 			QCHelperFunctions::lowerCase(tempStr);
 			get<4>(temp) = tempStr;
-			cout << "\tbuildZeroRateVector: wf " << get<4>(temp) << endl;
+			// cout << "\tbuildZeroRateVector: wf " << get<4>(temp) << endl;
 
 			//Agrega temp al vector resultado
 			zeroRateVector.at(i) = temp;
@@ -292,7 +292,7 @@ namespace QCDvePyBindHelperFunctions
 	void buildFwdVector(PyObject* input, vector<FwdIndex>& fwdIndexVector, double fx)
 	{
 		//('FwdUSDCLP12M', 11.95, '2018-04-02', 'USDCLP', 'FWDPOINTS') esto entra
-		cout << "Enter buildFwdVectorFX" << endl;
+		// cout << "Enter buildFwdVectorFX" << endl;
 		size_t numFwds = PyList_Size(input);
 		fwdIndexVector.resize(numFwds);
 		QCCurrencyConverter conv;
@@ -300,40 +300,40 @@ namespace QCDvePyBindHelperFunctions
 		{
 			FwdIndex temp;
 			get<qcFwdNotionalStrong>(temp) = 1.0;
-			cout << "buildFwdVector: strong notional " << get<qcFwdNotionalStrong>(temp) << endl;
+			// cout << "buildFwdVector: strong notional " << get<qcFwdNotionalStrong>(temp) << endl;
 			if (string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 4))) == "FWDPOINTS")
 			{
 				get<qcFwdNotionalWeak>(temp) = fx + PyFloat_AsDouble(PyTuple_GetItem(
 					PyList_GetItem(input, i), 1));
-				cout << "buildFwdVector: weak notional " << get<qcFwdNotionalWeak>(temp) << endl;
+				// cout << "buildFwdVector: weak notional " << get<qcFwdNotionalWeak>(temp) << endl;
 			}
 			else
 			{
 				get<qcFwdNotionalWeak>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 1));
-				cout << "buildFwdVector: weak notional " << get<qcFwdNotionalWeak>(temp) << endl;
+				// cout << "buildFwdVector: weak notional " << get<qcFwdNotionalWeak>(temp) << endl;
 			}
             auto stringDate = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 2)));
             get<qcFwdEndDate>(temp) = QCDate{stringDate};
-			cout << "buildFwdVector: end date " << get<qcFwdEndDate>(temp).description() << endl;
+			// cout << "buildFwdVector: end date " << get<qcFwdEndDate>(temp).description() << endl;
 			
 			get<qcFwdPresentValueCurr>(temp) = conv.getWeakCurrencyEnum(
 				string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 3))));
-			cout << "buildFwdVector: pv currency " << get<qcFwdPresentValueCurr>(temp) << endl;
+			// cout << "buildFwdVector: pv currency " << get<qcFwdPresentValueCurr>(temp) << endl;
 			
 			get<qcFwdStrongCurr>(temp) = conv.getStrongCurrencyEnum(
 				string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 3))));
-			cout << "buildFwdVector: strong currency " << get<qcFwdStrongCurr>(temp) << endl;
+			// cout << "buildFwdVector: strong currency " << get<qcFwdStrongCurr>(temp) << endl;
 			
 			get<qcFwdWeakCurr>(temp) = get<qcFwdPresentValueCurr>(temp);
-			cout << "buildFwdVector: weak currency " << get<qcFwdWeakCurr>(temp) << endl;
+			// cout << "buildFwdVector: weak currency " << get<qcFwdWeakCurr>(temp) << endl;
 			
 			get<qcFwdFxRateStrong2PV>(temp) = conv.getStandardFxRate(get<qcFwdStrongCurr>(temp),
 				get<qcFwdWeakCurr>(temp));
-			cout << "buildFwdVector: fx  strong 2 pv " << get<qcFwdFxRateStrong2PV>(temp) << endl;
+			// cout << "buildFwdVector: fx  strong 2 pv " << get<qcFwdFxRateStrong2PV>(temp) << endl;
 			
 			get<qcFwdFxRateWeak2PV>(temp) = conv.getStandardFxRate(get<qcFwdWeakCurr>(temp),
 				get<qcFwdWeakCurr>(temp));
-			cout << "buildFwdVector: fx weak 2 pv " << get<qcFwdFxRateWeak2PV>(temp) << endl << endl;
+			// cout << "buildFwdVector: fx weak 2 pv " << get<qcFwdFxRateWeak2PV>(temp) << endl << endl;
 			
 			fwdIndexVector.at(i) = temp;
 		}
@@ -353,20 +353,20 @@ namespace QCDvePyBindHelperFunctions
 		//enum wf 10, enum yf 11
 		size_t numSwaps = PyList_Size(input);
 		swapIndexVector.resize(numSwaps);
-		cout << "buildFixedRateIndexVector" << endl;
+		// cout << "buildFixedRateIndexVector" << endl;
 		for (size_t i = 0; i < numSwaps; ++i)
 		{
 			SwapIndex temp;
-			cout << endl;
+			// cout << endl;
 			
 			//Receive or pay
 			get<0>(temp) = "R";
-			cout << "\tbuildFixedRateIndexVector: receive or pay " << get<0>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: receive or pay " << get<0>(temp) << endl;
 
 			//Build start date (start_date_lag 2)
 			unsigned int lag = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 2));
 			get<1>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
-			cout << "\tbuildFixedRateIndexVector: start date " << get<1>(temp).description() << endl;
+			// cout << "\tbuildFixedRateIndexVector: start date " << get<1>(temp).description() << endl;
 
 			//Build end date (5)
 			long condition =  PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 1));
@@ -374,7 +374,7 @@ namespace QCDvePyBindHelperFunctions
 			{
 				string tempDate = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 5));
 				get<2>(temp) = QCDate{ tempDate };
-				cout << "\tbuildFixedRateIndexVector: end date " << get<2>(temp).description() << endl;
+				// cout << "\tbuildFixedRateIndexVector: end date " << get<2>(temp).description() << endl;
 			}
 			else
 			{
@@ -383,51 +383,51 @@ namespace QCDvePyBindHelperFunctions
 					PyTuple_GetItem(
 					PyList_GetItem(input, i), 3)));
 				get<2>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcNo);
-				cout << "\tbuildFixedRateIndexVector: end date " << get<2>(temp).description() << endl;
+				// cout << "\tbuildFixedRateIndexVector: end date " << get<2>(temp).description() << endl;
 			}
 
 			//Build settlement lag (7)
 			get<3>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 7));
-			cout << "\tbuildFixedRateIndexVector: settlement lag " << get<3>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: settlement lag " << get<3>(temp) << endl;
 
 			//Build enum stub (8)
 			string stub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 8));
 			get<4>(temp) = QCHelperFunctions::stringToQCStubPeriod(stub);
-			cout << "\tbuildFixedRateIndexVector: enum stub " << get<4>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: enum stub " << get<4>(temp) << endl;
 
 			//Build periodicity (9)
 			get<5>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 9)));
-			cout << "\tbuildFixedRateIndexVector: periodicity " << get<5>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: periodicity " << get<5>(temp) << endl;
 
 			//Build enum end date adjustment (10)
 			string endDatAdj = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 10));
 			get<6>(temp) = QCHelperFunctions::stringToQCBusDayAdjRule(endDatAdj);
-			cout << "\tbuildFixedRateIndexVector: enum end date adj " << get<6>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: enum end date adj " << get<6>(temp) << endl;
 
 			//Build enum amort (11)
 			string amort = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 11));
 			get<7>(temp) = QCHelperFunctions::stringToQCAmortization(amort);
-			cout << "\tbuildFixedRateIndexVector: enum amort " << get<7>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: enum amort " << get<7>(temp) << endl;
 			 
 			//Build rate (16)
 			get<8>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 16));
-			cout << "\tbuildFixedRateIndexVector: rate " << get<8>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: rate " << get<8>(temp) << endl;
 
 			//Build notional (12)
 			get<9>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 12));
-			cout << "\tbuildFixedRateIndexVector: notional " << get<9>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: notional " << get<9>(temp) << endl;
 
 			//Build enum wf (14)
 			string yf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 14));
 			QCHelperFunctions::lowerCase(yf);
 			get<10>(temp) = yf;
-			cout << "\tbuildFixedRateIndexVector: enum yf " << get<10>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: enum yf " << get<10>(temp) << endl;
 
 			//Build enum yf (13)
 			string wf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 13));
 			QCHelperFunctions::lowerCase(wf);
 			get<11>(temp) = wf;
-			cout << "\tbuildFixedRateIndexVector: enum wf " << get<11>(temp) << endl;
+			// cout << "\tbuildFixedRateIndexVector: enum wf " << get<11>(temp) << endl;
 
 			swapIndexVector.at(i) = temp;
 		}
@@ -436,7 +436,7 @@ namespace QCDvePyBindHelperFunctions
 	void buildFloatingRateIndexVector(PyObject* input, QCDate& processDate, vector<QCDate>& dateVector,
 		vector<FloatIndex>& floatIndexVector, string receivePay = "R")
 	{
-		cout << "Enter buildFloatingRateIndexVector" << endl;
+		// cout << "Enter buildFloatingRateIndexVector" << endl;
 		//Esto es un ejemplo de lo que entra:
 		//('BasisCamCLPLibor3MUSD10Y' 0, False 1, 2 2, '10Y' 3, None 4, None 5, 'NEW YORK' 6,
 		//0 7, 'CORTO INICIO' 8, '3M' 9, 'FOLLOW' 10, 'BULLET' 11, 0.0 12, 0.0 13, '3M' 14,
@@ -457,18 +457,18 @@ namespace QCDvePyBindHelperFunctions
 		for (size_t i = 0; i < numSwaps; ++i)
 		{
 			FloatIndex temp;
-			cout << endl;
+			// cout << endl;
 			
 			size_t numFields = PyTuple_Size(PyList_GetItem(input, i));
 
 			//Receive or pay
 			get<qcReceivePay>(temp) = receivePay;
-			cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
 
 			//Build start date (start_date_lag 2)
 			unsigned int lag = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 2));
 			get<qcStartDate>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
-			cout << "\tbuildFloatingRateIndexVector: start date " << get<qcStartDate>(temp).description() << endl;
+			// cout << "\tbuildFloatingRateIndexVector: start date " << get<qcStartDate>(temp).description() << endl;
 
 			//Build end date (5)
 			long condition = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 1));
@@ -476,7 +476,7 @@ namespace QCDvePyBindHelperFunctions
 			{
 				string tempDate = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 5));
 				get<qcEndDate>(temp) = QCDate{ tempDate };
-				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+				// cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
 			}
 			else
 			{
@@ -485,48 +485,48 @@ namespace QCDvePyBindHelperFunctions
 					PyTuple_GetItem(
 					PyList_GetItem(input, i), 3)));
 				get<qcEndDate>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
-				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+				// cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
 			}
 
 			//Build settlement lag (7)
 			get<qcSettlementLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 7));
-			cout << "\tbuildFloatingRateIndexVector: settlement lag " << get<qcSettlementLag>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: settlement lag " << get<qcSettlementLag>(temp) << endl;
 
 			//Build enum stub (8)
 			string stub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 8));
 			get<qcStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(stub);
-			cout << "\tbuildFloatingRateIndexVector: enum stub " << get<qcStubPeriod>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum stub " << get<qcStubPeriod>(temp) << endl;
 
 			//Build periodicity (9)
 			get<qcPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 9)));
-			cout << "\tbuildFloatingRateIndexVector: periodicity " << get<qcPeriodicity>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: periodicity " << get<qcPeriodicity>(temp) << endl;
 
 			//Build enum end date adjustment (10)
 			string endDatAdj = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 10));
 			get<qcEndDateAdjustment>(temp) = QCHelperFunctions::stringToQCBusDayAdjRule(endDatAdj);
-			cout << "\tbuildFloatingRateIndexVector: enum end date adj " << get<qcEndDateAdjustment>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum end date adj " << get<qcEndDateAdjustment>(temp) << endl;
 			
 			//Build fixing periodicity (14)
 			get<qcFixingPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 14)));
-			cout << "\tbuildFloatingRateIndexVector: fixing periodicity " << get<qcFixingPeriodicity>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: fixing periodicity " << get<qcFixingPeriodicity>(temp) << endl;
 
 			//Build fixing stub period (15) 
 			string fixingStub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 15));
 			get<qcFixingStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(fixingStub);
-			cout << "\tbuildFloatingRateIndexVector: enum fixing stub " << get<qcFixingStubPeriod>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum fixing stub " << get<qcFixingStubPeriod>(temp) << endl;
 
 			//Build fixing lag (17)
 			get<qcFixingLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 17));
-			cout << "\tbuildFloatingRateIndexVector: fixing lag " << get<qcFixingLag>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: fixing lag " << get<qcFixingLag>(temp) << endl;
 
 			//Build enum amort (11)
 			string amort = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 11));
 			get<qcAmortization>(temp) = QCHelperFunctions::stringToQCAmortization(amort);
-			cout << "\tbuildFloatingRateIndexVector: enum amort " << get<qcAmortization>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum amort " << get<qcAmortization>(temp) << endl;
 
 			//Build rate (12)
 			get<qcRate>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 12));
-			cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
 
 			//Build spread (24)
 			if (numFields == 25)
@@ -537,23 +537,23 @@ namespace QCDvePyBindHelperFunctions
 			{
 				get<qcSpread>(temp) = 0.0;
 			}
-			cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
 
 			//Build notional (18)
 			get<qcNotional>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 18));
-			cout << "\tbuildFloatingRateIndexVector: notional " << get<qcNotional>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: notional " << get<qcNotional>(temp) << endl;
 
 			//Build enum wf (19)
 			string wf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 19));
 			QCHelperFunctions::lowerCase(wf);
 			get<qcWealthFactor>(temp) = wf;
-			cout << "\tbuildFloatingRateIndexVector: enum wf " << get<qcWealthFactor>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum wf " << get<qcWealthFactor>(temp) << endl;
 
 			//Build enum yf (20)
 			string yf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 20));
 			QCHelperFunctions::lowerCase(yf);
 			get<qcYearFraction>(temp) = yf;
-			cout << "\tbuildFloatingRateIndexVector: enum yf " << get<qcYearFraction>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum yf " << get<qcYearFraction>(temp) << endl;
 
 			floatIndexVector.at(i) = temp;
 		}
@@ -562,7 +562,7 @@ namespace QCDvePyBindHelperFunctions
 	void buildFloatingRateIndexVector2(PyObject* input, QCDate& processDate, vector<QCDate>& dateVector,
 		vector<FloatIndex>& floatIndexVector)
 	{
-		cout << "Enter buildFloatingRateIndexVector" << endl;
+		// cout << "Enter buildFloatingRateIndexVector" << endl;
 		//Esto es un ejemplo de lo que entra:
 		//('BasisCamCLPLibor3MUSD10Y' 0, False 1, 2 2, '10Y' 3, None 4, None 5, 'NEW YORK' 6,
 		//0 7, 'CORTO INICIO' 8, '3M' 9, 'FOLLOW' 10, 'BULLET' 11, 0.0 12, 0.0 13, '3M' 14,
@@ -583,7 +583,7 @@ namespace QCDvePyBindHelperFunctions
 		for (size_t i = 0; i < numSwaps; ++i)
 		{
 			FloatIndex temp;
-			cout << endl;
+			// cout << endl;
 
 			size_t numFields = PyTuple_Size(PyList_GetItem(input, i));
 			
@@ -591,12 +591,12 @@ namespace QCDvePyBindHelperFunctions
 			
 			//Receive or pay
 			get<qcReceivePay>(temp) = receivePay;
-			cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: receive or pay " << get<0>(temp) << endl;
 
 			//Build start date (start_date_lag 2)
 			unsigned int lag = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 2));
 			get<qcStartDate>(temp) = processDate.shift(dateVector, lag, QCDate::QCBusDayAdjRules::qcFollow);
-			cout << "\tbuildFloatingRateIndexVector: start date " << get<qcStartDate>(temp).description() << endl;
+			// cout << "\tbuildFloatingRateIndexVector: start date " << get<qcStartDate>(temp).description() << endl;
 
 			//Build end date (5)
 			long condition = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 1));
@@ -604,7 +604,7 @@ namespace QCDvePyBindHelperFunctions
 			{
 				string tempDate = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 5));
 				get<qcEndDate>(temp) = QCDate{ tempDate };
-				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+				// cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
 			}
 			else
 			{
@@ -613,48 +613,48 @@ namespace QCDvePyBindHelperFunctions
 					PyTuple_GetItem(
 					PyList_GetItem(input, i), 3)));
 				get<qcEndDate>(temp) = get<1>(temp).addMonths(m).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
-				cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
+				// cout << "\tbuildFloatingRateIndexVector: end date " << get<qcEndDate>(temp).description() << endl;
 			}
 
 			//Build settlement lag (7)
 			get<qcSettlementLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 7));
-			cout << "\tbuildFloatingRateIndexVector: settlement lag " << get<qcSettlementLag>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: settlement lag " << get<qcSettlementLag>(temp) << endl;
 
 			//Build enum stub (8)
 			string stub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 8));
 			get<qcStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(stub);
-			cout << "\tbuildFloatingRateIndexVector: enum stub " << get<qcStubPeriod>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum stub " << get<qcStubPeriod>(temp) << endl;
 
 			//Build periodicity (9)
 			get<qcPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 9)));
-			cout << "\tbuildFloatingRateIndexVector: periodicity " << get<qcPeriodicity>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: periodicity " << get<qcPeriodicity>(temp) << endl;
 
 			//Build enum end date adjustment (10)
 			string endDatAdj = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 10));
 			get<qcEndDateAdjustment>(temp) = QCHelperFunctions::stringToQCBusDayAdjRule(endDatAdj);
-			cout << "\tbuildFloatingRateIndexVector: enum end date adj " << get<qcEndDateAdjustment>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum end date adj " << get<qcEndDateAdjustment>(temp) << endl;
 
 			//Build fixing periodicity (14)
 			get<qcFixingPeriodicity>(temp) = string(PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 14)));
-			cout << "\tbuildFloatingRateIndexVector: fixing periodicity " << get<qcFixingPeriodicity>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: fixing periodicity " << get<qcFixingPeriodicity>(temp) << endl;
 
 			//Build fixing stub period (15) 
 			string fixingStub = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 15));
 			get<qcFixingStubPeriod>(temp) = QCHelperFunctions::stringToQCStubPeriod(fixingStub);
-			cout << "\tbuildFloatingRateIndexVector: enum fixing stub " << get<qcFixingStubPeriod>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum fixing stub " << get<qcFixingStubPeriod>(temp) << endl;
 
 			//Build fixing lag (17)
 			get<qcFixingLag>(temp) = PyInt_AsLong(PyTuple_GetItem(PyList_GetItem(input, i), 17));
-			cout << "\tbuildFloatingRateIndexVector: fixing lag " << get<qcFixingLag>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: fixing lag " << get<qcFixingLag>(temp) << endl;
 
 			//Build enum amort (11)
 			string amort = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 11));
 			get<qcAmortization>(temp) = QCHelperFunctions::stringToQCAmortization(amort);
-			cout << "\tbuildFloatingRateIndexVector: enum amort " << get<qcAmortization>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum amort " << get<qcAmortization>(temp) << endl;
 
 			//Build rate (12)
 			get<qcRate>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 12));
-			cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: rate " << get<qcRate>(temp) << endl;
 
 			//Build spread (24)
 			if (numFields == 25)
@@ -665,23 +665,23 @@ namespace QCDvePyBindHelperFunctions
 			{
 				get<qcSpread>(temp) = 0.0;
 			}
-			cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: spread " << get<qcSpread>(temp) << endl;
 
 			//Build notional (18)
 			get<qcNotional>(temp) = PyFloat_AsDouble(PyTuple_GetItem(PyList_GetItem(input, i), 18));
-			cout << "\tbuildFloatingRateIndexVector: notional " << get<qcNotional>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: notional " << get<qcNotional>(temp) << endl;
 
 			//Build enum wf (19)
 			string wf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 19));
 			QCHelperFunctions::lowerCase(wf);
 			get<qcWealthFactor>(temp) = wf;
-			cout << "\tbuildFloatingRateIndexVector: enum wf " << get<qcWealthFactor>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum wf " << get<qcWealthFactor>(temp) << endl;
 
 			//Build enum yf (20)
 			string yf = PyString_AsString(PyTuple_GetItem(PyList_GetItem(input, i), 20));
 			QCHelperFunctions::lowerCase(yf);
 			get<qcYearFraction>(temp) = yf;
-			cout << "\tbuildFloatingRateIndexVector: enum yf " << get<qcYearFraction>(temp) << endl;
+			// cout << "\tbuildFloatingRateIndexVector: enum yf " << get<qcYearFraction>(temp) << endl;
 
 			floatIndexVector.at(i) = temp;
 		}

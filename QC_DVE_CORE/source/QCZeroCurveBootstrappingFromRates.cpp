@@ -25,7 +25,7 @@ QCZeroCurveBootstrappingFromRates::QCZeroCurveBootstrappingFromRates(
 
 void QCZeroCurveBootstrappingFromRates::generateCurve()
 {
-	cout << "Enter QCZeroCurveBootstrappingFromRates::generateCurve()" << endl;
+	// cout << "Enter QCZeroCurveBootstrappingFromRates::generateCurve()" << endl;
 
 	//Loop sobre las tasas
 	int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
@@ -36,7 +36,7 @@ void QCZeroCurveBootstrappingFromRates::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ td->getRateValue() }; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
 		double rNext;
@@ -52,7 +52,7 @@ void QCZeroCurveBootstrappingFromRates::generateCurve()
 		}
 	}
 
-	cout << "Rate convergence Ok" << endl;
+	// cout << "Rate convergence Ok" << endl;
 
 	return;
 }
@@ -76,7 +76,7 @@ void QCZeroCurveBootstrappingFromRates::generateCurveAndDerivatives()
 
 	for (size_t i = 0; i < numRates; ++i)
 	{
-		cout << "iteracion i = " << i << endl;
+		// cout << "iteracion i = " << i << endl;
 		//Bumpear el input que corresponde
 		_inputRates.at(i)->addToRateValue(BP);
 
@@ -88,7 +88,7 @@ void QCZeroCurveBootstrappingFromRates::generateCurveAndDerivatives()
 
 		generateCurve();
 
-		cout << "curva +: " << i << " generada." << endl;
+		// cout << "curva +: " << i << " generada." << endl;
 		for (size_t j = 0; j < numRates; ++j)
 		{
 			temp.at(j) = _curve->getRateAtIndex(j);
@@ -104,8 +104,8 @@ void QCZeroCurveBootstrappingFromRates::generateCurveAndDerivatives()
 			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(k), 0.0);
 		}
 
-		generateCurve();
-		cout << "curva -: " << i << " generada." << endl;
+		// generateCurve();
+		// cout << "curva -: " << i << " generada." << endl;
 
 		for (size_t j = 0; j < numRates; ++j)
 		{
@@ -131,7 +131,7 @@ void QCZeroCurveBootstrappingFromRates::generateCurveAndDerivatives()
 		for (size_t j = 0; j < numRates; ++j)
 		{
 			_derivatives.at(i).at(j) = (bumps.at(j).at(i) - bumps2.at(j).at(i)) / 2.0;// -_curve->getRateAt(j);
-			cout << "derivative: " << _derivatives.at(i).at(j) << endl;
+			// cout << "derivative: " << _derivatives.at(i).at(j) << endl;
 		}
 	}
 }

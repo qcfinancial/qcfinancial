@@ -464,10 +464,10 @@ protected:
 
 		//Primero se verifica si los endDate son estrictamente crecientes
 		//Si no lo son se retorna false .
-		cout << "Basis " << 0 << " end date " << _inputBasisSwaps.at(0)->getEndDate().description() << endl;
+		// cout << "Basis " << 0 << " end date " << _inputBasisSwaps.at(0)->getEndDate().description() << endl;
 		for (size_t i = 1; i < _inputBasisSwaps.size(); ++i)
 		{
-			cout << "Basis " << i << " end date " << _inputBasisSwaps.at(i)->getEndDate().description() << endl;
+			// cout << "Basis " << i << " end date " << _inputBasisSwaps.at(i)->getEndDate().description() << endl;
 
 			if (!(_inputBasisSwaps.at(i - 1)->getEndDate() <_inputBasisSwaps.at(i)->getEndDate()))
 			{

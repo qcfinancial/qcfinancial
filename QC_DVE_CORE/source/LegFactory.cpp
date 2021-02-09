@@ -207,7 +207,7 @@ namespace QCode
             size_t i = 0;
             auto tempNotional = notional;
             r = rate.getValue() / 12.0;
-            std::cout << "rate description: " << rate.description() << std::endl;
+            // std::cout << "rate description: " << rate.description() << std::endl;
             for (const auto& period : periods)
             {
                 QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
@@ -759,7 +759,7 @@ namespace QCode
 											 gearing);
 
 
-			std::cout << "custom amort ibor leg: done bullet" << std::endl;
+			// std::cout << "custom amort ibor leg: done bullet" << std::endl;
 			customizeAmortization(recPay, iborLeg, notionalAndAmort, LegFactory::iborCashflow);
 			return iborLeg;
 		}

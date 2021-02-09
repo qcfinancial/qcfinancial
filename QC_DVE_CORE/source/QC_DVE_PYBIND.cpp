@@ -212,8 +212,8 @@ PyObject* cashflow_fixed_mortgages(PyObject* self, PyObject*  args)
 		vector<pair<long, vector<tuple<QCDate, QCCashFlowLabel, double>>>> result;
 		long numPayoffs = payoffs.size();
 		result.resize(numPayoffs);
-		cout << "Numero de hipotecas: " << numPayoffs << endl;
-		cout << "Inicio generacion de flujos de hipotecas" << endl;
+		// cout << "Numero de hipotecas: " << numPayoffs << endl;
+		// cout << "Inicio generacion de flujos de hipotecas" << endl;
 		long counter = 0;
 		for (const auto& payoff : payoffs)
 		{
@@ -255,7 +255,7 @@ PyObject* cashflow_fixed_mortgages(PyObject* self, PyObject*  args)
 			success = PyList_SetItem(allMortgages, i, thisMortgage);
 		}
 
-		cout << "Fin generacion de flujos de hipotecas." << endl;
+		// cout << "Fin generacion de flujos de hipotecas." << endl;
 		return allMortgages;
 	}
 	catch (exception& e)
@@ -399,8 +399,8 @@ PyObject* cashflow_fixed_swaps(PyObject* self, PyObject*  args)
 		vector<pair<long, vector<tuple<QCDate, QCCashFlowLabel, double>>>> result;
 		long numPayoffs = payoffs.size();
 		result.resize(numPayoffs);
-		cout << "Numero de patas fijas de swaps: " << numPayoffs << endl;
-		cout << "Inicio generacion de flujos de patas fijas." << endl;
+		// cout << "Numero de patas fijas de swaps: " << numPayoffs << endl;
+		// cout << "Inicio generacion de flujos de patas fijas." << endl;
 		long counter = 0;
 		for (const auto& payoff : payoffs)
 		{
@@ -447,7 +447,7 @@ PyObject* cashflow_fixed_swaps(PyObject* self, PyObject*  args)
 			}
 			success = PyList_SetItem(allMortgages, i, thisMortgage);
 		}
-		cout << "Fin generacion de flujos de patas fijas." << endl;
+		// cout << "Fin generacion de flujos de patas fijas." << endl;
 		return allMortgages;
 	}
 	catch (exception& e)
@@ -606,8 +606,8 @@ PyObject* cashflow_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 		vector<pair<long, vector<tuple<QCDate, QCCashFlowLabel, double>>>> result;
 		long numPayoffs = payoffs.size();
 		result.resize(numPayoffs);
-		cout << "Numero de patas ICPCLP de swaps: " << numPayoffs << endl;
-		cout << "Inicio generacion de flujos patas ICPCLP." << endl;
+		// cout << "Numero de patas ICPCLP de swaps: " << numPayoffs << endl;
+		// cout << "Inicio generacion de flujos patas ICPCLP." << endl;
 		long counter = 0;
 		for (const auto& payoff : payoffs)
 		{
@@ -654,7 +654,7 @@ PyObject* cashflow_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 			}
 			success = PyList_SetItem(allMortgages, i, thisMortgage);
 		}
-		cout << "Fin generacion de flujos patas ICPCLP." << endl;
+		// cout << "Fin generacion de flujos patas ICPCLP." << endl;
 		return allMortgages;
 	}
 	catch (exception& e)
@@ -833,8 +833,8 @@ PyObject* cashflow_floating_rate_legs(PyObject* self, PyObject*  args)
 		vector<pair<long, vector<tuple<QCDate, QCCashFlowLabel, double>>>> result;
 		long numPayoffs = payoffs.size();
 		result.resize(numPayoffs);
-		cout << "Numero de patas flotantes de swaps: " << numPayoffs << endl;
-		cout << "Inicio generacion de flujos de patas flotantes." << endl;
+		// cout << "Numero de patas flotantes de swaps: " << numPayoffs << endl;
+		// cout << "Inicio generacion de flujos de patas flotantes." << endl;
 		long counter = 0;
 		for (const auto& payoff : payoffs)
 		{

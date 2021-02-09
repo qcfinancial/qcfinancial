@@ -39,7 +39,7 @@ QCInterestRatePayoff::QCInterestRatePayoff(
 //Esta se implementa en las subclases
 void QCInterestRatePayoff::_setAllRates()
 {
-	cout << "Set all rates clase parent" << endl;
+	// cout << "Set all rates clase parent" << endl;
 }
 
 void QCInterestRatePayoff::addToRateValue(double mov)
@@ -177,7 +177,7 @@ double QCInterestRatePayoff::presentValue(bool includeFirstCashflow)
 	for (const auto& cshflw : _payoffs)
 	{
 		long d = _valueDate.dayDiff(get<0>(cshflw));
-		cout << "dias a pago: " << d << endl;
+		// cout << "dias a pago: " << d << endl;
 		bool condition;
 		if (includeFirstCashflow == true)
 		{

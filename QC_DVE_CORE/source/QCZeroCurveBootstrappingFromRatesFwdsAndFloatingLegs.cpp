@@ -36,7 +36,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ td->getRateValue() }; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
@@ -49,10 +49,10 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 			_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rNext);
 			diff = rNext - rLast;
 			rLast = rNext;
-			cout << rLast << endl;
+			// cout << rLast << endl;
 		}
 	}
-	cout << "bootstrapping: tasas calibradas " << endl;
+	// cout << "bootstrapping: tasas calibradas " << endl;
 
 	//Loop sobre los forwards
 	rateCounter = _inputRates.size() - 1;
@@ -64,7 +64,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ .01 }; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
@@ -80,7 +80,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		}
 	}
 	
-	cout << "bootstrapping: forwards calibrados" << endl;
+	// cout << "bootstrapping: forwards calibrados" << endl;
 
 	//Loop sobre las patas flotantes
 	
@@ -93,7 +93,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ .01}; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
@@ -109,7 +109,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		}
 	}
 	
-	cout << "bootstrapping: patas flotantes calibradas" << endl;
+	// cout << "bootstrapping: patas flotantes calibradas" << endl;
 
 	return;
 }
@@ -135,7 +135,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurveAndDeriv
 
 	for (size_t i = 0; i < numRates + numFwds + numSwaps; ++i)
 	{
-		cout << "iteracion i = " << i << endl;
+		// cout << "iteracion i = " << i << endl;
 		//Bumpear el input que corresponde
 		if (i < numRates)
 		{
@@ -143,11 +143,11 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurveAndDeriv
 		}
 		else if (i == numRates || i < numRates + numFwds)
 		{
-			cout << "Estoy en el fwd: " << i << endl;
+			// cout << "Estoy en el fwd: " << i << endl;
 		}
 		else
 		{
-			cout << "Estoy aqui? : " << i << endl;
+			// cout << "Estoy aqui? : " << i << endl;
 			_inputFloatingRateLegs.at(i - numRates - numFwds)->addToAdditiveSpreadValue(BP);
 		}
 
@@ -159,7 +159,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurveAndDeriv
 
 		generateCurve();
 
-		cout << "curva +: " << i << " generada." << endl;
+		// cout << "curva +: " << i << " generada." << endl;
 		for (size_t j = 0; j < numRates + numFwds + numSwaps; ++j)
 		{
 			temp.at(j) = _curve->getRateAtIndex(j);
@@ -185,7 +185,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurveAndDeriv
 		}
 
 		generateCurve();
-		cout << "curva -: " << i << " generada." << endl;
+		// cout << "curva -: " << i << " generada." << endl;
 
 		for (size_t j = 0; j < numRates + numFwds + numSwaps; ++j)
 		{
@@ -221,7 +221,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurveAndDeriv
 		for (size_t j = 0; j < numRates + numFwds + numSwaps; ++j)
 		{
 			_derivatives.at(i).at(j) = (bumps.at(j).at(i) - bumps2.at(j).at(i)) / 2.0;// -_curve->getRateAt(j);
-			cout << "derivative: " << _derivatives.at(i).at(j) << endl;
+			// cout << "derivative: " << _derivatives.at(i).at(j) << endl;
 		}
 	}
 

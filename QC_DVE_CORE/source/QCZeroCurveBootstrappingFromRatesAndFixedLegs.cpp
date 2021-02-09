@@ -26,7 +26,7 @@ QCZeroCurveBootstrappingFromRatesAndFixedLegs::QCZeroCurveBootstrappingFromRates
 
 void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 {
-	cout << "Enter QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()" << endl;
+	// cout << "Enter QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()" << endl;
 
 	//Loop sobre las tasas
 	int rateCounter = -1; //Valor inicial del contador de tasas calculadas de la curva
@@ -37,7 +37,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ td->getRateValue() }; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
 		double rNext;
@@ -53,8 +53,8 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		}
 	}
 	
-	cout << "Rate convergence Ok" << endl;
-	cout << "Rate counter: " << rateCounter << endl;
+	// cout << "Rate convergence Ok" << endl;
+	// cout << "Rate counter: " << rateCounter << endl;
 
 	//rateCounter = _inputRates.size() - 1;
 	QCDate swapsStartDate{get<QCInterestRateLeg::intRtPrdElmntStartDate>( _inputFixedRateLegs.at(0)->getPeriodAt(0))};
@@ -65,9 +65,9 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 		//Conteo de tasas
 		rateCounter += 1;
 
-		//Utiliza la tasa del payoff como punto inicial del cálculo
+		//Utiliza la tasa del payoff como punto inicial del cï¿½lculo
 		double rLast{ fr->getRateValue() }; //valor inicial de la tasa a calcular
-		cout << "valor tasa inicial: " << rLast << endl;
+		// cout << "valor tasa inicial: " << rLast << endl;
 		_curve->setOrdinateAtWithValue(rateCounter, rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };
@@ -82,12 +82,12 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurve()
 			diff = rNext - rLast;
 			rLast = rNext;
 		}
-		cout << "valor tasa final: " << rLast << endl;
-		cout << "valor derivada final: " << dd << endl;
+		// cout << "valor tasa final: " << rLast << endl;
+		// cout << "valor derivada final: " << dd << endl;
 	}
 
-	cout << "Fixed Rate Leg convergence Ok" << endl;
-	cout << "rateCounter: " << rateCounter << endl;
+	// cout << "Fixed Rate Leg convergence Ok" << endl;
+	// cout << "rateCounter: " << rateCounter << endl;
 	return;
 }
 
@@ -124,11 +124,11 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 		}
 		generateCurve();
 
-		cout << "curva+: " << i << endl;
+		// cout << "curva+: " << i << endl;
 		for (size_t j = 0; j < numRates + numSwaps; ++j)
 		{
 			temp.at(j) = _curve->getRateAtIndex(j);
-			cout << "temp.at_" << j << " : " << temp.at(j) << endl;
+			// cout << "temp.at_" << j << " : " << temp.at(j) << endl;
 		}
 		bumps.at(i) = temp;
 		
@@ -178,7 +178,7 @@ void QCZeroCurveBootstrappingFromRatesAndFixedLegs::generateCurveAndDerivatives(
 		for (size_t j = 0; j < numRates + numSwaps; ++j)
 		{
 			_derivatives.at(i).at(j) = (bumps.at(j).at(i) - bumps2.at(j).at(i))/2.0;// -_curve->getRateAt(j);
-			cout << "der: " << _derivatives.at(i).at(j) << endl;
+			// cout << "der: " << _derivatives.at(i).at(j) << endl;
 		}
 	}
 }
@@ -195,7 +195,7 @@ double QCZeroCurveBootstrappingFromRatesAndFixedLegs::getRateAt(size_t index)
 
 void QCZeroCurveBootstrappingFromRatesAndFixedLegs::calculateDerivativesAt(size_t derivativeIndex)
 {
-	//Deducir a que input corresponde el índice y sumar 1pip al índice que corresponde
+	//Deducir a que input corresponde el ï¿½ndice y sumar 1pip al ï¿½ndice que corresponde
 	size_t numRates{ _inputRates.size() };
 	size_t numSwaps{ _inputFixedRateLegs.size() };
 	if (derivativeIndex < numRates + 1)

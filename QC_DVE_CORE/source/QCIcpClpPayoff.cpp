@@ -44,9 +44,9 @@ void QCIcpClpPayoff::_setAllRates()
 		if (_valueDate >= startDate)
 		{
 			//Trae ICP a startDate
-			cout << "Start date: " << startDate.description() << endl;
+			// cout << "Start date: " << startDate.description() << endl;
 			double icpStart = _fixingData->at(startDate);
-			cout << "Ok start date" << endl;
+			// cout << "Ok start date" << endl;
 			
 			//Trae ICP _valueDate
 			double icpValue = _fixingData->at(_valueDate);

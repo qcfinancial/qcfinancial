@@ -43,10 +43,10 @@ void QCFloatingRatePayoff::_setAllRates()
 		if (_valueDate >= temp)
 		{
 			// QCDate temp = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per);
-			cout << get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per).description() << endl;
+			// cout << get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per).description() << endl;
 			_allRates.at(i) = _fixingData->at(get<QCInterestRateLeg::intRtPrdElmntFxngDate>(per))
 				* _multipSpread + _additiveSpread;
-			cout << "all rates: " << i << " " << _allRates.at(i) << endl;
+			// cout << "all rates: " << i << " " << _allRates.at(i) << endl;
 
 			//Se calculan y guardan las derivadas de este factor Fwd
 			vector<double> tempDer;
@@ -77,7 +77,7 @@ void QCFloatingRatePayoff::_setAllRates()
 
 			//Cada tasa fwd (o fijación anterior) se guarda en _forwardRates
 			_forwardRates.at(i) = tasaFwd;
-			cout << "forward rates: " << i << ": " << _forwardRates.at(i) << endl;
+			// cout << "forward rates: " << i << ": " << _forwardRates.at(i) << endl;
 
 
 			//Se calculan y guardan las derivadas de este factor Fwd

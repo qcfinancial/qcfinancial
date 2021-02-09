@@ -19,7 +19,7 @@ add_subdirectory(ManualTests)
 
 if (APPLE)
     target_compile_options(QC_DVE_CORE PRIVATE -fPIC)
-    set(PYTHON2_LIB /System/Library/Frameworks/Python.framework/Versions/Current/lib)
+    set(PYTHON2_LIB /System/Library/Frameworks/Python.framework/Versions/2.7/lib/)
     set(PYTHON3_LIB /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/lib/)
     set(BOOST_PYTHON2_LIB /usr/local/lib/)
     set(BOOST_PYTHON3_LIB /usr/local/lib/)
