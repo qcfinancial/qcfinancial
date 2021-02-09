@@ -479,7 +479,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 		stubPeriod = QCInterestRateLeg::qcShortFront;
 	}
 	bool easyCase = remainderInDays == 0 && remainderInMonths == 0;
-	cout << "whole periods: " << numWholePeriods << " months: " << remainderInMonths << " days: " << remainderInDays << endl;
+	// cout << "whole periods: " << numWholePeriods << " months: " << remainderInMonths << " days: " << remainderInDays << endl;
 	if (easyCase)
 	{
 		bool easyStub = stubPeriod != QCInterestRateLeg::qcLongFront2 &&
