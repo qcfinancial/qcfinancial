@@ -2205,6 +2205,13 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
         {
             return boost::python::make_tuple("fecha_pago", "monto", "moneda");
         }
+        else if (cashflowType == "IcpClfCashflow")
+        {
+            return boost::python::make_tuple("fecha_inicial", "fecha_final", "fecha_pago", "nominal",
+                                             "amortizacion", "amort_es_flujo", "flujo", "moneda",
+                                             "icp_inicial", "icp_final", "uf_inicial", "uf_final",
+                                             "valor_tasa", "interes", "spread", "gearing", "tipo_tasa");
+        }
 	    else
         {
             throw std::invalid_argument("Cashflow type " + cashflowType + " is not recognized.");
