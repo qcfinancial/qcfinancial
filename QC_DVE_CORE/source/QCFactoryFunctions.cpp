@@ -454,7 +454,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg2(
 	
 	//Calcular amortizaciones y nocionales vigentes
 	numPeriods = periods.size();
-	cout << "numPeriods: " << numPeriods << "start date:" << startDate.description() << "end date:" << endDate.description() << endl;
+	// cout << "numPeriods: " << numPeriods << "start date:" << startDate.description() << "end date:" << endDate.description() << endl;
 	if (amortization == QCInterestRateLeg::qcBulletAmort)
 	{
 		for (unsigned int i = 0; i < numPeriods; ++i)
@@ -611,7 +611,7 @@ QCInterestRateLeg QCFactoryFunctions::buildFixedRateLeg3(
 	shared_ptr<QCInterestRate> intRate //interest rate
 	)
 {
-	//Aqui se guardaran los periodos
+	// Aqui se guardaran los periodos
 	QCInterestRateLeg::QCInterestRatePeriods periods;
 
 	//Sirve para determinar el signo de nocional vigente, disposicion y amortizacion
@@ -1187,10 +1187,10 @@ QCInterestRateLeg QCFactoryFunctions::buildFloatingRateLeg2(
 		(unsigned int)QCHelperFunctions::lagToInt(interestRateIndexChars.second),
 		interestRateIndexChars.first };
 
-	//Se generan los periodos
+	// Se generan los periodos
 	periods = factory.getPeriods();
 
-	//Calcular amortizaciones y nocionales vigentes
+	// Calcular amortizaciones y nocionales vigentes
 	numPeriods = periods.size();
 	if (amortization == QCInterestRateLeg::qcBulletAmort)
 	{

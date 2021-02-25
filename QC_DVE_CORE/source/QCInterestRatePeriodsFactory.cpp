@@ -94,27 +94,27 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
 
-	//Saca los basicperiods de settlement
+	// Saca los basicperiods de settlement
 	_settlementBasicDates = _buildBasicDates2(_settlementPeriodicity, _settlementStubPeriod, _settlementCalendar);
 
-	//Aprovechamos de darle size a result
+	// Aprovechamos de darle size a result
 	result.resize(_settlementBasicDates.size());
 
-	//Saca los basicperiods de fixing
-	//Esto es importante de notar, aqui se usa el calendario de settlement.
-	//Luego al calcular la fecha efectiva de fixing con el fixing lag se usara el calendario
-	//de fixing.
+	// Saca los basicperiods de fixing
+	// Esto es importante de notar, aqui se usa el calendario de settlement.
+	// Luego al calcular la fecha efectiva de fixing con el fixing lag se usara el calendario
+	// de fixing.
 	_fixingBasicDates = _buildBasicDates2(_fixingPeriodicity, _fixingStubPeriod, _settlementCalendar);
 
-	//Loop sobre los basicperiods de settlement
+	// Loop sobre los basicperiods de settlement
 	QCDate fixingDate;
 	for (unsigned int i = 0; i < _settlementBasicDates.size(); ++i)
 	{
-		//Calcula settlement date
+		// Calcula settlement date
 		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(_settlementCalendar, _settlementLag,
 			QCDate::qcFollow);
 
-		//Asigna el fixing date. El primero es el primero de los basic dates de fixing
+		// Asigna el fixing date. El primero es el primero de los basic dates de fixing
 		for (size_t j = _fixingBasicDates.size(); j-- > 0;)
 		{
 			if (get<0>(_fixingBasicDates.at(j)) <= get<0>(_settlementBasicDates.at(i)))
@@ -124,17 +124,17 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 			}
 		}
 
-		//Calcula la fecha de fixing con el fixing lag
+		// Calcula la fecha de fixing con el fixing lag
 		fixingDate = fixingDate.shift(_fixingCalendar, _fixingLag, QCDate::qcPrev);
 
-		//Calcula la fecha de inicio del indice con start date rule
+		// Calcula la fecha de inicio del indice con start date rule
 		QCDate indexStartDate = fixingDate.shift(_fixingCalendar, _indexStartDateLag, QCDate::qcFollow);
 
-		//Calcula la fecha final del indice con el tenor del indice
+		// Calcula la fecha final del indice con el tenor del indice
 		QCDate indexEndDate = indexStartDate.addMonths(QCHelperFunctions::tenor(_indexTenor)).
 			businessDay(_fixingCalendar, QCDate::qcFollow);
 
-		//Se arma la tupla period y se inserta en result
+		// Se arma la tupla period y se inserta en result
 		result.at(i) = make_tuple(0, false, 0, true, 0, get<0>(_settlementBasicDates.at(i)),
 			get<1>(_settlementBasicDates.at(i)), settlementDate,
 			fixingDate, indexStartDate, indexEndDate);

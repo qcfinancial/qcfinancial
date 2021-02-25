@@ -1409,15 +1409,15 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 				get<0>(zeroRateVector.at(i)),
 				get<1>(zeroRateVector.at(i)),
 				1.0);
-			cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fixed_legs: time deposit leg " << i << " initialized" << endl;
 			QCIntrstRtShrdPtr intRate = QCFactoryFunctions::intRateSharedPtr(
 				get<2>(zeroRateVector.at(i)),
 				get<3>(zeroRateVector.at(i)),
 				get<4>(zeroRateVector.at(i)));
-			cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fixed_legs: interest rate " << i << " initialized" << endl;
 			QCTimeDepositPayoff tdPayoff{ intRate, make_shared<QCInterestRateLeg>(tdLeg), valueDate, curve };
 			inputRates.at(i) = make_shared<QCTimeDepositPayoff>(tdPayoff);
-			cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fixed_legs: time deposit payoff " << i << " initialized" << endl;
 
 		}
 
@@ -1456,7 +1456,7 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 
 			auto fxFwd = make_shared<QCFXForward>(legs, get<3>(fwdIndexVector.at(i)),
 				make_shared<map<QCCurrencyConverter::QCFxRateEnum, double>>(fxRate));
-			cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fwds_fixed_legs: Fx Forward " << i << " initialized" << endl;
 
 			inputForwards.at(i) = fxFwd;
 		}
@@ -1470,7 +1470,7 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 				get<8>(swapIndexVector.at(i)),
 				get<10>(swapIndexVector.at(i)),
 				get<11>(swapIndexVector.at(i)));
-			cout << "\tboot_zero_rates_fixed_legs: swap interest rate " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fixed_legs: swap interest rate " << i << " initialized" << endl;
 
 			//buildFixedRateLeg
 			//Este pedazo de código debe quedar en una HelperFunction de QC_DVE_XLL
@@ -1486,7 +1486,7 @@ PyObject* boot_zero_rates_fwds_fixed_legs(PyObject* self, PyObject* args)
 				get<7>(swapIndexVector.at(i)),			//amortization
 				amortIfCustom,							//amortization and notional by date
 				get<9>(swapIndexVector.at(i)));			//notional
-			cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
+			// cout << "\tboot_zero_rates_fixed_legs: fixed rate interest leg " << i << " initialized" << endl;
 
 			//buildFixedRatePayoff
 			shared_ptr<QCFixedRatePayoff> tmpIntRatePayoff = shared_ptr<QCFixedRatePayoff>(
@@ -2308,7 +2308,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 
 		map<string, shared_ptr<QCZeroCouponCurve>> allCurves;
 
-		//Loopeo sobre los keys de crvValues
+		// Loopeo sobre los keys de crvValues
 		for (const auto &curva : crvValues)
 		{
 			vector<long> tmpLng{ curva.second.first };
@@ -2329,14 +2329,15 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 		}
 		cout << "	Finished constructing curve objects" << endl;
 
-		//Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
-		//(en ese orden) en esta estructura.
+		// Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
+		// (en ese orden) en esta estructura.
 		if (PyList_Size(customAmort) == 0)
 		{
 			string msg = "Error en las patas fijas. El vector de amortizaciones esta vacio";
 			PyErr_SetString(qcDveError, msg.c_str());
 			return NULL;
 		}
+
 		map<unsigned long, vector<tuple<QCDate, double, double>>> dateNotionalAndAmortByIdLeg;
 		QCDvePyBindHelperFunctions::buildCustomAmortization(customAmort, dateNotionalAndAmortByIdLeg);
 		cout << "	Finished amortization map" << endl;
@@ -2381,13 +2382,13 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				yf, wf);
 
 			numOp = PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
-			cout << "\tnumOp: " << numOp << endl;
+			// cout << "\tnumOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (string(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9))) != "BULLET")
 			{
 				amortIfCustom = dateNotionalAndAmortByIdLeg.at((unsigned long)numOp);
 			}
-			cout << "\tAmortizaciones Ok." << endl;
+			// cout << "\tAmortizaciones Ok." << endl;
             auto stringDate1 = string(PyString_AsString(PyList_GetItem(
                     PyList_GetItem(legCharacteristics, i), 2)));
             auto stringDate2 = string(PyString_AsString(PyList_GetItem(
@@ -2410,7 +2411,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 				amortIfCustom,										//amortization and notional by end date
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11))		 //notional
 				);
-			cout << "\tInterest Rate Leg constructed" << endl;
+			// cout << "\tInterest Rate Leg constructed" << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCFixedRatePayoff{ tmpIntRate, make_shared<QCInterestRateLeg>(tmpIntRateLeg),
 				allCurves.at(string(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14)))),
@@ -2605,7 +2606,7 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
 			numOp = (long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
-			//cout << "numOp: " << numOp << endl;
+			// cout << "numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9)) != "BULLET")
 			{
@@ -2641,10 +2642,10 @@ PyObject* pv_floating_rate_legs(PyObject* self, PyObject*  args)
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))		 //notional
 				);
 
-			//auto x = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 21)));
-			//auto xx = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 22)));
-			//auto y = mapManyFixings.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)));
-			cout << "idLeg: " << numOp << endl;
+			// auto x = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 21)));
+			// auto xx = allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 22)));
+			// auto y = mapManyFixings.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 10)));
+			// cout << "idLeg: " << numOp << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCFloatingRatePayoff{ tmpIntRate,
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 12)), 1.0,
@@ -2853,7 +2854,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 11)), yf, wf);
 
 			numOp = PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
-			cout << "icpclf numOp: " << numOp << endl;
+			// cout << "icpclf numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 9)) != "BULLET")
 			{
@@ -2892,7 +2893,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
-		//Calcular los valores presentes
+		// Calcular los valores presentes
 		vector<tuple<long, double, double, vector<double>, vector<double>>> result;
 		result.resize(payoffs.size());
 		double m2m;
@@ -2912,7 +2913,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 			}
 
 			unsigned int projVertices = payoff.second->projectingCurveLength();
-			cout << "proj. vertices 1: " << projVertices << endl;
+			// cout << "proj. vertices 1: " << projVertices << endl;
 			projDer.resize(projVertices);
 			for (unsigned long i = 0; i < projVertices; ++i)
 			{
@@ -2928,7 +2929,7 @@ PyObject* pv_icp_clf_rate_legs(PyObject* self, PyObject*  args)
 		{
 			unsigned int discVertices = get<3>(result.at(i)).size();
 			unsigned int projVertices = get<4>(result.at(i)).size();
-			cout << "proj. vertices 2: " << projVertices << endl;
+			// cout << "proj. vertices 2: " << projVertices << endl;
 			PyObject* temp = PyTuple_New(discVertices + projVertices + 4);
 			int success;
 			success = PyTuple_SetItem(temp, 0, PyInt_FromLong(get<0>(result.at(i))));
@@ -3011,11 +3012,11 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				get<0>(crvChars.at(curva.first)),
 				wf, yf, get<3>(crvChars.at(curva.first)));
 			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
-			cout << "Entro la curva: " << curva.first << endl;
+			// cout << "Entro la curva: " << curva.first << endl;
 		}
 
-		//Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
-		//(en ese orden) en esta estructura.
+		// Guardaremos el list customAmort con los datos de amortizacion y nominal vigente
+		// (en ese orden) en esta estructura.
 		if (PyList_Size(customAmort) == 0)
 		{
 			string msg = "Error en las patas icp_clp. El vector de amortizaciones esta vacio";
@@ -3063,7 +3064,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 
 		string strDate{ fecha };
 		QCDate allValueDate{ strDate };
-		cout << "FECHA: " + allValueDate.description() << endl;
+		// cout << "FECHA: " + allValueDate.description() << endl;
 		map <long, shared_ptr<QCInterestRatePayoff>> payoffs;
 		auto temp = 0;
 		for (unsigned long i = 0; i < PyList_Size(legCharacteristics); ++i)
@@ -3077,7 +3078,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 
 			numOp = (long long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
 			if (numOp == 1814.0) temp = i;
-			cout << "numOp: " << numOp << endl;
+			// cout << "numOp: " << numOp << endl;
 			vector<tuple<QCDate, double, double>> amortIfCustom;
 			if (string(PyString_AsString(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 9))) != "BULLET")
@@ -3105,14 +3106,14 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 				amortIfCustom,										//amortization and notional by end date
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 14))	//notional
 				);
-			cout << "notional: " << PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(
-				legCharacteristics, i), 14));
-			cout << "buildIcpLegOk" << endl;
-			cout << "curva1: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 17))
-				<< endl;
-			cout << "curva2: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))
-				<< endl;
-			cout << "Alta payoff: " << numOp << endl;
+			// cout << "notional: " << PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(
+			//	legCharacteristics, i), 14));
+			// cout << "buildIcpLegOk" << endl;
+			// cout << "curva1: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 17))
+			// 	<< endl;
+			// cout << "curva2: " << PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))
+			//	<< endl;
+			// cout << "Alta payoff: " << numOp << endl;
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 					new QCIcpClpPayoff{ tmpIntRate, PyFloat_AsDouble(PyList_GetItem(
 					PyList_GetItem(legCharacteristics, i), 12)), 1.0,
@@ -3121,7 +3122,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 					allCurves.at(PyString_AsString(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 18))),
 					allValueDate,
 					make_shared<map<QCDate, double>>(mapIcpFixings) });
-			cout << "payoff ok" << endl;
+			// cout << "payoff ok" << endl;
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
@@ -3135,7 +3136,7 @@ PyObject* pv_icp_clp_rate_legs(PyObject* self, PyObject*  args)
 		unsigned long counter = 0;
 		for (const auto& payoff : payoffs)
 		{
-			cout << "SE VALORIZA: " << payoff.first << endl;
+			// cout << "SE VALORIZA: " << payoff.first << endl;
 			m2m = payoff.second->presentValue();
 			valueDateCashflow = payoff.second->getValueDateCashflow();
 			unsigned int discVertices = payoff.second->discountCurveLength();
@@ -3230,7 +3231,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 		QCDvePyBindHelperFunctions::buildFxRateIndexFxRate(typeFxRate, fxRateChars);
 		for (auto& x : fxRateChars)
 		{
-			cout << "\tÍndice: " << x.first << ", " << x.second << endl;
+			// cout << "\tÍndice: " << x.first << ", " << x.second << endl;
 		}
 		map<string, shared_ptr<QCZeroCouponCurve>> allCurves;
 
@@ -3252,7 +3253,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 				get<0>(crvChars.at(curva.first)),
 				wf, yf, get<3>(crvChars.at(curva.first)));
 			allCurves.insert(pair <string, shared_ptr<QCZeroCouponCurve>>(curva.first, tmpCrv));
-			cout << "\tIngresó la curva: " << curva.first << endl;
+			// cout << "\tIngresó la curva: " << curva.first << endl;
 		}
 
 		//Metemos los fixings de los índices fx en esta estructura
@@ -3294,7 +3295,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 		for (unsigned long i = 0; i < PyList_Size(legCharacteristics); ++i)
 		{
 			numOp = (long long)PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 0));
-			cout << "\tnumOp: " << numOp << endl;
+			// cout << "\tnumOp: " << numOp << endl;
             auto stringDate1 = string(PyString_AsString(PyList_GetItem(
                     PyList_GetItem(legCharacteristics, i), 2)));
             auto stringDate2 = string(PyString_AsString(PyList_GetItem(
@@ -3311,13 +3312,13 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 				PyList_GetItem(legCharacteristics, i), 11))),		//settlement calendar
 				PyFloat_AsDouble(PyList_GetItem(PyList_GetItem(legCharacteristics, i), 13))	//notional
 				);
-			cout << "\tbuildDiscountBondLegOk" << endl;
-			cout << "\tfx rate code: " << PyString_AsString(PyList_GetItem(
+			// cout << "\tbuildDiscountBondLegOk" << endl;
+			/*cout << "\tfx rate code: " << PyString_AsString(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 8)) << endl;;
 			cout << "\tcurve: " << PyString_AsString(PyList_GetItem(PyList_GetItem(
 				legCharacteristics, i), 14)) << endl;
 			cout << crrncyCnvrtr.getFxRateEnum(fxRateChars.at(PyString_AsString(PyList_GetItem(
-				PyList_GetItem(legCharacteristics, i), 8)))) << endl;
+				PyList_GetItem(legCharacteristics, i), 8)))) << endl;*/
 
 			shared_ptr<QCInterestRatePayoff> tmpIntRatePayoff = shared_ptr<QCInterestRatePayoff>(
 				new QCDiscountBondPayoff{ make_shared<QCInterestRateLeg>(tmpIntRateLeg),
@@ -3330,7 +3331,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 				crrncyCnvrtr.getFxRateEnum(fxRateChars.at(PyString_AsString(PyList_GetItem(
 				PyList_GetItem(legCharacteristics, i), 8)))) }
 			);
-			cout << "\tpayoff ok" << endl;
+			// cout << "\tpayoff ok" << endl;
 			payoffs.insert(pair<long, shared_ptr<QCInterestRatePayoff>>(static_cast<long>(numOp), tmpIntRatePayoff));
 		}
 
@@ -3396,7 +3397,7 @@ PyObject* pv_discount_bond_legs(PyObject* self, PyObject*  args)
 
 PyObject* next_business_date(PyObject* self, PyObject*  args)
 {
-	cout << "Enter next_business_date" << endl;
+	// cout << "Enter next_business_date" << endl;
 
 	char* fecha;
 	PyObject* holidays;
@@ -3410,20 +3411,20 @@ PyObject* next_business_date(PyObject* self, PyObject*  args)
 	//Se construye la fecha de proceso
 	string strDate{ fecha };
 	QCDate valueDate{ strDate };
-	cout << "\tnext_business_date: finished constructing date";
+	// cout << "\tnext_business_date: finished constructing date";
 
 	//Se construye el vector con las fechas de los feriados
 	vector<QCDate> dateVector;
 	QCDvePyBindHelperFunctions::buildQCDateVector(holidays, dateVector);
-	cout << "\tnext_business_date: finished holidays" << endl;
+	// cout << "\tnext_business_date: finished holidays" << endl;
 
 	QCDate result = valueDate.addDays(1).businessDay(dateVector, QCDate::QCBusDayAdjRules::qcFollow);
-	cout << "\tnext_business_date: finished calculation" << endl;
+	// cout << "\tnext_business_date: finished calculation" << endl;
 
 	return Py_BuildValue("s", result.description().c_str());
 }
 
-//Tres funciones de prueba
+// Tres funciones de prueba
 PyObject* qc_date_2_string(PyObject* self, PyObject*  args)
 {
 	long fecha;
@@ -3445,8 +3446,6 @@ PyObject * hello_world_nombre(PyObject * self, PyObject * args)
 	{
 		return NULL;
 	}
-
-	//no se porque tengo que definir nombre como puntero...
 
 	return Py_BuildValue("s", nombre);
 }
@@ -3492,7 +3491,7 @@ PyObject* test_uso_dos_list_int(PyObject* self, PyObject* args)
 	return Py_BuildValue("i", aux);
 }
 
-//Toma lista de enteros y retorna la lista de enteros mas 1
+// Toma lista de enteros y retorna la lista de enteros mas 1
 PyObject* test_uso_list_r_list(PyObject* self, PyObject* args)
 {
 	PyObject* list;
@@ -3512,7 +3511,7 @@ PyObject* test_uso_list_r_list(PyObject* self, PyObject* args)
 	return result;
 }
 
-//Toma Lisla de listas de int (una matriz) y retorna la suma de sus elementos
+// Toma lista de listas de int (una matriz) y retorna la suma de sus elementos
 PyObject * test_uso_tuples_r_int(PyObject * self, PyObject * args)
 {
 	PyObject * list;

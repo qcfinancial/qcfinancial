@@ -833,7 +833,7 @@ namespace QCDvePyBindHelperFunctions
 
 	void buildManyFixings(PyObject* fixings, map<string, map<QCDate, double>>& mapManyFixings)
 	{
-		//La list de fixings debe venir ordenada por nombre
+		// La list de fixings debe venir ordenada por nombre
 		string lastName, nextName;
 		lastName = PyString_AsString(PyList_GetItem(PyList_GetItem(fixings, 0), 0));
 		map<QCDate, double> tempMap;

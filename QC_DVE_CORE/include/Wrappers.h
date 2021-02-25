@@ -2216,7 +2216,6 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
         {
             throw std::invalid_argument("Cashflow type " + cashflowType + " is not recognized.");
         }
-
     }
 
 
