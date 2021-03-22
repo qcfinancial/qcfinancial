@@ -2252,6 +2252,11 @@ boost::python::tuple getColumnNames(const std::string& cashflowType, const std::
             return this->get_override("getValuesAt")();
         }
 
+        size_t getLength() const
+        {
+            return this->get_override("getLength")();
+        }
+
 		double getRateAt(long d)
 		{
 			return this->get_override("getRateAt")();

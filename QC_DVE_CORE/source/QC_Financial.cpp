@@ -937,6 +937,7 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         class_<wrappers::InterestRateCurveWrap, std::shared_ptr<wrappers::InterestRateCurveWrap>, boost::noncopyable>
         ("InterestRateCurve", init<shared_ptr<QCInterpolator>, QCInterestRate>())
         .def("get_values_at", pure_virtual(&qf::InterestRateCurve::getValuesAt))
+        .def("get_length", pure_virtual(&qf::InterestRateCurve::getLength))
         .def("get_rate_at", pure_virtual(&qf::InterestRateCurve::getRateAt))
         .def("get_qc_interest_rate_at", pure_virtual(&qf::InterestRateCurve::getQCInterestRateAt))
         .def("get_discount_factor_at", pure_virtual(&qf::InterestRateCurve::getDiscountFactorAt))
