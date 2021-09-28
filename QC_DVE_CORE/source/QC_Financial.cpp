@@ -107,6 +107,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         implicitly_convertible<std::shared_ptr<QCCHF>, shared_ptr<QCCurrency>>();
         class_<QCCHF, std::shared_ptr<QCCHF>, bases<QCCurrency>>("QCCHF");
 
+        implicitly_convertible<std::shared_ptr<QCCOP>, shared_ptr<QCCurrency>>();
+        class_<QCCOP, std::shared_ptr<QCCOP>, bases<QCCurrency>>("QCCOP");
+
         def("get_qccurrency_from_code", &qf::getQCCurrencyFromCode);
 
         std::tuple<unsigned long, int>(QCDate::*mddiff_1)(const QCDate&, std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const =

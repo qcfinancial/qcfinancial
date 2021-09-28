@@ -291,7 +291,7 @@ public:
  *
  * @brief	Representation for CAD.
  *
- * @author	Alvaro D�az V.
+ * @author	Alvaro Díaz V.
  * @date	27/09/2017
  */
 class QCCAD : public QCCurrency
@@ -309,6 +309,31 @@ public:
 	QCCAD() : QCCurrency("Canadian Dollar", "CAD", 124, 2)
 	{
 	}
+};
+
+/**
+ * @class	QCCOP
+ *
+ * @brief	Representation for COP.
+ *
+ * @author	Alvaro Díaz V.
+ * @date	27/07/2021
+ */
+class QCCOP : public QCCurrency
+{
+public:
+
+    /**
+     * @fn	QCCOP::QCCOP()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro Díaz V.
+     * @date	27/07/2021
+     */
+    QCCOP() : QCCurrency("Colombian Peso", "COP", 170, 2)
+    {
+    }
 };
 
 /**

@@ -19,8 +19,7 @@ namespace QCode
 		/**
 		*
 		*/
-			ChileanFixedRateBond(Leg& fixedRateLeg,
-			const QCInterestRate& tera);
+			ChileanFixedRateBond(Leg& fixedRateLeg, const QCInterestRate& tera);
 			double valorPar(const QCDate& valueDate);
 			double price(const QCDate& valueDate, const QCInterestRate& yieldToMaturity) override;
 			double settlementValue(double notional, std::shared_ptr<QCCurrency> currency,
