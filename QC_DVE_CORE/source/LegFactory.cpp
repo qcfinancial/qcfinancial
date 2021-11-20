@@ -836,6 +836,17 @@ namespace QCode
 				}
 			}
 
+            if (typeOfCashflow == LegFactory::icpClpCashflow2)
+            {
+                for (size_t i = 0; i < minSize; ++i)
+                {
+                    std::dynamic_pointer_cast<IcpClpCashflow2>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setNominal(sign * std::get<0>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                    std::dynamic_pointer_cast<IcpClpCashflow2>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setAmortization(sign * std::get<1>(notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                }
+            }
+
 			if (typeOfCashflow == LegFactory::icpClfCashflow)
 			{
 				for (size_t i = 0; i < minSize; ++i)
@@ -1040,7 +1051,7 @@ namespace QCode
                                                  isAct360);
 
             std::cout << "custom amort icp clp leg: done bullet" << std::endl;
-            customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);
+            customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow2);
             return icpClpLeg;
 
         }

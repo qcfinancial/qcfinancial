@@ -1,6 +1,7 @@
 #define BOOST_PYTHON_STATIC_LIB
 #define BOOST_PYTHON_MAX_ARITY 25
 
+//#include <boost/python/python.hpp>
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>

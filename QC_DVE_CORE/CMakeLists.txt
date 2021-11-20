@@ -24,12 +24,14 @@ if (APPLE)
     # set(PYTHON3_LIB /Users/alvarodiaz/opt/miniconda3/envs/jupybook/lib/)
     set(BOOST_PYTHON2_LIB /usr/local/lib/)
     set(BOOST_PYTHON3_LIB /usr/local/lib/)
+
 elseif(WIN32)
     target_compile_options(QC_Financial PRIVATE /bigobj)
     target_compile_options(QC_Financial_3 PRIVATE /bigobj)
     set(PYTHON2_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python27/libs/)
-    set(PYTHON3_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python37/libs/)
-    set(BOOST_PYTHON_LIB C:/boost_1_70_0/lib64-msvc-12.0/)
+    set(PYTHON3_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python38/libs/)
+    set(BOOST_PYTHON_LIB C:/local/boost_1_74_0/lib64-msvc-14.1/)
+
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
     string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
@@ -62,11 +64,11 @@ elseif(WIN32)
 
     target_link_libraries(QC_Financial
             ${PYTHON2_LIB}python27.lib
-            ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib )
+            ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
 
     target_link_libraries(QC_Financial_3
-            ${PYTHON3_LIB}python37.lib
-            ${BOOST_PYTHON_LIB}libboost_python37-vc120-mt-x64-1_70.lib)
+            ${PYTHON3_LIB}python38.lib
+            ${BOOST_PYTHON_LIB}libboost_python38-vc141-mt-x64-1_74.lib)
 else()
     target_compile_options(QC_DVE_PYBIND PRIVATE -fPIC)
     target_link_libraries(QC_DVE_PYBIND
