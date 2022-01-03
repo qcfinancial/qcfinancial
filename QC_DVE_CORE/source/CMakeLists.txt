@@ -44,6 +44,8 @@ target_sources(QC_DVE_CORE
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/CompoundedOvernightRateCashflow.cpp
+        cashflows/IborMultiCurrencyCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
@@ -52,6 +54,7 @@ target_sources(QC_DVE_CORE
         asset_classes/QCAct360.cpp
         asset_classes/QCAct365.cpp
         asset_classes/QCActAct.cpp
+        asset_classes/QC3030.cpp
         time/QCBusinessCalendar.cpp
         QCClampedSpline.cpp
         QCCompoundWf.cpp
@@ -63,6 +66,7 @@ target_sources(QC_DVE_CORE
         QCFloatingRatePayoff.cpp
         QCFXForward.cpp
         QCHelperFunctions.cpp
+        HelperFunctions.cpp
         QCIcpClfPayoff.cpp
         QCIcpClpPayoff.cpp
         QCInterestRate.cpp
@@ -87,7 +91,8 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
         Tenor.cpp
-        ZeroCouponCurve.cpp)
+        ZeroCouponCurve.cpp
+        LegFactory.cpp)
 
 
 # --- QC_DVE_PYBIND ---------------------------------------------------------------------

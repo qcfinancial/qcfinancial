@@ -461,7 +461,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(string periodicity,
 	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar)
 {
-	//Aqui se almancena el resultado
+	//Aqui se almacena el resultado
 	vector<tuple<QCDate, QCDate>> periods;
 
 	//La distancia en meses y dias entre startDate y endDate

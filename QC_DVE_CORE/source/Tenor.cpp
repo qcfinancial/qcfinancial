@@ -104,8 +104,13 @@ namespace QCode
 			return result;
 		}
 
+        unsigned int Tenor::getTotalMonths()
+        {
+            return getMonths() + 12 * getYears();
+        }
+
 		Tenor::~Tenor()
 		{
 		}
-	}
+    }
 }

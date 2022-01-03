@@ -66,19 +66,24 @@ namespace QCode
 				///< An enum constant representing the ibor cashflow option
 				iborCashflow,
 
+                ///< An enum constant representing the ibor cashflow 2 option
+				iborCashflow2,
+
 				///< An enum constant representing the icp clp cashflow option
 				icpClpCashflow,
 
                 ///< An enum constant representing the icp clp cashflow2 option
                 icpClpCashflow2,
 
+                ///< An enum constant representing the icp clf cashflow option
+				icpClfCashflow,
 
                 ///< An enum constant representing the icp clf cashflow option
-				icpClfCashflow
+                compoundedOvernightRateCashflow,
 			};
 
 			/**
-			 * @fn	static Leg LegFactory::buildBulletFixedRateLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency, bool forBonds = false);
+			 * @fn	static Leg LegFactory::buildBulletFixedRateLeg(RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency, bool forBonds = false);
 			 *
 			 * @brief	Builds bullet fixed rate leg
 			 *
@@ -498,6 +503,26 @@ namespace QCode
 				double spread,
 				double gearing);
 
+            static Leg buildCustomAmortIbor2Leg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> currency,
+                    double spread,
+                    double gearing);
+
 			/**
 			 * @fn	static Leg LegFactory::buildBulletIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
 			 *
@@ -728,6 +753,26 @@ namespace QCode
 				double spread,
 				double gearing);
 
+            static Leg buildBulletCompoundedOvernightLeg(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    double notional,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    bool isAct360,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout);
 			/**
 			* @fn	static void LegFactory::customizeAmortization(RecPay recPay, Leg& leg,
 			* 		CustomNotionalAmort notionalAndAmort, TypeOfCashflow typeOfCashflow);

@@ -50,12 +50,10 @@ double QCActAct::yf(long days)
 
 long QCActAct::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
-    return firstDate.dayDiff(secondDate);
+    return QCYearFraction::countDaysAct(firstDate, secondDate);
 }
 
 std::string QCActAct::description()
 {
 	return "ActAct";
 }
-
-

@@ -7,7 +7,7 @@
 
 double QCAct30::yf(const QCDate &firstDate, const QCDate &secondDate)
 {
-	long days = firstDate.dayDiff(secondDate);
+	auto days = countDays(firstDate, secondDate);
 	return days / _basis;
 }
 
@@ -18,7 +18,7 @@ double QCAct30::yf(long days)
 
 long QCAct30::countDays(const QCDate &firstDate, const QCDate &secondDate)
 {
-	return firstDate.dayDiff(secondDate);
+	return QCYearFraction::countDaysAct(firstDate, secondDate);
 }
 
 std::string QCAct30::description()

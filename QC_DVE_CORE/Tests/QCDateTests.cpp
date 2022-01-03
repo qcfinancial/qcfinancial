@@ -8,10 +8,9 @@
 #include <array>
 #include <algorithm> // for std::find
 #include <iterator> // for std::begin, std::end
-#include <string>
 
 
-TEST_CASE("Default constructor") {
+TEST_CASE("QCDate Default constructor") {
     QCDate fecha;
     REQUIRE(fecha.day() == 12);
     REQUIRE(fecha.month() == 1);

@@ -42,10 +42,10 @@ int main()
             doesAmortize,
             spread,
             gearing,
-            true);
+            true
+            );
 
     std::cout << "Logrado." << "\n";
 
     return 0;
 }
-

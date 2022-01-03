@@ -31,7 +31,7 @@ public:
 	 * @author	Alvaro Díaz V.
 	 * @date	02/10/2017
 	 */
-	QCCurrency() : _name("U. S. Dollar"), _isoCode("USD"), _isoNumber(840), _decimalPlaces(0)
+	QCCurrency() : _name("U. S. Dollar"), _isoCode("USD"), _isoNumber(840), _decimalPlaces(2)
 	{
 	}
 
