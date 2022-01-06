@@ -112,7 +112,7 @@ namespace QCode
 					double dwf = intRate.dwf(days);
 					double d2wf = intRate.d2wf(days);
 					double pv = amount / wf;
-					//wf(r) ---> d/dr(1/wf(r)) = (-dwf(r)/dr)/wf(r)**2
+					// wf(r) ---> d/dr(1/wf(r)) = (-dwf(r)/dr)/wf(r)**2
 					_derivative = -amount * dwf * pow(wf, -2.0);
 					_derivative2 = -amount * (d2wf * pow(wf, -2.0) - 2.0 * pow(wf, -3.0) * dwf * dwf);
 					_rate = intRate.getValue();

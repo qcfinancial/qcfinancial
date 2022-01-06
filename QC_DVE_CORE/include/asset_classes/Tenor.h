@@ -94,6 +94,8 @@ namespace QCode
 			 */
 			std::string getString();
 
+            unsigned int getTotalMonths();
+
 			/**
 			 * @fn	Tenor::~Tenor();
 			 *

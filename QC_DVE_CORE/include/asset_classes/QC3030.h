@@ -12,11 +12,12 @@
 /*!
 * @brief La clase QC30360 implementa el método 30/360.
 * Hereda de la clase abstracta QCYearFraction
-* @author Alvaro D�az
+* @author Alvaro Díaz
 */
 class QC3030 : public QCYearFraction
 {
 public:
+    QC3030() = default;
 	/*!
 	* La funci�n yf devuelve la fracción de a�o entre dos fechas en convención 30/360.
 	* @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo

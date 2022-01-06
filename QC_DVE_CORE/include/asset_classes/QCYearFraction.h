@@ -3,7 +3,7 @@
 
 #include <string>
 
-class QCDate;
+#include "time/QCDate.h"
 
 /*!
 * @author Alvaro Díaz
@@ -62,6 +62,32 @@ public:
 	{
 		return "";
 	}
+
+    static long countDays30360(const QCDate &firstDate, const QCDate &secondDate)
+    {
+        int firstDay = firstDate.day();
+        int firstMonth = firstDate.month();
+        int firstYear = firstDate.year();
+
+        int secondDay = secondDate.day();
+        int secondMonth = secondDate.month();
+        int secondYear = secondDate.year();
+
+        if (firstDay == 31)
+            firstDay = 30;
+
+        if (secondDay == 31 && firstDay == 30)
+            secondDay = 30;
+
+        long result = (secondDay - firstDay) + 30 * (secondMonth - firstMonth)
+                      + 360 * (secondYear - firstYear);
+        return result;
+    }
+
+    static long countDaysAct(const QCDate &firstDate, const QCDate &secondDate)
+    {
+        return firstDate.dayDiff(secondDate);
+    }
 };
 
 

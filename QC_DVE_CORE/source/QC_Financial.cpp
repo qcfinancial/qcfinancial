@@ -1,6 +1,7 @@
 #define BOOST_PYTHON_STATIC_LIB
 #define BOOST_PYTHON_MAX_ARITY 25
 
+//#include <boost/python/python.hpp>
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
@@ -860,6 +861,8 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         .staticmethod("build_bullet_ibor_mccy_leg")
         .def("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
         .staticmethod("build_custom_amort_ibor_leg")
+        .def("build_custom_amort_ibor2_leg", &qf::LegFactory::buildCustomAmortIbor2Leg)
+        .staticmethod("build_custom_amort_ibor2_leg")
         .def("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)
         .staticmethod("build_bullet_icp_clp_leg")
         .def("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
@@ -997,7 +1000,9 @@ BOOST_PYTHON_MODULE(NOMBRE_MODULO)
         class_<qf::ForwardRates>("ForwardRates")
         .def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
         .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
+        .def("set_rate_icp_clp_cashflow2", &qf::ForwardRates::setRateIcpClpCashflow2)
         .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
+        .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
         .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
         .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
         .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)

@@ -2,7 +2,8 @@
 #include <exception>
 #include <algorithm>
 
-template<class T> QCCurve<T>::QCCurve(vector<T> &abscissa, vector<double>& ordinate)
+template<class T>
+QCCurve<T>::QCCurve(vector<T> &abscissa, vector<double>& ordinate)
 {		
 	//Se verifica si el numero de abscissa y ordinate coinciden
 	if (abscissa.size() != ordinate.size())

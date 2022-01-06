@@ -5,10 +5,12 @@ if (APPLE)
     set(PYTHON3_H /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/include/python3.8)
     # set(PYTHON3_H /Users/alvarodiaz/opt/miniconda3/envs/jupybook/include/python3.8)
     set(BOOST_H /usr/local/Cellar/boost/1.75.0_1/include)
+
 elseif(WIN32)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
-    set(PYTHON3_H C:/Users/Soporte/AppData/Local/Programs/Python/Python37/include)
-    set(BOOST_H C:/boost_1_70_0)
+    set(PYTHON3_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
+    set(BOOST_H C:/local/boost_1_74_0)
+
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
     string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
@@ -42,6 +44,8 @@ target_sources(QC_DVE_CORE
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/CompoundedOvernightRateCashflow.cpp
+        cashflows/IborMultiCurrencyCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
@@ -50,6 +54,7 @@ target_sources(QC_DVE_CORE
         asset_classes/QCAct360.cpp
         asset_classes/QCAct365.cpp
         asset_classes/QCActAct.cpp
+        asset_classes/QC3030.cpp
         time/QCBusinessCalendar.cpp
         QCClampedSpline.cpp
         QCCompoundWf.cpp
@@ -61,6 +66,7 @@ target_sources(QC_DVE_CORE
         QCFloatingRatePayoff.cpp
         QCFXForward.cpp
         QCHelperFunctions.cpp
+        HelperFunctions.cpp
         QCIcpClfPayoff.cpp
         QCIcpClpPayoff.cpp
         QCInterestRate.cpp
@@ -85,7 +91,8 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
         Tenor.cpp
-        ZeroCouponCurve.cpp)
+        ZeroCouponCurve.cpp
+        LegFactory.cpp)
 
 
 # --- QC_DVE_PYBIND ---------------------------------------------------------------------

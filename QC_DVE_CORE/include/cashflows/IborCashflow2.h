@@ -33,7 +33,8 @@ namespace QCode
                     double					 /* Interest rate value */
             > IborCashflow2Wrapper;
 
-            IborCashflow2(std::shared_ptr<InterestRateIndex> index,
+            IborCashflow2(
+                    std::shared_ptr<InterestRateIndex> index,
                     const QCDate& startDate,
                     const QCDate& endDate,
                     const QCDate& fixingDate,
