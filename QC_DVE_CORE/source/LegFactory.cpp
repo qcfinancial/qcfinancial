@@ -764,12 +764,13 @@ namespace QCode
 			return iborLeg;
 		}
 
-		void LegFactory::customizeAmortization(RecPay recPay,
-											   Leg& leg,
-											   CustomNotionalAmort notionalAndAmort,
-											   TypeOfCashflow typeOfCashflow)
+		void LegFactory::customizeAmortization(
+                RecPay recPay,
+                Leg& leg,
+                CustomNotionalAmort notionalAndAmort,
+                TypeOfCashflow typeOfCashflow)
 		{
-			// Ahora modificar nominal y amortizaci�n en el objeto Leg reci�n construido.
+			// Ahora modificar nominal y amortización en el objeto Leg recién construido.
 			size_t notionalAndAmortSize = notionalAndAmort.getSize();
 			size_t legSize = leg.size();
 			if (legSize == 0)
@@ -1025,19 +1026,20 @@ namespace QCode
                 double gearing,
                 bool isAct360)
         {
-            Leg icpClpLeg = buildBulletIcpClp2Leg(recPay,
-                                                 startDate,
-                                                 endDate,
-                                                 endDateAdjustment,
-                                                 settlementPeriodicity,
-                                                 settlementStubPeriod,
-                                                 settlementCalendar,
-                                                 settlementLag,
-                                                 100.0,
-                                                 doesAmortize,
-                                                 spread,
-                                                 gearing,
-                                                 isAct360);
+            Leg icpClpLeg = buildBulletIcpClp2Leg(
+                    recPay,
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    settlementPeriodicity,
+                    settlementStubPeriod,
+                    settlementCalendar,
+                    settlementLag,
+                    100.0,
+                    doesAmortize,
+                    spread,
+                    gearing,
+                    isAct360);
 
             std::cout << "custom amort icp clp leg: done bullet" << std::endl;
             customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);

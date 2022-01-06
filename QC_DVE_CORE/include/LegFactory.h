@@ -66,6 +66,9 @@ namespace QCode
 				///< An enum constant representing the ibor cashflow option
 				iborCashflow,
 
+                ///< An enum constant representing the ibor cashflow 2 option
+                iborCashflow2,
+
 				///< An enum constant representing the icp clp cashflow option
 				icpClpCashflow,
 
