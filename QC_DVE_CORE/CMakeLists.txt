@@ -31,6 +31,7 @@ elseif(WIN32)
     set(PYTHON2_LIB C:/Users/Soporte/AppData/Local/Programs/Python/Python27/libs/)
     set(PYTHON3_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python38/libs/)
     set(BOOST_PYTHON_LIB C:/local/boost_1_74_0/lib64-msvc-14.1/)
+    set(BOOST_PYTHON_LIB_27 C:/boost_1_70_0/lib64-msvc-12.0/)
 
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
@@ -64,7 +65,7 @@ elseif(WIN32)
 
     target_link_libraries(QC_Financial
             ${PYTHON2_LIB}python27.lib
-            ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
+            ${BOOST_PYTHON_LIB_27}libboost_python27-vc120-mt-x64-1_70.lib)
 
     target_link_libraries(QC_Financial_3
             ${PYTHON3_LIB}python38.lib

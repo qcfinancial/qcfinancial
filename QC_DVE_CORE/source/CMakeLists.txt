@@ -10,6 +10,7 @@ elseif(WIN32)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
     set(PYTHON3_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
     set(BOOST_H C:/local/boost_1_74_0)
+    set(BOOST_H_27 C:/boost_1_70_0)
 
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
@@ -168,6 +169,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/CompoundedOvernightRateCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
@@ -218,7 +220,7 @@ set(QC_FINANCIAL_SOURCES
 target_include_directories(QC_Financial
         PRIVATE
         ${QC_INCLUDE}
-        ${BOOST_H}
+        ${BOOST_H_27}
         ${PYTHON2_H})
 
 target_sources(QC_Financial
