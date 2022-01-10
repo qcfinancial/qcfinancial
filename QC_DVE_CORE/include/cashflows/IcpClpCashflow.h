@@ -251,7 +251,7 @@ namespace QCode
 			shared_ptr<IcpClpCashflowWrapper> wrap();
 
 			/**
-			* @fn	    double IcpClpCashflow::getRateValue();
+			* @fn	    double IcpClpCashflow::_getRateValue();
 			*
 			* @brief	Gets the value of the associated interest rate
 			*

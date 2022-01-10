@@ -168,6 +168,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/CompoundedOvernightRateCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp

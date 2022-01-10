@@ -43,6 +43,10 @@ namespace QCode {
 
             // Make sure fixing dates are sorted in ascending order.
             sort(_fixingDates.begin(), _fixingDates.end());
+
+            // Initialize _amountDerivatives
+            _amountDerivatives.push_back(0.0);
+            _amountDerivatives.push_back(0.0);
         }
 
         double CompoundedOvernightRateCashflow::amount() {
@@ -277,8 +281,33 @@ namespace QCode {
             _initialDateWf = wf;
         }
 
-        std::vector<double> CompoundedOvernightRateCashflow::getAmountDerivatives() {
-            return _amountDerivatives;
+        std::shared_ptr<CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper> CompoundedOvernightRateCashflow::wrap() {
+            CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper tup = std::make_tuple(
+                    _startDate,
+                    _endDate,
+                    _settlementDate,
+                    _nominal,
+                    _amortization,
+                    _interest,
+                    _doesAmortize,
+                    amount(),
+                    _currency,
+                    _index->getCode(),
+                    _index->getRate(),
+                    _spread,
+                    _gearing,
+                    _getRateValue());
+
+            return std::make_shared<CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper>(tup);
+        }
+
+        double CompoundedOvernightRateCashflow::_getRateValue() const {
+            auto wf = _endDateWf / _initialDateWf;
+            if (wf == 1.0)
+                return 0.0;
+            auto rate = _index->getRate();
+
+            return rate.getRateFromWf(wf, _startDate.dayDiff(_endDate));
         }
     }
 }

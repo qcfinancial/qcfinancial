@@ -96,7 +96,7 @@ namespace QCode
 			double amount() override ;
 
 			/**
-			 * @fn	    double IcpClfCashflow::getRateValue();
+			 * @fn	    double IcpClfCashflow::_getRateValue();
 			 *
 			 * @brief	Gets the value of the associated interest rate
 			 *
