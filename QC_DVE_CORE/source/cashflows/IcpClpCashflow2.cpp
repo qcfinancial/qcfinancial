@@ -98,10 +98,12 @@ namespace QCode
             return _amountDerivatives;
         }
 
+
         shared_ptr<QCCurrency> IcpClpCashflow2::ccy()
         {
             return _currency;
         }
+
 
         QCDate IcpClpCashflow2::date()
         {
@@ -114,15 +116,18 @@ namespace QCode
             return "ICPCLP";
         }
 
+
         std::shared_ptr<QCCurrency> IcpClpCashflow2::getInitialCcy() const
         {
             return _currency;
         }
 
+
         const QCDate& IcpClpCashflow2::getStartDate() const
         {
             return _startDate;
         }
+
 
         const QCDate& IcpClpCashflow2::getEndDate() const
         {
@@ -321,10 +326,12 @@ namespace QCode
             }
         }
 
+
         std::vector<double> IcpClpCashflow2::getStartDateICPDerivatives() const
         {
             return _startDateICPDerivatives;
         }
+
 
         double IcpClpCashflow2::getStartDateICP() const
         {
@@ -463,6 +470,7 @@ namespace QCode
             _rate.setValue(tna * _gearing + _spread);
             return _nominal * (_rate.wf(_startDate, date) - 1);
         }
+
 
         IcpClpCashflow2::~IcpClpCashflow2()
         {
