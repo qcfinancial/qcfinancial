@@ -200,7 +200,7 @@ namespace QCode
              *
              * @brief	Validates that the object is instantiated properly.
              *
-             * @author	Alvaro D�az V.
+             * @author	Alvaro Díaz V.
              * @date	24/09/2018
              *
              * @return	True if it succeeds, false if it fails.

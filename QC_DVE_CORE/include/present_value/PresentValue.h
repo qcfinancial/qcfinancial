@@ -138,8 +138,9 @@ namespace QCode
 			* @return	A double with the present value. Derivatives are stored in the class and have
 			*           their own set of accessors.
 			*/
-			double pv(QCDate& valuationDate, const std::shared_ptr<Cashflow>& cashflow,
-				      const std::shared_ptr<InterestRateCurve>& curve)
+			double pv(QCDate& valuationDate,
+                      const std::shared_ptr<Cashflow>& cashflow,
+                      const std::shared_ptr<InterestRateCurve>& curve)
 			{
 				_resetDerivatives(curve->getLength());
 

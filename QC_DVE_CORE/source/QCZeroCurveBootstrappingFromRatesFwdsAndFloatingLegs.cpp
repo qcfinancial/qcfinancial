@@ -37,7 +37,7 @@ void QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs::generateCurve()
 		rateCounter += 1;
 
 		//Utiliza la tasa del payoff como punto inicial del c�lculo
-		double rLast{ td->getRateValue() }; //valor inicial de la tasa a calcular
+		double rLast{td->getRateValue() }; //valor inicial de la tasa a calcular
 		_curve->setOrdinateAtWithValue(static_cast<unsigned long>(rateCounter), rLast); //Se modifica la curva con el valor inicial
 		double rNext;
 		double diff{ 1 };

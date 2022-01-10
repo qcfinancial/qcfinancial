@@ -16,6 +16,22 @@ namespace QCode {
 
         class CompoundedOvernightRateCashflow : public LinearInterestRateCashflow {
         public:
+            typedef std::tuple<
+                    QCDate,                  /* Start date */
+                    QCDate,                  /* End date */
+                    QCDate,                  /* Settlement date */
+                    double,                  /* Nominal */
+                    double,                  /* Amortization */
+                    double,                  /* Interest */
+                    bool,                    /* Amortization is cashflow */
+                    double,                  /* Total cashflow */
+                    shared_ptr<QCCurrency>,  /* Nominal currency */
+                    std::string,             /* Interest rate index code */
+                    QCInterestRate,			 /* Interest rate */
+                    double,                  /* Spread */
+                    double,                  /* Gearing */
+                    double					 /* Interest rate value */
+            > CompoundedOvernightRateCashflowWrapper;
             CompoundedOvernightRateCashflow(
                     std::shared_ptr<InterestRateIndex> index,
                     const QCDate &startDate,
@@ -106,7 +122,7 @@ namespace QCode {
 
             void setEndDateWf(double wf);
 
-            std::vector<double> getAmountDerivatives();
+            std::shared_ptr<CompoundedOvernightRateCashflowWrapper> wrap();
 
             ~CompoundedOvernightRateCashflow() override = default;
 
@@ -192,6 +208,8 @@ namespace QCode {
             void _fillIndexEndDates();
 
             double _calculateInterest(double rateValue, QCDate &fecha);
+
+            double _getRateValue() const;
         };
     }
 }
