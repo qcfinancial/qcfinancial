@@ -1030,6 +1030,8 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
             .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
             .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
-            .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg);
+            .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
+            .def("set_rate_compounded_overnight_cashflow", &qf::ForwardRates::setRateCompoundedOvernightCashflow)
+            .def("set_rates_compounded_overnight_leg", &qf::ForwardRates::setRatesCompoundedOvernightLeg);
 
 };
