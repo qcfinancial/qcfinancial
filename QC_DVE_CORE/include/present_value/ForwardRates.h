@@ -63,6 +63,25 @@ namespace QCode {
                 }
             }
 
+            void setRatesCompoundedOvernightLeg(
+                    const QCDate &valuationDate,
+                    Leg &compoundedONLeg,
+                    ZeroCouponCurve &curve,
+                    const TimeSeries& fixings) {
+                _derivatives2.resize(compoundedONLeg.size(), vector<double>(curve.getLength(), 0.0));
+                for (size_t i = 0; i < compoundedONLeg.size(); ++i) {
+                    auto initialCashflow = std::dynamic_pointer_cast<CompoundedOvernightRateCashflow>(compoundedONLeg.getCashflowAt(i));
+                    // Calcular el fixing
+                    auto accruedFixing = initialCashflow->accruedFixing(valuationDate, fixings);
+                    auto cashflow = setRateCompoundedOvernightCashflow(
+                            valuationDate,
+                            accruedFixing,
+                            *initialCashflow,
+                            curve);
+                    compoundedONLeg.setCashflowAt(cashflow, i);
+                }
+            }
+
             std::shared_ptr<CompoundedOvernightRateCashflow> setRateCompoundedOvernightCashflow(
                     const QCDate &valuationDate,
                     double accruedFixing,

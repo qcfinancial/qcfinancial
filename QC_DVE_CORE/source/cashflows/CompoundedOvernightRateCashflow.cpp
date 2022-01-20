@@ -51,7 +51,7 @@ namespace QCode {
 
         double CompoundedOvernightRateCashflow::amount() {
             auto interest = (_endDateWf / _initialDateWf - 1.0) * _nominal;
-            return (_doesAmortize) ? interest + _nominal : interest;
+            return (_doesAmortize) ? interest + _amortization : interest;
         }
 
 
