@@ -8,8 +8,11 @@ if (APPLE)
 
 elseif(WIN32)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
-    set(PYTHON3_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
-    set(BOOST_H C:/local/boost_1_74_0)
+    set(PYTHON37_H D:/Users/adiazv/AppData/Local/Programs/Python/Python37/include)
+    set(PYTHON38_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
+    set(PYTHON39_H D:/Users/adiazv/AppData/Local/Programs/Python/Python39/include)
+    set(PYTHON310_H D:/Users/adiazv/AppData/Local/Programs/Python/Python310/include)
+    set(BOOST_H C:/local/boost_1_79_0)
 
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
@@ -226,23 +229,68 @@ target_sources(QC_Financial
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
 
-target_include_directories(QC_Financial_3
+target_include_directories(QC_Financial_37
         PRIVATE
         ${QC_INCLUDE}
         ${BOOST_H}
-        ${PYTHON3_H})
+        ${PYTHON37_H})
 
-target_sources(QC_Financial_3
+target_sources(QC_Financial_37
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
 
-target_compile_definitions(QC_Financial_3
+target_compile_definitions(QC_Financial_37
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_38
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON38_H})
+
+target_sources(QC_Financial_38
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_38
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_39
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON39_H})
+
+target_sources(QC_Financial_39
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_39
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_310
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON310_H})
+
+target_sources(QC_Financial_310
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_310
         PUBLIC
         PYTHON3)
 
 if (WIN32)
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".pyd")
-    set_target_properties(QC_Financial_3 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_37 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_38 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_39 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".pyd")
 else()
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".so")
     set_target_properties(QC_Financial_3 PROPERTIES SUFFIX ".so")
