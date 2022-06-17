@@ -24,6 +24,7 @@ else()
         set(PYTHON39_H /usr/include/python3.9)
         set(BOOST_H /usr/include/boost)
         set(PYTHON2_H /usr/include/python2.7)
+        set(PYTHON36_H /usr/include/python3.6m)
     endif()
 endif()
 
@@ -230,6 +231,20 @@ target_sources(QC_Financial
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
 
+target_include_directories(QC_Financial_36
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON36_H})
+
+target_sources(QC_Financial_36
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_36
+        PUBLIC
+        PYTHON3)
+
 target_include_directories(QC_Financial_37
         PRIVATE
         ${QC_INCLUDE}
@@ -294,5 +309,9 @@ if (WIN32)
     set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".pyd")
 else()
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_36 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_37 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_38 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_39 PROPERTIES SUFFIX ".so")
     set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".so")
 endif()
