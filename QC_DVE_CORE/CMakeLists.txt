@@ -48,12 +48,12 @@ else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
     string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
     if(${distro} STREQUAL "Ubuntu")
-        set(PYTHON3_LIB /usr/lib/x86_64-linux-gnu/)
+        set(PYTHON310_LIB /usr/lib/x86_64-linux-gnu/)
         set(BOOST_PYTHON_LIB /usr/lib/x86_64-linux-gnu/)
     else()
 	# set(PYTHON2_LIB /usr/lib64/)
-        set(PYTHON310_LIB /usr/local/lib/)
-        set(BOOST_PYTHON_LIB /usr/lib64/boost169/)
+        set(PYTHON39_LIB /usr/lib64/)
+        set(BOOST_PYTHON_LIB /usr/lib64/)
     endif()
 endif()
 
@@ -65,7 +65,7 @@ if (APPLE)
             ${PYTHON2_LIB}libpython2.7.dylib
             ${BOOST_PYTHON2_LIB}libboost_python27-mt.dylib )
 
-    target_link_libraries(QC_Financial_3
+    target_link_libraries(QC_Financial_39
             ${PYTHON3_LIB}libpython3.8.dylib
             ${BOOST_PYTHON3_LIB}libboost_python38.dylib)
 
@@ -104,12 +104,12 @@ else()
 
     if (${distro} STREQUAL "Ubuntu")
         target_link_libraries(QC_Financial_310
-                ${PYTHON3_LIB}libpython3.10.so.1.0
+                ${PYTHON310_LIB}libpython3.10.so.1.0
                 ${BOOST_PYTHON_LIB}libboost_python310.so.1.74.0)
     else()
         target_link_libraries(QC_Financial_39
-                ${PYTHON3_LIB}libpython3.7m.so.1.0
-                ${BOOST_PYTHON_LIB}libboost_python3.so)
+                ${PYTHON39_LIB}libpython3.9.so.1.0
+                ${BOOST_PYTHON_LIB}libboost_python39.so.1.75.0)
     endif ()
 
 endif()

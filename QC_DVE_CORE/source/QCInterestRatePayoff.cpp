@@ -131,15 +131,18 @@ size_t QCInterestRatePayoff::payoffSize() const
 	return _payoffs.size();
 }
 
+
 QCInterestRateLeg::QCInterestRatePeriod QCInterestRatePayoff::getPeriodAt(size_t n) const
 {
 	return _irLeg->getPeriodAt(n);
 }
 
+
 size_t QCInterestRatePayoff::getLastPeriodIndex() const
 {
 	return _irLeg->lastPeriod();
 }
+
 
 QCDate QCInterestRatePayoff::getStartDate() const
 {
