@@ -44,50 +44,51 @@ namespace QCode
                            double endDateICP = QCode::Financial::DEFAULT_ICP);
 
             // Overriding methods in Cashflow
-            virtual double amount() override;
+            double amount() override;
 
-            virtual shared_ptr<QCCurrency> ccy() override;
+            shared_ptr<QCCurrency> ccy() override;
 
-            virtual QCDate date() override;
+            QCDate date() override;
 
             // Overriding methods in LinearInterestRateCashflow
-            virtual std::string getType() const override;
+            std::string getType() const override;
 
-            virtual std::shared_ptr<QCCurrency> getInitialCcy() const override;
+            std::shared_ptr<QCCurrency> getInitialCcy() const override;
 
-            virtual const QCDate& getStartDate() const override;
+            const QCDate& getStartDate() const override;
 
-            virtual const QCDate& getEndDate() const override;
+            const QCDate& getEndDate() const override;
 
-            virtual const QCDate& getSettlementDate() const override;
+            const QCDate& getSettlementDate() const override;
 
-            virtual const DateList& getFixingDates() const override;
+            const DateList& getFixingDates() const override;
 
-            virtual double getNominal() const override;
+            double getNominal() const override;
 
-            virtual double nominal(const QCDate& fecha) const override;
+            double nominal(const QCDate& fecha) const override;
 
-            virtual double getAmortization() const override;
+            double getAmortization() const override;
 
-            virtual double amortization() const override;
+            double amortization() const override;
 
-            virtual double interest() override;
+            double interest() override;
 
-            virtual double interest(const TimeSeries& fixings) override;
+            double interest(const TimeSeries& fixings) override;
 
-            virtual double fixing() override;
+            double fixing() override;
 
-            virtual double fixing(const TimeSeries& fixings) override;
+            double fixing(const TimeSeries& fixings) override;
 
-            virtual double accruedInterest(const QCDate& fecha) override;
+            double accruedInterest(const QCDate& fecha) override;
 
-            virtual double accruedInterest(const QCDate& fecha, const TimeSeries& fixings) override;
+            double accruedInterest(const QCDate& fecha, const TimeSeries& fixings) override;
 
-            virtual double accruedFixing(const QCDate& fecha) override;
+            double accruedFixing(const QCDate& fecha) override;
 
-            virtual double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) override;
+            double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) override;
 
-            virtual bool doesAmortize() const override;
+
+            bool doesAmortize() const override;
 
             // Methods specific to this class
             std::vector<double> getAmountDerivatives() const;

@@ -273,9 +273,10 @@ namespace QCode
 			 * @author	Alvaro Díaz V.
 			 * @date	07/10/2017
 			 */
-			CustomNotionalAmort()
-			{
-			}
+			CustomNotionalAmort() = default;
+
+            /** @brief	The custom notional and amortization schedule */
+            std::vector<std::tuple<double, double>> customNotionalAmort;
 
 			/**
 			 * @fn	void setSize(size_t n)
@@ -362,9 +363,6 @@ namespace QCode
 			~CustomNotionalAmort()
 			{
 			}
-
-			/** @brief	The custom notional and amortization schedule */
-			std::vector<std::tuple<double, double>> customNotionalAmort;
 		};
 	};
 }

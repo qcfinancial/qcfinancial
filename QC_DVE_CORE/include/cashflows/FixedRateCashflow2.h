@@ -93,7 +93,7 @@ namespace QCode
             *
             * @returns	The start date.
             */
-			virtual const QCDate& getStartDate() const override;
+			const QCDate& getStartDate() const override;
 
 			/**
 			* @fn	virtual const QCDate& LinearInterestRateCashflow::getEndDate() const = 0;
@@ -105,7 +105,7 @@ namespace QCode
 			*
 			* @returns	The end date.
 			*/
-			virtual const QCDate& getEndDate() const override;
+			const QCDate& getEndDate() const override;
 
 			/**
 			* @fn	virtual const QCDate& LinearInterestRateCashflow::getSettlementDate() const = 0;
@@ -117,7 +117,7 @@ namespace QCode
 			*
 			* @returns	The settlement date.
 			*/
-			virtual const QCDate& getSettlementDate() const override;
+			const QCDate& getSettlementDate() const override;
 
 			/**
 			* @fn	virtual const std::vector<QCDate>& LinearInterestRateCashflow::getFixingDates() const = 0;
@@ -130,7 +130,7 @@ namespace QCode
 			*
 			* @returns	The fixing dates.
 			*/
-			virtual const DateList& getFixingDates() const override;
+			const DateList& getFixingDates() const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getNominal() const = 0;
@@ -142,7 +142,7 @@ namespace QCode
 			*
 			* @returns	The nominal.
 			*/
-			virtual double getNominal() const override;
+			double getNominal() const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::nominal(const QCDate& fecha) const = 0;
@@ -156,7 +156,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double nominal(const QCDate& fecha) const override;
+			double nominal(const QCDate& fecha) const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getAmortization() const = 0;
@@ -169,7 +169,7 @@ namespace QCode
 			*
 			* @returns	The amortization.
 			*/
-			virtual double getAmortization() const override;
+			double getAmortization() const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::amortization() const = 0;
@@ -182,7 +182,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double amortization() const override;
+			double amortization() const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::interest() = 0;
@@ -195,7 +195,7 @@ namespace QCode
 			*
 			* @returns	A double.
 			*/
-			virtual double interest() override;
+			double interest() override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::interest(const TimeSeries& fixings) = 0;
@@ -354,7 +354,7 @@ namespace QCode
 			 * @author	A Diaz V
 			 * @date	19-03-2019
 			 */
-			virtual ~FixedRateCashflow2();
+			~FixedRateCashflow2() override;
 
 		protected:
 

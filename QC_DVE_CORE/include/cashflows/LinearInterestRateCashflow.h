@@ -248,7 +248,7 @@ namespace QCode
 			 */
 			virtual double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) = 0;
 
-			/**
+            /**
 			 * @fn	virtual bool LinearInterestRateCashflow::doesAmortize() const = 0;
 			 *
 			 * @brief	Determines if the amortization is a real cashflow

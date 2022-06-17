@@ -108,7 +108,7 @@ else()
                 ${PYTHON3_LIB}libpython3.6m.so.1.0
                 ${BOOST_PYTHON_LIB}libboost_python-py36.so)
     else()
-        target_link_libraries(QC_Financial_3
+        target_link_libraries(QC_Financial_39
                 ${PYTHON3_LIB}libpython3.7m.so.1.0
                 ${BOOST_PYTHON_LIB}libboost_python3.so)
     endif ()
