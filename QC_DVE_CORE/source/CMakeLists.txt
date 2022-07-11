@@ -6,6 +6,7 @@ if (APPLE)
     set(BOOST_H /usr/local/Cellar/boost/1.75.0_1/include)
 
 elseif(WIN32)
+    set(BOOST_H_27 C:/boost_1_70_0)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
     set(PYTHON37_H D:/Users/adiazv/AppData/Local/Programs/Python/Python37/include)
     set(PYTHON38_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
@@ -224,7 +225,7 @@ set(QC_FINANCIAL_SOURCES
 target_include_directories(QC_Financial
         PRIVATE
         ${QC_INCLUDE}
-        ${BOOST_H}
+        ${BOOST_H_27}
         ${PYTHON2_H})
 
 target_sources(QC_Financial

@@ -44,6 +44,7 @@ elseif(WIN32)
     set(PYTHON38_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python38/libs/)
     set(PYTHON39_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python39/libs/)
     set(PYTHON310_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python310/libs/)
+    set(BOOST_PYTHON2_LIB C:/boost_1_70_0/lib64-msvc-12.0/)
     set(BOOST_PYTHON3_LIB C:/local/boost_1_79_0/lib64-msvc-14.1/lib/)
 
 else()
@@ -79,7 +80,7 @@ elseif(WIN32)
 
     target_link_libraries(QC_Financial
             ${PYTHON2_LIB}python27.lib
-            ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
+            ${BOOST_PYTHON2_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
 
     target_link_libraries(QC_Financial_37
             ${PYTHON37_LIB}python37.lib
