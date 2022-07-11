@@ -176,7 +176,7 @@ namespace QCode
 		}
 
 
-		bool FixedRateCashflow2::doesAmortize() const
+        bool FixedRateCashflow2::doesAmortize() const
 		{
 			return _doesAmortize;
 		}
@@ -239,9 +239,8 @@ namespace QCode
 			return wf + yf;
 		}
 
-
-		FixedRateCashflow2::~FixedRateCashflow2()
-		{
-		}
+        FixedRateCashflow2::~FixedRateCashflow2()
+        {
+        }
     }
 }

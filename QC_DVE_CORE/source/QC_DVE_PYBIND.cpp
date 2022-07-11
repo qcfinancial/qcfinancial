@@ -2294,7 +2294,7 @@ PyObject* pv_fixed_rate_legs(PyObject* self, PyObject*  args)
 
 		if (PyList_Size(curveValues) == 0)
 		{
-			string msg = "Error en las patas fijas. El vector de curvas esta vacio";
+			string msg = "Error en las patas fijas. El vector de curvas esta vacío";
 			PyErr_SetString(qcDveError, msg.c_str());
 			return NULL;
 		}

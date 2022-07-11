@@ -3,24 +3,28 @@ set(QC_INCLUDE ../include)
 if (APPLE)
     set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
     set(PYTHON3_H /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/include/python3.8)
-    # set(PYTHON3_H /Users/alvarodiaz/opt/miniconda3/envs/jupybook/include/python3.8)
     set(BOOST_H /usr/local/Cellar/boost/1.75.0_1/include)
 
 elseif(WIN32)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
-    set(PYTHON3_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
-    set(BOOST_H C:/local/boost_1_74_0)
-    set(BOOST_H_27 C:/boost_1_70_0)
+    set(PYTHON37_H D:/Users/adiazv/AppData/Local/Programs/Python/Python37/include)
+    set(PYTHON38_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
+    set(PYTHON39_H D:/Users/adiazv/AppData/Local/Programs/Python/Python39/include)
+    set(PYTHON310_H D:/Users/adiazv/AppData/Local/Programs/Python/Python310/include)
+    set(BOOST_H C:/local/boost_1_79_0) # No se distingue por target, porque todas las versiones de boost
+                                       # para las correspondientes versiones de Python están en la misma carpeta.
 
 else()
     file(STRINGS /etc/os-release distro REGEX "^NAME=")
     string(REGEX REPLACE "NAME=\"(.*)\"" "\\1" distro "${distro}")
     if(${distro} STREQUAL "Ubuntu")
-        set(PYTHON3_H /usr/include/python3.6)
+        set(PYTHON310_H /usr/include/python3.10)
+        set(BOOST_H /usr/include/boost)
     else()
-        set(PYTHON3_H /usr/local/include/python3.7m)
-        set(BOOST_H /usr/include/boost169)
+        set(PYTHON39_H /usr/include/python3.9)
+        set(BOOST_H /usr/include/boost)
         set(PYTHON2_H /usr/include/python2.7)
+        set(PYTHON36_H /usr/include/python3.6m)
     endif()
 endif()
 
@@ -220,31 +224,94 @@ set(QC_FINANCIAL_SOURCES
 target_include_directories(QC_Financial
         PRIVATE
         ${QC_INCLUDE}
-        ${BOOST_H_27}
+        ${BOOST_H}
         ${PYTHON2_H})
 
 target_sources(QC_Financial
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
 
-target_include_directories(QC_Financial_3
+target_include_directories(QC_Financial_36
         PRIVATE
         ${QC_INCLUDE}
         ${BOOST_H}
-        ${PYTHON3_H})
+        ${PYTHON36_H})
 
-target_sources(QC_Financial_3
+target_sources(QC_Financial_36
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
 
-target_compile_definitions(QC_Financial_3
+target_compile_definitions(QC_Financial_36
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_37
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON37_H})
+
+target_sources(QC_Financial_37
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_37
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_38
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON38_H})
+
+target_sources(QC_Financial_38
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_38
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_39
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON39_H})
+
+target_sources(QC_Financial_39
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_39
+        PUBLIC
+        PYTHON3)
+
+target_include_directories(QC_Financial_310
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON310_H})
+
+target_sources(QC_Financial_310
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_310
         PUBLIC
         PYTHON3)
 
 if (WIN32)
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".pyd")
-    set_target_properties(QC_Financial_3 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_37 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_38 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_39 PROPERTIES SUFFIX ".pyd")
+    set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".pyd")
 else()
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".so")
-    set_target_properties(QC_Financial_3 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_36 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_37 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_38 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_39 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".so")
 endif()

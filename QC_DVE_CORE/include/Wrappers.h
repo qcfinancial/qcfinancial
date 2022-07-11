@@ -3,8 +3,8 @@
 
 #include "Python.h"
 
-#include<memory>
-#include<string>
+#include <memory>
+#include <string>
 
 #include <boost/python.hpp>
 #include <boost/python/wrapper.hpp>
@@ -39,7 +39,9 @@ namespace qf = QCode::Financial;
 
 #ifdef PYTHON3
 #define PYSTRING2STRING PyUnicode_FromString
+#ifndef NOMBRE_MODULO
 #define NOMBRE_MODULO QC_Financial_3
+#endif
 #else
 #define PYSTRING2STRING PyString_FromString
 #define NOMBRE_MODULO QC_Financial
