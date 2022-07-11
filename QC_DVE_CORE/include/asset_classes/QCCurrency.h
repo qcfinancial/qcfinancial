@@ -427,5 +427,44 @@ public:
 	}
 };
 
+/**
+* @fn	QCCNY::QCCNY()
+*
+* @brief	Default constructor
+*
+* @author	Alvaro Diaz V.
+* @date	10/07/2022
+*/
+class QCCNY : public QCCurrency
+{
+public:
+    QCCNY() : QCCurrency("Chinese CNY", "CNY", 156, 2)
+    {
+    }
+};
+
+class QCPEN : public QCCurrency
+{
+public:
+    QCPEN() : QCCurrency("Sol peruano", "PEN", 604, 2)
+    {
+    }
+};
+
+class QCNOK : public QCCurrency
+{
+public:
+    QCNOK() : QCCurrency("Corona noruega", "NOK", 578, 2)
+    {
+    }
+};
+
+class QCSEK : public QCCurrency
+{
+public:
+    QCSEK() : QCCurrency("Corona sueca", "SEK", 752, 2)
+    {
+    }
+};
 
 #endif //QCCURRENCY_H
