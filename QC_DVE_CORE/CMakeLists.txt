@@ -113,6 +113,7 @@ else()
         target_link_libraries(QC_Financial_39
                 ${PYTHON39_LIB}libpython3.9.so.1.0
                 ${BOOST_PYTHON39_LIB}libboost_python39.so.1.75.0)
+
         target_link_libraries(QC_Financial_36
                 ${PYTHON36_LIB}libpython3.6m.so.1.0
                 ${BOOST_PYTHON36_LIB}libboost_python.so.1.53.0)
