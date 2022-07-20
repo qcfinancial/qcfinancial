@@ -168,7 +168,7 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .def("__gt__", &QCDate::operator>)
             .def("__hash__", &QCDate::excelSerial)
             .def(self_ns::str(self_ns::self))
-            .def_pickle(qcdate_pickle_suite());
+            .def("isocode", &QCDate::description);
 
     def("build_qcdate_from_string", &wrappers::buildQCDateFromString);
 
