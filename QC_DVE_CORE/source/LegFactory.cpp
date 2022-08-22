@@ -1241,5 +1241,51 @@ namespace QCode {
 
             return compoundedOvernightRateLeg;
         }
+
+        Leg LegFactory::buildCustomAmortCompoundedOvernightLeg(
+                RecPay recPay,
+                const QCDate& startDate,
+                const QCDate& endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                QCBusinessCalendar fixingCalendar,
+                const shared_ptr<InterestRateIndex>& index,
+                CustomNotionalAmort notionalAndAmort,
+                bool doesAmortize,
+                const shared_ptr<QCCurrency>& currency,
+                double spread,
+                double gearing,
+                bool isAct360,
+                unsigned int eqRateDecimalPlaces,
+                unsigned int lookback,
+                unsigned int lockout) {
+
+            Leg comOvernightLeg = buildBulletCompoundedOvernightLeg(
+                    recPay,
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    settlementPeriodicity,
+                    settlementStubPeriod,
+                    settlementCalendar,
+                    settlementLag,
+                    fixingCalendar,
+                    index,
+                    100.0,
+                    doesAmortize,
+                    currency,
+                    spread,
+                    gearing,
+                    isAct360,
+                    eqRateDecimalPlaces,
+                    lookback,
+                    lockout);
+
+            customizeAmortization(recPay, comOvernightLeg, notionalAndAmort, LegFactory::compoundedOvernightRateCashflow);
+            return comOvernightLeg;
+        }
     }
 }
