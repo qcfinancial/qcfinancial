@@ -167,7 +167,7 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .value("FRI", QCDate::qcFriday)
             .value("SAT", QCDate::qcSaturday)
             .value("SUN", QCDate::qcSunday);
-
+    
     enum_<QCDate::QCBusDayAdjRules>("BusyAdjRules")
             .value("NO", QCDate::qcNo)
             .value("FOLLOW", QCDate::qcFollow)
@@ -917,6 +917,8 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .staticmethod("customize_amortization")
             .def("build_bullet_compounded_overnight_rate_leg", &qf::LegFactory::buildBulletCompoundedOvernightLeg)
             .staticmethod("build_bullet_compounded_overnight_rate_leg")
+            .def("build_custom_amort_compounded_overnight_rate_leg", &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg)
+            .staticmethod("build_custom_amort_compounded_overnight_rate_leg")
             ;
 
     class_<qf::FXRate, std::shared_ptr<qf::FXRate>>

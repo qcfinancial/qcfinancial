@@ -773,6 +773,30 @@ namespace QCode
                     unsigned int eqRateDecimalPlaces,
                     unsigned int lookback,
                     unsigned int lockout);
+
+            static Leg buildCustomAmortCompoundedOvernightLeg(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    bool isAct360,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout);
+
+
+
 			/**
 			* @fn	static void LegFactory::customizeAmortization(RecPay recPay, Leg& leg,
 			* 		CustomNotionalAmort notionalAndAmort, TypeOfCashflow typeOfCashflow);
