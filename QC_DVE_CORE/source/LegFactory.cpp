@@ -769,7 +769,7 @@ namespace QCode {
                 Leg &leg,
                 CustomNotionalAmort notionalAndAmort,
                 TypeOfCashflow typeOfCashflow) {
-            // Ahora modificar nominal y amortizaci�n en el objeto Leg reci�n construido.
+            // Ahora modificar nominal y amortizacion en el objeto Leg reci�n construido.
             size_t notionalAndAmortSize = notionalAndAmort.getSize();
             size_t legSize = leg.size();
             if (legSize == 0) {

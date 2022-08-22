@@ -181,6 +181,17 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .value("SAT", QCDate::qcSaturday)
             .value("SUN", QCDate::qcSunday);
 
+    enum_<qf::LegFactory::TypeOfCashflow>("TypeOfCashflow")
+            .value("FIXED", qf::LegFactory::fixedRateCashflow)
+            .value("FIXED2", qf::LegFactory::fixedRateCashflow2)
+            .value("IBOR", qf::LegFactory::iborCashflow)
+            .value("IBOR2", qf::LegFactory::iborCashflow2)
+            .value("COMP_INDEX", qf::LegFactory::icpClpCashflow)
+            .value("COMP_INDEX2", qf::LegFactory::icpClpCashflow2)
+            .value("ICPCLF", qf::LegFactory::icpClfCashflow)
+            .value("COMP_ON", qf::LegFactory::compoundedOvernightRateCashflow)
+            ;
+
     enum_<QCDate::QCBusDayAdjRules>("BusyAdjRules")
             .value("NO", QCDate::qcNo)
             .value("FOLLOW", QCDate::qcFollow)
