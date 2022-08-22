@@ -1274,7 +1274,7 @@ namespace QCode {
                     settlementLag,
                     fixingCalendar,
                     index,
-                    100.0,
+                    notionalAndAmort.getNotionalAt(0),
                     doesAmortize,
                     currency,
                     spread,
