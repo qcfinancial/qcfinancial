@@ -6,6 +6,7 @@ if (APPLE)
     set(BOOST_H /usr/local/Cellar/boost/1.75.0_1/include)
 
 elseif(WIN32)
+    set(BOOST_H_27 C:/boost_1_70_0)
     set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
     set(PYTHON37_H D:/Users/adiazv/AppData/Local/Programs/Python/Python37/include)
     set(PYTHON38_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
@@ -24,6 +25,7 @@ else()
         set(PYTHON39_H /usr/include/python3.9)
         set(BOOST_H /usr/include/boost)
         set(PYTHON2_H /usr/include/python2.7)
+        set(PYTHON36_H /usr/include/python3.6m)
     endif()
 endif()
 
@@ -223,12 +225,26 @@ set(QC_FINANCIAL_SOURCES
 target_include_directories(QC_Financial
         PRIVATE
         ${QC_INCLUDE}
-        ${BOOST_H}
+        ${BOOST_H_27}
         ${PYTHON2_H})
 
 target_sources(QC_Financial
         PRIVATE
         ${QC_FINANCIAL_SOURCES})
+
+target_include_directories(QC_Financial_36
+        PRIVATE
+        ${QC_INCLUDE}
+        ${BOOST_H}
+        ${PYTHON36_H})
+
+target_sources(QC_Financial_36
+        PRIVATE
+        ${QC_FINANCIAL_SOURCES})
+
+target_compile_definitions(QC_Financial_36
+        PUBLIC
+        PYTHON3)
 
 target_include_directories(QC_Financial_37
         PRIVATE
@@ -294,5 +310,9 @@ if (WIN32)
     set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".pyd")
 else()
     set_target_properties(QC_Financial PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_36 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_37 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_38 PROPERTIES SUFFIX ".so")
+    set_target_properties(QC_Financial_39 PROPERTIES SUFFIX ".so")
     set_target_properties(QC_Financial_310 PROPERTIES SUFFIX ".so")
 endif()

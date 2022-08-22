@@ -9,12 +9,14 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_library(QC_DVE_CORE STATIC "")
 add_library(QC_DVE_PYBIND SHARED "")
 add_library(QC_Financial SHARED "")
+add_library(QC_Financial_36 SHARED "")
 add_library(QC_Financial_37 SHARED "")
 add_library(QC_Financial_38 SHARED "")
 add_library(QC_Financial_39 SHARED "")
 add_library(QC_Financial_310 SHARED "")
 add_executable(QC_DVE_CORE_TESTS)
 add_executable(manual_tests)
+target_compile_definitions(QC_Financial_36 PUBLIC NOMBRE_MODULO=QC_Financial_36)
 target_compile_definitions(QC_Financial_37 PUBLIC NOMBRE_MODULO=QC_Financial_37)
 target_compile_definitions(QC_Financial_38 PUBLIC NOMBRE_MODULO=QC_Financial_38)
 target_compile_definitions(QC_Financial_39 PUBLIC NOMBRE_MODULO=QC_Financial_39)
@@ -42,6 +44,7 @@ elseif(WIN32)
     set(PYTHON38_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python38/libs/)
     set(PYTHON39_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python39/libs/)
     set(PYTHON310_LIB D:/Users/adiazv/AppData/Local/Programs/Python/Python310/libs/)
+    set(BOOST_PYTHON2_LIB C:/boost_1_70_0/lib64-msvc-12.0/)
     set(BOOST_PYTHON3_LIB C:/local/boost_1_79_0/lib64-msvc-14.1/lib/)
 
 else()
@@ -51,9 +54,10 @@ else()
         set(PYTHON310_LIB /usr/lib/x86_64-linux-gnu/)
         set(BOOST_PYTHON_LIB /usr/lib/x86_64-linux-gnu/)
     else()
-	# set(PYTHON2_LIB /usr/lib64/)
         set(PYTHON39_LIB /usr/lib64/)
-        set(BOOST_PYTHON_LIB /usr/lib64/)
+        set(PYTHON36_LIB /usr/lib64/)
+        set(BOOST_PYTHON39_LIB /usr/lib64/)
+        set(BOOST_PYTHON36_LIB /usr/lib64/)
     endif()
 endif()
 
@@ -76,7 +80,7 @@ elseif(WIN32)
 
     target_link_libraries(QC_Financial
             ${PYTHON2_LIB}python27.lib
-            ${BOOST_PYTHON_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
+            ${BOOST_PYTHON2_LIB}libboost_python27-vc120-mt-x64-1_70.lib)
 
     target_link_libraries(QC_Financial_37
             ${PYTHON37_LIB}python37.lib
@@ -109,7 +113,11 @@ else()
     else()
         target_link_libraries(QC_Financial_39
                 ${PYTHON39_LIB}libpython3.9.so.1.0
-                ${BOOST_PYTHON_LIB}libboost_python39.so.1.75.0)
+                ${BOOST_PYTHON39_LIB}libboost_python39.so.1.75.0)
+
+        target_link_libraries(QC_Financial_36
+                ${PYTHON36_LIB}libpython3.6m.so.1.0
+                ${BOOST_PYTHON36_LIB}libboost_python.so.1.53.0)
     endif ()
 
 endif()

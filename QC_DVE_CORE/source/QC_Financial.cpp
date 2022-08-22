@@ -77,6 +77,9 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .def("amount", &QCCurrency::amount)
             .def("__str__", &QCCurrency::getIsoCode);
 
+    implicitly_convertible<std::shared_ptr<QCSEK>, shared_ptr<QCCurrency>>();
+    class_<QCSEK, std::shared_ptr<QCSEK>, bases<QCCurrency>>("QCSEK");
+
     implicitly_convertible<std::shared_ptr<QCCLF>, shared_ptr<QCCurrency>>();
     class_<QCCLF, std::shared_ptr<QCCLF>, bases<QCCurrency>>("QCCLF");
 
@@ -109,6 +112,16 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
 
     implicitly_convertible<std::shared_ptr<QCCOP>, shared_ptr<QCCurrency>>();
     class_<QCCOP, std::shared_ptr<QCCOP>, bases<QCCurrency>>("QCCOP");
+
+    implicitly_convertible<std::shared_ptr<QCCNY>, shared_ptr<QCCurrency>>();
+    class_<QCCNY, std::shared_ptr<QCCNY>, bases<QCCurrency>>("QCCNY");
+
+    implicitly_convertible<std::shared_ptr<QCPEN>, shared_ptr<QCCurrency>>();
+    class_<QCPEN, std::shared_ptr<QCPEN>, bases<QCCurrency>>("QCPEN");
+
+    implicitly_convertible<std::shared_ptr<QCNOK>, shared_ptr<QCCurrency>>();
+    class_<QCNOK, std::shared_ptr<QCNOK>, bases<QCCurrency>>("QCNOK");
+
 
     def("get_qccurrency_from_code", &qf::getQCCurrencyFromCode);
 
@@ -155,7 +168,7 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
             .def("__gt__", &QCDate::operator>)
             .def("__hash__", &QCDate::excelSerial)
             .def(self_ns::str(self_ns::self))
-            .def_pickle(qcdate_pickle_suite());
+            .def("isocode", &QCDate::description);
 
     def("build_qcdate_from_string", &wrappers::buildQCDateFromString);
 
