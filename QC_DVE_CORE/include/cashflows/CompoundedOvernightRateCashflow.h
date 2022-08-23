@@ -1,3 +1,4 @@
+
 //
 // Created by ADiazV on 20-12-2021.
 //
@@ -68,6 +69,8 @@ namespace QCode {
             const QCDate &getSettlementDate() const override;
 
             const DateList &getFixingDates() const override;
+
+            std::string getInterestRateIndexCode() const;
 
             double getNominal() const override;
 

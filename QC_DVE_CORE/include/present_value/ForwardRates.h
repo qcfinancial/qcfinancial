@@ -82,6 +82,7 @@ namespace QCode {
                 }
             }
 
+
             std::shared_ptr<CompoundedOvernightRateCashflow> setRateCompoundedOvernightCashflow(
                     const QCDate &valuationDate,
                     double accruedFixing,
@@ -154,6 +155,7 @@ namespace QCode {
                     return std::make_shared<CompoundedOvernightRateCashflow>(compoundedONRateCashflow_);
                 }
             }
+
 
             std::shared_ptr<IcpClpCashflow2> setRateIcpClpCashflow(
                     const QCDate &valuationDate,

@@ -309,6 +309,12 @@ namespace QCode {
 
             return rate.getRateFromWf(wf, _startDate.dayDiff(_endDate));
         }
+
+
+        std::string CompoundedOvernightRateCashflow::getInterestRateIndexCode() const
+        {
+            return _index->getCode();
+        }
     }
 }
 

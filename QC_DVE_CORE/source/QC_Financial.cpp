@@ -555,7 +555,9 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
     .def("set_amortization", &qf::CompoundedOvernightRateCashflow::setAmortization)
     .def("get_eq_rate_decimal_places", &qf::CompoundedOvernightRateCashflow::getEqRateDecimalPlaces)
     .def("get_amount_derivatives", &qf::CompoundedOvernightRateCashflow::getAmountDerivatives)
+    .def("get_interest_rate_index_code", &qf::CompoundedOvernightRateCashflow::getInterestRateIndexCode)
     ;
+
     PyObject* (*showOIR)(qf::CompoundedOvernightRateCashflow) = wrappers::show;
     def("show", showOIR);
 
