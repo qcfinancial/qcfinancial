@@ -122,6 +122,15 @@ BOOST_PYTHON_MODULE (NOMBRE_MODULO) {
     implicitly_convertible<std::shared_ptr<QCNOK>, shared_ptr<QCCurrency>>();
     class_<QCNOK, std::shared_ptr<QCNOK>, bases<QCCurrency>>("QCNOK");
 
+    implicitly_convertible<std::shared_ptr<QCAUD>, shared_ptr<QCCurrency>>();
+    class_<QCAUD, std::shared_ptr<QCAUD>, bases<QCCurrency>>("QCAUD");
+
+    implicitly_convertible<std::shared_ptr<QCDKK>, shared_ptr<QCCurrency>>();
+    class_<QCDKK, std::shared_ptr<QCDKK>, bases<QCCurrency>>("QCDKK");
+
+    implicitly_convertible<std::shared_ptr<QCHKD>, shared_ptr<QCCurrency>>();
+    class_<QCHKD, std::shared_ptr<QCHKD>, bases<QCCurrency>>("QCHKD");
+
 
     def("get_qccurrency_from_code", &qf::getQCCurrencyFromCode);
 

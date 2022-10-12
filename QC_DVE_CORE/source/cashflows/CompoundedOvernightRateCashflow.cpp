@@ -163,7 +163,8 @@ namespace QCode {
                 const QCode::Financial::TimeSeries &fixings) {
             auto fixing = accruedFixing(fecha, fixings);
             auto f = fecha;
-            return _calculateInterest(fixing, f);
+            _interest = _calculateInterest(fixing, f);
+            return _interest;
         }
 
 
@@ -191,7 +192,9 @@ namespace QCode {
             auto f = fecha;
             auto eqRate = _index->getRate().getRateFromWf(producto, _startDate, f);
             double factor = std::pow(10, _eqRateDecimalPlaces);
-            return std::round(eqRate * factor) / factor;
+            auto accFixing =  std::round(eqRate * factor) / factor;
+            _interest = _calculateInterest(accFixing, f);
+            return accFixing;
         }
 
 
@@ -224,62 +227,77 @@ namespace QCode {
             return _doesAmortize;
         }
 
+
         bool CompoundedOvernightRateCashflow::_validate() {
             auto s = _startDate;
             return true;
         }
 
+
         void CompoundedOvernightRateCashflow::setNominal(double nominal) {
             _nominal = nominal;
         }
+
 
         void CompoundedOvernightRateCashflow::setAmortization(double amortization) {
             _amortization = amortization;
         }
 
+
         std::string CompoundedOvernightRateCashflow::getTypeOfRate() {
             return _index->getRate().description();
         }
+
 
         double CompoundedOvernightRateCashflow::getSpread() const {
             return _spread;
         }
 
+
         double CompoundedOvernightRateCashflow::getGearing() const {
             return _gearing;
         }
+
 
         unsigned int CompoundedOvernightRateCashflow::getEqRateDecimalPlaces() const {
             return _eqRateDecimalPlaces;
         }
 
+
         unsigned int CompoundedOvernightRateCashflow::getLookBack() const {
             return _lookback;
         }
+
 
         unsigned int CompoundedOvernightRateCashflow::getLockOut() const {
             return _lockout;
         }
 
+
         std::vector<double> CompoundedOvernightRateCashflow::getAmountDerivatives() const {
             return _amountDerivatives;
         }
+
 
         void CompoundedOvernightRateCashflow::setAmountDerivatives(std::vector<double> amountDerivatives) {
             _amountDerivatives = std::move(amountDerivatives);
         }
 
+
         void CompoundedOvernightRateCashflow::setEndDateWf(double wf) {
             _endDateWf = wf;
         }
+
 
         shared_ptr<InterestRateIndex> QCode::Financial::CompoundedOvernightRateCashflow::getInterestRateIndex() {
             return _index;
         }
 
+
         void CompoundedOvernightRateCashflow::setInitialDateWf(double wf) {
             _initialDateWf = wf;
         }
+
 
         std::shared_ptr<CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper> CompoundedOvernightRateCashflow::wrap() {
             CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper tup = std::make_tuple(
@@ -300,6 +318,7 @@ namespace QCode {
 
             return std::make_shared<CompoundedOvernightRateCashflow::CompoundedOvernightRateCashflowWrapper>(tup);
         }
+
 
         double CompoundedOvernightRateCashflow::_getRateValue() const {
             auto wf = _endDateWf / _initialDateWf;

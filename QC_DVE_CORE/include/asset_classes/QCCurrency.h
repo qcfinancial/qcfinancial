@@ -467,4 +467,30 @@ public:
     }
 };
 
+class QCDKK : public QCCurrency
+{
+public:
+    QCDKK() : QCCurrency("Corona danesa", "DKK", 208, 2)
+    {
+    }
+};
+
+class QCAUD : public QCCurrency
+{
+public:
+    QCAUD() : QCCurrency("Dólar australiano", "AUD", 36, 2)
+    {
+    }
+};
+
+class QCHKD : public QCCurrency
+{
+public:
+    QCHKD() : QCCurrency("Dólar de Hong Kong", "HKD", 344, 2)
+    {
+    }
+};
+
+
+
 #endif //QCCURRENCY_H

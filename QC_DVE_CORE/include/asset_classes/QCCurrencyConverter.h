@@ -34,7 +34,10 @@ public:
         qcPEN,
         qcCAD,
         qcMXN,
-        qcNOK
+        qcNOK,
+        qcAUD,
+        qcDKK,
+        qcHKD,
 	};
 
     /*!
@@ -95,6 +98,18 @@ public:
         qcNOKNOK,
         qcUSDNOK,
         qcNOKCLP,
+
+        qcAUDAUD,
+        qcAUDUSD,
+        qcAUDCLP,
+
+        qcDKKDKK,
+        qcUSDDKK,
+        qcDKKCLP,
+
+        qcHKDHKD,
+        qcUSDHKD,
+        qcHKDCLP,
     };
 
 	
@@ -120,6 +135,9 @@ public:
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcCAD, "CAD"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcMXN, "MXN"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcNOK, "NOK"));
+        _currencyCode.insert(pair<QCCurrencyEnum, string>(qcDKK, "DKK"));
+        _currencyCode.insert(pair<QCCurrencyEnum, string>(qcAUD, "AUD"));
+        _currencyCode.insert(pair<QCCurrencyEnum, string>(qcHKD, "HKD"));
 
         // QCFxRateEnum ---> Code
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDUSD, "USDUSD"));
@@ -175,6 +193,18 @@ public:
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcMXNMXN, "MXNMXN"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDMXN, "USDMXN"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcMXNCLP, "MXNCLP"));
+
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcAUDAUD, "AUDAUD"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcAUDUSD, "AUDUSD"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcAUDCLP, "AUDCLP"));
+
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcDKKDKK, "DKKDKK"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDDKK, "USDDKK"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcDKKCLP, "DKKCLP"));
+
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcHKDHKD, "HKDHKD"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDHKD, "USDHKD"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcHKDCLP, "HKDCLP"));
 
         // Code (incluido al revés) ---> QCFxRateEnum
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDUSD", qcUSDUSD));
@@ -254,6 +284,24 @@ public:
         _standardFxRate.insert(pair<string, QCFxRateEnum>("MXNUSD", qcUSDMXN));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("MXNCLP", qcMXNCLP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPMXN", qcMXNCLP));
+
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("AUDAUD", qcAUDAUD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("AUDUSD", qcAUDUSD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("USDAUD", qcAUDUSD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("AUDCLP", qcAUDCLP));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPAUD", qcAUDCLP));
+
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("DKKDKK", qcDKKDKK));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("USDDKK", qcUSDDKK));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("DKKUSD", qcUSDDKK));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("DKKCLP", qcDKKCLP));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPDKK", qcDKKCLP));
+
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("HKDHKD", qcHKDHKD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("USDHKD", qcUSDHKD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("HKDUSD", qcUSDHKD));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("HKDCLP", qcHKDCLP));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPHKD", qcHKDCLP));
 
 
         // Code (incluido cuando está al revés) ---> Code (el correcto)
@@ -336,6 +384,24 @@ public:
         _fxRateMktCode.insert(pair<std::string, std::string>("MXNUSD", "USDMXN"));
         _fxRateMktCode.insert(pair<std::string, std::string>("MXNCLP", "MXNCLP"));
         _fxRateMktCode.insert(pair<std::string, std::string>("CLPMXN", "MXNCLP"));
+
+        _fxRateMktCode.insert(pair<std::string, std::string>("AUDAUD", "AUDAUD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("AUDUSD", "AUDUSD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("USDAUD", "AUDUSD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("AUDCLP", "AUDCLP"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("CLPAUD", "AUDCLP"));
+
+        _fxRateMktCode.insert(pair<std::string, std::string>("DKKDKK", "DKKDKK"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("USDDKK", "USDDKK"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("DKKUSD", "USDDKK"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("DKKCLP", "DKKCLP"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("CLPDKK", "DKKCLP"));
+
+        _fxRateMktCode.insert(pair<std::string, std::string>("HKDHKD", "HKDHKD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("USDHKD", "USDHKD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("HKDUSD", "USDHKD"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("HKDCLP", "HKDCLP"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("CLPHKD", "HKDCLP"));
 	}
 
 	/*!
