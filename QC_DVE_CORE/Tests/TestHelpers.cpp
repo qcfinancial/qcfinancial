@@ -57,7 +57,7 @@ std::shared_ptr<QCode::Financial::InterestRateCurve> TestHelpers::getTestZccPtr(
     return std::make_shared<QCode::Financial::ZeroCouponCurve>(curve);
 }
 
-QCode::Financial::CompoundedOvernightRateCashflow TestHelpers::getCashflow() {
+QCode::Financial::CompoundedOvernightRateCashflow TestHelpers::getCashflow(double spread) {
     auto sofr = TestHelpers::getSofr();
     auto startDate = QCDate(27, 12, 2021);
     auto endDate = QCDate(7, 1, 2022);
@@ -77,7 +77,6 @@ QCode::Financial::CompoundedOvernightRateCashflow TestHelpers::getCashflow() {
     double amortization = 1000000;
     bool doesAmortize = false;
     auto ccy = TestHelpers::getUSD();
-    double spread = 0.01;
     double gearing = 1.0;
     bool isAct360 = true;
     unsigned int eqRateDecimalPlaces = 8;
@@ -118,10 +117,10 @@ QCode::Financial::CompoundedOvernightRateCashflow TestHelpers::getCashflowWithAm
             QCDate(6, 1, 2022),
     };
     double notional = 10000000;
-    double amortization = 1000000;
+    double amortization = notional;
     bool doesAmortize = true;
     auto ccy = TestHelpers::getUSD();
-    double spread = 0.01;
+    double spread = 0.0;
     double gearing = 1.0;
     bool isAct360 = true;
     unsigned int eqRateDecimalPlaces = 8;

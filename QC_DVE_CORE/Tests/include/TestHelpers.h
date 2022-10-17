@@ -30,7 +30,7 @@ namespace TestHelpers {
 
     std::shared_ptr<QCode::Financial::InterestRateCurve> getTestZccPtr();
 
-    QCode::Financial::CompoundedOvernightRateCashflow getCashflow();
+    QCode::Financial::CompoundedOvernightRateCashflow getCashflow(double spread);
 
     QCode::Financial::CompoundedOvernightRateCashflow getCashflowWithAmort();
 

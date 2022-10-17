@@ -34,7 +34,8 @@ TEST_CASE("PresentValue: CompoundedOvernightRateFlow") {
             valuationDate,
             cashflow.accruedFixing(valuationDate, timeSeries),
             cashflow,
-            flatZcc);
+            flatZcc
+            );
 
     // Check zero coupon curve sensitivities and present value
     std::cout << std::fixed;

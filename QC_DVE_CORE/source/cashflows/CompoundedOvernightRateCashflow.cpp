@@ -50,7 +50,8 @@ namespace QCode {
         }
 
         double CompoundedOvernightRateCashflow::amount() {
-            auto interest = (_endDateWf / _initialDateWf - 1.0) * _nominal;
+            auto rate = _index->getRate().getRateFromWf(_endDateWf / _initialDateWf, _startDate, _endDate);
+            auto interest = _calculateInterest(rate, _endDate);
             return (_doesAmortize) ? interest + _amortization : interest;
         }
 

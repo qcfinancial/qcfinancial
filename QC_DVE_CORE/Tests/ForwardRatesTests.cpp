@@ -9,7 +9,8 @@
 
 
 TEST_CASE("ForwardRates: setRateCompoundedOvernightCashflow") {
-    auto cashflow = TestHelpers::getCashflow();
+    double spread = .0;
+    auto cashflow = TestHelpers::getCashflow(spread);
     auto fixingDates = cashflow.getFixingDates();
     std::map<QCDate, double> timeSeries = {
             {fixingDates[0], .001},
@@ -47,7 +48,7 @@ TEST_CASE("ForwardRates: setRateCompoundedOvernightCashflow") {
     t2 = valuationDate.dayDiff(fixedCashflow->getEndDate());
     df2 = zcc.getDiscountFactorAt(t2);
 
-    auto expectedResult = (1.0 / df2 - 1.0) * fixedCashflow->getNominal();
+    auto expectedResult = (1.0 / df2 - 1.0) * (fixedCashflow->getNominal());
     REQUIRE(fixedCashflow->amount() == expectedResult);
 
     // Case where start date < valuation date < end date

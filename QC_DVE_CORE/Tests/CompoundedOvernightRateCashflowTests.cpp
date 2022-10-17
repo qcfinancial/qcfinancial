@@ -127,8 +127,12 @@ TEST_CASE("CompoundedOvernightRateCashflow: fixing and interest") {
     expectedFixing = round(expectedFixing * factor) / factor;
     REQUIRE(cashflow.fixing(timeSeries) == expectedFixing);
 
-    auto expectedInterest = std::round(notional * (expectedFixing+ spread) * 4 / 360.0 * 100) / 100.0;
+    auto expectedInterest = std::round(notional * (expectedFixing + spread) * 4 / 360.0 * 100) / 100.0;
     REQUIRE(std::round(cashflow.interest(timeSeries) * 100) / 100.0 == expectedInterest);
+
+    auto amount = round(cashflow.amount() * 100.0) / 100.0;
+    auto expectedAmount = expectedInterest + cashflow.getAmortization();
+    REQUIRE(amount == round(expectedAmount * 100) / 100.0 );
 }
 
 TEST_CASE("CompoundedOvernightRateCashflow: accrued fixing and accrued interest") {
@@ -195,3 +199,4 @@ TEST_CASE("CompoundedOvernightRateCashflow: accrued fixing and accrued interest"
     REQUIRE(std::round(cashflow.accruedInterest(
             accrualDate, timeSeries) * 100) / 100.0 == expectedInterest);
 }
+
