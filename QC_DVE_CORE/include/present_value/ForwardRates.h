@@ -91,6 +91,7 @@ namespace QCode {
                 std::vector<double> zeroDerivatives(curve.getLength(), 0.0);
 
                 auto compoundedONRateCashflow_ = dynamic_cast<CompoundedOvernightRateCashflow &>(compoundedONRateCashflow);
+                auto notional_ = compoundedONRateCashflow_.getNominal();
 
                 if (valuationDate >= compoundedONRateCashflow_.getEndDate())
                 {
@@ -113,7 +114,7 @@ namespace QCode {
                     auto accruedWf = compoundedONRateCashflow_.getInterestRateIndex()->getRate().wf(t1);
                     compoundedONRateCashflow_.setEndDateWf(accruedWf / curve.getDiscountFactorAt(t2));
                     for (size_t i = 0; i < curve.getLength(); ++i) {
-                        zeroDerivatives.at(i) = accruedWf * curve.wfDerivativeAt(i);
+                        zeroDerivatives.at(i) = notional_ * accruedWf * curve.wfDerivativeAt(i);
                     }
                     compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
                     return std::make_shared<CompoundedOvernightRateCashflow>(compoundedONRateCashflow_);
@@ -125,7 +126,7 @@ namespace QCode {
                     auto endDateWf = 1.0 / curve.getDiscountFactorAt(t);
                     compoundedONRateCashflow_.setEndDateWf(endDateWf);
                     for (size_t i = 0; i < curve.getLength(); ++i) {
-                        zeroDerivatives.at(i) = compoundedONRateCashflow_.getNominal() * curve.wfDerivativeAt(i);
+                        zeroDerivatives.at(i) = notional_ * curve.wfDerivativeAt(i);
                     }
                     compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
                     return std::make_shared<CompoundedOvernightRateCashflow>(compoundedONRateCashflow_);
@@ -146,7 +147,7 @@ namespace QCode {
                         endDateDerivatives.at(i) = curve.wfDerivativeAt(i);
                     }
                     for (size_t i = 0; i < curve.getLength(); ++i) {
-                        zeroDerivatives.at(i) = (endDateDerivatives.at(i) / curve.getDiscountFactorAt(t1) -
+                        zeroDerivatives.at(i) = notional_ * (endDateDerivatives.at(i) / curve.getDiscountFactorAt(t1) -
                                 startDateDerivatives.at(i) / curve.getDiscountFactorAt(t2)) *
                                         std::pow(curve.getDiscountFactorAt(t1), 2.0);
                     }

@@ -1223,7 +1223,7 @@ namespace QCode {
                         thisEndDate,
                         settlementDate,
                         fixingDates,
-                        notional,
+                        sign * notional,
                         amort,
                         doesAmortize,
                         currency,

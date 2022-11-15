@@ -7,12 +7,12 @@ if (APPLE)
 
 elseif(WIN32)
     set(BOOST_H_27 C:/boost_1_70_0)
-    set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27/include)
-    set(PYTHON37_H D:/Users/adiazv/AppData/Local/Programs/Python/Python37/include)
-    set(PYTHON38_H D:/Users/adiazv/AppData/Local/Programs/Python/Python38/include)
-    set(PYTHON39_H D:/Users/adiazv/AppData/Local/Programs/Python/Python39/include)
-    set(PYTHON310_H D:/Users/adiazv/AppData/Local/Programs/Python/Python310/include)
-    set(BOOST_H C:/local/boost_1_79_0) # No se distingue por target, porque todas las versiones de boost
+    set(PYTHON2_H C:/Users/Soporte/AppData/Local/Programs/Python/Python27-16/include)
+    set(PYTHON37_H C:/Users/Soporte/AppData/Local/Programs/Python/Python37/include)
+    set(PYTHON38_H C:/Users/Soporte/AppData/Local/Programs/Python/Python38/include)
+    set(PYTHON39_H C:/Users/Soporte/AppData/Local/Programs/Python/Python39/include)
+    set(PYTHON310_H C:/Users/Soporte/AppData/Local/Programs/Python/Python310/include)
+    set(BOOST_H C:/boost_1_79_0) # No se distingue por target, porque todas las versiones de boost
                                        # para las correspondientes versiones de Python están en la misma carpeta.
 
 else()
