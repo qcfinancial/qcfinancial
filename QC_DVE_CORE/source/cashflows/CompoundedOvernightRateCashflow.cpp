@@ -44,6 +44,8 @@ namespace QCode {
             // Make sure fixing dates are sorted in ascending order.
             sort(_fixingDates.begin(), _fixingDates.end());
 
+            _interest = _calculateInterest(0.0, _endDate);
+
             // Initialize _amountDerivatives
             _amountDerivatives.push_back(0.0);
             _amountDerivatives.push_back(0.0);
