@@ -3,8 +3,9 @@
 //
 
 #include <iomanip>
+#include <memory>
 #include "catch/catch-2.hpp"
-#include "cashflows//Cashflow.h"
+#include "cashflows/Cashflow.h"
 #include "asset_classes/InterestRateCurve.h"
 #include "present_value/PresentValue.h"
 #include "present_value/ForwardRates.h"
@@ -66,5 +67,37 @@ TEST_CASE("PresentValue: CompoundedOvernightRateFlow") {
             cashflow,
             flatZcc);
     result = pv.pv(valuationDate, fixedCashflow, zcc);
+    REQUIRE(result == expectedResult);
+}
+
+TEST_CASE("PresentValue: IcpClpCashflow3") {
+    auto cashflow = QCode::Financial::IcpClpCashflow3(
+            QCDate(12, 1, 1969),
+            QCDate(12, 1, 1970),
+            QCDate(12, 1, 1970),
+            QCDate(14, 1, 1970),
+            1000.0,
+            1000.0,
+            true,
+            .0,
+            1.0,
+            true,
+            10000.0,
+            12000.0
+    );
+
+    auto fwd = QCode::Financial::ForwardRates();
+    auto pv {QCode::Financial::PresentValue()};
+    auto flatZcc = TestHelpers::getTestZcc();
+    std::shared_ptr<QCode::Financial::InterestRateCurve> zcc = TestHelpers::getTestZccPtr();
+    auto valuationDate = QCDate(12, 1, 1969);
+    auto fixedCashflow = fwd.setRateIcpClpCashflow3(
+            valuationDate,
+            10000.0,
+            cashflow,
+            flatZcc);
+
+    auto result = pv.pv(valuationDate, fixedCashflow, zcc);
+    auto expectedResult = 1000.0;
     REQUIRE(result == expectedResult);
 }

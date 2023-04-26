@@ -31,17 +31,18 @@ namespace QCode
         class IcpClpCashflow2 : public LinearInterestRateCashflow
         {
         public:
-            IcpClpCashflow2(const QCDate& startDate,
-                           const QCDate& endDate,
-                           const QCDate& settlementDate,
-                           double nominal,
-                           double amortization,
-                           bool doesAmortize,
-                           double spread,
-                           double gearing,
-                           bool isAct360,
-                           double startDateICP = QCode::Financial::DEFAULT_ICP,
-                           double endDateICP = QCode::Financial::DEFAULT_ICP);
+            IcpClpCashflow2(
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    const QCDate& settlementDate,
+                    double nominal,
+                    double amortization,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    bool isAct360,
+                    double startDateICP = QCode::Financial::DEFAULT_ICP,
+                    double endDateICP = QCode::Financial::DEFAULT_ICP);
 
             // Overriding methods in Cashflow
             double amount() override;
