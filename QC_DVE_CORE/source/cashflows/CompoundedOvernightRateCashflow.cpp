@@ -119,7 +119,7 @@ namespace QCode {
 
 
         double CompoundedOvernightRateCashflow::interest() {
-            throw invalid_argument("A TimeSeries object with overnight rate values is needed.");
+            return _calculateInterest(0.0, _endDate);
         }
 
 
