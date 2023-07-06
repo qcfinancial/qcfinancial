@@ -24,7 +24,7 @@ TEST_CASE("QCBusinessCalendar: Add a date in the middle") {
     auto fechaInicio = QCDate(12, 6, 1969);
     auto cal = QCBusinessCalendar(fechaInicio, numYears);
     auto newHoliday = QCDate(31, 12, 1969);
-    cal.addHolyday(newHoliday);
+    cal.addHoliday(newHoliday);
     auto holidays = cal.getHolidays();
     REQUIRE(holidays.size() == 7);
     REQUIRE(holidays.at(0) == QCDate(1, 1, 1969));
@@ -37,7 +37,7 @@ TEST_CASE("QCBusinessCalendar: Add a date at the beginning") {
     auto fechaInicio = QCDate(12, 6, 1969);
     auto cal = QCBusinessCalendar(fechaInicio, numYears);
     auto newHoliday = QCDate(31, 12, 1968);
-    cal.addHolyday(newHoliday);
+    cal.addHoliday(newHoliday);
     auto holidays = cal.getHolidays();
     REQUIRE(holidays.size() == 7);
     REQUIRE(holidays.at(0) == newHoliday);
@@ -49,7 +49,7 @@ TEST_CASE("QCBusinessCalendar: Add a date at the end") {
     auto fechaInicio = QCDate(12, 6, 1969);
     auto cal = QCBusinessCalendar(fechaInicio, numYears);
     auto newHoliday = QCDate(31, 12, 1980);
-    cal.addHolyday(newHoliday);
+    cal.addHoliday(newHoliday);
     auto holidays = cal.getHolidays();
     REQUIRE(holidays.size() == 7);
     REQUIRE(holidays.at(6) == newHoliday);
@@ -75,12 +75,12 @@ TEST_CASE("QCBusinessCalendar: nextBusinessDay") {
     nextDate = cal.nextBusinessDay(testDate);
     REQUIRE(nextDate == expectedDate);
 
-    cal.addHolyday(testDate);
+    cal.addHoliday(testDate);
     expectedDate = QCDate(19, 9, 1969);
     nextDate = cal.nextBusinessDay(testDate);
     REQUIRE(nextDate == expectedDate);
 
-    cal.addHolyday(expectedDate);
+    cal.addHoliday(expectedDate);
     expectedDate = QCDate(22, 9, 1969);
     nextDate = cal.nextBusinessDay(testDate);
     REQUIRE(nextDate == expectedDate);

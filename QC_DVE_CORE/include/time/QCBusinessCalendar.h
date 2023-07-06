@@ -29,9 +29,9 @@ class QCBusinessCalendar
 
         /*!
          * Agrega una fecha (QCDate) al calendario (que representa un feriado)
-         * @param holyday (QCDate) el feriado a agregar
+         * @param holiday (QCDate) el feriado a agregar
          */
-        void addHolyday(const QCDate& holyday);
+        void addHoliday(const QCDate& holiday);
 
         /*!
          * Calcula el día hábil siguiente a la fecha que ingresa.
@@ -81,11 +81,11 @@ class QCBusinessCalendar
     private:
         QCDate _startDate;
         int _length;
-		QCode::Financial::DateList _holydays;
+		QCode::Financial::DateList _holidays;
         QCDate::QCWeekDay _firstDayOfWeekend;
         QCDate::QCWeekDay _secondDayOfweekEnd;
         void insertNewYear();
-        void sortHolydays();
+        void sortHolidays();
 
 
 };

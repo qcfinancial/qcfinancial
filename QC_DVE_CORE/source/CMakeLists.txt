@@ -1,4 +1,5 @@
 set(QC_INCLUDE ../include)
+set(PYBIND11 ../pybind11/include)
 
 if (APPLE)
     set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
@@ -50,6 +51,7 @@ target_sources(QC_DVE_CORE
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/IcpClpCashflow3.cpp
         cashflows/CompoundedOvernightRateCashflow.cpp
         cashflows/IborMultiCurrencyCashflow.cpp
         asset_classes/InterestRateIndex.cpp
@@ -174,6 +176,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
+        cashflows/IcpClpCashflow3.cpp
         cashflows/CompoundedOvernightRateCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp

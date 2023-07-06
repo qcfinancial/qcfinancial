@@ -20,21 +20,21 @@ void QCBusinessCalendar::insertNewYear()
 {
     for (int i = 0; i < _length + 1; ++i)
     {
-        _holydays.push_back(QCDate(1, 1, _startDate.year() + i));
+        _holidays.push_back(QCDate(1, 1, _startDate.year() + i));
     }
 
-    sortHolydays();
+    sortHolidays();
 }
 
-void QCBusinessCalendar::addHolyday(const QCDate& holyday)
+void QCBusinessCalendar::addHoliday(const QCDate& holiday)
 {
-    _holydays.push_back(holyday);
-    sortHolydays();
+    _holidays.push_back(holiday);
+    sortHolidays();
 }
 
-void QCBusinessCalendar::sortHolydays()
+void QCBusinessCalendar::sortHolidays()
 {
-    sort(_holydays.begin(), _holydays.end());
+    sort(_holidays.begin(), _holidays.end());
 }
 
 QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
@@ -53,7 +53,7 @@ QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
     }
 
     QCDate fechaOut{serial};
-    while (binary_search(_holydays.begin(), _holydays.end(), fechaOut))
+    while (binary_search(_holidays.begin(), _holidays.end(), fechaOut))
     {
         fechaOut.setDateFromExcelSerial(++serial);
         if (fechaOut.weekDay() == _firstDayOfWeekend)
@@ -79,7 +79,7 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     }
 
     QCDate fechaOut{serial};
-    while (binary_search(_holydays.begin(), _holydays.end(), fechaOut))
+    while (binary_search(_holidays.begin(), _holidays.end(), fechaOut))
     {
         fechaOut.setDateFromExcelSerial(--serial);
         if (fechaOut.weekDay() == _secondDayOfweekEnd)
@@ -128,7 +128,7 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
 
 QCode::Financial::DateList QCBusinessCalendar::getHolidays()
 {
-	return _holydays;
+	return _holidays;
 }
 
 

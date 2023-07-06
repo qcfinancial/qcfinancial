@@ -15,6 +15,8 @@
 class QCYearFraction
 {
 public:
+    QCYearFraction() = default;
+
     /*!
      * La función yf devuelve la fracción de año entre dos fechas.
      * @param firstDate es la fecha más antigua de las dos si se desea retornar un valor positivo

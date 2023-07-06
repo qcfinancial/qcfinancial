@@ -226,7 +226,7 @@ namespace QCode {
             auto periodoIrregular = QCInterestRateLeg::QCStubPeriod::qcNoStubPeriod;
 
             auto calendario = QCBusinessCalendar{qcFechaInicio, 20};
-            calendario.addHolyday(QCDate(31, 12, 2020));
+            calendario.addHoliday(QCDate(31, 12, 2020));
             unsigned int lagPago = 0;
             auto nominal = monto;
             auto amortEsFlujo = true;

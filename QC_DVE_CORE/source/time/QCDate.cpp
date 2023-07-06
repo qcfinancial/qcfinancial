@@ -284,7 +284,7 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 	QCBusinessCalendar busCal{ result, 1 };
 	for (const auto &fecha : calendar)
 	{
-		busCal.addHolyday(fecha);
+        busCal.addHoliday(fecha);
 	}
 	/*switch (rule)
 	{

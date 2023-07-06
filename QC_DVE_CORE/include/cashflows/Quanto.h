@@ -17,8 +17,15 @@ namespace QCode
 		class QuantoCashflow : public Cashflow
 		{
 		public:
-			QuantoCashflow(std::shared_ptr<Cashflow> cashflow, FXRateIndex fxRateIndex, const TimeSeries& fxRateIndexValues, QCDate fxRateFixingDate)
-				: _cashflow(cashflow), _fxRateIndex(fxRateIndex), _fxRateIndexValues(fxRateIndexValues), _fxRateFixingDate(fxRateFixingDate)
+			QuantoCashflow(
+                    std::shared_ptr<Cashflow> cashflow, 
+                    FXRateIndex fxRateIndex,
+                    const TimeSeries& fxRateIndexValues,
+                    QCDate fxRateFixingDate) :
+                    _cashflow(cashflow),
+                    _fxRateIndex(fxRateIndex),
+                    _fxRateIndexValues(fxRateIndexValues),
+                    _fxRateFixingDate(fxRateFixingDate)
 			{}
 
 			double amount() override

@@ -149,7 +149,7 @@ public:
 	 * @author	Alvaro Díaz V.
 	 * @date	21/09/2017
 	 */
-	~QCCurrency()
+	virtual ~QCCurrency()
 	{
 	}
 
