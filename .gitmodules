@@ -1,0 +1,6 @@
+[submodule "QC_DVE_CORE/QC_DVE_CORE/pybind11"]
+	path = QC_DVE_CORE/QC_DVE_CORE/pybind11
+	url = https://github.com/pybind/pybind11.git
+[submodule "QC_DVE_CORE/pybind11"]
+	path = QC_DVE_CORE/pybind11
+	url = https://github.com/pybind/pybind11.git
