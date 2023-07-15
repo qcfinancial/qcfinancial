@@ -209,5 +209,9 @@ namespace QCode
         IborCashflow::~IborCashflow()
         {
         }
+
+        std::string IborCashflow::getType() const {
+            return "IborCashflow";
+        }
     }
 }

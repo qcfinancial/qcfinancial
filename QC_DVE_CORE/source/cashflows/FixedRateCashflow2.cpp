@@ -70,7 +70,7 @@ namespace QCode
 
         std::string FixedRateCashflow2::getType() const
         {
-            return "FIXED_RATE";
+            return "FixedRateCashflow2";
         }
 
 

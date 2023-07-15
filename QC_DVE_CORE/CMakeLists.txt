@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(QC_DVE_CORE)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -35,7 +35,7 @@ add_subdirectory(ManualTests)
 
 if (APPLE)
     target_compile_options(QC_DVE_CORE PRIVATE -fPIC)
-    set(PYTHON2_LIB /Users/alvarodiaz/opt/miniconda3/envs/py27/lib/)
+    set(PYTHON2_LIB /Library/Frameworks/Python.framework/Versions/2.7/lib/)
     set(PYTHON3_LIB /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/lib/)
     set(BOOST_PYTHON2_LIB /usr/local/lib/)
     set(BOOST_PYTHON3_LIB /usr/local/lib/)

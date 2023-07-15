@@ -4,29 +4,29 @@ namespace QCode
 {
 	namespace Financial
 	{
-		IcpClfCashflow::IcpClfCashflow(const QCDate& startDate,
-									   const QCDate& endDate,
-									   const QCDate& settlementDate,
-									   double nominal,
-									   double amortization,
-									   bool doesAmortize,
-									   double spread,
-									   double gearing,
-									   std::vector<double> icpAndUf) :
-									   IcpClpCashflow(
-									   startDate,
-									   endDate,
-									   settlementDate,
-									   nominal,
-									   amortization,
-									   doesAmortize,
-									   spread,
-									   gearing,
-									   icpAndUf[0],
-									   icpAndUf[1]),
-									   _startDateUF(icpAndUf[2]),
-									   _endDateUF(icpAndUf[3])
-		{
+		IcpClfCashflow::IcpClfCashflow(
+                const QCDate &startDate,
+                const QCDate &endDate,
+                const QCDate &settlementDate,
+                double nominal,
+                double amortization,
+                bool doesAmortize,
+                double spread,
+                double gearing,
+                std::vector<double> icpAndUf) :
+                IcpClpCashflow(
+                        startDate,
+                        endDate,
+                        settlementDate,
+                        nominal,
+                        amortization,
+                        doesAmortize,
+                        spread,
+                        gearing,
+                        icpAndUf[0],
+                        icpAndUf[1]),
+                _startDateUF(icpAndUf[2]),
+                _endDateUF(icpAndUf[3]) {
 #ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
 			{
@@ -278,6 +278,10 @@ namespace QCode
         std::vector<double> IcpClfCashflow::getAmountUFCLFDerivatives() const
         {
             return _amountUFCLFDerivatives;
+        }
+
+        std::string IcpClfCashflow::getType() const {
+            return "IcpClfCashflow";
         }
 
     }

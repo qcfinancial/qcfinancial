@@ -34,6 +34,9 @@ namespace QCode
 #endif
 		}
 
+        std::string FixedRateMultiCurrencyCashflow::getType() const {
+            return "FixedRateMultiCurrencyCashflow";
+        }
 
 		double FixedRateMultiCurrencyCashflow::amount()
 		{
@@ -166,5 +169,9 @@ namespace QCode
 		FixedRateMultiCurrencyCashflow::~FixedRateMultiCurrencyCashflow()
 		{
 		}
-	}
+
+        QCDate FixedRateMultiCurrencyCashflow::getFXPublishDate() const {
+            return _fxRateIndexFixingDate;
+        }
+    }
 }

@@ -68,6 +68,8 @@ namespace QCode
 						   double startDateICP = DEFAULT_ICP,
 						   double endDateICP = DEFAULT_ICP);
 
+            virtual std::string getType() const;
+
 			/**
 			* @fn	void IcpClpCashflow::setTnaDecimalPlaces(unsigned int decimalPlaces);
 			*
@@ -90,7 +92,7 @@ namespace QCode
 			*
 			* @return	A double.
 			*/
-			double amount();
+			double amount() override;
 
 			/**
 			* @fn	    double IcpClpCashflow::accruedInterest(QCDate& accrualDate, double icpValue);
@@ -176,7 +178,7 @@ namespace QCode
 			*
 			* @return	A shared_ptr&lt;QCCurrency&gt;
 			*/
-			shared_ptr<QCCurrency> ccy();
+			shared_ptr<QCCurrency> ccy() override;
 
 			/**
 			* @fn	    QCDate IcpClpCashflow::date();
@@ -188,7 +190,7 @@ namespace QCode
 			*
 			* @return	A QCDate.
 			*/
-			QCDate date();
+			QCDate date() override;
 
 			/**
 			* @fn	    void IcpClpCashflow::setNominal(double nominal);

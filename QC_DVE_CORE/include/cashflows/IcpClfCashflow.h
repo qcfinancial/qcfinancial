@@ -14,7 +14,7 @@ namespace QCode
 {
 	namespace Financial
 	{
-		const double DEFAULT_UF = 27000.00;
+		const double DEFAULT_UF = 35000.00;
 		const unsigned int DEFAULT_TRA_DECIMAL_PLACES = 6;
 
 		const std::vector<double> DEFAULT_ICP_UF = { DEFAULT_ICP, DEFAULT_ICP, DEFAULT_UF, DEFAULT_UF };
@@ -70,6 +70,8 @@ namespace QCode
 						   double spread,
 						   double gearing,
 						   std::vector<double> icpAndUf = DEFAULT_ICP_UF);
+
+            std::string getType() const override;
 
 			/**
 			* @fn	    void IcpClfCashflow::setTraDecimalPlaces(unsigned int decimalPlaces);
@@ -234,7 +236,7 @@ namespace QCode
 			* @date	    24/11/2017
 			*
 			*/
-			virtual ~IcpClfCashflow();
+			~IcpClfCashflow() override;
 
 		private:
 			/** @brief	The interest rate index. It is always Lin ACT360. */
@@ -283,4 +285,4 @@ namespace QCode
         };
 	}
 }
-#endif //ICPCLPCASHFLOW_H
+#endif //ICPCLFCASHFLOW_H

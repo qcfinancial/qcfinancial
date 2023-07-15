@@ -6,27 +6,28 @@ namespace QCode
 {
     namespace Financial
     {
-        IcpClpCashflow2::IcpClpCashflow2(const QCDate& startDate,
-                            const QCDate& endDate,
-                            const QCDate& settlementDate,
-                            double nominal,
-                            double amortization,
-                            bool doesAmortize,
-                            double spread,
-                            double gearing,
-                            bool isAct360,
-                            double startDateICP,
-                            double endDateICP) :
-                            _startDate(startDate),
-                            _endDate(endDate),
-                            _settlementDate(settlementDate),
-                            _nominal(nominal),
-                            _amortization(amortization),
-                            _doesAmortize(doesAmortize),
-                            _spread(spread),
-                            _gearing(gearing),
-                            _startDateICP(startDateICP),
-                            _endDateICP(endDateICP)
+        IcpClpCashflow2::IcpClpCashflow2(
+                const QCDate& startDate,
+                const QCDate& endDate,
+                const QCDate& settlementDate,
+                double nominal,
+                double amortization,
+                bool doesAmortize,
+                double spread,
+                double gearing,
+                bool isAct360,
+                double startDateICP,
+                double endDateICP) :
+                _startDate(startDate),
+                _endDate(endDate),
+                _settlementDate(settlementDate),
+                _nominal(nominal),
+                _amortization(amortization),
+                _doesAmortize(doesAmortize),
+                _spread(spread),
+                _gearing(gearing),
+                _startDateICP(startDateICP),
+                _endDateICP(endDateICP)
         {
 #ifndef NO_CONSTRUCTOR_VALIDATION
             if (!_validate())
@@ -53,12 +54,6 @@ namespace QCode
         // Overriding methods in Cashflow
         double IcpClpCashflow2::amount()
         {
-//            auto interest = _calculateInterest(_endDate, _endDateICP);
-//            if (_doesAmortize) {
-//                return _amortization + interest;
-//            } else {
-//                return interest;
-//            }
             auto wf = _endDateICP / _startDateICP;
             auto interest = _nominal * (wf - 1.0);
             _rate.setValue(_spread);
@@ -113,7 +108,7 @@ namespace QCode
         // Overriding methods in LinearInterestRateCashflow
         std::string IcpClpCashflow2::getType() const
         {
-            return "ICPCLP";
+            return "IcpClpCashflow";
         }
 
 
@@ -283,6 +278,7 @@ namespace QCode
         void IcpClpCashflow2::setTnaDecimalPlaces(unsigned int decimalPlaces)
         {
             _tnaDecimalPlaces = decimalPlaces;
+            _rate.setValue(getTna(_endDate, _endDateICP));
         }
 
 
@@ -314,6 +310,7 @@ namespace QCode
         void IcpClpCashflow2::setStartDateICP(double icpValue)
         {
             _startDateICP = icpValue;
+            _rate.setValue(getTna(_endDate, _endDateICP));
         }
 
 
@@ -348,6 +345,7 @@ namespace QCode
         void IcpClpCashflow2::setEndDateICP(double icpValue)
         {
             _endDateICP = icpValue;
+            _rate.setValue(getTna(_endDate, _endDateICP));
         }
 
 
@@ -395,19 +393,20 @@ namespace QCode
             //double,                 /* Spread */
             //double                  /* Gearing */
 
-            IcpClpCashflow2Wrapper tup = std::make_tuple(_startDate,
-                                                        _endDate,
-                                                        _settlementDate,
-                                                        _nominal,
-                                                        _amortization,
-                                                        _doesAmortize,
-                                                        _currency,
-                                                        _startDateICP,
-                                                        _endDateICP,
-                                                        getTna(_endDate, _endDateICP),
-                                                        interest(),
-                                                        _spread,
-                                                        _gearing);
+            IcpClpCashflow2Wrapper tup = std::make_tuple(
+                    _startDate,
+                    _endDate,
+                    _settlementDate,
+                    _nominal,
+                    _amortization,
+                    _doesAmortize,
+                    _currency,
+                    _startDateICP,
+                    _endDateICP,
+                    getTna(_endDate, _endDateICP),
+                    interest(),
+                    _spread,
+                    _gearing);
 
             return std::make_shared<IcpClpCashflowWrapper>(tup);
 

@@ -44,8 +44,8 @@ namespace QCode
 		{
 		}
 
-
-
-
-	}
+        std::string SimpleCashflow::getType() const {
+            return "SimpleCashflow";
+        }
+    }
 }

@@ -42,6 +42,8 @@ namespace QCode
 						   double nominal,
 						   std::shared_ptr<QCCurrency> currency);
 
+            virtual std::string getType() const;
+
 			/**
 			* @fn	double SimpleCashflow::amount();
 			*
@@ -83,19 +85,19 @@ namespace QCode
 			*
 			* @brief	Sets the nominal amount.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	15/11/2017
 			*
 			* @param	nominal	The nominal.
 			*/
 			void setNominal(double nominal);
 
-			/**
+             /**
 			* @fn	    tuple<QCDate, double, std::shared_ptr<QCCurrency>> SimpleCashflow::show();
 			*
 			* @brief	Wraps the cashflow in a SimpleCashflowWrapper
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    15/11/2017
 			*
 			* @return	A tuple&lt;QCDate,double,shared_ptr<QCCurrency>&gt;

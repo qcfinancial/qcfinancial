@@ -32,6 +32,10 @@ namespace QCode
 #endif
 		}
 
+        std::string IborMultiCurrencyCashflow::getType() const {
+            return "IborMultiCurrencyCashflow";
+        }
+
 		double IborMultiCurrencyCashflow::amount()
 		{
 			QCCurrencyConverter ccyConverter;

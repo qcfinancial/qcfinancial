@@ -82,6 +82,8 @@ namespace QCode
 				std::shared_ptr<FXRateIndex> fxRateIndex,
 				double fxRateIndexValue = 1.0);
 
+            std::string getType() const override;
+
 			/**
 			 * @fn	double IborMultiCurrencyCashflow::amount() override;
 			 *

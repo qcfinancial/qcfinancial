@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <iostream>
+#include <utility>
 
 #include "cashflows/Cashflow.h"
 #include "cashflows/LinearInterestRateCashflow.h"
@@ -22,7 +23,7 @@ namespace QCode
                     FXRateIndex fxRateIndex,
                     const TimeSeries& fxRateIndexValues,
                     QCDate fxRateFixingDate) :
-                    _cashflow(cashflow),
+                    _cashflow(std::move(cashflow)),
                     _fxRateIndex(fxRateIndex),
                     _fxRateIndexValues(fxRateIndexValues),
                     _fxRateFixingDate(fxRateFixingDate)

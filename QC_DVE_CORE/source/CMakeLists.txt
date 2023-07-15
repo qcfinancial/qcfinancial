@@ -2,7 +2,7 @@ set(QC_INCLUDE ../include)
 set(PYBIND11 ../pybind11/include)
 
 if (APPLE)
-    set(PYTHON2_H /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
+    set(PYTHON2_H /Library/Frameworks/Python.framework/Versions/2.7/include/python2.7)
     set(PYTHON3_H /usr/local/Cellar/python@3.8/3.8.3/Frameworks/Python.framework/Versions/3.8/include/python3.8)
     set(BOOST_H /usr/local/Cellar/boost/1.75.0_1/include)
 
