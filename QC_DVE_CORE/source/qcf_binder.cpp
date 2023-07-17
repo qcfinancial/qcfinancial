@@ -29,6 +29,8 @@ namespace py = pybind11;
 #include <asset_classes/FXRate.h>
 #include <asset_classes/FXRateIndex.h>
 #include <asset_classes/QCCurrencyConverter.h>
+#include <asset_classes/InterestRateCurve.h>
+#include <asset_classes/ZeroCouponCurve.h>
 
 #include <cashflows/Cashflow.h>
 #include <cashflows/SimpleCashflow.h>
@@ -45,14 +47,30 @@ namespace py = pybind11;
 #include <cashflows/IcpClfCashflow.h>
 #include <cashflows/CompoundedOvernightRateCashflow.h>
 
+#include "FixedRateBond.h"
+#include "ChileanFixedRateBond.h"
+
+#include <present_value/PresentValue.h>
+#include <present_value/ForwardRates.h>
+
+#include <Leg.h>
+#include <LegFactory.h>
+
+#include <curves/QCCurve.h>
+#include <curves/QCLinearInterpolator.h>
+
 #include <time/QCDate.h>
 #include <time/QCBusinessCalendar.h>
 
 #include <QcfinancialPybind11Helpers.h>
 
-namespace qf = QCode::Financial;
-
 // PYBIND11_MAKE_OPAQUE(std::vector<QCDate>);
+PYBIND11_MAKE_OPAQUE(std::vector<double>);
+PYBIND11_MAKE_OPAQUE(std::vector<long>);
+PYBIND11_MAKE_OPAQUE(std::map<QCDate, double>);
+// PYBIND11_MAKE_OPAQUE(std::pair<long, double>)
+
+namespace qf = QCode::Financial;
 
 PYBIND11_MODULE(qcfinancial, m)
 {
@@ -123,9 +141,6 @@ PYBIND11_MODULE(qcfinancial, m)
     m.def("build_qcdate_from_string", [](std::string& strDate){
         return QCDate{strDate};
     });
-
-    py::bind_vector<std::vector<QCDate>>(m, "DateList");
-    py::bind_vector<std::vector<double>>(m, "double_vec");
 
     py::enum_<QCDate::QCWeekDay>(pyQCDate, "WeekDay")
             .value("MON", QCDate::qcMonday)
@@ -460,6 +475,9 @@ PYBIND11_MODULE(qcfinancial, m)
     // TimeSeries
     py::bind_map<std::map<QCDate, double>>(m, "time_series");
 
+    // DateList
+    py::bind_vector<std::vector<QCDate>>(m, "DateList");
+
     // SimpleMultiCurrencyCashflow
     py::class_<qf::SimpleMultiCurrencyCashflow, qf::SimpleCashflow, std::shared_ptr<qf::SimpleMultiCurrencyCashflow>>(
             m, "SimpleMultiCurrencyCashflow")
@@ -513,7 +531,7 @@ PYBIND11_MODULE(qcfinancial, m)
                     .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType);
 
     // LinearInterestRateCashflow
-    py::class_<qf::LinearInterestRateCashflow, PyLinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>>(
+    py::class_<qf::LinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>, PyLinearInterestRateCashflow>(
             m, "LinearInterestRateCashflow")
             .def("get_type", &qf::LinearInterestRateCashflow::getType)
             .def("get_initial_currency", &qf::LinearInterestRateCashflow::getInitialCcy)
@@ -766,6 +784,175 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_interest_rate_index_code", &qf::CompoundedOvernightRateCashflow::getInterestRateIndexCode);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::CompoundedOvernightRateCashflow>&>(&show));
+
+    // Leg
+    py::class_<qf::Leg>(m, "Leg")
+            .def(py::init<>())
+            .def("set_cashflow_at", &qf::Leg::setCashflowAt)
+            .def("get_cashflow_at", &qf::Leg::getCashflowAt)
+            .def("append_cashflow", &qf::Leg::appendCashflow)
+            .def("size", &qf::Leg::size)
+            .def("resize", &qf::Leg::resize);
+
+    // BusyAdjRules
+    py::enum_<QCDate::QCBusDayAdjRules>(m, "BusyAdjRules")
+            .value("NO", QCDate::qcNo)
+            .value("FOLLOW", QCDate::qcFollow)
+            .value("MODFOLLOW", QCDate::qcModFollow)
+            .value("PREVIOUS", QCDate::qcPrev)
+            .value("MODPREVIOUS", QCDate::qcModPrev);
+
+    // StubPeriod
+    py::enum_<QCInterestRateLeg::QCStubPeriod>(m, "StubPeriod")
+            .value("NO", QCInterestRateLeg::qcNoStubPeriod)
+            .value("SHORTBACK", QCInterestRateLeg::qcShortBack)
+            .value("SHORTFRONT", QCInterestRateLeg::qcShortFront)
+            .value("LONGBACK", QCInterestRateLeg::qcLongBack)
+            .value("LONGFRONT", QCInterestRateLeg::qcLongFront)
+            .value("LONGFRONT2", QCInterestRateLeg::qcLongFront2)
+            .value("LONGFRONT3", QCInterestRateLeg::qcLongFront3)
+            .value("LONGFRONT4", QCInterestRateLeg::qcLongFront4)
+            .value("LONGFRONT5", QCInterestRateLeg::qcLongFront5)
+            .value("LONGFRONT6", QCInterestRateLeg::qcLongFront6)
+            .value("LONGFRONT7", QCInterestRateLeg::qcLongFront7)
+            .value("LONGFRONT8", QCInterestRateLeg::qcLongFront8)
+            .value("LONGFRONT9", QCInterestRateLeg::qcLongFront9)
+            .value("LONGFRONT10", QCInterestRateLeg::qcLongFront10)
+            .value("LONGFRONT11", QCInterestRateLeg::qcLongFront11)
+            .value("LONGFRONT12", QCInterestRateLeg::qcLongFront12)
+            .value("LONGFRONT13", QCInterestRateLeg::qcLongFront13)
+            .value("LONGFRONT14", QCInterestRateLeg::qcLongFront14);
+
+    // CustomNotionalAmort
+    py::class_<qf::CustomNotionalAmort>(m, "CustomNotionalAmort")
+            .def(py::init<>())
+            .def("set_size", &qf::CustomNotionalAmort::setSize)
+            .def("get_size", &qf::CustomNotionalAmort::getSize)
+            .def("set_notional_amort_at", &qf::CustomNotionalAmort::setNotionalAmortAt)
+            .def("pushback_notional_amort", &qf::CustomNotionalAmort::pushbackNotionalAmort)
+            .def("get_notional_at", &qf::CustomNotionalAmort::getNotionalAt)
+            .def("get_amort_at", &qf::CustomNotionalAmort::getAmortAt);
+
+    // LegFactory
+    py::class_<qf::LegFactory>(m, "LegFactory")
+            .def_static("build_bullet_fixed_rate_leg", &qf::LegFactory::buildBulletFixedRateLeg)
+            .def_static("build_bullet_fixed_rate_leg_2", &qf::LegFactory::buildBulletFixedRateLeg2)
+            .def_static("build_bullet_fixed_rate_mccy_leg", &qf::LegFactory::buildBulletFixedRateMultiCurrencyLeg)
+            .def_static("build_custom_amort_fixed_rate_leg", &qf::LegFactory::buildCustomAmortFixedRateLeg)
+            .def_static("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
+            .def_static("build_custom_amort_fixed_rate_leg_2", &qf::LegFactory::buildCustomAmortFixedRateLeg2)
+            .def_static("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
+            .def_static("build_bullet_ibor2_leg", &qf::LegFactory::buildBulletIbor2Leg)
+            .def_static("build_bullet_ibor_mccy_leg", &qf::LegFactory::buildBulletIborMultiCurrencyLeg)
+            .def_static("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
+            .def_static("build_custom_amort_ibor2_leg", &qf::LegFactory::buildCustomAmortIbor2Leg)
+            .def_static("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)
+            .def_static("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
+            .def_static("build_custom_amort_icp_clp_leg", &qf::LegFactory::buildCustomAmortIcpClpLeg)
+            .def_static("build_custom_amort_icp_clp2_leg", &qf::LegFactory::buildCustomAmortIcpClp2Leg)
+            .def_static("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
+            .def_static("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
+            .def_static("customize_amortization", &qf::LegFactory::customizeAmortization)
+            .def_static("build_bullet_compounded_overnight_rate_leg", &qf::LegFactory::buildBulletCompoundedOvernightLeg)
+            .def_static("build_custom_amort_compounded_overnight_rate_leg", &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg);
+
+    // long_vec
+    py::bind_vector<std::vector<long>>(m, "long_vec");
+
+    // double_vec
+    py::bind_vector<std::vector<double>>(m, "double_vec");
+
+    // QCCurve
+    py::class_<QCCurve<long>, std::shared_ptr<QCCurve<long>>>(m, "QCCurve")
+            .def(py::init<std::vector<long> &, std::vector<double> &>())
+            .def("reset", &QCCurve<long>::reset)
+            .def("set_pair", &QCCurve<long>::setPair)
+            .def("set_ordinate_at_with_value", &QCCurve<long>::setOrdinateAtWithValue)
+            .def("set_abscissa_at_with_value", &QCCurve<long>::setAbscissaAtWithValue)
+            .def("get_values_at", &QCCurve<long>::getValuesAt)
+            .def("get_length", &QCCurve<long>::getLength);
+
+    py::class_<std::pair<long, double>>(m, "CurvePoint");
+
+    // QCInterpolator
+    py::class_<QCInterpolator, PyQCInterpolator, std::shared_ptr<QCInterpolator>>(m, "QCInterpolator")
+            .def(py::init<shared_ptr<QCCurve<long>>>())
+            .def("interpolate_at", &QCInterpolator::interpolateAt)
+            .def("derivative_at", &QCInterpolator::derivativeAt)
+            .def("second_derivative_at", &QCInterpolator::secondDerivativeAt);
+
+    // QCLinearInterpolator
+    py::class_<QCLinearInterpolator, std::shared_ptr<QCLinearInterpolator>, QCInterpolator>(m, "QCLinearInterpolator")
+            .def(py::init<shared_ptr<QCCurve<long>>>())
+            .def("interpolate_at", &QCLinearInterpolator::interpolateAt)
+            .def("derivative_at", &QCLinearInterpolator::derivativeAt)
+            .def("second_derivative_at", &QCLinearInterpolator::secondDerivativeAt);
+
+    // InterestRateCurve
+    py::class_<qf::InterestRateCurve, std::shared_ptr<qf::InterestRateCurve>, PyInterestRateCurve>(m, "InterestRateCurve")
+            .def(py::init<shared_ptr<QCInterpolator>, QCInterestRate>())
+            .def("get_rate_at", &qf::InterestRateCurve::getRateAt)
+            .def("get_qc_interest_rate_at", &qf::InterestRateCurve::getQCInterestRateAt)
+            .def("get_discount_factor_at", &qf::InterestRateCurve::getDiscountFactorAt)
+            .def("get_forward_rate_with_rate", &qf::InterestRateCurve::getForwardRateWithRate)
+            .def("get_forward_rate", &qf::InterestRateCurve::getForwardRate)
+            .def("get_forward_wf", &qf::InterestRateCurve::getForwardWf)
+            .def("df_derivative_at", &qf::InterestRateCurve::dfDerivativeAt)
+            .def("wf_derivative_at", &qf::InterestRateCurve::wfDerivativeAt)
+            .def("fwd_wf_derivative_at", &qf::InterestRateCurve::fwdWfDerivativeAt);
+
+    // ZeroCouponCurve
+    py::class_<qf::ZeroCouponCurve, std::shared_ptr<qf::ZeroCouponCurve>, qf::InterestRateCurve>(m, "ZeroCouponCurve")
+            .def(py::init<shared_ptr<QCInterpolator>, QCInterestRate>());
+
+    // PresentValue
+    py::class_<qf::PresentValue>(m, "PresentValue")
+            .def(py::init<>())
+            .def("pv", py::overload_cast<QCDate&, const std::shared_ptr<qf::Cashflow>&, QCInterestRate&>(&qf::PresentValue::pv))
+            .def("pv", py::overload_cast<QCDate&, const std::shared_ptr<qf::Cashflow>&, const std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValue::pv))
+            .def("pv", py::overload_cast<QCDate&, const std::shared_ptr<qf::LinearInterestRateCashflow>&, const std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValue::pv))
+            .def("pv", py::overload_cast<QCDate&, qf::Leg&, QCInterestRate&>(&qf::PresentValue::pv))
+            .def("pv", py::overload_cast<QCDate&, qf::Leg&, const std::shared_ptr<qf::InterestRateCurve>&>(&qf::PresentValue::pv))
+            .def("get_derivative", &qf::PresentValue::getDerivative)
+            .def("get_derivatives", &qf::PresentValue::getDerivatives)
+            .def("get_rate", &qf::PresentValue::getRate);
+
+    // FixedRateBond
+    py::class_<qf::FixedRateBond, std::shared_ptr<qf::FixedRateBond>>(m, "FixedRateBond")
+            .def(py::init<qf::Leg &>())
+            .def("present_value", &qf::FixedRateBond::presentValue)
+            .def("price", &qf::FixedRateBond::price)
+            .def("accrued_interest", &qf::FixedRateBond::accruedInterest)
+            .def("duracion", &qf::FixedRateBond::duration)
+            .def("convexidad", &qf::FixedRateBond::convexity)
+            .def("get_leg", &qf::FixedRateBond::getLeg);
+
+    // ChileanFixedRateBond
+    py::class_<qf::ChileanFixedRateBond, std::shared_ptr<qf::ChileanFixedRateBond>, qf::FixedRateBond>(m, "ChileanFixedRateBond")
+            .def(py::init<qf::Leg&, const QCInterestRate&>())
+            .def("valor_par", &qf::ChileanFixedRateBond::valorPar)
+            .def("precio", &qf::ChileanFixedRateBond::price)
+            .def("valor_pago", &qf::ChileanFixedRateBond::settlementValue)
+            .def("precio2", &qf::ChileanFixedRateBond::price2)
+            .def("valor_pago2", &qf::ChileanFixedRateBond::settlementValue2);
+
+    // get_column_names
+    m.def("get_column_names", getColumnNames);
+
+    // ForwardRates
+    py::class_<qf::ForwardRates>(m, "ForwardRates")
+            .def(py::init<>())
+            .def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
+            .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
+            .def("set_rate_icp_clp_cashflow2", &qf::ForwardRates::setRateIcpClpCashflow2)
+            .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
+            .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
+            .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
+            .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
+            .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
+            .def("set_rate_compounded_overnight_cashflow", &qf::ForwardRates::setRateCompoundedOvernightCashflow)
+            .def("set_rates_compounded_overnight_leg", &qf::ForwardRates::setRatesCompoundedOvernightLeg);
+
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);

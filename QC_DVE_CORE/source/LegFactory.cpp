@@ -38,7 +38,7 @@ namespace QCode {
                 bool forBonds) {
             auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -98,7 +98,7 @@ namespace QCode {
                 bool forBonds) {
             auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -158,7 +158,7 @@ namespace QCode {
                 bool forBonds) {
             auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -336,7 +336,7 @@ namespace QCode {
                 bool forBonds) {
             auto settlementPeriodicityString = Tenor(settlementPeriodicity).getString();
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -465,8 +465,8 @@ namespace QCode {
                 double spread,
                 double gearing) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
-            auto fixCal = std::make_shared<DateList>(fixingCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
+            auto fixCal = std::make_shared<std::vector<QCDate>>(fixingCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -537,8 +537,8 @@ namespace QCode {
                 double spread,
                 double gearing) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
-            auto fixCal = std::make_shared<DateList>(fixingCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
+            auto fixCal = std::make_shared<std::vector<QCDate>>(fixingCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -613,8 +613,8 @@ namespace QCode {
                 unsigned int fxRateIndexFixingLag
         ) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
-            auto fixCal = std::make_shared<DateList>(fixingCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
+            auto fixCal = std::make_shared<std::vector<QCDate>>(fixingCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -880,7 +880,7 @@ namespace QCode {
                 double spread,
                 double gearing) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -938,7 +938,7 @@ namespace QCode {
                 double gearing,
                 bool isAct360) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -1067,7 +1067,7 @@ namespace QCode {
                 double spread,
                 double gearing) {
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;
@@ -1168,8 +1168,8 @@ namespace QCode {
                 unsigned int lockout) {
 
             // Make all the holidays in the calendar into a shared_ptr.
-            auto settCal = std::make_shared<DateList>(settlementCalendar.getHolidays());
-            auto fixCal = std::make_shared<DateList>(fixingCalendar.getHolidays());
+            auto settCal = std::make_shared<std::vector<QCDate>>(settlementCalendar.getHolidays());
+            auto fixCal = std::make_shared<std::vector<QCDate>>(fixingCalendar.getHolidays());
 
             // Minus sign is set if cashflows are paid.
             int sign;

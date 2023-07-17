@@ -130,7 +130,7 @@ namespace QCode
 			*
 			* @returns	The fixing dates.
 			*/
-			const DateList& getFixingDates() const override;
+			const std::vector<QCDate>& getFixingDates() const override;
 
 			/**
 			* @fn	virtual double LinearInterestRateCashflow::getNominal() const = 0;

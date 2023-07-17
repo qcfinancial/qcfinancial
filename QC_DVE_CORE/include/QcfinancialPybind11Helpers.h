@@ -10,6 +10,9 @@
 #include <cashflows/Cashflow.h>
 #include <cashflows/SimpleMultiCurrencyCashflow.h>
 #include <cashflows/LinearInterestRateCashflow.h>
+#include <curves/QCInterpolator.h>
+#include <asset_classes//InterestRateCurve.h>
+#include <asset_classes/QCInterestRate.h>
 
 namespace qf = QCode::Financial;
 
@@ -119,9 +122,9 @@ public:
     }
 
 
-    const qf::DateList& getFixingDates() const override {
+    const std::vector<QCDate>& getFixingDates() const override {
         PYBIND11_OVERRIDE_PURE(
-                const qf::DateList ,
+                const std::vector<QCDate> ,
                 qf::LinearInterestRateCashflow,
                 getFixingDates);
     }
@@ -237,6 +240,117 @@ public:
                 accruedFixing,
                 fecha,
                 fixings);
+    }
+};
+
+class PyQCInterpolator : public QCInterpolator {
+public:
+    /* Inherit the constructors */
+    using QCInterpolator::QCInterpolator;
+
+    /* Trampoline (need one for each virtual function) */
+    double interpolateAt(long value) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,           /* Return type */
+                QCInterpolator,   /* Parent class */
+                interpolateAt);   /* Name of function in C++ (must match Python name) */
+    }
+
+    double derivativeAt(long value) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,           /* Return type */
+                QCInterpolator,   /* Parent class */
+                derivativeAt);    /* Name of function in C++ (must match Python name) */
+    }
+
+    double secondDerivativeAt(long value) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                 /* Return type */
+                QCInterpolator,         /* Parent class */
+                secondDerivativeAt);    /* Name of function in C++ (must match Python name) */
+    }
+};
+
+class PyInterestRateCurve : public qf::InterestRateCurve {
+public:
+    /* Inherit the constructors */
+    using qf::InterestRateCurve::InterestRateCurve;
+
+    /* Trampoline (need one for each virtual function) */
+    double getRateAt(long d) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getRateAt,                  /* Name of function in C++ (must match Python name) */
+                d);
+    }
+
+    QCInterestRate getQCInterestRateAt(long d) override {
+        PYBIND11_OVERRIDE_PURE(
+                QCInterestRate,             /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getQCInterestRateAt,        /* Name of function in C++ (must match Python name) */
+                d);
+    }
+
+    double getDiscountFactorAt(long d) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getDiscountFactorAt,        /* Name of function in C++ (must match Python name) */
+                d);
+    }
+
+    double getForwardRateWithRate(QCInterestRate& intRate, long d1, long d2) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getForwardRateWithRate,     /* Name of function in C++ (must match Python name) */
+                intRate,
+                d1,
+                d2);
+    }
+
+    double getForwardRate(long d1, long d2) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getForwardRate,             /* Name of function in C++ (must match Python name) */
+                d1,
+                d2);
+    }
+
+    double getForwardWf(long d1, long d2) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                getForwardWf,               /* Name of function in C++ (must match Python name) */
+                d1,
+                d2);
+    }
+
+    double dfDerivativeAt(unsigned int index) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                dfDerivativeAt,             /* Name of function in C++ (must match Python name) */
+                index);
+    }
+
+    double wfDerivativeAt(unsigned int index) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                wfDerivativeAt,             /* Name of function in C++ (must match Python name) */
+                index);
+    }
+
+    double fwdWfDerivativeAt(unsigned int index) override {
+        PYBIND11_OVERRIDE_PURE(
+                double,                     /* Return type */
+                qf::InterestRateCurve,      /* Parent class */
+                fwdWfDerivativeAt,          /* Name of function in C++ (must match Python name) */
+                index);
     }
 };
 
@@ -493,6 +607,154 @@ py::tuple show(const std::shared_ptr<qf::CompoundedOvernightRateCashflow>& compo
     tuple[13] = compoundedOvernightRateCashflow->getTypeOfRate();
     return tuple;
 }
+
+// Other Functions
+py::tuple getColumnNames(const std::string &cashflowType, const std::string &cashflowSubtype = "") {
+    if (cashflowType == "FixedRateCashflow" || cashflowType == "FixedRateCashflow2") {
+        auto result = py::tuple(11);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_pago";
+        result[3] = "nominal";
+        result[4] = "amortizacion";
+        result[5] = "interes";
+        result[6] = "amort_es_flujo";
+        result[7] = "flujo";
+        result[8] = "moneda";
+        result[9] = "valor_tasa";
+        result[10] = "tipo_tasa";
+        return result;
+    } else if (cashflowType == "IborCashflow" || cashflowType == "IborCashflow2") {
+        auto result = py::tuple(15);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_fixing";
+        result[3] = "fecha_pago";
+        result[4] = "nominal";
+        result[5] = "amortizacion";
+        result[6] = "interes";
+        result[7] = "amort_es_flujo";
+        result[8] = "flujo";
+        result[9] = "valor_tasa";
+        result[10] = "moneda";
+        result[11] = "codigo_indice_tasa";
+        result[12] = "spread";
+        result[13] = "gearing";
+        result[14] = "tipo_tasa";
+        return result;
+    } else if (cashflowType == "IcpClpCashflow" || cashflowType == "IcpClpCashflow2") {
+        auto result = py::tuple(15);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_pago";
+        result[3] = "nominal";
+        result[4] = "amortizacion";
+        result[5] = "amort_es_flujo";
+        result[6] = "flujo";
+        result[7] = "moneda";
+        result[8] = "icp_inicial";
+        result[9] = "icp_final";
+        result[10] = "valor_tasa";
+        result[11] = "interes";
+        result[12] = "spread";
+        result[13] = "gearing";
+        result[14] = "tipo_tasa";
+        return result;
+    } else if (cashflowType == "QuantoLinearInterestRateCashflow") {
+        if (cashflowSubtype == "FixedRateCashflow2") {
+            auto result = py::tuple(16);
+            result[0] = "fecha_inicial";
+            result[1] = "fecha_final";
+            result[2] = "fecha_pago";
+            result[3] = "nominal";
+            result[4] = "amortizacion";
+            result[5] = "interes";
+            result[6] = "amort_es_flujo";
+            result[7] = "flujo";
+            result[8] = "moneda";
+            result[9] = "valor_tasa";
+            result[10] = "tipo_tasa";
+            result[11] = "valor_indice_fx";
+            result[12] = "nominal_moneda_pago";
+            result[13] = "amort_moneda_pago";
+            result[14] = "interes_moneda_pago";
+            result[15] = "flujo_moneda_pago";
+            return result;
+        } else if (cashflowSubtype == "IborCashflow2") {
+            auto result = py::tuple(20);
+            result[0] = "fecha_inicial";
+            result[1] = "fecha_final";
+            result[2] = "fecha_fixing";
+            result[3] = "fecha_pago";
+            result[4] = "nominal";
+            result[5] = "amortizacion";
+            result[6] = "interes";
+            result[7] = "amort_es_flujo";
+            result[8] = "flujo";
+            result[9] = "moneda";
+            result[10] = "codigo_indice_tasa";
+            result[11] = "valor_tasa";
+            result[12] = "spread";
+            result[13] = "gearing";
+            result[14] = "tipo_tasa";
+            result[15] = "valor_indice_fx";
+            result[16] = "nominal_moneda_pago";
+            result[17] = "amort_moneda_pago";
+            result[18] = "interes_moneda_pago";
+            result[19] = "flujo_moneda_pago";
+            return result;
+        } else {
+            throw std::invalid_argument("Cashflow subtype " + cashflowSubtype + " is not recognized.");
+        }
+    } else if (cashflowType == "SimpleCashflow") {
+        auto result = py::tuple(3);
+        result[0] = "fecha_pago";
+        result[1] = "monto";
+        result[2] = "moneda";
+        return result;
+    } else if (cashflowType == "IcpClfCashflow") {
+        auto result = py::tuple(18);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_pago";
+        result[3] = "nominal";
+        result[4] = "amortizacion";
+        result[5] = "amort_es_flujo";
+        result[6] = "flujo";
+        result[7] = "moneda";
+        result[8] = "interes";
+        result[9] = "icp_inicial";
+        result[10] = "icp_final";
+        result[11] = "uf_inicial";
+        result[12] = "uf_final";
+        result[13] = "valor_tasa";
+        result[14] = "interes";
+        result[15] = "spread";
+        result[16] = "gearing";
+        result[17] = "tipo_tasa";
+        return result;
+    } else if (cashflowType == "CompoundedOvernightRateCashflow") {
+        auto result = py::tuple(14);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_pago";
+        result[3] = "nominal";
+        result[4] = "amortizacion";
+        result[5] = "interes";
+        result[6] = "amort_es_flujo";
+        result[7] = "flujo";
+        result[8] = "moneda";
+        result[9] = "codigo_indice_tasa";
+        result[10] = "valor_tasa";
+        result[11] = "spread";
+        result[12] = "gearing";
+        result[13] = "tipo_tasa";
+        return result;
+    } else {
+        throw std::invalid_argument("Cashflow type " + cashflowType + " is not recognized.");
+    }
+}
+
 
 
 #endif //QCFINANCIALPYBIND11HELPERS_H

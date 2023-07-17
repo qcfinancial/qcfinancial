@@ -53,6 +53,7 @@ namespace QCode {
                 return std::make_shared<IborCashflow2>(iborCashflow_);
             }
 
+
             void setRatesIborLeg(
                     const QCDate &valuationDate,
                     Leg &iborLeg,
@@ -63,6 +64,7 @@ namespace QCode {
                     iborLeg.setCashflowAt(cashflow, i);
                 }
             }
+
 
             void setRatesCompoundedOvernightLeg(
                     const QCDate &valuationDate,
@@ -227,7 +229,6 @@ namespace QCode {
                     return std::make_shared<IcpClpCashflow2>(icpClpCashflow_);
                 }
             }
-
 
 
             std::shared_ptr<IcpClpCashflow2> setRateIcpClpCashflow2(
@@ -548,6 +549,7 @@ namespace QCode {
                     return icpClfCashflow;
                 }
             }
+
 
             void setRatesIcpClfLeg(
                     const QCDate &valuationDate,

@@ -93,7 +93,7 @@ namespace QCode {
         }
 
 
-        const DateList& CompoundedOvernightRateCashflow::getFixingDates() const {
+        const std::vector<QCDate>& CompoundedOvernightRateCashflow::getFixingDates() const {
             return _fixingDates;
         }
 

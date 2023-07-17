@@ -92,7 +92,7 @@ namespace QCode
 		}
 
 
-		const DateList& FixedRateCashflow2::getFixingDates() const
+		const std::vector<QCDate>& FixedRateCashflow2::getFixingDates() const
 		{
 			return _fixingDates;
 		}

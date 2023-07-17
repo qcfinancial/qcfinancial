@@ -136,7 +136,7 @@ namespace QCode
 			}
 
 
-			virtual const DateList& getFixingDates() const override
+			virtual const std::vector<QCDate>& getFixingDates() const override
 			{
 				return _cashflow->getFixingDates();
 			}

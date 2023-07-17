@@ -18,7 +18,7 @@ namespace QCode
 		*
 		* @brief	Defines an alias representing a list (std::vector) of dates.
 		*/
-		typedef std::vector<QCDate> DateList;
+		// typedef std::vector<QCDate> DateList;
 
 		/** @brief	The default FX rate index value used when constructing multicurrency cashflows*/
 		const double DEFAULT_FX_RATE_INDEX_VALUE = 1.00;

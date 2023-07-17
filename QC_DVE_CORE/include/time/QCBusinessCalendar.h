@@ -76,14 +76,14 @@ class QCBusinessCalendar
 		 *
 		 * @return	The holidays.
 		 */
-		QCode::Financial::DateList getHolidays();
+		std::vector<QCDate> getHolidays();
 
     private:
         QCDate _startDate;
         int _length;
-		QCode::Financial::DateList _holidays;
+		std::vector<QCDate> _holidays;
         QCDate::QCWeekDay _firstDayOfWeekend;
-        QCDate::QCWeekDay _secondDayOfweekEnd;
+        QCDate::QCWeekDay _secondDayOfWeekEnd;
         void insertNewYear();
         void sortHolidays();
 

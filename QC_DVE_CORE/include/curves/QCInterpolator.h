@@ -10,12 +10,12 @@ class QCInterpolator
 {
 public:
 	/*!
-	* Enumera los distintos tipos de interpolaci�n de tasas de inter�s.
+	* Enumera los distintos tipos de interpolación de tasas de interés.
 	*/
 	enum QCTypeInterpolator
 	{
-		qcLinearInterpolator,	/*!< Interpolaci�n lineal. Se usa con curvas de tasas.*/
-		qcLogLinearInterpolator /*!< Interpolaci�n loglineal. Se usa con curvas de factores de descuento.*/
+		qcLinearInterpolator,	/*!< Interpolación lineal. Se usa con curvas de tasas.*/
+		qcLogLinearInterpolator /*!< Interpolación loglineal. Se usa con curvas de factores de descuento.*/
 	};
 
 	/*!

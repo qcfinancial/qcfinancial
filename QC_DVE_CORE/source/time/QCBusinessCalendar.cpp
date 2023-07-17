@@ -13,7 +13,7 @@ QCBusinessCalendar::QCBusinessCalendar(
 {
     insertNewYear();
     _firstDayOfWeekend = QCDate::QCWeekDay ::qcSaturday;
-    _secondDayOfweekEnd = QCDate::QCWeekDay ::qcSunday;
+    _secondDayOfWeekEnd = QCDate::QCWeekDay ::qcSunday;
 };
 
 void QCBusinessCalendar::insertNewYear()
@@ -42,7 +42,7 @@ QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
     QCDate::QCWeekDay d = fecha.weekDay();
     long serial = fecha.excelSerial();
 
-    if (d == _secondDayOfweekEnd)
+    if (d == _secondDayOfWeekEnd)
     {
         serial++;
     }
@@ -68,7 +68,7 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     QCDate::QCWeekDay d = fecha.weekDay();
     long serial = fecha.excelSerial();
 
-    if (d == _secondDayOfweekEnd)
+    if (d == _secondDayOfWeekEnd)
     {
         serial -= 2;
     }
@@ -82,7 +82,7 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     while (binary_search(_holidays.begin(), _holidays.end(), fechaOut))
     {
         fechaOut.setDateFromExcelSerial(--serial);
-        if (fechaOut.weekDay() == _secondDayOfweekEnd)
+        if (fechaOut.weekDay() == _secondDayOfWeekEnd)
             fechaOut.setDateFromExcelSerial(serial - 2);
         serial = fechaOut.excelSerial();
     }
@@ -126,7 +126,7 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
     return result;
 }
 
-QCode::Financial::DateList QCBusinessCalendar::getHolidays()
+std::vector<QCDate> QCBusinessCalendar::getHolidays()
 {
 	return _holidays;
 }

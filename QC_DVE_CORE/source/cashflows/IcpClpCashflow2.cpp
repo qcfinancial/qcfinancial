@@ -136,7 +136,7 @@ namespace QCode
         }
 
 
-        const DateList& IcpClpCashflow2::getFixingDates() const
+        const std::vector<QCDate>& IcpClpCashflow2::getFixingDates() const
         {
             return _fixingDates;
         }

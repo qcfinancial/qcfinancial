@@ -65,7 +65,7 @@ namespace QCode
 
             const QCDate& getSettlementDate() const override;
 
-            const DateList& getFixingDates() const override;
+            const std::vector<QCDate>& getFixingDates() const override;
 
             std::shared_ptr<InterestRateIndex> getInterestRateIndex();
 
@@ -128,7 +128,7 @@ namespace QCode
             /** @brief	The fixing date */
             QCDate _fixingDate;
 
-            DateList _fixingDates;
+            std::vector<QCDate> _fixingDates;
 
             /** @brief	The settlement date */
             QCDate _settlementDate;
