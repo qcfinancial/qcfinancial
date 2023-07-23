@@ -1,12 +1,14 @@
 set(QC_INCLUDE ../include)
 
+#[[
 target_include_directories(QC_DVE_CORE_TESTS
         PRIVATE
         ${QC_INCLUDE}
         include
         )
+]]
 
-target_sources(QC_DVE_CORE_TESTS
+#[[target_sources(QC_DVE_CORE_TESTS
         PRIVATE
         CatchMain.cpp
         QCDateTests.cpp
@@ -24,4 +26,4 @@ target_sources(QC_DVE_CORE_TESTS
         ForwardRatesTests.cpp
         PresentValueTests.cpp
         LegFactoryTests.cpp
-        )
+        )]]

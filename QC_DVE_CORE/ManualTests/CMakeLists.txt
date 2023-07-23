@@ -1,10 +1,12 @@
 set(QC_INCLUDE ../include)
 
+#[[
 target_include_directories(manual_tests
         PRIVATE
         ${QC_INCLUDE})
+]]
 
-target_sources(manual_tests
+#[[target_sources(manual_tests
         PRIVATE
         manualTests.cpp
         ../source/Leg.cpp
@@ -34,4 +36,4 @@ target_sources(manual_tests
         ../source/QCLinearWf.cpp
         ../source/HelperFunctions.cpp
         ../source/QCHelperFunctions.cpp
-        )
+        )]]

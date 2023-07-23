@@ -960,4 +960,3 @@ PYBIND11_MODULE(qcfinancial, m)
     m.attr("__version__") = "dev";
 #endif
 }
-
