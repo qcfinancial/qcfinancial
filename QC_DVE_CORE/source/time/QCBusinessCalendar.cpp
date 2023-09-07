@@ -11,31 +11,26 @@ QCBusinessCalendar::QCBusinessCalendar(
 	_startDate(startDate),
 	_length(length)
 {
-    insertNewYear();
+    // insertNewYear();
     _firstDayOfWeekend = QCDate::QCWeekDay ::qcSaturday;
     _secondDayOfWeekEnd = QCDate::QCWeekDay ::qcSunday;
 };
 
-void QCBusinessCalendar::insertNewYear()
-{
-    for (int i = 0; i < _length + 1; ++i)
-    {
-        _holidays.push_back(QCDate(1, 1, _startDate.year() + i));
+void QCBusinessCalendar::insertNewYear() {
+    for (int i = 0; i < _length + 1; ++i) {
+        _holidays.insert(QCDate(1, 1, _startDate.year() + i));
     }
-
-    sortHolidays();
 }
-
 void QCBusinessCalendar::addHoliday(const QCDate& holiday)
 {
-    _holidays.push_back(holiday);
-    sortHolidays();
+    _holidays.insert(holiday);
+    // sortHolidays();
 }
 
-void QCBusinessCalendar::sortHolidays()
+/*void QCBusinessCalendar::sortHolidays()
 {
     sort(_holidays.begin(), _holidays.end());
-}
+}*/
 
 QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
 {
@@ -128,7 +123,8 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
 
 std::vector<QCDate> QCBusinessCalendar::getHolidays()
 {
-	return _holidays;
+    std::vector<QCDate> _vecHolidays(_holidays.begin(), _holidays.end());
+	return _vecHolidays;
 }
 
 

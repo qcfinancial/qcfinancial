@@ -7,11 +7,11 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	QCDate::QCBusDayAdjRules endDateAdjustment,
 	string settlementPeriodicity,
 	QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-	shared_ptr<vector<QCDate>> settlementCalendar,
+	shared_ptr<std::vector<QCDate>> settlementCalendar,
 	unsigned int settlementLag,
 	string fixingPeriodicity,
 	QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-	shared_ptr<vector<QCDate>> fixingCalendar,
+	shared_ptr<std::vector<QCDate>> fixingCalendar,
 	unsigned int fixingLag,
 	unsigned int indexStartDateLag,
 	string indexTenor
@@ -273,7 +273,7 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(size_t numPeriods)
 }
 
 vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(string periodicity,
-	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar)
+	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar)
 {
 	//Aqui se almacena el resultado
 	vector<tuple<QCDate, QCDate>> periods; 
@@ -459,7 +459,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 }
 
 vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(string periodicity,
-	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar)
+	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar)
 {
 	//Aqui se almacena el resultado
 	vector<tuple<QCDate, QCDate>> periods;
