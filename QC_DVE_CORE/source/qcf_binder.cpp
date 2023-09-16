@@ -96,12 +96,10 @@ PYBIND11_MODULE(qcfinancial, m)
     )pbdoc");
 
     // QCDate
-    py::class_<QCDate>
-    pyQCDate(m, "QCDate", R"pbdoc(
+    py::class_<QCDate>(m, "QCDate", R"pbdoc(
         Permite representar una fecha en calendario gregoriano.
-    )pbdoc");
-
-    pyQCDate.def(py::init<int, int, int>(), R"pbdoc(
+    )pbdoc")
+    .def(py::init<int, int, int>(), R"pbdoc(
 - d: int, es el día de la fecha.
 - m: int, es el mes de la fecha.
 - y: int, es el año de la fecha.)pbdoc")
@@ -142,7 +140,7 @@ PYBIND11_MODULE(qcfinancial, m)
         return QCDate{strDate};
     });
 
-    py::enum_<QCDate::QCWeekDay>(pyQCDate, "WeekDay")
+    py::enum_<QCDate::QCWeekDay>(m, "WeekDay")
             .value("MON", QCDate::qcMonday)
             .value("TUE", QCDate::qcTuesday)
             .value("WED", QCDate::qcWednesday)

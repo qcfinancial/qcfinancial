@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <memory>
+#include <set>
 
 #include "time/QCDate.h"
 #include "TypeAliases.h"
@@ -81,11 +82,11 @@ class QCBusinessCalendar
     private:
         QCDate _startDate;
         int _length;
-		std::vector<QCDate> _holidays;
+		std::set<QCDate> _holidays;
         QCDate::QCWeekDay _firstDayOfWeekend;
         QCDate::QCWeekDay _secondDayOfWeekEnd;
         void insertNewYear();
-        void sortHolidays();
+        // void sortHolidays();
 
 
 };

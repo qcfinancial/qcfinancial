@@ -3,6 +3,7 @@
 
 #include <string>
 #include <tuple>
+#include <set>
 
 #include "QCInterestRateLeg.h"
 #include "time/QCDate.h"
@@ -30,18 +31,20 @@ public:
 	* @param indexStartDateLag días de valuta del índice flotante desde fecha de fixing
 	* @param indexTenor tenor del índice flotante (1M, 3M ...)
 	*/
-	QCInterestRatePeriodsFactory(QCDate startDate, QCDate endDate,
-		QCDate::QCBusDayAdjRules endDateAdjustment,
-		string settlementPeriodicity,
-		QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-		shared_ptr<vector<QCDate>> settlementCalendar,
-		unsigned int settlementLag,
-		string fixingPeriodicity,
-		QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-		shared_ptr<vector<QCDate>> fixingCalendar,
-		unsigned int fixingLag,
-		unsigned int indexStartDateLag,
-		string indexTenor
+	QCInterestRatePeriodsFactory(
+            QCDate startDate,
+            QCDate endDate,
+            QCDate::QCBusDayAdjRules endDateAdjustment,
+		    string settlementPeriodicity,
+		    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+		    shared_ptr<std::vector<QCDate>> settlementCalendar,
+		    unsigned int settlementLag,
+		    string fixingPeriodicity,
+		    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+		    shared_ptr<std::vector<QCDate>> fixingCalendar,
+		    unsigned int fixingLag,
+		    unsigned int indexStartDateLag,
+		    string indexTenor
 		);
 
 	/*!
@@ -70,7 +73,7 @@ private:
 	QCInterestRateLeg::QCStubPeriod _settlementStubPeriod;
 
 	/*! Calendario para fechas de cálculo de intereses y pago */
-	shared_ptr<vector<QCDate>> _settlementCalendar;
+	shared_ptr<std::vector<QCDate>> _settlementCalendar;
 
 	/*! días de valuta para determinar la fecha de pago */
 	unsigned int _settlementLag;
@@ -82,7 +85,7 @@ private:
 	QCInterestRateLeg::QCStubPeriod _fixingStubPeriod;
 
 	/*! Calendario para fechas de fixing */
-	shared_ptr<vector<QCDate>> _fixingCalendar;
+	shared_ptr<std::vector<QCDate>> _fixingCalendar;
 
 	/*! Días de anticipo respecto a fecha inicio de período de pago de la fecha de fixing */
 	unsigned int _fixingLag;
@@ -109,7 +112,7 @@ private:
 	* @param calendar calendario a utilizar
 	*/
 	vector<tuple<QCDate, QCDate>> _buildBasicDates(string periodicity,
-		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar);
+		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar);
 
 	/*! Método que calcula estructuras básicas de fechas de inicio y fin.
 	* @param periodicity valor de periodicidad (3M, 6M ...)
@@ -117,7 +120,7 @@ private:
 	* @param calendar calendario a utilizar
 	*/
 	vector<tuple<QCDate, QCDate>> _buildBasicDates2(string periodicity,
-		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<vector<QCDate>> calendar);
+		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar);
 	
 	/*! DEPRECATED. Método que construye la estructura de fechas que se quiere obtener.
 	* @return estructura de fechas buscada
