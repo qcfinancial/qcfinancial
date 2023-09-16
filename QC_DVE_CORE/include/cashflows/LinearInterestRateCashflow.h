@@ -60,6 +60,10 @@ namespace QCode
 			 */
 			virtual const QCDate& getEndDate() const = 0;
 
+            [[nodiscard]] bool isExpired(const QCDate& fecha) const {
+                return this->getEndDate() <= fecha;
+            }
+
 			/**
 			 * @fn	virtual const QCDate& LinearInterestRateCashflow::getSettlementDate() const = 0;
 			 *
@@ -82,7 +86,7 @@ namespace QCode
 			 *
 			 * @returns	The fixing dates.
 			 */
-			virtual const DateList& getFixingDates() const = 0;
+			virtual const std::vector<QCDate>& getFixingDates() const = 0;
 
 			/**
 			 * @fn	virtual double LinearInterestRateCashflow::getNominal() const = 0;

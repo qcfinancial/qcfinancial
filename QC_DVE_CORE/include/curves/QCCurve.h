@@ -9,8 +9,8 @@
 using namespace std;
 
 /*!
-* @brief QCCurve representa una curva de Set ---> R. Set debe ser ordenable y en la mayor�a de las aplicaciones
-* ser� Z (enteros relativos) o R (campo real).
+* @brief QCCurve representa una curva de Set ---> R. Set debe ser ordenable y en la mayoría de las aplicaciones
+* será Z (enteros relativos) o R (campo real).
 */
 template<class T>
 class QCCurve
@@ -29,38 +29,38 @@ public:
 	QCCurve(vector<T>& abscissa, vector<double>& ordinate);
 
 	/*!
-	* Este m�todo borra abscisas y ordenadas de la curva y vuelve a definir el tama�o de los
+	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tamaño de los
 	* vectores de abscisa y ordenadas.
 	* @param newSize nuevo tama�o de la curva
 	*/
 	void reset(unsigned long newSize);
 
 	/*!
-	* Este m�todo actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
+	* Este método actualiza el valor de un par ordenado de la curva. Si la abscisa corresponde
 	* a un par ya existente, entonces sobre escribe los valores existentes. Si la abscisa no existe,
-	* se inserta un nuevo par en la posici�n que corresponda (ordenado por abscisa ascendente).
+	* se inserta un nuevo par en la posición que corresponda (ordenado por abscisa ascendente).
 	* @param x abscisa
 	* @param y ordenada
 	*/
 	void setPair(T x, double y);
 
 	/*!
-	M�todo que actualiza el valor de la ordenada en una posici�n dada.
+	* Método que actualiza el valor de la ordenada en una posición dada.
 	* @param pos
 	* @param value
 	*/
 	void setOrdinateAtWithValue(unsigned long position, double value);
 
 	/*!
-	M�todo que actualiza el valor de la abscisa en una posici�n dada.
+	* Método que actualiza el valor de la abscisa en una posición dada.
 	* @param pos
 	* @param value
 	*/
 	void setAbscissaAtWithValue(unsigned long position, T value);
 
 	/*!
-	* M�todo que devuelve el valor de un par ordenado en una posici�n dada.
-	* @param position posici�n del par buscado.
+	* Método que devuelve el valor de un par ordenado en una posición dada.
+	* @param position posición del par buscado.
 	* @return valor del par buscado.
 	*/
 	pair<T, double> getValuesAt(size_t position);

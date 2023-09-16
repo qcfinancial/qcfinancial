@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <memory>
+#include <set>
 
 #include "time/QCDate.h"
 #include "TypeAliases.h"
@@ -29,9 +30,9 @@ class QCBusinessCalendar
 
         /*!
          * Agrega una fecha (QCDate) al calendario (que representa un feriado)
-         * @param holyday (QCDate) el feriado a agregar
+         * @param holiday (QCDate) el feriado a agregar
          */
-        void addHolyday(const QCDate& holyday);
+        void addHoliday(const QCDate& holiday);
 
         /*!
          * Calcula el día hábil siguiente a la fecha que ingresa.
@@ -76,16 +77,16 @@ class QCBusinessCalendar
 		 *
 		 * @return	The holidays.
 		 */
-		QCode::Financial::DateList getHolidays();
+		std::vector<QCDate> getHolidays();
 
     private:
         QCDate _startDate;
         int _length;
-		QCode::Financial::DateList _holydays;
+		std::set<QCDate> _holidays;
         QCDate::QCWeekDay _firstDayOfWeekend;
-        QCDate::QCWeekDay _secondDayOfweekEnd;
+        QCDate::QCWeekDay _secondDayOfWeekEnd;
         void insertNewYear();
-        void sortHolydays();
+        // void sortHolidays();
 
 
 };

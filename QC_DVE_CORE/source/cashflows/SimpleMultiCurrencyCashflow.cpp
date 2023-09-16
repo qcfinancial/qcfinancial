@@ -100,5 +100,9 @@ namespace QCode
 		{
 		}
 
-	}
+        std::string SimpleMultiCurrencyCashflow::getType() const {
+            return "SimpleMultiCurrencyCashflow";
+        }
+
+    }
 }

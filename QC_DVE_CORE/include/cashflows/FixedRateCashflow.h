@@ -43,33 +43,34 @@ namespace QCode
 			 * @param	rate		  	The rate.
 			 * @param	currency	  	The currency.
 			 */
-			FixedRateCashflow(const QCDate& startDate,
-							  const QCDate& endDate,
-							  const QCDate& settlementDate,
-							  double nominal,
-							  double amortization,
-							  bool doesAmortize,
-							  const QCInterestRate& rate,
-							  std::shared_ptr<QCCurrency> currency);
+			FixedRateCashflow(
+                    const QCDate &startDate,
+                    const QCDate &endDate,
+                    const QCDate &settlementDate,
+                    double nominal,
+                    double amortization,
+                    bool doesAmortize,
+                    const QCInterestRate &rate,
+                    std::shared_ptr<QCCurrency> currency);
 
 			/**
 			 * @fn	double FixedRateCashflow::amount();
 			 *
 			 * @brief	Gets the amount of the cashflow.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	27/09/2017
 			 *
 			 * @return	A double.
 			 */
-			virtual double amount() override;
+			double amount() override;
 
 			/**
 			 * @fn	QCCurrency FixedRateCashflow::ccy();
 			 *
 			 * @brief	Gets the currency of the cashflow.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	27/09/2017
 			 *
 			 * @return	A QCCurrency.
@@ -81,7 +82,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the payment date of the cashflow.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	27/09/2017
 			 *
 			 * @return	A QCDate.
@@ -93,7 +94,7 @@ namespace QCode
 			*
 			* @brief	Gets the start date of the cashflow.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*
 			* @return	A const QCDate&.
@@ -117,7 +118,7 @@ namespace QCode
 			*
 			* @brief	Gets the nominal of the cashflow.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*
 			* @return	The cashflow's nominal.
@@ -129,7 +130,7 @@ namespace QCode
 			 *
 			 * @brief	Sets the nominal amount.
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	05/10/2017
 			 *
 			 * @param	nominal	The nominal.
@@ -189,6 +190,8 @@ namespace QCode
 			* @return	A double.
 			*/
 			double accruedInterest(const QCDate& valueDate);
+
+            virtual std::string getType() const;
 
 			/**
 			* @fn	virtual FixedRateCashflow::~FixedRateCashflow();
@@ -349,7 +352,7 @@ namespace QCode
 			 */
 			void pushbackNotionalAmort(double notional, double amortization)
 			{
-				customNotionalAmort.push_back(make_tuple(notional, amortization));
+				customNotionalAmort.emplace_back(notional, amortization);
 			}
 
 			/**
@@ -360,9 +363,7 @@ namespace QCode
 			 * @author	Alvaro D�az V.
 			 * @date	07/10/2017
 			 */
-			~CustomNotionalAmort()
-			{
-			}
+			~CustomNotionalAmort() = default;
 		};
 	};
 }

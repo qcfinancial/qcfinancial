@@ -146,5 +146,9 @@ namespace QCode
 		{
 		}
 
+        std::string FixedRateCashflow::getType() const {
+            return "FixedRateCashflow";
+        }
+
     }
 }

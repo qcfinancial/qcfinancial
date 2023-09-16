@@ -115,6 +115,7 @@ double QCFXForward::getPvRateDerivativeAtFromLeg(unsigned int index, unsigned in
 		double value = _legs.at(0)->getPvRateDerivativeAt(index);
 		return conv.convert(value, legCurrency, fxRateValue, fxRate);
 	}
+    return 0.0;
 }
 
 QCFXForward::~QCFXForward()

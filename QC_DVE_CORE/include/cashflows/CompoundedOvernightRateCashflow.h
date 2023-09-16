@@ -68,7 +68,7 @@ namespace QCode {
 
             const QCDate &getSettlementDate() const override;
 
-            const DateList &getFixingDates() const override;
+            const std::vector<QCDate> &getFixingDates() const override;
 
             std::string getInterestRateIndexCode() const;
 

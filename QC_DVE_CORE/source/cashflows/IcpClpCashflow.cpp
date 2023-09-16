@@ -223,5 +223,9 @@ namespace QCode
 		IcpClpCashflow::~IcpClpCashflow()
 		{
 		}
-	}
+
+        std::string IcpClpCashflow::getType() const {
+            return "IcpClpCashflow";
+        }
+    }
 }

@@ -100,11 +100,6 @@ namespace QCode
 					_derivative = 0.0;
 					return 0.0;
 				}
-//				if (days == 0)
-//				{
-//					_derivative = 0.0;
-//					return cashflow->amount();
-//				}
 				else
 				{
 					double amount = cashflow->amount();
@@ -163,6 +158,32 @@ namespace QCode
 					return pv;
 				}
 			}
+
+            double pv(QCDate& valuationDate,
+                      const std::shared_ptr<LinearInterestRateCashflow>& cashflow,
+                      const std::shared_ptr<InterestRateCurve>& curve)
+            {
+                _resetDerivatives(curve->getLength());
+
+                const auto days = valuationDate.dayDiff(cashflow->date());
+                if (days <= 0)
+                {
+                    std::fill(_derivatives.begin(), _derivatives.end(), 0);
+                    return 0.0;
+                }
+                else
+                {
+                    const double amount = cashflow->amount();
+                    auto df = curve->getDiscountFactorAt(days);
+                    const double pv = amount * df;
+                    _rate = curve->getRateAt(days);
+                    for (size_t i = 0; i < _derivatives.size(); ++i)
+                    {
+                        _derivatives[i] = curve->dfDerivativeAt((unsigned)i) * amount;
+                    }
+                    return pv;
+                }
+            }
 
             /**
             * @fn	    double PresentValue::pv(QCDate& valuationDate,

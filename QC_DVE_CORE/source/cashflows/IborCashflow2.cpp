@@ -111,7 +111,7 @@ const QCDate &QCode::Financial::IborCashflow2::getSettlementDate() const {
 }
 
 
-const QCode::Financial::DateList &QCode::Financial::IborCashflow2::getFixingDates() const {
+const std::vector<QCDate> &QCode::Financial::IborCashflow2::getFixingDates() const {
     return _fixingDates;
 }
 

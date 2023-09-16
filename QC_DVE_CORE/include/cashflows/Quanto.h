@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <iostream>
+#include <utility>
 
 #include "cashflows/Cashflow.h"
 #include "cashflows/LinearInterestRateCashflow.h"
@@ -17,8 +18,15 @@ namespace QCode
 		class QuantoCashflow : public Cashflow
 		{
 		public:
-			QuantoCashflow(std::shared_ptr<Cashflow> cashflow, FXRateIndex fxRateIndex, const TimeSeries& fxRateIndexValues, QCDate fxRateFixingDate)
-				: _cashflow(cashflow), _fxRateIndex(fxRateIndex), _fxRateIndexValues(fxRateIndexValues), _fxRateFixingDate(fxRateFixingDate)
+			QuantoCashflow(
+                    std::shared_ptr<Cashflow> cashflow, 
+                    FXRateIndex fxRateIndex,
+                    const TimeSeries& fxRateIndexValues,
+                    QCDate fxRateFixingDate) :
+                    _cashflow(std::move(cashflow)),
+                    _fxRateIndex(fxRateIndex),
+                    _fxRateIndexValues(fxRateIndexValues),
+                    _fxRateFixingDate(fxRateFixingDate)
 			{}
 
 			double amount() override
@@ -128,7 +136,7 @@ namespace QCode
 			}
 
 
-			virtual const DateList& getFixingDates() const override
+			virtual const std::vector<QCDate>& getFixingDates() const override
 			{
 				return _cashflow->getFixingDates();
 			}

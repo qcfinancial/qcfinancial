@@ -32,7 +32,7 @@ namespace QCode
 		 * @brief	A simple multi currency cashflow. A multi currency cashflow is a cashflow
 		 * 			calculated in a given currency but payed/exchanged in a different currency.
 		 *
-		 * @author	Alvaro D�az V.
+		 * @author	Alvaro Díaz V.
 		 * @date	07/07/2018
 		 */
 		class SimpleMultiCurrencyCashflow : public SimpleCashflow
@@ -48,7 +48,7 @@ namespace QCode
 			* @brief	Constructor. The parameter endDate is the date in which the cashflow
 			* 			actually occurs.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    16/11/2017
 			*
 			* @param	endDate		  	            The end date.
@@ -66,24 +66,26 @@ namespace QCode
 										std::shared_ptr<FXRateIndex> fxRateIndex,
 										double fxRateIndexValue = 1.0);
 
+            std::string getType() const override;
+
 			/**
 			* @fn	    double SimpleMultiCurrencyCashflow::amount();
 			*
 			* @brief	Gets the amount of the cashflow in settlement currency.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	16/11/2017
 			*
 			* @return	A double.
 			*/
-			double amount();
+			double amount() override;
 
 			/**
 			* @fn	    double SimpleMultiCurrencyCashflow::nominal();
 			*
 			* @brief	Gets the amount of nominal in nominal currency.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	16/11/2017
 			*
 			* @return	A double.
@@ -120,7 +122,7 @@ namespace QCode
 			*
 			* @brief	Wraps the cashflow in a SimpleMultiCurrencyCashflowWrapper
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    16/11/2017
 			*
 			* @return	A tuple&lt;QCDate,double,std::shared_ptr<QCCurrency>,
@@ -133,10 +135,10 @@ namespace QCode
 			 *
 			 * @brief	Destructor
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	14/09/2018
 			 */
-			~SimpleMultiCurrencyCashflow();
+			~SimpleMultiCurrencyCashflow() override;
 
 		private:
 

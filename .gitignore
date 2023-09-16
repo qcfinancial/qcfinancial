@@ -1,5 +1,7 @@
 QC_DVE_CORE/build
+QC_DVE_CORE/dist
 .DS_Store
+QC_DVE_CORE/qcfinancial.egg-info
 QC_DVE_CORE/.DS_Store
 .idea/
 QC_DVE.sdf
@@ -161,3 +163,4 @@ QC_DVE_CORE/.idea/
 *.a
 QC_DVE_CORE/cmake-build-debug
 QC_DVE_CORE/cmake-build-release
+QC_DVE_CORE/cmake-build-centos8

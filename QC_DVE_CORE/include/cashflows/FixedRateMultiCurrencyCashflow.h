@@ -90,6 +90,8 @@ namespace QCode
 			 */
 			double amount() override;
 
+            QCDate getFXPublishDate() const;
+
 			/**
 			 * @fn		shared_ptr<QCCurrency> FixedRateMultiCurrencyCashflow::settlementCcy();
 			 *
@@ -198,6 +200,8 @@ namespace QCode
 			 * @return	A std::shared_ptr&lt;FixedRateMultiCurrencyCashflowWrapper&gt;
 			 */
 			std::shared_ptr<FixedRateMultiCurrencyCashflowWrapper> wrap();
+
+            std::string getType() const override;
 
 			/**
 			 * @fn	virtual FixedRateMultiCurrencyCashflow::~FixedRateMultiCurrencyCashflow();

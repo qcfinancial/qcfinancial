@@ -70,7 +70,7 @@ namespace QCode
 
         std::string FixedRateCashflow2::getType() const
         {
-            return "FIXED_RATE";
+            return "FixedRateCashflow2";
         }
 
 
@@ -92,7 +92,7 @@ namespace QCode
 		}
 
 
-		const DateList& FixedRateCashflow2::getFixingDates() const
+		const std::vector<QCDate>& FixedRateCashflow2::getFixingDates() const
 		{
 			return _fixingDates;
 		}

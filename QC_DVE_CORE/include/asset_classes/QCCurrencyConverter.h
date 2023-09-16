@@ -21,23 +21,24 @@ public:
 	*/
 	enum QCCurrencyEnum
 	{
-        qcUSD,
+        qcAUD,
+        qcBRL,
+        qcCAD,
+        qcCHF,
 		qcCLF,
 		qcCLP,
-		qcGBP,
-		qcEUR,
-		qcJPY,
-		qcCHF,
-		qcCOP,
         qcCNY,
-        qcSEK,
-        qcPEN,
-        qcCAD,
+        qcCOP,
+        qcDKK,
+        qcEUR,
+		qcGBP,
+        qcHKD,
+		qcJPY,
         qcMXN,
         qcNOK,
-        qcAUD,
-        qcDKK,
-        qcHKD,
+        qcPEN,
+        qcSEK,
+        qcUSD,
 	};
 
     /*!
@@ -45,51 +46,57 @@ public:
 	*/
     enum QCFxRateEnum
     {
-        qcUSDUSD,
+        qcAUDAUD,
+        qcAUDUSD,
+        qcAUDCLP,
 
-        qcCLFCLF,
-        qcUSDCLF,
-        qcCLFCLP,
-
-        qcCLPCLP,
-        qcUSDCLP,
-
-        qcGBPGBP,
-        qcGBPUSD,
-        qcGBPCLP,
-
-        qcEUREUR,
-        qcEURUSD,
-        qcEURCLP,
-
-        qcJPYJPY,
-        qcUSDJPY,
-        qcJPYCLP,
+        qcBRLBRL,
+        qcUSDBRL,
+        qcBRLCLP,
 
         qcCHFCHF,
         qcUSDCHF,
         qcEURCHF,
         qcCHFCLP,
 
-        qcCOPCOP,
-        qcUSDCOP,
-        qcCOPCLP,
+        qcCADCAD,
+        qcUSDCAD,
+        qcCADCLP,
+
+        qcCLPCLP,
+        qcUSDCLP,
+
+        qcCLFCLF,
+        qcUSDCLF,
+        qcCLFCLP,
 
         qcCNYCNY,
         qcUSDCNY,
         qcCNYCLP,
 
-        qcSEKSEK,
-        qcUSDSEK,
-        qcSEKCLP,
+        qcCOPCOP,
+        qcUSDCOP,
+        qcCOPCLP,
 
-        qcPENPEN,
-        qcUSDPEN,
-        qcPENCLP,
+        qcDKKDKK,
+        qcUSDDKK,
+        qcDKKCLP,
 
-        qcCADCAD,
-        qcUSDCAD,
-        qcCADCLP,
+        qcEUREUR,
+        qcEURUSD,
+        qcEURCLP,
+
+        qcGBPGBP,
+        qcGBPUSD,
+        qcGBPCLP,
+
+        qcHKDHKD,
+        qcUSDHKD,
+        qcHKDCLP,
+
+        qcJPYJPY,
+        qcUSDJPY,
+        qcJPYCLP,
 
         qcMXNMXN,
         qcUSDMXN,
@@ -99,20 +106,16 @@ public:
         qcUSDNOK,
         qcNOKCLP,
 
-        qcAUDAUD,
-        qcAUDUSD,
-        qcAUDCLP,
+        qcPENPEN,
+        qcUSDPEN,
+        qcPENCLP,
 
-        qcDKKDKK,
-        qcUSDDKK,
-        qcDKKCLP,
+        qcSEKSEK,
+        qcUSDSEK,
+        qcSEKCLP,
 
-        qcHKDHKD,
-        qcUSDHKD,
-        qcHKDCLP,
+        qcUSDUSD,
     };
-
-	
 
 	/*!
 	* Constructor. Inicializa además los mapas que contienen los string que permiten identificar
@@ -138,6 +141,7 @@ public:
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcDKK, "DKK"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcAUD, "AUD"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcHKD, "HKD"));
+        _currencyCode.insert(pair<QCCurrencyEnum, string>(qcBRL, "BRL"));
 
         // QCFxRateEnum ---> Code
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDUSD, "USDUSD"));
@@ -145,6 +149,10 @@ public:
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCLFCLF, "CLFCLF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDCLF, "USDCLF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCLFCLP, "CLFCLP"));
+
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcBRLBRL, "BRLBRL"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDBRL, "USDBRL"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcBRLCLP, "BRLCLP"));
 
 		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcCLPCLP, "CLPCLP"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDCLP, "USDCLP"));
@@ -218,6 +226,12 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CLPCLP", qcCLPCLP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDCLP", qcUSDCLP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPUSD", qcUSDCLP));
+
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("BRLBRL", qcBRLBRL));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("BRLUSD", qcUSDBRL));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("USDBRL", qcUSDBRL));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("BRLCLP", qcBRLCLP));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("CLPBRL", qcBRLCLP));
 
         _standardFxRate.insert(pair<string, QCFxRateEnum>("GBPGBP", qcGBPGBP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("GBPUSD", qcGBPUSD));
@@ -427,39 +441,6 @@ public:
 		}
 	}
 
-	/**
-	 * @fn	double QCCurrencyConverter::convert(double amount, QCCurrency& currency, double fxRateValue, QCode::Financial::FXRateIndex& fxRateIndex)
-	 *
-	 * @brief	Converts an amount in currency to another currency using the fx rate given.
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	19/07/2018
-	 *
-	 * @exception	invalid_argument	Thrown when an invalid argument error condition occurs.
-	 *
-	 * @param 		  	amount	   	The amount to convert.
-	 * @param [in,out]	currency   	The currency of the amount.
-	 * @param 		  	fxRateValue	The fx rate value.
-	 * @param [in,out]	fxRateIndex	The fx rate index.
-	 *
-	 * @return	A double.
-	 */
-//	double convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue,
-//	        QCode::Financial::FXRateIndex& fxRateIndex)
-//	{
-//		if (fxRateIndex.strongCcyCode() == currency->getIsoCode() )
-//		{
-//			return amount * fxRateValue;
-//		}
-//		else if (fxRateIndex.weakCcyCode() == currency->getIsoCode())
-//		{
-//			return amount / fxRateValue;
-//		}
-//		else
-//		{
-//			throw invalid_argument("Fx Rate for conversion does not apply to this currency.");
-//		}
-//	}
 
 	/**
 	 * @fn	double QCCurrencyConverter::convert(double amount, shared_ptr<QCCurrency> currency, double fxRateValue, const QCode::Financial::FXRateIndex& fxRateIndex)

@@ -69,7 +69,7 @@ namespace QCode {
 
 
         std::string CompoundedOvernightRateCashflow::getType() const {
-            return "COMPOUNDED_OVERNIGHT_RATE";
+            return "CompoundedOvernightRateCashflow";
         }
 
 
@@ -93,7 +93,7 @@ namespace QCode {
         }
 
 
-        const DateList& CompoundedOvernightRateCashflow::getFixingDates() const {
+        const std::vector<QCDate>& CompoundedOvernightRateCashflow::getFixingDates() const {
             return _fixingDates;
         }
 
@@ -248,7 +248,8 @@ namespace QCode {
 
 
         std::string CompoundedOvernightRateCashflow::getTypeOfRate() {
-            return _index->getRate().description();
+            auto rate = _index->getRate();
+            return rate.getWealthFactor()->description() + rate.getYearFraction()->description();
         }
 
 
