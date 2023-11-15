@@ -8,6 +8,7 @@
 
 #include "cashflows/Cashflow.h"
 #include "cashflows/FixedRateCashflow.h"
+#include "cashflows/OvernightIndexCashflow.h"
 #include "Leg.h"
 #include "asset_classes/InterestRateIndex.h"
 #include "asset_classes/FXRateIndex.h"
@@ -60,11 +61,17 @@ namespace QCode
 				///< An enum constant representing the fixed rate cashflow option
 				fixedRateCashflow,
 
-				///< An enum constant representing the fixed rate cashflow option
+                ///< An enum constant representing the fixed rate multi currency cashflow option
+                fixedRateMultiCurrencyCashflow,
+
+				///< An enum constant representing the fixed rate cashflow 2 option
 				fixedRateCashflow2,
 
 				///< An enum constant representing the ibor cashflow option
 				iborCashflow,
+
+                ///< An enum constant representing the ibor multi currency cashflow option
+                iborMultiCurrencyCashflow,
 
                 ///< An enum constant representing the ibor cashflow 2 option
 				iborCashflow2,
@@ -80,6 +87,9 @@ namespace QCode
 
                 ///< An enum constant representing the icp clf cashflow option
                 compoundedOvernightRateCashflow,
+
+                ///< An enum constant representing the overnight index cashflow option
+                overnightIndexCashflow,
 			};
 
 			/**
@@ -252,6 +262,24 @@ namespace QCode
 				std::shared_ptr<FXRateIndex> fxRateIndex,
 				unsigned int fxRateIndexFixingLag,
 				bool forBonds = false);
+
+            static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    QCInterestRate rate,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    bool forBonds = false);
 
 
 			/**
@@ -453,6 +481,29 @@ namespace QCode
 				unsigned int fxRateIndexFixingLag
 				);
 
+            static Leg buildCustomAmortIborMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    double spread,
+                    double gearing,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag);
+
 
 			/**
 			 * @fn	static Leg LegFactory::buildCustomAmortIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
@@ -559,6 +610,46 @@ namespace QCode
 				bool doesAmortize,
 				double spread,
 				double gearing);
+
+            static Leg buildBulletOvernightIndexLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency);
+
+            static Leg buildCustomAmortOvernightIndexLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency);
 
 
             /**

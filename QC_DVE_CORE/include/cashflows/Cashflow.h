@@ -17,7 +17,7 @@ namespace QCode
 		*
 		* @brief	Abstract class that provides the basis for every type of cashflow.
 		*
-		* @author	Alvaro D�az V.
+		* @author	Alvaro Díaz V.
 		* @date	26/09/2017
 		*/
 		class Cashflow
@@ -53,7 +53,7 @@ namespace QCode
 			*
 			* @brief	Gets the currency of the cashflow.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	26/09/2017
 			*
 			* @return	A QCCurrency.
@@ -65,7 +65,7 @@ namespace QCode
 			*
 			* @brief	Gets the date of the cashflow.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	26/09/2017
 			*
 			* @return	A QCDate.
@@ -78,7 +78,7 @@ namespace QCode
 			*
 			* @brief	Query if the cashflow is expired with respect to 'refDate'.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	26/09/2017
 			*
 			* @param	refDate	The reference date.
