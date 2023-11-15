@@ -15,7 +15,7 @@ namespace QCode
 		*
 		* @brief	Class that models the concept of an FX rate.
 		*
-		* @author	Alvaro Díaz V.
+		* @author	Alvaro DÃ­az V.
 		* @date	    15/11/2017
 		*/
 		class FXRate
@@ -26,7 +26,7 @@ namespace QCode
 			*
 			* @brief	Constructor
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	    15/11/2017
 			*
 			* @param	strongCcy		The strong currency of the pair. For EURUSD it should be EUR.
@@ -45,7 +45,7 @@ namespace QCode
 			* @brief	Gets the standard code for the pair. Strong currency first, weak currency second.
 			*           For example, if strongCcy is EUR and weakCcy is USD the code will be EURUSD.
 			*
-			* @author	Alvaro Díaz V.
+			* @author	Alvaro DÃ­az V.
 			* @date	    15/11/2017
 			*
 			* @return	The standard code.

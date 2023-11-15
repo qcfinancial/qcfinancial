@@ -276,7 +276,19 @@ namespace QCode
 			 * @author	Alvaro Díaz V.
 			 * @date	07/10/2017
 			 */
-			CustomNotionalAmort() = default;
+			CustomNotionalAmort()
+            {
+                customNotionalAmort.resize(1);
+            }
+
+            explicit CustomNotionalAmort(size_t n)
+            {
+                if (n < 1) {
+                    throw std::invalid_argument( "Parameter n should be > 0" );
+                }
+
+                customNotionalAmort.resize(n);
+            }
 
             /** @brief	The custom notional and amortization schedule */
             std::vector<std::tuple<double, double>> customNotionalAmort;
