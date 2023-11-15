@@ -1,0 +1,14 @@
+//
+// Created by Alvaro Patricio Diaz Valenzuela on 2023-11-14.
+//
+
+#ifndef QC_DVE_CORE_OVERNIGHTINDEXMULTICURRENCYCASHFLOW_H
+#define QC_DVE_CORE_OVERNIGHTINDEXMULTICURRENCYCASHFLOW_H
+
+
+class OvernightIndexMultiCurrencyCashflow {
+
+};
+
+
+#endif //QC_DVE_CORE_OVERNIGHTINDEXMULTICURRENCYCASHFLOW_H
