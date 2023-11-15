@@ -355,7 +355,7 @@ namespace QCode {
                                             settlementPeriodicityString};
             auto periods = pf.getPeriods();
 
-            // Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+            // Load the periods into the structure of FixedRateCashflow and construct the Leg.
             Leg fixedRateMultiCurrencyLeg;
             size_t numPeriods = periods.size();
             fixedRateMultiCurrencyLeg.resize(numPeriods);
@@ -364,7 +364,7 @@ namespace QCode {
                 QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
                 QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
                 QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
-                QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, fxRateIndexFixingLag);
+                QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
                 // For the correct calculation of present values using market yields according
                 // to the usual conventions in fixed income markets.
                 if (forBonds) settlementDate = thisEndDate;
@@ -381,6 +381,46 @@ namespace QCode {
             }
 
             return fixedRateMultiCurrencyLeg;
+        }
+
+        Leg LegFactory::buildCustomAmortFixedRateMultiCurrencyLeg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                CustomNotionalAmort notionalAndAmort,
+                bool doesAmortize,
+                QCInterestRate rate,
+                std::shared_ptr<QCCurrency> notionalCurrency,
+                std::shared_ptr<QCCurrency> settlementCurrency,
+                std::shared_ptr<FXRateIndex> fxRateIndex,
+                unsigned int fxRateIndexFixingLag,
+                bool forBonds) {
+            Leg fixedRateMccyLeg = buildBulletFixedRateMultiCurrencyLeg(
+                    recPay,
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    settlementPeriodicity,
+                    settlementStubPeriod,
+                    settlementCalendar,
+                    settlementLag,
+                    1.0,
+                    doesAmortize,
+                    rate,
+                    notionalCurrency,
+                    settlementCurrency,
+                    fxRateIndex,
+                    fxRateIndexFixingLag,
+                    forBonds);
+
+            customizeAmortization(recPay, fixedRateMccyLeg, notionalAndAmort,
+                                  LegFactory::fixedRateMultiCurrencyCashflow);
+            return fixedRateMccyLeg;
         }
 
         Leg LegFactory::buildCustomAmortFixedRateLeg(
@@ -638,10 +678,10 @@ namespace QCode {
                                                  index->getDaysOfStartLag(),
                                                  index->getTenor().getString()};
 
-            //Se generan los periodos
+            //Se construyen los períodos
             auto periods = factory.getPeriods();
 
-            // Load the periods into the structure of IborMultiCurrencyLeg and contruct the Leg.
+            // Load the periods into the structure of IborMultiCurrencyLeg and construct the Leg.
             Leg iborMultiCurrencyLeg;
             size_t numPeriods = periods.size();
             iborMultiCurrencyLeg.resize(numPeriods);
@@ -651,7 +691,7 @@ namespace QCode {
                 QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
                 QCDate thisFixingDate = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(period);
                 QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
-                QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, fxRateIndexFixingLag);
+                QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
 
                 double amort = 0.0;
                 if (i == numPeriods - 1) {
@@ -714,6 +754,62 @@ namespace QCode {
             return iborLeg;
         }
 
+        Leg LegFactory::buildCustomAmortIborMultiCurrencyLeg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                unsigned int settlementLag,
+                Tenor fixingPeriodicity,
+                QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                QCBusinessCalendar fixingCalendar,
+                unsigned int fixingLag,
+                std::shared_ptr<InterestRateIndex> index,
+                CustomNotionalAmort notionalAndAmort,
+                bool doesAmortize,
+                std::shared_ptr<QCCurrency> notionalCurrency,
+                double spread,
+                double gearing,
+                std::shared_ptr<QCCurrency> settlementCurrency,
+                std::shared_ptr<FXRateIndex> fxRateIndex,
+                unsigned int fxRateIndexFixingLag
+        ) {
+            auto iborMccyLeg = buildBulletIborMultiCurrencyLeg(
+                    recPay,
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    settlementPeriodicity,
+                    settlementStubPeriod,
+                    settlementCalendar,
+                    settlementLag,
+                    fixingPeriodicity,
+                    fixingStubPeriod,
+                    fixingCalendar,
+                    fixingLag,
+                    index,
+                    1.0,
+                    doesAmortize,
+                    notionalCurrency,
+                    spread,
+                    gearing,
+                    settlementCurrency,
+                    fxRateIndex,
+                    fxRateIndexFixingLag
+            );
+
+            customizeAmortization(
+                    recPay,
+                    iborMccyLeg,
+                    notionalAndAmort,
+                    LegFactory::iborMultiCurrencyCashflow);
+
+            return iborMccyLeg;
+        }
+
         Leg LegFactory::buildCustomAmortIbor2Leg(
                 RecPay recPay,
                 QCDate startDate,
@@ -769,7 +865,7 @@ namespace QCode {
                 Leg &leg,
                 CustomNotionalAmort notionalAndAmort,
                 TypeOfCashflow typeOfCashflow) {
-            // Ahora modificar nominal y amortizacion en el objeto Leg reci�n construido.
+            // Ahora modificar nominal y amortizacion en el objeto Leg recién construido.
             size_t notionalAndAmortSize = notionalAndAmort.getSize();
             size_t legSize = leg.size();
             if (legSize == 0) {
@@ -792,6 +888,17 @@ namespace QCode {
                             ->setNominal(sign * std::get<0>(
                                     notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
                     std::dynamic_pointer_cast<FixedRateCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setAmortization(sign * std::get<1>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                }
+            }
+
+            if (typeOfCashflow == LegFactory::fixedRateMultiCurrencyCashflow) {
+                for (size_t i = 0; i < minSize; ++i) {
+                    std::dynamic_pointer_cast<FixedRateMultiCurrencyCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setNominal(sign * std::get<0>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                    std::dynamic_pointer_cast<FixedRateMultiCurrencyCashflow>(leg.getCashflowAt(legSize - 1 - i))
                             ->setAmortization(sign * std::get<1>(
                                     notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
                 }
@@ -864,6 +971,28 @@ namespace QCode {
                                     notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
                 }
             }
+
+            if (typeOfCashflow == LegFactory::iborMultiCurrencyCashflow) {
+                for (size_t i = 0; i < minSize; ++i) {
+                    std::dynamic_pointer_cast<IborMultiCurrencyCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setNominal(sign * std::get<0>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                    std::dynamic_pointer_cast<IborMultiCurrencyCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setAmortization(sign * std::get<1>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                }
+            }
+
+            if (typeOfCashflow == LegFactory::overnightIndexCashflow) {
+                for (size_t i = 0; i < minSize; ++i) {
+                    std::dynamic_pointer_cast<OvernightIndexCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setNotional(sign * std::get<0>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                    std::dynamic_pointer_cast<OvernightIndexCashflow>(leg.getCashflowAt(legSize - 1 - i))
+                            ->setAmortization(sign * std::get<1>(
+                                    notionalAndAmort.customNotionalAmort[notionalAndAmortSize - 1 - i]));
+                }
+            }
         }
 
         Leg LegFactory::buildBulletIcpClpLeg(
@@ -922,6 +1051,151 @@ namespace QCode {
             return icpClpLeg;
         }
 
+        Leg LegFactory::buildBulletOvernightIndexLeg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                QCDate::QCBusDayAdjRules indexDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                QCBusinessCalendar fixingCalendar,
+                unsigned int settlementLag,
+                double notional,
+                bool doesAmortize,
+                double spread,
+                double gearing,
+                QCInterestRate rate,
+                std::string indexName,
+                unsigned int eqRateDecimalPlaces,
+                std::shared_ptr<QCCurrency> notionalCurrency) {
+
+            // Make all the holidays in the calendars into a shared_ptr.
+            auto settCal = std::make_shared<std::vector<QCDate>>(
+                    settlementCalendar.getHolidays());
+
+            auto fixCal = std::make_shared<std::vector<QCDate>>(
+                    fixingCalendar.getHolidays());
+
+
+            // Minus sign is set if cashflows are paid.
+            int sign;
+            if (recPay == Receive) {
+                sign = 1;
+            } else {
+                sign = -1;
+            }
+
+            // Instantiate factory and build the corresponding periods.
+            QCInterestRatePeriodsFactory pf{
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    settlementPeriodicity.getString(),
+                    settlementStubPeriod,
+                    settCal,
+                    settlementLag,
+                    // The next parameters are useful only for IborLegs. Arbitrary values
+                    // are given to them in this case.
+                    settlementPeriodicity.getString(),
+                    settlementStubPeriod,
+                    settCal,
+                    0,
+                    0,
+                    settlementPeriodicity.getString()
+            };
+            auto periods = pf.getPeriods();
+
+            // Load the periods into the structure of OvernightIndexCashflow and construct the Leg.
+            Leg overnightIndexLeg;
+            size_t numPeriods = periods.size();
+            overnightIndexLeg.resize(numPeriods);
+            size_t i = 0;
+            for (const auto &period: periods) {
+                QCDate accrualStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
+                QCDate accrualEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
+                QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
+                QCDate indexStartDate = accrualStartDate.businessDay(fixCal, indexDateAdjustment);
+                QCDate indexEndDate = accrualEndDate.businessDay(fixCal, indexDateAdjustment);
+                double amort = 0.0;
+                if (i == numPeriods - 1) {
+                    amort = sign * notional;
+                }
+                OvernightIndexCashflow overnightIndexCashflow{
+                        accrualStartDate,
+                        accrualEndDate,
+                        indexStartDate,
+                        indexEndDate,
+                        settlementDate,
+                        notionalCurrency,
+                        sign * notional,
+                        amort,
+                        doesAmortize,
+                        spread,
+                        gearing,
+                        rate,
+                        indexName,
+                        eqRateDecimalPlaces
+                };
+                overnightIndexLeg.setCashflowAt(std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow), i);
+                ++i;
+            }
+
+            return overnightIndexLeg;
+
+
+        };
+
+        Leg LegFactory::buildCustomAmortOvernightIndexLeg(
+                RecPay recPay,
+                QCDate startDate,
+                QCDate endDate,
+                QCDate::QCBusDayAdjRules endDateAdjustment,
+                QCDate::QCBusDayAdjRules indexDateAdjustment,
+                Tenor settlementPeriodicity,
+                QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                QCBusinessCalendar settlementCalendar,
+                QCBusinessCalendar fixingCalendar,
+                unsigned int settlementLag,
+                CustomNotionalAmort notionalAndAmort,
+                bool doesAmortize,
+                double spread,
+                double gearing,
+                QCInterestRate rate,
+                std::string indexName,
+                unsigned int eqRateDecimalPlaces,
+                std::shared_ptr<QCCurrency> notionalCurrency) {
+
+            auto bulletLeg = buildBulletOvernightIndexLeg(
+                    recPay,
+                    startDate,
+                    endDate,
+                    endDateAdjustment,
+                    indexDateAdjustment,
+                    settlementPeriodicity,
+                    settlementStubPeriod,
+                    settlementCalendar,
+                    fixingCalendar,
+                    settlementLag,
+                    1.0,
+                    doesAmortize,
+                    spread,
+                    gearing,
+                    rate,
+                    std::move(indexName), // a ver que pasa
+                    eqRateDecimalPlaces,
+                    std::move(notionalCurrency) // a ver que pasa
+            );
+
+            customizeAmortization(
+                    recPay,
+                    bulletLeg,
+                    notionalAndAmort,
+                    LegFactory::overnightIndexCashflow);
+
+            return bulletLeg;
+        };
 
         Leg LegFactory::buildBulletIcpClp2Leg(
                 RecPay recPay,
@@ -1148,18 +1422,18 @@ namespace QCode {
 
         Leg LegFactory::buildBulletCompoundedOvernightLeg(
                 RecPay recPay,
-                const QCDate& startDate,
-                const QCDate& endDate,
+                const QCDate &startDate,
+                const QCDate &endDate,
                 QCDate::QCBusDayAdjRules endDateAdjustment,
                 Tenor settlementPeriodicity,
                 QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
                 QCBusinessCalendar settlementCalendar,
                 unsigned int settlementLag,
                 QCBusinessCalendar fixingCalendar,
-                const shared_ptr<InterestRateIndex>& index,
+                const shared_ptr<InterestRateIndex> &index,
                 double notional,
                 bool doesAmortize,
-                const shared_ptr<QCCurrency>& currency,
+                const shared_ptr<QCCurrency> &currency,
                 double spread,
                 double gearing,
                 bool isAct360,
@@ -1217,7 +1491,7 @@ namespace QCode {
                 if (i == numPeriods - 1) {
                     amort = sign * notional;
                 }
-                CompoundedOvernightRateCashflow comp {
+                CompoundedOvernightRateCashflow comp{
                         index,
                         thisStartDate,
                         thisEndDate,
@@ -1244,18 +1518,18 @@ namespace QCode {
 
         Leg LegFactory::buildCustomAmortCompoundedOvernightLeg(
                 RecPay recPay,
-                const QCDate& startDate,
-                const QCDate& endDate,
+                const QCDate &startDate,
+                const QCDate &endDate,
                 QCDate::QCBusDayAdjRules endDateAdjustment,
                 Tenor settlementPeriodicity,
                 QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
                 QCBusinessCalendar settlementCalendar,
                 unsigned int settlementLag,
                 QCBusinessCalendar fixingCalendar,
-                const shared_ptr<InterestRateIndex>& index,
+                const shared_ptr<InterestRateIndex> &index,
                 CustomNotionalAmort notionalAndAmort,
                 bool doesAmortize,
-                const shared_ptr<QCCurrency>& currency,
+                const shared_ptr<QCCurrency> &currency,
                 double spread,
                 double gearing,
                 bool isAct360,
@@ -1284,7 +1558,8 @@ namespace QCode {
                     lookback,
                     lockout);
 
-            customizeAmortization(recPay, comOvernightLeg, notionalAndAmort, LegFactory::compoundedOvernightRateCashflow);
+            customizeAmortization(recPay, comOvernightLeg, notionalAndAmort,
+                                  LegFactory::compoundedOvernightRateCashflow);
             return comOvernightLeg;
         }
     }

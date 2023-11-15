@@ -2173,7 +2173,7 @@ namespace wrappers {
         } else if (cashflowType == "CompoundedOvernightRateCashflow") {
             return boost::python::make_tuple("fecha_inicial", "fecha_final", "fecha_pago", "nominal",
                                              "amortizacion", "interes", "amort_es_flujo", "flujo",
-                                             "moneda","codigo_indice_tasa", "valor_tasa", "spread",
+                                             "moneda", "codigo_indice_tasa", "valor_tasa", "spread",
                                              "gearing", "tipo_tasa");
         } else {
             throw std::invalid_argument("Cashflow type " + cashflowType + " is not recognized.");

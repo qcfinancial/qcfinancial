@@ -3,7 +3,7 @@
 //
 
 #include "catch/catch-2.hpp"
-#include "cashflows/IcpClpCashflow3.h"
+#include "cashflows/OvernightIndexCashflow.h"
 #include "time/QCDate.h"
 
 TEST_CASE("Settlement Dates") {

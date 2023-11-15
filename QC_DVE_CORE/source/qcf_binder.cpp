@@ -9,6 +9,7 @@
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
 namespace py = pybind11;
+using namespace pybind11::literals;
 
 #include <asset_classes/QCCurrency.h>
 #include <asset_classes/QCYearFraction.h>
@@ -46,6 +47,8 @@ namespace py = pybind11;
 #include <cashflows/IcpClpCashflow2.h>
 #include <cashflows/IcpClfCashflow.h>
 #include <cashflows/CompoundedOvernightRateCashflow.h>
+#include <cashflows/OvernightIndexCashflow.h>
+#include <cashflows/OvernightIndexMultiCurrencyCashflow.h>
 
 #include "FixedRateBond.h"
 #include "ChileanFixedRateBond.h"
@@ -89,11 +92,14 @@ PYBIND11_MODULE(qcfinancial, m)
 
     )pbdoc";
 
-    m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
-        Subtract two numbers
 
-        Some other explanation about the subtract function.
-    )pbdoc");
+    m.def(
+            "subtract_2_nums",
+            [](int firstNumber, int secondNumber) { return firstNumber - secondNumber; },
+            R"pbdoc(Subtract two numbers .Some other explanation about the subtract function.)pbdoc",
+            "first_number"_a,
+            "second_number"_a
+            );
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -688,6 +694,73 @@ PYBIND11_MODULE(qcfinancial, m)
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::IcpClpCashflow>&>(&show));
 
+    // OvernightIndexCashflow
+    py::class_<qf::OvernightIndexCashflow, std::shared_ptr<qf::OvernightIndexCashflow>, qf::Cashflow>(
+            m, "OvernightIndexCashflow")
+            .def(py::init<const QCDate &, const QCDate &, const QCDate &, const QCDate &, const QCDate &,
+                 std::shared_ptr<QCCurrency>,
+                    double, double, bool, double, double,
+                    const QCInterestRate &,
+                    std::string,
+                    unsigned int>())
+            .def("amount", &qf::OvernightIndexCashflow::amount)
+            .def("ccy", &qf::OvernightIndexCashflow::ccy)
+            .def("date", &qf::OvernightIndexCashflow::date)
+            .def("get_accrual_start_date", &qf::OvernightIndexCashflow::getAccrualStartDate)
+            .def("get_accrual_end_date", &qf::OvernightIndexCashflow::getAccrualEndDate)
+            .def("get_index_start_date", &qf::OvernightIndexCashflow::getIndexStartDate)
+            .def("get_index_end_date", &qf::OvernightIndexCashflow::getIndexEndDate)
+            .def("get_settlement_date", &qf::OvernightIndexCashflow::getSettlementDate)
+            .def("set_start_date_index", &qf::OvernightIndexCashflow::setStartDateIndex)
+            .def("set_end_date_index", &qf::OvernightIndexCashflow::setEndDateIndex)
+            .def("get_start_date_index", &qf::OvernightIndexCashflow::getStartDateIndex)
+            .def("get_end_date_index", &qf::OvernightIndexCashflow::getEndDateIndex)
+            .def("set_notional", &qf::OvernightIndexCashflow::setNotional)
+            .def("get_notional", &qf::OvernightIndexCashflow::getNotional)
+            .def("set_amortization", &qf::OvernightIndexCashflow::setAmortization)
+            .def("get_amortization", &qf::OvernightIndexCashflow::getAmortization)
+            .def("get_rate_value", &qf::OvernightIndexCashflow::getRateValue)
+            .def("get_type_of_rate", &qf::OvernightIndexCashflow::getTypeOfRate)
+            .def("get_eq_rate", &qf::OvernightIndexCashflow::getEqRate)
+            .def < double(qf::OvernightIndexCashflow::*)(QCDate&, double)>(
+                    "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
+            .def < double(qf::OvernightIndexCashflow::*)(const QCDate&, const qf::TimeSeries&)>(
+                    "accrued_interest",&qf::OvernightIndexCashflow::accruedInterest)
+            .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
+            .def("get_type", &qf::OvernightIndexCashflow::getType);
+
+    m.def("show", py::overload_cast<const std::shared_ptr<qf::OvernightIndexCashflow>&>(&show));
+
+    // OvernightIndexMultiCurrencyCashflow
+    py::class_<qf::OvernightIndexMultiCurrencyCashflow, std::shared_ptr<qf::OvernightIndexMultiCurrencyCashflow>, qf::OvernightIndexCashflow>(
+            m, "OvernightIndexMultiCurrencyCashflow")
+            .def(py::init<const QCDate &, const QCDate &, const QCDate &, const QCDate &, const QCDate &,
+                    std::shared_ptr<QCCurrency>,
+                    double, double, bool, double, double,
+                    const QCInterestRate &,
+                    std::string,
+                    unsigned int,
+                    const QCDate &,
+                    std::shared_ptr<QCCurrency>,
+                    std::shared_ptr<qf::FXRateIndex>>())
+            .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCcy)
+            .def("set_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::setFxRateIndexValue)
+            .def("get_fx_rate_index", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndex)
+            .def("get_type", &qf::OvernightIndexMultiCurrencyCashflow::getType)
+            .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)(const qf::TimeSeries&, const qf::TimeSeries&)>(
+            "settlement_ccy_interest", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest)
+            .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)()>(
+            "settlement_ccy_interest", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest)
+            .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)(const qf::TimeSeries&, const qf::TimeSeries&)>(
+                    "settlement_ccy_amortization", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmortization)
+            .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)()>(
+            "settlement_ccy_amortization", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmortization)
+            .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)(const qf::TimeSeries&, const qf::TimeSeries&)>(
+                    "settlement_ccy_amount", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount)
+                    .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)()>(
+            "settlement_ccy_amount", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount);
+
+
     // IcpClpCashflow2
     py::class_<qf::IcpClpCashflow2, std::shared_ptr<qf::IcpClpCashflow2>, qf::LinearInterestRateCashflow>(
             m, "IcpClpCashflow2")
@@ -824,6 +897,7 @@ PYBIND11_MODULE(qcfinancial, m)
     // CustomNotionalAmort
     py::class_<qf::CustomNotionalAmort>(m, "CustomNotionalAmort")
             .def(py::init<>())
+            .def(py::init<size_t>())
             .def("set_size", &qf::CustomNotionalAmort::setSize)
             .def("get_size", &qf::CustomNotionalAmort::getSize)
             .def("set_notional_amort_at", &qf::CustomNotionalAmort::setNotionalAmortAt)
@@ -833,20 +907,259 @@ PYBIND11_MODULE(qcfinancial, m)
 
     // LegFactory
     py::class_<qf::LegFactory>(m, "LegFactory")
-            .def_static("build_bullet_fixed_rate_leg", &qf::LegFactory::buildBulletFixedRateLeg)
+            .def_static(
+                    "build_bullet_fixed_rate_leg",
+                    &qf::LegFactory::buildBulletFixedRateLeg,
+                    "Builds a Leg containing only cashflows of type FixedRateCashflow. Amortization is BULLET",
+                     py::arg("rec_pay"),
+                     py::arg("start_date"),
+                     py::arg("end_date"),
+                     py::arg("bus_adj_rule"),
+                     py::arg("settlement_periodicity"),
+                     py::arg("stub_period"),
+                     py::arg("settlement_calendar"),
+                     py::arg("settlement_lag"),
+                     py::arg("initial_notional"),
+                     py::arg("amort_is_cashflow"),
+                     py::arg("interest_rate"),
+                     py::arg("notional_currency"),
+                     py::arg("is_bond"))
+            .def_static(
+                    "build_custom_amort_fixed_rate_leg",
+                    &qf::LegFactory::buildCustomAmortFixedRateLeg,
+                    "Builds a Leg containing only cashflows of type FixedRateCashflow. Amortization is CUSTOM",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("interest_rate"),
+                    py::arg("notional_currency"))
+            .def_static(
+                    "build_bullet_fixed_rate_mccy_leg",
+                    &qf::LegFactory::buildBulletFixedRateMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type FixedRateMultiCurrencyCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("interest_rate"),
+                    py::arg("notional_currency"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag"),
+                    py::arg("is_bond"))
+            .def_static(
+                    "build_custom_amort_fixed_rate_mccy_leg",
+                    &qf::LegFactory::buildCustomAmortFixedRateMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type FixedRateMultiCurrencyCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("interest_rate"),
+                    py::arg("notional_currency"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag"),
+                    py::arg("is_bond"))
+            .def_static(
+                    "build_bullet_ibor_leg",
+                    &qf::LegFactory::buildBulletIborLeg,
+                    "Builds a Leg containing only cashflows of type IborCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_periodicity"),
+                    py::arg("fixing_stub_period"),
+                    py::arg("fixing_calendar"),
+                    py::arg("fixing_lag"),
+                    py::arg("interest_rate_index"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"))
+            .def_static(
+                    "build_custom_amort_ibor_leg",
+                    &qf::LegFactory::buildCustomAmortIborLeg,
+                    "Builds a Leg containing only cashflows of type IborCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("fixing_periodicity"),
+                    py::arg("fixing_stub_period"),
+                    py::arg("fixing_calendar"),
+                    py::arg("fixing_lag"),
+                    py::arg("interest_rate_index"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"))
+            .def_static(
+                    "build_bullet_ibor_mccy_leg",
+                    &qf::LegFactory::buildBulletIborMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type IborMultiCurrencyCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_periodicity"),
+                    py::arg("fixing_stub_period"),
+                    py::arg("fixing_calendar"),
+                    py::arg("fixing_lag"),
+                    py::arg("interest_rate_index"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag"))
+            .def_static(
+                    "build_custom_amort_ibor_mccy_leg",
+                    &qf::LegFactory::buildCustomAmortIborMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type IborMultiCurrencyCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_periodicity"),
+                    py::arg("fixing_stub_period"),
+                    py::arg("fixing_calendar"),
+                    py::arg("fixing_lag"),
+                    py::arg("interest_rate_index"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag"))
+            .def_static(
+                    "build_bullet_overnight_index_leg",
+                    &qf::LegFactory::buildBulletOvernightIndexLeg,
+                    "Builds a Leg containing only cashflows of type OvernightIndexCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("fix_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("fixing_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("index_name"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("notional_currency")
+            )
+            .def_static(
+                    "build_custom_amort_overnight_index_leg",
+                    &qf::LegFactory::buildCustomAmortOvernightIndexLeg,
+                    "Builds a Leg containing only cashflows of type OvernightIndexCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("fix_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("fixing_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("index_name"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("notional_currency")
+            )
+            .def_static(
+                    "build_bullet_icp_clp_leg",
+                    &qf::LegFactory::buildBulletIcpClpLeg,
+                    "Builds a Leg containing only cashflows of type IcpClpCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing")
+                    )
+            .def_static(
+                    "build_custom_amort_icp_clp_leg",
+                    &qf::LegFactory::buildCustomAmortIcpClpLeg,
+                    "Builds a Leg containing only cashflows of type IcpClpCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing")
+                    )
             .def_static("build_bullet_fixed_rate_leg_2", &qf::LegFactory::buildBulletFixedRateLeg2)
-            .def_static("build_bullet_fixed_rate_mccy_leg", &qf::LegFactory::buildBulletFixedRateMultiCurrencyLeg)
-            .def_static("build_custom_amort_fixed_rate_leg", &qf::LegFactory::buildCustomAmortFixedRateLeg)
             .def_static("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
             .def_static("build_custom_amort_fixed_rate_leg_2", &qf::LegFactory::buildCustomAmortFixedRateLeg2)
-            .def_static("build_bullet_ibor_leg", &qf::LegFactory::buildBulletIborLeg)
             .def_static("build_bullet_ibor2_leg", &qf::LegFactory::buildBulletIbor2Leg)
-            .def_static("build_bullet_ibor_mccy_leg", &qf::LegFactory::buildBulletIborMultiCurrencyLeg)
-            .def_static("build_custom_amort_ibor_leg", &qf::LegFactory::buildCustomAmortIborLeg)
             .def_static("build_custom_amort_ibor2_leg", &qf::LegFactory::buildCustomAmortIbor2Leg)
-            .def_static("build_bullet_icp_clp_leg", &qf::LegFactory::buildBulletIcpClpLeg)
             .def_static("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
-            .def_static("build_custom_amort_icp_clp_leg", &qf::LegFactory::buildCustomAmortIcpClpLeg)
             .def_static("build_custom_amort_icp_clp2_leg", &qf::LegFactory::buildCustomAmortIcpClp2Leg)
             .def_static("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
             .def_static("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
