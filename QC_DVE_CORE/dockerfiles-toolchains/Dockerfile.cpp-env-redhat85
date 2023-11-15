@@ -1,0 +1,45 @@
+# CLion remote docker environment (How to build docker container, run and stop it)
+#
+# Build and run:
+#   docker build -t clion/redhat85/cpp-env:1.0 -f Dockerfile.cpp-env-redhat85 .
+#   docker run -it --name redhat85 -v /Users/alvarodiaz/Documents/Docker\ Volumes/redhat-clion:/home/test_user/MyVolume --entrypoint /bin/bash clion/redhat85/cpp-env:1.0
+
+#
+# stop:
+#   docker stop clion_remote_env
+# 
+# ssh credentials (test user):
+#   user@password 
+
+FROM redhat/ubi8:8.8-854
+
+# RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* \
+#    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+
+RUN yum -y update
+RUN yum -y install dnf
+# RUN yum -y install dnf-plugins-core
+# RUN dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+# RUN /usr/bin/crb enable
+RUN yum -y install openssh-server
+RUN yum -y install make
+RUN yum -y install autoconf
+RUN yum -y install automake
+# RUN yum -y install locales-all
+# RUN yum -y install dos2unix
+# RUN dnf install ninja-build -y
+RUN yum -y install gcc
+RUN yum -y install gcc-c++
+RUN yum -y install gdb
+RUN yum -y install clang
+RUN yum -y install cmake
+RUN yum -y install rsync
+RUN yum -y install tar
+RUN yum -y install git
+RUN dnf -y install python39-devel
+RUN pip3 install twine
+RUN pip3 install wheel
+RUN yum clean all
+RUN useradd -m test_user
+USER test_user
+RUN git clone --recursive-submodules https://github.com/adiaz-efaa/derivative-valuation-engine.git /home/test_user/
