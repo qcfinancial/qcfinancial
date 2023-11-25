@@ -98,9 +98,7 @@ namespace QCode
 			 * @author	Alvaro D�az V.
 			 * @date	04/10/2017
 			 */
-			virtual ~Cashflow()
-			{
-			}
+			virtual ~Cashflow() = default;
 		};
 
 		/**

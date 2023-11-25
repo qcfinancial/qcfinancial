@@ -65,6 +65,8 @@ namespace QCode
 			 */
 			double amount() override;
 
+            virtual double settlementAmount();
+
 			/**
 			 * @fn	QCCurrency FixedRateCashflow::ccy();
 			 *

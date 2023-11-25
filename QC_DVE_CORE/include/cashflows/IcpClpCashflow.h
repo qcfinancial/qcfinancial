@@ -262,7 +262,7 @@ namespace QCode
 			*
 			* @return   A double
 			*/
-			double getRateValue();
+			virtual double getRateValue();
 
 			/**
 			* @fn	    double IcpClpCashflow::getTypeOfRate();

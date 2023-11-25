@@ -47,6 +47,8 @@ using namespace pybind11::literals;
 #include <cashflows/IcpClpCashflow2.h>
 #include <cashflows/IcpClfCashflow.h>
 #include <cashflows/CompoundedOvernightRateCashflow.h>
+#include <cashflows/CompoundedOvernightRateCashflow2.h>
+#include <cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h>
 #include <cashflows/OvernightIndexCashflow.h>
 #include <cashflows/OvernightIndexMultiCurrencyCashflow.h>
 
@@ -94,12 +96,8 @@ PYBIND11_MODULE(qcfinancial, m)
 
 
     m.def(
-            "subtract_2_nums",
-            [](int firstNumber, int secondNumber) { return firstNumber - secondNumber; },
-            R"pbdoc(Subtract two numbers .Some other explanation about the subtract function.)pbdoc",
-            "first_number"_a,
-            "second_number"_a
-            );
+            "id",
+            []() { return "18"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -140,7 +138,11 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("__ge__", &QCDate::operator>=)
             .def("__gt__", &QCDate::operator>)
             .def("__hash__", &QCDate::excelSerial)
-            .def("__str__", &QCDate::description, py::arg("es_iso") = false);
+            .def("__str__", &QCDate::description, py::arg("es_iso") = false)
+            .def < QCDate(QCDate::*)(std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const > (
+                    "business_day", &QCDate::businessDay);
+
+
 
     m.def("build_qcdate_from_string", [](std::string& strDate){
         return QCDate{strDate};
@@ -368,7 +370,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def(py::init<std::shared_ptr<qf::FXRate>, std::string, qf::Tenor, qf::Tenor, QCBusinessCalendar>())
             .def("fixing_date", &qf::FXRateIndex::fixingDate)
             .def("value_date", &qf::FXRateIndex::valueDate)
-            .def("convert", &qf::FXRateIndex::convert);
+            .def("convert", &qf::FXRateIndex::convert)
+            .def("get_calendar", &qf::FXRateIndex::getCalendar);
 
     // QCCurrencyConverter
     py::class_<QCCurrencyConverter>(m, "QCCurrencyConverter")
@@ -482,6 +485,9 @@ PYBIND11_MODULE(qcfinancial, m)
     // DateList
     py::bind_vector<std::vector<QCDate>>(m, "DateList");
 
+    // CashflowVec
+    py::bind_vector<std::vector<std::shared_ptr<qf::Cashflow>>>(m, "CashflowVec");
+
     // SimpleMultiCurrencyCashflow
     py::class_<qf::SimpleMultiCurrencyCashflow, qf::SimpleCashflow, std::shared_ptr<qf::SimpleMultiCurrencyCashflow>>(
             m, "SimpleMultiCurrencyCashflow")
@@ -510,7 +516,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_nominal", &qf::FixedRateCashflow::getNominal)
             .def("set_amortization", &qf::FixedRateCashflow::setAmortization)
             .def("get_amortization", &qf::FixedRateCashflow::getAmortization)
-            .def("get_type", &qf::FixedRateCashflow::getType);
+            .def("get_type", &qf::FixedRateCashflow::getType)
+            .def("settlement_amount", &qf::FixedRateCashflow::settlementAmount);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::FixedRateCashflow>&>(&show));
 
@@ -522,8 +529,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     double, double, bool,
                     const QCInterestRate &, shared_ptr<QCCurrency>, QCDate &,
                     shared_ptr<QCCurrency>, shared_ptr<qf::FXRateIndex>, double>())
-                    .def("amount", &qf::FixedRateMultiCurrencyCashflow::amount)
-                    .def("get_fx_publish_date", &qf::FixedRateMultiCurrencyCashflow::getFXPublishDate)
+                    // .def("amount", &qf::FixedRateMultiCurrencyCashflow::amount)
+                    .def("get_fx_fixing_date", &qf::FixedRateMultiCurrencyCashflow::getFXPublishDate)
                     .def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCcy)
                     .def("set_fx_rate_index_value", &qf::FixedRateMultiCurrencyCashflow::setFxRateIndexValue)
                     .def("accrued_interest", &qf::FixedRateCashflow::accruedInterest)
@@ -532,7 +539,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     .def("get_amortization", &qf::FixedRateMultiCurrencyCashflow::getAmortization)
                     .def("get_fx_rate_index", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndex)
                     .def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
-                    .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType);
+                    .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType)
+                    .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount);
 
     // LinearInterestRateCashflow
     py::class_<qf::LinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>, PyLinearInterestRateCashflow>(
@@ -663,6 +671,7 @@ PYBIND11_MODULE(qcfinancial, m)
                     double>())
             .def("amount", &qf::IborMultiCurrencyCashflow::amount)
             .def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCcy)
+            .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)
             .def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
             .def("accrued_interest", &qf::IborCashflow::accruedInterest)
             .def("accrued_interest", &qf::IborMultiCurrencyCashflow::accruedInterest);
@@ -706,8 +715,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("amount", &qf::OvernightIndexCashflow::amount)
             .def("ccy", &qf::OvernightIndexCashflow::ccy)
             .def("date", &qf::OvernightIndexCashflow::date)
-            .def("get_accrual_start_date", &qf::OvernightIndexCashflow::getAccrualStartDate)
-            .def("get_accrual_end_date", &qf::OvernightIndexCashflow::getAccrualEndDate)
+            .def("get_start_date", &qf::OvernightIndexCashflow::getStartDate)
+            .def("get_end_date", &qf::OvernightIndexCashflow::getEndDate)
             .def("get_index_start_date", &qf::OvernightIndexCashflow::getIndexStartDate)
             .def("get_index_end_date", &qf::OvernightIndexCashflow::getIndexEndDate)
             .def("get_settlement_date", &qf::OvernightIndexCashflow::getSettlementDate)
@@ -727,7 +736,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def < double(qf::OvernightIndexCashflow::*)(const QCDate&, const qf::TimeSeries&)>(
                     "accrued_interest",&qf::OvernightIndexCashflow::accruedInterest)
             .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
-            .def("get_type", &qf::OvernightIndexCashflow::getType);
+            .def("get_type", &qf::OvernightIndexCashflow::getType)
+            .def("get_index_code", &qf::OvernightIndexCashflow::getIndexCode);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::OvernightIndexCashflow>&>(&show));
 
@@ -745,7 +755,10 @@ PYBIND11_MODULE(qcfinancial, m)
                     std::shared_ptr<qf::FXRateIndex>>())
             .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCcy)
             .def("set_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::setFxRateIndexValue)
+            .def("get_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndexValue)
             .def("get_fx_rate_index", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndex)
+            .def("get_fx_rate_index_code", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndexCode)
+            .def("get_fx_rate_index_fixing_date", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndexFixingDate)
             .def("get_type", &qf::OvernightIndexMultiCurrencyCashflow::getType)
             .def < double(qf::OvernightIndexMultiCurrencyCashflow::*)(const qf::TimeSeries&, const qf::TimeSeries&)>(
             "settlement_ccy_interest", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest)
@@ -809,6 +822,7 @@ PYBIND11_MODULE(qcfinancial, m)
             m, "IcpClfCashflow")
             .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, double, double, vector<double>>())
             .def("amount", &qf::IcpClfCashflow::amount)
+            .def("settlement_amount", &qf::IcpClfCashflow::settlementAmount)
             .def("ccy", &qf::IcpClfCashflow::ccy)
             .def("accrued_interest", &qf::IcpClfCashflow::accruedInterest)
             .def("get_type", &qf::IcpClfCashflow::getType)
@@ -856,6 +870,89 @@ PYBIND11_MODULE(qcfinancial, m)
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::CompoundedOvernightRateCashflow>&>(&show));
 
+    // CompoundedOvernightRateCashflow2
+    py::class_<qf::CompoundedOvernightRateCashflow2, std::shared_ptr<qf::CompoundedOvernightRateCashflow2>, qf::Cashflow>(
+            m, "CompoundedOvernightRateCashflow2")
+            .def(py::init<std::shared_ptr<qf::InterestRateIndex>,
+                    const QCDate &,
+                    const QCDate &,
+                    const QCDate &,
+                    const std::vector<QCDate> &,
+                    double,
+                    double,
+                    bool,
+                    shared_ptr<QCCurrency>,
+                    double,
+                    double,
+                    const QCInterestRate&,
+                    unsigned int,
+                    unsigned int,
+                    unsigned int>())
+            .def("amount", &qf::CompoundedOvernightRateCashflow2::amount)
+            .def("ccy", &qf::CompoundedOvernightRateCashflow2::ccy)
+            .def("date", &qf::CompoundedOvernightRateCashflow2::date)
+            .def("get_type", &qf::CompoundedOvernightRateCashflow2::getType)
+            .def("get_start_date", &qf::CompoundedOvernightRateCashflow2::getStartDate)
+            .def("get_end_date", &qf::CompoundedOvernightRateCashflow2::getEndDate)
+            .def("get_settlement_date", &qf::CompoundedOvernightRateCashflow2::getSettlementDate)
+            .def("get_fixing_dates", &qf::CompoundedOvernightRateCashflow2::getFixingDates)
+            .def("get_interest_rate_index_code", &qf::CompoundedOvernightRateCashflow2::getInterestRateIndexCode)
+            .def("get_notional", &qf::CompoundedOvernightRateCashflow2::getNotional)
+            .def("get_amortization", &qf::CompoundedOvernightRateCashflow2::getAmortization)
+            .def("interest_from_spread", &qf::CompoundedOvernightRateCashflow2::interestFromSpread)
+            .def("interest", &qf::CompoundedOvernightRateCashflow2::interest)
+            .def("fixing", &qf::CompoundedOvernightRateCashflow2::fixing)
+            .def("accrued_interest", &qf::CompoundedOvernightRateCashflow2::accruedInterest)
+            .def("accrued_fixing", &qf::CompoundedOvernightRateCashflow2::accruedFixing)
+            .def("does_amortize", &qf::CompoundedOvernightRateCashflow2::doesAmortize)
+            .def("get_interest_rate_index", &qf::CompoundedOvernightRateCashflow2::getInterestRateIndex)
+            .def("get_interest_rate_index_code", &qf::CompoundedOvernightRateCashflow2::getInterestRateIndexCode)
+            .def("get_spread", &qf::CompoundedOvernightRateCashflow2::getSpread)
+            .def("get_gearing", &qf::CompoundedOvernightRateCashflow2::getGearing)
+            .def("set_notional", &qf::CompoundedOvernightRateCashflow2::setNotional)
+            .def("set_amortization", &qf::CompoundedOvernightRateCashflow2::setAmortization)
+            .def("is_expired", &qf::CompoundedOvernightRateCashflow2::isExpired)
+            .def("get_eq_rate_decimal_places", &qf::CompoundedOvernightRateCashflow2::getEqRateDecimalPlaces)
+            .def("get_amount_derivatives", &qf::CompoundedOvernightRateCashflow2::getAmountDerivatives);
+
+    m.def("show", py::overload_cast<const std::shared_ptr<qf::CompoundedOvernightRateCashflow2>&>(&show));
+
+    // CompoundedOvernightRateMultiCurrencyCashflow2
+    py::class_<qf::CompoundedOvernightRateMultiCurrencyCashflow2, std::shared_ptr<qf::CompoundedOvernightRateMultiCurrencyCashflow2>, qf::CompoundedOvernightRateCashflow2>(
+            m, "CompoundedOvernightRateMultiCurrencyCashflow2")
+            .def(py::init<std::shared_ptr<qf::InterestRateIndex>,
+                    const QCDate &,
+                    const QCDate &,
+                    const QCDate &,
+                    const std::vector<QCDate> &,
+                    double,
+                    double,
+                    bool,
+                    shared_ptr<QCCurrency>,
+                    double,
+                    double,
+                    const QCInterestRate&,
+                    unsigned int,
+                    unsigned int,
+                    unsigned int,
+                    const QCDate &,
+                    std::shared_ptr<QCCurrency>,
+                    std::shared_ptr<qf::FXRateIndex>>())
+            .def("settlement_currency", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCcy)
+            .def < void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(const qf::TimeSeries&)>(
+            "set_fx_rate_index_value", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateIndexValue)
+            .def < void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double)>(
+            "set_fx_rate_index_value", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateIndexValue)
+            .def("get_fx_rate_index_code", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexCode)
+            .def("get_fx_rate_index_value", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexValue)
+            .def("get_fx_rate_index_fixing_date", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexFixingDate)
+            .def("get_fx_rate_index", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndex)
+            .def < double(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double)>(
+            "to_settlement_currency", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::toSettlementCurrency)
+            .def < double(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double, const qf::TimeSeries&)>(
+            "to_settlement_currency", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::toSettlementCurrency);
+
+
     // Leg
     py::class_<qf::Leg>(m, "Leg")
             .def(py::init<>())
@@ -863,7 +960,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_cashflow_at", &qf::Leg::getCashflowAt)
             .def("append_cashflow", &qf::Leg::appendCashflow)
             .def("size", &qf::Leg::size)
-            .def("resize", &qf::Leg::resize);
+            .def("resize", &qf::Leg::resize)
+            .def("get_cashflows", &qf::Leg::getCashflows);
 
     // BusyAdjRules
     py::enum_<QCDate::QCBusDayAdjRules>(m, "BusyAdjRules")
@@ -1098,6 +1196,32 @@ PYBIND11_MODULE(qcfinancial, m)
                     py::arg("notional_currency")
             )
             .def_static(
+                    "build_bullet_overnight_index_multi_currency_leg",
+                    &qf::LegFactory::buildBulletOvernightIndexMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type OvernightIndexMultiCurrencyCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("fix_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("fixing_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("index_name"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("notional_currency"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag")
+            )
+            .def_static(
                     "build_custom_amort_overnight_index_leg",
                     &qf::LegFactory::buildCustomAmortOvernightIndexLeg,
                     "Builds a Leg containing only cashflows of type OvernightIndexCashflow. Amortization is CUSTOM.",
@@ -1119,6 +1243,32 @@ PYBIND11_MODULE(qcfinancial, m)
                     py::arg("index_name"),
                     py::arg("eq_rate_decimal_places"),
                     py::arg("notional_currency")
+            )
+            .def_static(
+                    "build_custom_amort_overnight_index_multi_currency_leg",
+                    &qf::LegFactory::buildCustomAmortOvernightIndexMultiCurrencyLeg,
+                    "Builds a Leg containing only cashflows of type OvernightIndexMultiCurrencyCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("fix_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("fixing_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("index_name"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("notional_currency"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"),
+                    py::arg("fx_rate_index_fixing_lag")
             )
             .def_static(
                     "build_bullet_icp_clp_leg",
@@ -1154,6 +1304,40 @@ PYBIND11_MODULE(qcfinancial, m)
                     py::arg("spread"),
                     py::arg("gearing")
                     )
+            .def_static(
+                    "build_bullet_icp_clf_leg",
+                    &qf::LegFactory::buildBulletIcpClfLeg,
+                    "Builds a Leg containing only cashflows of type IcpClFCashflow. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("initial_notional"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing")
+                    )
+            .def_static(
+                    "build_custom_amort_icp_clf_leg",
+                    &qf::LegFactory::buildCustomAmortIcpClfLeg,
+                    "Builds a Leg containing only cashflows of type IcpClFCashflow. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("notional_and_amort"),
+                    py::arg("amort_is_cashflow"),
+                    py::arg("spread"),
+                    py::arg("gearing")
+                    )
             .def_static("build_bullet_fixed_rate_leg_2", &qf::LegFactory::buildBulletFixedRateLeg2)
             .def_static("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
             .def_static("build_custom_amort_fixed_rate_leg_2", &qf::LegFactory::buildCustomAmortFixedRateLeg2)
@@ -1165,7 +1349,105 @@ PYBIND11_MODULE(qcfinancial, m)
             .def_static("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
             .def_static("customize_amortization", &qf::LegFactory::customizeAmortization)
             .def_static("build_bullet_compounded_overnight_rate_leg", &qf::LegFactory::buildBulletCompoundedOvernightLeg)
-            .def_static("build_custom_amort_compounded_overnight_rate_leg", &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg);
+            .def_static(
+                    "build_bullet_compounded_overnight_rate_leg_2",
+                    &qf::LegFactory::buildBulletCompoundedOvernightRateLeg2,
+                    "Builds a Leg containing only cashflows of type CompoundedOvernightRate2. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("settlement_stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_calendar"),
+                    py::arg("interest_rate_index"),
+                    py::arg("initial_notional"),
+                    py::arg("cashflow_is_amort"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("lookback"),
+                    py::arg("lockout"))
+            .def_static(
+                "build_bullet_compounded_overnight_rate_mccy_leg_2",
+                &qf::LegFactory::buildBulletCompoundedOvernightRateMultiCurrencyLeg2,
+                "Builds a Leg containing only cashflows of type CompoundedOvernightRateMultiCurrencyCashflow2. Amortization is BULLET.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("settlement_stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_calendar"),
+                    py::arg("interest_rate_index"),
+                    py::arg("initial_notional"),
+                    py::arg("cashflow_is_amort"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("lookback"),
+                    py::arg("lockout"),
+                    py::arg("fx_rate_index_fixing_lag"),
+                    py::arg("settlement_currency"),
+                    py::arg("fx_rate_index"))
+            .def_static("build_custom_amort_compounded_overnight_rate_leg", &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg)
+            .def_static(
+                    "build_custom_amort_compounded_overnight_rate_leg_2",
+                    &qf::LegFactory::buildCustomAmortCompoundedOvernightRateLeg2,
+                    "Builds a Leg containing only cashflows of type CompoundedOvernightRate2. Amortization is CUSTOM.",
+                    py::arg("rec_pay"),
+                    py::arg("start_date"),
+                    py::arg("end_date"),
+                    py::arg("bus_adj_rule"),
+                    py::arg("settlement_periodicity"),
+                    py::arg("settlement_stub_period"),
+                    py::arg("settlement_calendar"),
+                    py::arg("settlement_lag"),
+                    py::arg("fixing_calendar"),
+                    py::arg("interest_rate_index"),
+                    py::arg("notional_and_amort"),
+                    py::arg("cashflow_is_amort"),
+                    py::arg("notional_currency"),
+                    py::arg("spread"),
+                    py::arg("gearing"),
+                    py::arg("interest_rate"),
+                    py::arg("eq_rate_decimal_places"),
+                    py::arg("lookback"),
+                    py::arg("lockout"))
+    .def_static(
+            "build_custom_amort_compounded_overnight_rate_multi_currency_leg_2",
+            &qf::LegFactory::buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2,
+            "Builds a Leg containing only cashflows of type CompoundedOvernightRateMultiCurrency2. Amortization is CUSTOM.",
+            py::arg("rec_pay"),
+            py::arg("start_date"),
+            py::arg("end_date"),
+            py::arg("bus_adj_rule"),
+            py::arg("settlement_periodicity"),
+            py::arg("settlement_stub_period"),
+            py::arg("settlement_calendar"),
+            py::arg("settlement_lag"),
+            py::arg("fixing_calendar"),
+            py::arg("interest_rate_index"),
+            py::arg("notional_and_amort"),
+            py::arg("cashflow_is_amort"),
+            py::arg("notional_currency"),
+            py::arg("spread"),
+            py::arg("gearing"),
+            py::arg("interest_rate"),
+            py::arg("eq_rate_decimal_places"),
+            py::arg("lookback"),
+            py::arg("lockout"),
+            py::arg("fx_rate_index_fixing_lag"),
+            py::arg("settlement_currency"),
+            py::arg("fx_rate_index"));
 
     // long_vec
     py::bind_vector<std::vector<long>>(m, "long_vec");

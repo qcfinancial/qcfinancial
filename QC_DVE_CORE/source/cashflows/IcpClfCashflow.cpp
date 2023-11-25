@@ -284,5 +284,14 @@ namespace QCode
             return "IcpClfCashflow";
         }
 
+        double IcpClfCashflow::settlementAmount() {
+            auto ufAmount = _calculateInterest(_endDate, _endDateICP, _endDateUF);
+            if (_doesAmortize) {
+                ufAmount += _amortization;
+            }
+            auto clp = QCCLP();
+            return clp.amount(ufAmount * _endDateUF);
+        }
+
     }
 }

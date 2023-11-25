@@ -142,12 +142,15 @@ namespace QCode
 			return result;
 		}
 
-		FixedRateCashflow::~FixedRateCashflow()
-		{
-		}
+		FixedRateCashflow::~FixedRateCashflow() = default;
 
         std::string FixedRateCashflow::getType() const {
             return "FixedRateCashflow";
+        }
+
+        double FixedRateCashflow::settlementAmount() {
+            auto result = amount();
+            return ccy()->amount(result);
         }
 
     }

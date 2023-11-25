@@ -115,10 +115,10 @@ namespace QCode
             std::string getTypeOfRate();
 
 
-            [[nodiscard]] QCDate getAccrualStartDate() const;
+            [[nodiscard]] QCDate getStartDate() const;
 
 
-            [[nodiscard]] QCDate getAccrualEndDate() const;
+            [[nodiscard]] QCDate getEndDate() const;
 
 
             [[nodiscard]] QCDate getIndexStartDate() const;
@@ -128,6 +128,9 @@ namespace QCode
 
 
             [[nodiscard]] QCDate getSettlementDate() const;
+
+
+            std::string getIndexCode() const;
 
 
             virtual ~OvernightIndexCashflow();
@@ -147,10 +150,10 @@ namespace QCode
             double _endDateIndex;
 
             /** @brief	The start date */
-            QCDate _accrualStartDate;
+            QCDate _startDate;
 
             /** @brief	The end date */
-            QCDate _accrualEndDate;
+            QCDate _endDate;
 
             /** @brief	The start date */
             QCDate _indexStartDate;

@@ -82,7 +82,7 @@ namespace QCode
 				std::shared_ptr<FXRateIndex> fxRateIndex,
 				double fxRateIndexValue = 1.0);
 
-            std::string getType() const override;
+            [[nodiscard]] std::string getType() const override;
 
 			/**
 			 * @fn	double IborMultiCurrencyCashflow::amount() override;
@@ -165,6 +165,8 @@ namespace QCode
 			 * @returns	A std::shared_ptr<IborMultiCurrencyCashflowWrapper>;
 			 */
 			std::shared_ptr<IborMultiCurrencyCashflowWrapper> wrap();
+
+            QCDate getFXFixingDate() const;
 
 			/**
 			 * @fn	virtual IborMultiCurrencyCashflow::~IborMultiCurrencyCashflow();

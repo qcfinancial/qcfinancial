@@ -24,7 +24,7 @@ namespace QCode::Financial {
             const QCInterestRate &rate,
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
-            const QCDate &fxRateIndexFixingDate,
+            const QCDate& fxRateIndexFixingDate,
             std::shared_ptr<QCCurrency> settlementCurrency,
             shared_ptr<FXRateIndex> fxRateIndex) :
             OvernightIndexCashflow(
@@ -58,7 +58,11 @@ namespace QCode::Financial {
     }
 
     std::string OvernightIndexMultiCurrencyCashflow::getFXRateIndexCode() const {
-        _fxRateIndex->getCode();
+        return _fxRateIndex->getCode();
+    }
+
+    double OvernightIndexMultiCurrencyCashflow::getFXRateIndexValue() const {
+        return _fxRateIndexValue;
     }
 
     shared_ptr<FXRateIndex> OvernightIndexMultiCurrencyCashflow::getFXRateIndex() const {
@@ -80,7 +84,7 @@ namespace QCode::Financial {
         }
         else
         {
-            double fxRateIndexValue{ fxRateIndexValues.at(_fxRateIndexFixingDate) };
+            _fxRateIndexValue = fxRateIndexValues.at(_fxRateIndexFixingDate);
         }
 
         if (!QCode::Helpers::isDateInTimeSeries(_indexStartDate, overnightIndexValues))
@@ -107,13 +111,14 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest() {
-        auto interest = _calculateInterest(_accrualEndDate, _endDateIndex);
+        auto interest = ccy()->amount(_calculateInterest(_endDate, _endDateIndex));
         QCCurrencyConverter ccyConverter;
-        return ccyConverter.convert(
-                interest,
-                _notionalCurrency,
-                _fxRateIndexValue,
-                *_fxRateIndex);
+        return _settlementCurrency->amount(
+                ccyConverter.convert(
+                        interest,
+                        _notionalCurrency,
+                        _fxRateIndexValue,
+                        *_fxRateIndex));
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest(
@@ -125,11 +130,12 @@ namespace QCode::Financial {
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmortization() {
         QCCurrencyConverter ccyConverter;
-        return ccyConverter.convert(
-                _amortization,
+        return _settlementCurrency->amount(
+                ccyConverter.convert(
+                ccy()->amount(_amortization),
                 _notionalCurrency,
                 _fxRateIndexValue,
-                *_fxRateIndex);
+                *_fxRateIndex));
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmortization(
@@ -153,8 +159,52 @@ namespace QCode::Financial {
         return settlementCurrencyAmount();
     }
 
-    std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> OvernightIndexMultiCurrencyCashflow::wrap() {
+    std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> OvernightIndexMultiCurrencyCashflow::mccyWrap() {
+         /* Accrual Start Date
+         Accrual End Date
+         Index Start Date
+         Index End Date
+         Settlement Date
+         Notional
+         Amortization
+         Amortization is cashflow
+         Notional Currency code
+         Index name
+         Start date index value
+         End date index value
+         Equivalent Rate
+         Type of rate
+         Interest
+         Cashflow
+         Spread
+         Gearing
+         Settlement currency
+         FX Rate Index
+         FX Rate Index Fixing Date
+         FX Rate Index Value
+         Interest in settlement currency
+         Amortization in settlement currency
+         Cashflow in settlement currency */
+        auto interes = _calculateInterest(_endDate, _endDateIndex);
+        auto flujo = interes;
+        if (_doesAmortize)
+            flujo += _amortization;
 
+        auto tup1 = wrap();
+        auto tup2 = std::make_tuple(
+                _settlementCurrency->getIsoCode(),
+                _fxRateIndex->getCode(),
+                _fxRateIndexFixingDate.description(false),
+                _fxRateIndexValue,
+                settlementCurrencyInterest(),
+                settlementCurrencyAmortization(),
+                settlementCurrencyAmount());
+
+        return std::make_shared<OvernightIndexMultiCurrencyCashflowWrapper>(std::tuple_cat(*tup1, tup2));
+    }
+
+    QCDate OvernightIndexMultiCurrencyCashflow::getFXRateIndexFixingDate() const {
+        return _fxRateIndexFixingDate;
     }
 }
 

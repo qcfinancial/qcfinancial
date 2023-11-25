@@ -156,5 +156,9 @@ namespace QCode
 		IborMultiCurrencyCashflow::~IborMultiCurrencyCashflow()
 		{
 		}
-	}
+
+        QCDate IborMultiCurrencyCashflow::getFXFixingDate() const {
+            return _fxRateIndexFixingDate;
+        }
+    }
 }

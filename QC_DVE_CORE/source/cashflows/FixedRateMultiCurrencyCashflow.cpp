@@ -38,17 +38,17 @@ namespace QCode
             return "FixedRateMultiCurrencyCashflow";
         }
 
-		double FixedRateMultiCurrencyCashflow::amount()
-		{
-			QCCurrencyConverter ccyConverter;
-			double cashflow = _interest;
-			if (_doesAmortize)
-			{
-				cashflow += _amortization;
-			}
-
-			return ccyConverter.convert(cashflow, _currency, _fxRateIndexValue, *_fxRateIndex);
-		}
+//		double FixedRateMultiCurrencyCashflow::amount()
+//		{
+//			QCCurrencyConverter ccyConverter;
+//			double cashflow = _interest;
+//			if (_doesAmortize)
+//			{
+//				cashflow += _amortization;
+//			}
+//
+//			return ccyConverter.convert(cashflow, _currency, _fxRateIndexValue, *_fxRateIndex);
+//		}
 
 		shared_ptr<QCCurrency> FixedRateMultiCurrencyCashflow::settlementCcy()
 		{
@@ -166,12 +166,30 @@ namespace QCode
 			return result;
 		}
 
-		FixedRateMultiCurrencyCashflow::~FixedRateMultiCurrencyCashflow()
-		{
-		}
+		FixedRateMultiCurrencyCashflow::~FixedRateMultiCurrencyCashflow() = default;
 
         QCDate FixedRateMultiCurrencyCashflow::getFXPublishDate() const {
             return _fxRateIndexFixingDate;
+        }
+
+        double FixedRateMultiCurrencyCashflow::settlementAmount() {
+            QCCurrencyConverter ccyConverter;
+//            double cashflow = _interest;
+//            if (_doesAmortize)
+//            {
+//                cashflow += _amortization;
+//            }
+
+            // cashflow = _currency->amount(cashflow);
+            auto cashflow = _currency->amount(amount());
+
+            cashflow = ccyConverter.convert(
+                    cashflow,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+
+            return _settlementCurrency->amount(cashflow);
         }
     }
 }

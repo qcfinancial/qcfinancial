@@ -1,12 +1,12 @@
 #include "Leg.h"
 
+#include <utility>
+
 namespace QCode
 {
 	namespace Financial
 	{
-		Leg::Leg()
-		{
-		}
+		Leg::Leg() = default;
 
 		std::shared_ptr<Cashflow> Leg::getCashflowAt(size_t pos)
 		{
@@ -15,10 +15,10 @@ namespace QCode
 
 		void Leg::setCashflowAt(shared_ptr<Cashflow> cashflow, size_t pos)
 		{
-			_cashflows.at(pos) = cashflow;
+			_cashflows.at(pos) = std::move(cashflow);
 		}
 
-		void Leg::appendCashflow(shared_ptr<Cashflow> cashflow)
+		void Leg::appendCashflow(const shared_ptr<Cashflow>& cashflow)
 		{
 			_cashflows.push_back(cashflow);
 		}
@@ -33,8 +33,10 @@ namespace QCode
 			_cashflows.resize(newSize);
 		}
 
-		Leg::~Leg()
-		{
-		}
-	}
+		Leg::~Leg() = default;
+
+        std::vector<std::shared_ptr<Cashflow>> Leg::getCashflows() const {
+            return _cashflows;
+        }
+    }
 }

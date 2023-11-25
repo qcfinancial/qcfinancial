@@ -65,35 +65,43 @@ namespace QCode::Financial {
 
         [[nodiscard]] std::string getFXRateIndexCode() const;
 
+        [[nodiscard]] double getFXRateIndexValue() const;
+
+        [[nodiscard]] QCDate getFXRateIndexFixingDate() const;
+
         [[nodiscard]] shared_ptr<FXRateIndex> getFXRateIndex() const;
 
-        // TODO: implementar este método y el método show
-        std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> wrap();
+        std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> mccyWrap();
 
         [[nodiscard]] std::string getType() const override;
 
         double settlementCurrencyInterest();
 
-        double settlementCurrencyInterest(const TimeSeries &overnightIndexValues, const TimeSeries &fxRateIndexValues);
+        double toSettlementCurrency(double amount) const;
+
+        double settlementCurrencyInterest(
+                const TimeSeries &overnightIndexValues,
+                const TimeSeries &fxRateIndexValues);
 
         double settlementCurrencyAmortization();
 
-        double
-        settlementCurrencyAmortization(const TimeSeries &overnightIndexValues, const TimeSeries &fxRateIndexValues);
+        double settlementCurrencyAmortization(
+                const TimeSeries &overnightIndexValues,
+                const TimeSeries &fxRateIndexValues);
 
         double settlementCurrencyAmount();
 
         double settlementCurrencyAmount(const TimeSeries &overnightIndexValues, const TimeSeries &fxRateIndexValues);
 
     protected:
-        const QCDate &_fxRateIndexFixingDate;
+        QCDate _fxRateIndexFixingDate;
         std::shared_ptr<QCCurrency> _settlementCurrency;
         std::shared_ptr<FXRateIndex> _fxRateIndex;
         double _fxRateIndexValue;
 
         void _fixIndices(
                 const TimeSeries &overnightIndexValues,
-                const TimeSeries &fxRateIndexValues)
+                const TimeSeries &fxRateIndexValues);
     };
 
 }

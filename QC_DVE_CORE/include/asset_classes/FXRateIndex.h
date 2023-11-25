@@ -31,7 +31,9 @@ namespace QCode
 			{
 			}
 
-			std::shared_ptr<FXRate> getFxRate() const
+
+
+			[[nodiscard]] std::shared_ptr<FXRate> getFxRate() const
 			{
 				return _fxRate;
 			}
@@ -53,12 +55,12 @@ namespace QCode
 				return _calendar.shift(fixingDate(publishDate), _valueDateRule.getDays());
 			}
 
-			std::string strongCcyCode() const
+			[[nodiscard]] std::string strongCcyCode() const
 			{
 				return _fxRate->strongCcyCode();
 			}
 
-			std::string weakCcyCode() const
+			[[nodiscard]] std::string weakCcyCode() const
 			{
 				return _fxRate->weakCcyCode();
 			}

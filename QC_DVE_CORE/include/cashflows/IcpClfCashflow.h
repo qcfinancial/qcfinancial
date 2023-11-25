@@ -97,6 +97,8 @@ namespace QCode
 			*/
 			double amount() override ;
 
+            double settlementAmount();
+
 			/**
 			 * @fn	    double IcpClfCashflow::_getRateValue();
 			 *
@@ -107,7 +109,7 @@ namespace QCode
 			 *
 			 * @return	The rate value.
 			 */
-			double getRateValue();
+			double getRateValue() override;
 
 			/**
 			* @fn	    double IcpClfCashflow::accruedInterest(QCDate& accrualDate, double icpValue);

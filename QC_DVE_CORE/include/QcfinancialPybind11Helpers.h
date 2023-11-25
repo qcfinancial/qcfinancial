@@ -14,6 +14,8 @@
 #include <curves/QCInterpolator.h>
 #include <asset_classes//InterestRateCurve.h>
 #include <asset_classes/QCInterestRate.h>
+#include <cashflows/CompoundedOvernightRateCashflow2.h>
+#include <cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h>
 
 namespace qf = QCode::Financial;
 
@@ -609,29 +611,112 @@ py::tuple show(const std::shared_ptr<qf::CompoundedOvernightRateCashflow>& compo
     return tuple;
 }
 
-py::tuple show(const std::shared_ptr<qf::OvernightIndexCashflow>& overnightIndexCashflow) {
-    auto tuple = py::tuple(18);
-    auto cashflow = overnightIndexCashflow->wrap();
-    tuple[0] = std::get<0>(*cashflow);
-    tuple[1] = std::get<1>(*cashflow);
-    tuple[2] = std::get<2>(*cashflow);
-    tuple[3] = std::get<3>(*cashflow);
-    tuple[4] = std::get<4>(*cashflow);
-    tuple[5] = std::get<5>(*cashflow);
-    tuple[6] = std::get<6>(*cashflow);
-    tuple[7] = std::get<7>(*cashflow);
-    tuple[8] = std::get<8>(*cashflow);
-    tuple[9] = std::get<9>(*cashflow);
-    tuple[10] = std::get<10>(*cashflow);
-    tuple[11] = std::get<11>(*cashflow);
-    tuple[12] = std::get<12>(*cashflow);
-    tuple[13] = std::get<13>(*cashflow);
-    tuple[14] = std::get<14>(*cashflow);
-    tuple[15] = std::get<15>(*cashflow);
-    tuple[16] = std::get<16>(*cashflow);
-    tuple[17] = std::get<17>(*cashflow);
-    return tuple;
+py::tuple show(const std::shared_ptr<qf::CompoundedOvernightRateCashflow2>& compoundedOvernightRateCashflow2) {
+    if (compoundedOvernightRateCashflow2->getType() == "CompoundedOvernightRateCashflow2") {
+        auto tuple = py::tuple(14);
+        auto cashflow = compoundedOvernightRateCashflow2->wrap();
+        tuple[0] = std::get<0>(*cashflow);
+        tuple[1] = std::get<1>(*cashflow);
+        tuple[2] = std::get<2>(*cashflow);
+        tuple[3] = std::get<3>(*cashflow);
+        tuple[4] = std::get<4>(*cashflow);
+        tuple[5] = std::get<5>(*cashflow);
+        tuple[6] = std::get<6>(*cashflow);
+        tuple[7] = std::get<7>(*cashflow);
+        tuple[8] = std::get<8>(*cashflow);
+        tuple[9] = std::get<9>(*cashflow);
+        tuple[10] = std::get<10>(*cashflow);
+        tuple[11] = std::get<11>(*cashflow);
+        tuple[12] = std::get<12>(*cashflow);
+        tuple[13] = std::get<12>(*cashflow);
+        return tuple;
+    } else {
+        auto tuple = py::tuple(21);
+        auto mccyCashflow = std::dynamic_pointer_cast<qf::CompoundedOvernightRateMultiCurrencyCashflow2>(
+                compoundedOvernightRateCashflow2);
+        auto cashflow = mccyCashflow->mccyWrap();
+        tuple[0] = std::get<0>(*cashflow);
+        tuple[1] = std::get<1>(*cashflow);
+        tuple[2] = std::get<2>(*cashflow);
+        tuple[3] = std::get<3>(*cashflow);
+        tuple[4] = std::get<4>(*cashflow);
+        tuple[5] = std::get<5>(*cashflow);
+        tuple[6] = std::get<6>(*cashflow);
+        tuple[7] = std::get<7>(*cashflow);
+        tuple[8] = std::get<8>(*cashflow);
+        tuple[9] = std::get<9>(*cashflow);
+        tuple[10] = std::get<10>(*cashflow);
+        tuple[11] = std::get<11>(*cashflow);
+        tuple[12] = std::get<12>(*cashflow);
+        tuple[13] = std::get<13>(*cashflow);
+        tuple[14] = std::get<14>(*cashflow);
+        tuple[15] = std::get<15>(*cashflow);
+        tuple[16] = std::get<16>(*cashflow);
+        tuple[17] = std::get<17>(*cashflow);
+        tuple[18] = std::get<18>(*cashflow);
+        tuple[19] = std::get<19>(*cashflow);
+        tuple[20] = std::get<20>(*cashflow);
+        return tuple;
+    };
 }
+
+py::tuple show(const std::shared_ptr<qf::OvernightIndexCashflow>& overnightIndexCashflow) {
+    if (overnightIndexCashflow->getType() == "OvernightIndexCashflow") {
+        auto tuple = py::tuple(18);
+        auto cashflow = overnightIndexCashflow->wrap();
+        tuple[0] = std::get<0>(*cashflow);
+        tuple[1] = std::get<1>(*cashflow);
+        tuple[2] = std::get<2>(*cashflow);
+        tuple[3] = std::get<3>(*cashflow);
+        tuple[4] = std::get<4>(*cashflow);
+        tuple[5] = std::get<5>(*cashflow);
+        tuple[6] = std::get<6>(*cashflow);
+        tuple[7] = std::get<7>(*cashflow);
+        tuple[8] = std::get<8>(*cashflow);
+        tuple[9] = std::get<9>(*cashflow);
+        tuple[10] = std::get<10>(*cashflow);
+        tuple[11] = std::get<11>(*cashflow);
+        tuple[12] = std::get<12>(*cashflow);
+        tuple[13] = std::get<13>(*cashflow);
+        tuple[14] = std::get<14>(*cashflow);
+        tuple[15] = std::get<15>(*cashflow);
+        tuple[16] = std::get<16>(*cashflow);
+        tuple[17] = std::get<17>(*cashflow);
+        return tuple;
+    } else {
+        auto overnightIndexMccyCashflow = std::dynamic_pointer_cast<qf::OvernightIndexMultiCurrencyCashflow>(overnightIndexCashflow);
+        auto tuple = py::tuple(25);
+        auto cashflow = overnightIndexMccyCashflow->mccyWrap();
+        tuple[0] = std::get<0>(*cashflow);
+        tuple[1] = std::get<1>(*cashflow);
+        tuple[2] = std::get<2>(*cashflow);
+        tuple[3] = std::get<3>(*cashflow);
+        tuple[4] = std::get<4>(*cashflow);
+        tuple[5] = std::get<5>(*cashflow);
+        tuple[6] = std::get<6>(*cashflow);
+        tuple[7] = std::get<7>(*cashflow);
+        tuple[8] = std::get<8>(*cashflow);
+        tuple[9] = std::get<9>(*cashflow);
+        tuple[10] = std::get<10>(*cashflow);
+        tuple[11] = std::get<11>(*cashflow);
+        tuple[12] = std::get<12>(*cashflow);
+        tuple[13] = std::get<13>(*cashflow);
+        tuple[14] = std::get<14>(*cashflow);
+        tuple[15] = std::get<15>(*cashflow);
+        tuple[16] = std::get<16>(*cashflow);
+        tuple[17] = std::get<17>(*cashflow);
+        tuple[18] = std::get<18>(*cashflow);
+        tuple[19] = std::get<19>(*cashflow);
+        tuple[20] = std::get<20>(*cashflow);
+        tuple[21] = std::get<21>(*cashflow);
+        tuple[22] = std::get<22>(*cashflow);
+        tuple[23] = std::get<23>(*cashflow);
+        tuple[24] = std::get<24>(*cashflow);
+        return tuple;
+    }
+
+}
+
 
 // Other Functions
 py::tuple getColumnNames(const std::string &cashflowType, const std::string &cashflowSubtype = "") {
@@ -689,6 +774,34 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[15] = "flujo";
         result[16] = "spread";
         result[17] = "gearing";
+        return result;
+    } else if (cashflowType == "OvernightIndexMultiCurrencyCashflow" ) {
+        auto result = py::tuple(25);
+        result[0] = "fecha_inicial_devengo";
+        result[1] = "fecha_final_devengo";
+        result[2] = "fecha_inicial_indice";
+        result[3] = "fecha_final_indice";
+        result[4] = "fecha_pago";
+        result[5] = "nocional";
+        result[6] = "amortizacion";
+        result[7] = "amort_es_flujo";
+        result[8] = "moneda_nocional";
+        result[9] = "nombre_indice";
+        result[10] = "valor_indice_inicial";
+        result[11] = "valor_indice_final";
+        result[12] = "valor_tasa_equivalente";
+        result[13] = "tipo_tasa";
+        result[14] = "interes";
+        result[15] = "flujo";
+        result[16] = "spread";
+        result[17] = "gearing";
+        result[18] = "moneda_pago";
+        result[19] = "indice_fx";
+        result[20] = "fecha_fijacion_indice_fx";
+        result[21] = "valor_indice_fx";
+        result[22] = "interes_moneda_pago";
+        result[23] = "amortizacion_moneda_pago";
+        result[24] = "flujo_moneda_pago";
         return result;
     } else if (cashflowType == "IborCashflow" || cashflowType == "IborCashflow2") {
         auto result = py::tuple(15);
@@ -799,7 +912,7 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[16] = "gearing";
         result[17] = "tipo_tasa";
         return result;
-    } else if (cashflowType == "CompoundedOvernightRateCashflow") {
+    } else if (cashflowType == "CompoundedOvernightRateCashflow" || cashflowType == "CompoundedOvernightRateCashflow2") {
         auto result = py::tuple(14);
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
@@ -815,6 +928,30 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[11] = "spread";
         result[12] = "gearing";
         result[13] = "tipo_tasa";
+        return result;
+    } else if (cashflowType == "CompoundedOvernightRateMultiCurrencyCashflow2") {
+        auto result = py::tuple(21);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_pago";
+        result[3] = "nominal";
+        result[4] = "amortizacion";
+        result[5] = "interes";
+        result[6] = "amort_es_flujo";
+        result[7] = "flujo";
+        result[8] = "moneda";
+        result[9] = "codigo_indice_tasa";
+        result[10] = "valor_tasa";
+        result[11] = "spread";
+        result[12] = "gearing";
+        result[13] = "tipo_tasa";
+        result[14] = "moneda_pago";
+        result[15] = "fx_rate_index";
+        result[16] = "fecha_fixing_fx";
+        result[17] = "valor_indice_fx";
+        result[18] = "interes_moneda_pago";
+        result[19] = "amortizacion_moneda_pago";
+        result[20] = "flujo_moneda_pago";
         return result;
     } else {
         throw std::invalid_argument("Cashflow type " + cashflowType + " is not recognized.");
