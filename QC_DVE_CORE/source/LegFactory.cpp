@@ -366,7 +366,8 @@ namespace QCode::Financial {
             QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
             QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
             QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
-            QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
+            // QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
+            QCDate fxRateIndexFixingDate =settlementCalendar.shift(settlementDate, -fxRateIndexFixingLag);
             // For the correct calculation of present values using market yields according
             // to the usual conventions in fixed income markets.
             if (forBonds) settlementDate = thisEndDate;
@@ -693,7 +694,7 @@ namespace QCode::Financial {
             QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
             QCDate thisFixingDate = get<QCInterestRateLeg::intRtPrdElmntFxngDate>(period);
             QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
-            QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
+            QCDate fxRateIndexFixingDate = settlementCalendar.shift(settlementDate, -fxRateIndexFixingLag);
 
             double amort = 0.0;
             if (i == numPeriods - 1) {
@@ -1291,7 +1292,7 @@ namespace QCode::Financial {
             QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
             QCDate indexStartDate = accrualStartDate.businessDay(fixCal, indexDateAdjustment);
             QCDate indexEndDate = accrualEndDate.businessDay(fixCal, indexDateAdjustment);
-            QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
+            QCDate fxRateIndexFixingDate = settlementCalendar.shift(settlementDate, -fxRateIndexFixingLag);
             double amort = 0.0;
             if (i == numPeriods - 1) {
                 amort = sign * notional;
@@ -1900,7 +1901,7 @@ namespace QCode::Financial {
             QCDate thisStartDate = get<QCInterestRateLeg::intRtPrdElmntStartDate>(period);
             QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
             QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
-            QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
+            QCDate fxRateIndexFixingDate = settlementCalendar.shift(settlementDate, -fxRateIndexFixingLag);
             std::vector<QCDate> fixingDates;
             auto fixingDate = thisStartDate;
             while (fixingDate < thisEndDate) {

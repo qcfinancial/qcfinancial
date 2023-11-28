@@ -30,7 +30,7 @@ namespace QCode::Financial {
             double,                      /* Spread */
             double,                      /* Gearing */
             std::string,                 /* Settlement currency */
-            std::string,                /* FX Rate Index */
+            std::string,                 /* FX Rate Index */
             std::string,                 /* FX Rate Index Fixing Date */
             double,                      /* FX Rate Index Value */
             double,                      /* Interest in settlement currency */
