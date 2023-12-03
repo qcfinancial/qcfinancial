@@ -48,7 +48,7 @@ namespace QCode
 			return ccyConverter.convert(cashflow, _currency, _fxRateIndexValue, *_fxRateIndex);
 		}
 
-		shared_ptr<QCCurrency> IborMultiCurrencyCashflow::settlementCcy()
+		shared_ptr<QCCurrency> IborMultiCurrencyCashflow::settlementCurrency()
 		{
 			return _settlementCurrency;
 		}
@@ -136,6 +136,7 @@ namespace QCode
 			return std::make_shared<IborMultiCurrencyCashflowWrapper>(tup);
 		}
 
+
 		bool IborMultiCurrencyCashflow::_validate()
 		{
 			bool result = true;
@@ -153,12 +154,15 @@ namespace QCode
 			return result;
 		}
 
-		IborMultiCurrencyCashflow::~IborMultiCurrencyCashflow()
-		{
-		}
+		IborMultiCurrencyCashflow::~IborMultiCurrencyCashflow() = default;
+
 
         QCDate IborMultiCurrencyCashflow::getFXFixingDate() const {
             return _fxRateIndexFixingDate;
+        }
+
+        double IborMultiCurrencyCashflow::settlementAmount() {
+            return _settlementCurrency->amount(amount());
         }
     }
 }

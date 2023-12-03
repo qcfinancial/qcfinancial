@@ -60,7 +60,9 @@ namespace QCode::Financial {
 
         [[nodiscard]] std::string getType() const override;
 
-        shared_ptr<QCCurrency> settlementCcy();
+        double settlementAmount() override;
+
+        shared_ptr<QCCurrency> settlementCurrency() override;
 
         void setFxRateIndexValue(double fxRateIndexValue);
 

@@ -229,6 +229,14 @@ namespace QCode::Financial {
         return _indexName;
     }
 
+    double OvernightIndexCashflow::settlementAmount() {
+        return _notionalCurrency->amount(amount());
+    }
+
+    shared_ptr<QCCurrency> OvernightIndexCashflow::settlementCurrency() {
+        return _notionalCurrency;
+    }
+
     OvernightIndexCashflow::~OvernightIndexCashflow() = default;
 
 } // QCode

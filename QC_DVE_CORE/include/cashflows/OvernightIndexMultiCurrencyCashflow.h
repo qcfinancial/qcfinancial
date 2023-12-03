@@ -59,39 +59,58 @@ namespace QCode::Financial {
                 std::shared_ptr<QCCurrency> settlementCurrency,
                 std::shared_ptr<FXRateIndex> fxRateIndex);
 
-        shared_ptr<QCCurrency> settlementCcy();
+
+        shared_ptr<QCCurrency> settlementCurrency();
+
 
         void setFxRateIndexValue(double fxRateIndexValue);
 
+
         [[nodiscard]] std::string getFXRateIndexCode() const;
+
 
         [[nodiscard]] double getFXRateIndexValue() const;
 
+
         [[nodiscard]] QCDate getFXRateIndexFixingDate() const;
+
 
         [[nodiscard]] shared_ptr<FXRateIndex> getFXRateIndex() const;
 
+
         std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> mccyWrap();
+
 
         [[nodiscard]] std::string getType() const override;
 
+
         double settlementCurrencyInterest();
 
+
         double toSettlementCurrency(double amount) const;
+
 
         double settlementCurrencyInterest(
                 const TimeSeries &overnightIndexValues,
                 const TimeSeries &fxRateIndexValues);
 
+
         double settlementCurrencyAmortization();
+
 
         double settlementCurrencyAmortization(
                 const TimeSeries &overnightIndexValues,
                 const TimeSeries &fxRateIndexValues);
 
+
         double settlementCurrencyAmount();
 
+
         double settlementCurrencyAmount(const TimeSeries &overnightIndexValues, const TimeSeries &fxRateIndexValues);
+
+
+        double settlementAmount() override;
+
 
     protected:
         QCDate _fxRateIndexFixingDate;

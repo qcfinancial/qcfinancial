@@ -38,7 +38,7 @@ namespace QCode::Financial {
 
     }
 
-    shared_ptr <QCCurrency> CompoundedOvernightRateMultiCurrencyCashflow2::settlementCcy() {
+    shared_ptr <QCCurrency> CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrency() {
         return _settlementCurrency;
     };
 
@@ -101,7 +101,7 @@ namespace QCode::Financial {
     [[nodiscard]] double CompoundedOvernightRateMultiCurrencyCashflow2::toSettlementCurrency(double amount) {
         return _currencyConverter.convert(
                 amount,
-                _settlementCurrency,
+                _notionalCurrency,
                 _fxRateIndexValue,
                 *_fxRateIndex);
     }
@@ -119,5 +119,9 @@ namespace QCode::Financial {
 
         double fx = fxRateIndexValues.at(_fxRateIndexFixingDate);
         return _currencyConverter.convert(amount, _settlementCurrency, fx, *_fxRateIndex);
+    }
+
+    double CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount() {
+        return _settlementCurrency->amount(toSettlementCurrency(CompoundedOvernightRateCashflow2::amount()));
     }
 }

@@ -67,6 +67,8 @@ namespace QCode
 
             virtual double settlementAmount();
 
+            virtual shared_ptr<QCCurrency> settlementCurrency();
+
 			/**
 			 * @fn	QCCurrency FixedRateCashflow::ccy();
 			 *

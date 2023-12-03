@@ -153,5 +153,9 @@ namespace QCode
             return ccy()->amount(result);
         }
 
+        shared_ptr<QCCurrency> FixedRateCashflow::settlementCurrency() {
+            return ccy();
+        }
+
     }
 }

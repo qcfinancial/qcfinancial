@@ -54,6 +54,8 @@ namespace QCode::Financial {
 
         shared_ptr <QCCurrency> ccy() override;
 
+        virtual shared_ptr <QCCurrency> settlementCurrency();
+
         QCDate date() override;
 
         // Methods specific to this class
@@ -96,6 +98,12 @@ namespace QCode::Financial {
         void setNotional(double notional);
 
         void setAmortization(double amortization);
+
+        void setFixings(const TimeSeries &fixings);
+
+        [[nodiscard]] TimeSeries getFixings() const;
+
+        virtual double settlementAmount();
 
         std::string getTypeOfRate();
 
@@ -156,7 +164,9 @@ namespace QCode::Financial {
         QCDate _settlementDate;
 
         /** @brief	List of dates corresponding to fixing dates. In this case only contains start date */
-        vector<QCDate> _fixingDates;
+        std::vector<QCDate> _fixingDates;
+
+        QCode::Financial::TimeSeries _fixedRates;
 
         /** @brief	The nominal */
         double _notional;

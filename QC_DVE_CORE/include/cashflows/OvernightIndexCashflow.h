@@ -70,6 +70,12 @@ namespace QCode
             double amount() override;
 
 
+            virtual double settlementAmount();
+
+
+            virtual shared_ptr<QCCurrency> settlementCurrency();
+
+
             void setEqRateDecimalPlaces(unsigned int decimalPlaces);
 
 

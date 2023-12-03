@@ -97,7 +97,7 @@ PYBIND11_MODULE(qcfinancial, m)
 
     m.def(
             "id",
-            []() { return "20"; });
+            []() { return "28"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -517,7 +517,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("set_amortization", &qf::FixedRateCashflow::setAmortization)
             .def("get_amortization", &qf::FixedRateCashflow::getAmortization)
             .def("get_type", &qf::FixedRateCashflow::getType)
-            .def("settlement_amount", &qf::FixedRateCashflow::settlementAmount);
+            .def("settlement_amount", &qf::FixedRateCashflow::settlementAmount)
+            .def("settlement_currency", &qf::FixedRateCashflow::settlementCurrency);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::FixedRateCashflow>&>(&show));
 
@@ -540,7 +541,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     .def("get_fx_rate_index", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndex)
                     .def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
                     .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType)
-                    .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount);
+                    .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount)
+                    .def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCurrency);
 
     // LinearInterestRateCashflow
     py::class_<qf::LinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>, PyLinearInterestRateCashflow>(
@@ -614,7 +616,9 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_nominal", &qf::IborCashflow::getNominal)
             .def("set_amortization", &qf::IborCashflow::setAmortization)
             .def("get_amortization", &qf::IborCashflow::getAmortization)
-            .def("get_type", &qf::IborCashflow::getType);
+            .def("get_type", &qf::IborCashflow::getType)
+            .def("settlement_amount", &qf::IborCashflow::settlementAmount)
+            .def("settlement_currency", &qf::IborCashflow::settlementCurrency);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::IborCashflow>&>(&show));
 
@@ -670,7 +674,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     std::shared_ptr<qf::FXRateIndex>,
                     double>())
             .def("amount", &qf::IborMultiCurrencyCashflow::amount)
-            .def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCcy)
+            .def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCurrency)
+            .def("settlement_amount", &qf::IborMultiCurrencyCashflow::settlementAmount)
             .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)
             .def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
             .def("accrued_interest", &qf::IborCashflow::accruedInterest)
@@ -737,7 +742,9 @@ PYBIND11_MODULE(qcfinancial, m)
                     "accrued_interest",&qf::OvernightIndexCashflow::accruedInterest)
             .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
             .def("get_type", &qf::OvernightIndexCashflow::getType)
-            .def("get_index_code", &qf::OvernightIndexCashflow::getIndexCode);
+            .def("get_index_code", &qf::OvernightIndexCashflow::getIndexCode)
+            .def("settlement_currency", &qf::OvernightIndexCashflow::settlementCurrency)
+            .def("settlement_amount", &qf::OvernightIndexCashflow::settlementAmount);
 
     m.def("show", py::overload_cast<const std::shared_ptr<qf::OvernightIndexCashflow>&>(&show));
 
@@ -753,7 +760,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     const QCDate &,
                     std::shared_ptr<QCCurrency>,
                     std::shared_ptr<qf::FXRateIndex>>())
-            .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCcy)
+            .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrency)
+            .def("settlement_amount", &qf::OvernightIndexMultiCurrencyCashflow::settlementAmount)
             .def("set_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::setFxRateIndexValue)
             .def("get_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndexValue)
             .def("get_fx_rate_index", &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndex)
@@ -822,7 +830,8 @@ PYBIND11_MODULE(qcfinancial, m)
             m, "IcpClfCashflow")
             .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, double, double, vector<double>>())
             .def("amount", &qf::IcpClfCashflow::amount)
-            .def("settlement_amount", &qf::IcpClfCashflow::settlementAmount)
+            .def("settlement_amount", []() { return QCCLP(); })
+            .def("settlement_currency", &qf::IcpClfCashflow::settlementAmount)
             .def("ccy", &qf::IcpClfCashflow::ccy)
             .def("accrued_interest", &qf::IcpClfCashflow::accruedInterest)
             .def("get_type", &qf::IcpClfCashflow::getType)
@@ -889,6 +898,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     unsigned int,
                     unsigned int>())
             .def("amount", &qf::CompoundedOvernightRateCashflow2::amount)
+            .def("settlement_amount", &qf::CompoundedOvernightRateCashflow2::settlementAmount)
+            .def("settlement_currency", &qf::CompoundedOvernightRateCashflow2::settlementCurrency)
             .def("ccy", &qf::CompoundedOvernightRateCashflow2::ccy)
             .def("date", &qf::CompoundedOvernightRateCashflow2::date)
             .def("get_type", &qf::CompoundedOvernightRateCashflow2::getType)
@@ -910,6 +921,9 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_spread", &qf::CompoundedOvernightRateCashflow2::getSpread)
             .def("get_gearing", &qf::CompoundedOvernightRateCashflow2::getGearing)
             .def("set_notional", &qf::CompoundedOvernightRateCashflow2::setNotional)
+            .def("set_fixings", &qf::CompoundedOvernightRateCashflow2::setFixings)
+            .def("get_fixings", &qf::CompoundedOvernightRateCashflow2::getFixings)
+            .def("settlement_amount", &qf::CompoundedOvernightRateCashflow2::settlementAmount)
             .def("set_amortization", &qf::CompoundedOvernightRateCashflow2::setAmortization)
             .def("is_expired", &qf::CompoundedOvernightRateCashflow2::isExpired)
             .def("get_eq_rate_decimal_places", &qf::CompoundedOvernightRateCashflow2::getEqRateDecimalPlaces)
@@ -938,7 +952,8 @@ PYBIND11_MODULE(qcfinancial, m)
                     const QCDate &,
                     std::shared_ptr<QCCurrency>,
                     std::shared_ptr<qf::FXRateIndex>>())
-            .def("settlement_currency", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCcy)
+            .def("settlement_currency", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrency)
+            .def("settlement_amount", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount)
             .def < void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(const qf::TimeSeries&)>(
             "set_fx_rate_index_value", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateIndexValue)
             .def < void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double)>(

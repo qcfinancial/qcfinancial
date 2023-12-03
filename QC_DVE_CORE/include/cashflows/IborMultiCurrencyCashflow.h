@@ -96,6 +96,9 @@ namespace QCode
 			 */
 			double amount() override;
 
+
+            double settlementAmount() override;
+
 			/**
 			 * @fn	shared_ptr<QCCurrency> IborMultiCurrencyCashflow::settlementCcy();
 			 *
@@ -106,7 +109,7 @@ namespace QCode
 			 *
 			 * @returns	A shared_ptr&lt;QCCurrency&gt;
 			 */
-			shared_ptr<QCCurrency> settlementCcy();
+			shared_ptr<QCCurrency> settlementCurrency();
 
 			/**
 			 * @fn	void IborMultiCurrencyCashflow::setFxRateIndexValue(double fxRateIndexValue);

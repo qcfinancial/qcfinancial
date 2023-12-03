@@ -138,6 +138,31 @@
             return std::round(eqRate * factor) / factor;
         }
 
+        void CompoundedOvernightRateCashflow2::setFixings(const TimeSeries &fixings) {
+            _fillIndexEndDates();
+
+            for (auto& fix_date: _fixingDates) {
+                auto fix_rate = fixings.find(fix_date);
+                _fixedRates[fix_date] = std::round(fix_rate->second * 10000.0) / 10000.0;
+            }
+            auto discard = interest(_fixedRates);
+            discard = fixing(_fixedRates);
+        }
+
+        TimeSeries CompoundedOvernightRateCashflow2::getFixings() const {
+            return _fixedRates;
+        }
+
+        double CompoundedOvernightRateCashflow2::settlementAmount() {
+            auto interest_ = ccy()->amount(interest(_fixedRates));
+            if (_doesAmortize) {
+                return interest_ + _amortization;
+            } else {
+                return interest_;
+            }
+        }
+
+
 
         double CompoundedOvernightRateCashflow2::accruedInterest(
                 const QCDate &fecha,
@@ -311,6 +336,10 @@
         std::string CompoundedOvernightRateCashflow2::getInterestRateIndexCode() const
         {
             return _index->getCode();
+        }
+
+        shared_ptr<QCCurrency> CompoundedOvernightRateCashflow2::settlementCurrency() {
+            return ccy();
         }
 
     } // QCode

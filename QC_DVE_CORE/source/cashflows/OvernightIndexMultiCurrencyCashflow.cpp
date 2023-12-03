@@ -49,7 +49,7 @@ namespace QCode::Financial {
                     _fxRateIndexValue(1.0) {
     };
 
-    shared_ptr<QCCurrency> OvernightIndexMultiCurrencyCashflow::settlementCcy() {
+    shared_ptr<QCCurrency> OvernightIndexMultiCurrencyCashflow::settlementCurrency() {
         return _settlementCurrency;
     }
 
@@ -157,6 +157,10 @@ namespace QCode::Financial {
             const TimeSeries& fxRateIndexValues) {
         _fixIndices(overnightIndexValues, fxRateIndexValues);
         return settlementCurrencyAmount();
+    }
+
+    double OvernightIndexMultiCurrencyCashflow::settlementAmount() {
+        return _settlementCurrency->amount(settlementCurrencyAmount());
     }
 
     std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> OvernightIndexMultiCurrencyCashflow::mccyWrap() {

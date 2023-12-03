@@ -99,7 +99,7 @@ namespace QCode
 			 *
 			 * @brief	Gets the settlement currency of the cashflow
 			 *
-			 * @author	Alvaro D�az V.
+			 * @author	Alvaro Díaz V.
 			 * @date	19/07/2018
 			 *
 			 * @return	A shared_ptr&lt;QCCurrency&gt;

@@ -206,12 +206,18 @@ namespace QCode
         }
 
 
-        IborCashflow::~IborCashflow()
-        {
-        }
+        IborCashflow::~IborCashflow() = default;
 
         std::string IborCashflow::getType() const {
             return "IborCashflow";
+        }
+
+        double IborCashflow::settlementAmount() {
+            return ccy()->amount(amount());
+        }
+
+        shared_ptr<QCCurrency> IborCashflow::settlementCurrency() {
+            return ccy();
         }
     }
 }
