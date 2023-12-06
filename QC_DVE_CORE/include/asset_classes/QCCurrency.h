@@ -189,7 +189,7 @@ public:
 	 * @author	Alvaro Díaz V.
 	 * @date	09/10/2017
 	 */
-	QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 4)
+	QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 2)
 	{
 	}
 };
