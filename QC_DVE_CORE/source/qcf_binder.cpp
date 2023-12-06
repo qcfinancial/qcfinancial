@@ -97,7 +97,7 @@ PYBIND11_MODULE(qcfinancial, m)
 
     m.def(
             "id",
-            []() { return "28"; });
+            []() { return "33"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -139,6 +139,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("__gt__", &QCDate::operator>)
             .def("__hash__", &QCDate::excelSerial)
             .def("__str__", &QCDate::description, py::arg("es_iso") = false)
+            .def("__repr__", &QCDate::description, py::arg("es_iso") = false)
             .def < QCDate(QCDate::*)(std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const > (
                     "business_day", &QCDate::businessDay);
 
@@ -691,6 +692,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("date", &qf::IcpClpCashflow::date)
             .def("get_start_date", &qf::IcpClpCashflow::getStartDate)
             .def("get_end_date", &qf::IcpClpCashflow::getEndDate)
+            .def("get_settlement_date", &qf::IcpClpCashflow::getSettlementDate)
             .def("set_start_date_icp", &qf::IcpClpCashflow::setStartDateICP)
             .def("get_start_date_icp", &qf::IcpClpCashflow::getStartDateICP)
             .def("set_end_date_icp", &qf::IcpClpCashflow::setEndDateICP)
@@ -830,8 +832,8 @@ PYBIND11_MODULE(qcfinancial, m)
             m, "IcpClfCashflow")
             .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, double, double, vector<double>>())
             .def("amount", &qf::IcpClfCashflow::amount)
-            .def("settlement_amount", []() { return QCCLP(); })
-            .def("settlement_currency", &qf::IcpClfCashflow::settlementAmount)
+            .def("settlement_currency", &qf::IcpClfCashflow::settlementCurrency)
+            .def("settlement_amount", &qf::IcpClfCashflow::settlementAmount)
             .def("ccy", &qf::IcpClfCashflow::ccy)
             .def("accrued_interest", &qf::IcpClfCashflow::accruedInterest)
             .def("get_type", &qf::IcpClfCashflow::getType)
