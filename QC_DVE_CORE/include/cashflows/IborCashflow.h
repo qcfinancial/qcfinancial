@@ -103,6 +103,9 @@ namespace QCode
 
             virtual shared_ptr<QCCurrency> settlementCurrency();
 
+
+			[[nodiscard]] std::string getInterestRateIndexCode() const;
+
 			/**
 			 * @fn	shared_ptr<QCCurrency> IborCashflow::ccy();
 			 *

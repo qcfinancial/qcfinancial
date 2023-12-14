@@ -97,7 +97,7 @@ PYBIND11_MODULE(qcfinancial, m)
 
     m.def(
             "id",
-            []() { return "34"; });
+            []() { return "41"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -611,6 +611,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_start_date", &qf::IborCashflow::getStartDate)
             .def("get_end_date", &qf::IborCashflow::getEndDate)
             .def("get_settlement_date", &qf::IborCashflow::date)
+            .def("get_interest_rate_index_code", &qf::IborCashflow::getInterestRateIndexCode)
             .def("set_interest_rate_value", &qf::IborCashflow::setInterestRateValue)
             .def("get_interest_rate_value", &qf::IborCashflow::getInterestRateValue)
             .def("set_nominal", &qf::IborCashflow::setNominal)
@@ -679,6 +680,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("settlement_amount", &qf::IborMultiCurrencyCashflow::settlementAmount)
             .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)
             .def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
+            .def("get_fx_rate_index_code", &qf::IborMultiCurrencyCashflow::getFXRateIndexCode)
             .def("accrued_interest", &qf::IborCashflow::accruedInterest)
             .def("accrued_interest", &qf::IborMultiCurrencyCashflow::accruedInterest);
 
@@ -731,8 +733,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("set_end_date_index", &qf::OvernightIndexCashflow::setEndDateIndex)
             .def("get_start_date_index", &qf::OvernightIndexCashflow::getStartDateIndex)
             .def("get_end_date_index", &qf::OvernightIndexCashflow::getEndDateIndex)
-            .def("set_notional", &qf::OvernightIndexCashflow::setNotional)
-            .def("get_notional", &qf::OvernightIndexCashflow::getNotional)
+            .def("set_nominal", &qf::OvernightIndexCashflow::setNotional)
+            .def("get_nominal", &qf::OvernightIndexCashflow::getNotional)
             .def("set_amortization", &qf::OvernightIndexCashflow::setAmortization)
             .def("get_amortization", &qf::OvernightIndexCashflow::getAmortization)
             .def("get_rate_value", &qf::OvernightIndexCashflow::getRateValue)
@@ -872,6 +874,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_type", &qf::CompoundedOvernightRateCashflow::getType)
             .def("get_spread", &qf::CompoundedOvernightRateCashflow::getSpread)
             .def("get_gearing", &qf::CompoundedOvernightRateCashflow::getGearing)
+            .def("get_nominal", &qf::CompoundedOvernightRateCashflow::getNominal)
             .def("set_nominal", &qf::CompoundedOvernightRateCashflow::setNominal)
             .def("set_amortization", &qf::CompoundedOvernightRateCashflow::setAmortization)
             .def("is_expired", &qf::CompoundedOvernightRateCashflow::isExpired)
@@ -910,7 +913,7 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_settlement_date", &qf::CompoundedOvernightRateCashflow2::getSettlementDate)
             .def("get_fixing_dates", &qf::CompoundedOvernightRateCashflow2::getFixingDates)
             .def("get_interest_rate_index_code", &qf::CompoundedOvernightRateCashflow2::getInterestRateIndexCode)
-            .def("get_notional", &qf::CompoundedOvernightRateCashflow2::getNotional)
+            .def("get_nominal", &qf::CompoundedOvernightRateCashflow2::getNotional)
             .def("get_amortization", &qf::CompoundedOvernightRateCashflow2::getAmortization)
             .def("interest_from_spread", &qf::CompoundedOvernightRateCashflow2::interestFromSpread)
             .def("interest", &qf::CompoundedOvernightRateCashflow2::interest)
