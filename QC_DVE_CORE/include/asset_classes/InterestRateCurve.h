@@ -71,15 +71,15 @@ namespace QCode
 			*/
 			virtual double getDiscountFactorAt(long d) = 0;
 
-			/*!
-			* Retorna la tasa forward entre los plazos d1 y d2 en la convención de intRate.
-			* @param intRate convención de la tasa forward que se debe calcular.
-			* @param d1 plazo más corto de la tasa forward.
-			* @param d2 plazo más largo de la tasa forward.
-			* @return valor de la tasa forward calculada.
-			* Probablemente este método puede mejorarse haciendo que retorne void y el valor de la
-			* tasa forward calculada se almacene dentro de la variable intRate.
-			*/
+            /*!
+            * Retorna la tasa forward entre los plazos d1 y d2 en la convención de intRate.
+            * @param intRate convención de la tasa forward que se debe calcular.
+            * @param d1 plazo más corto de la tasa forward.
+            * @param d2 plazo más largo de la tasa forward.
+            * @return valor de la tasa forward calculada.
+            * Probablemente esta función puede mejorarse haciendo que retorne void y el valor de la
+            * tasa forward calculada se almacene dentro de la variable intRate.
+            */
 			virtual double getForwardRateWithRate(QCInterestRate& intRate, long d1, long d2) = 0;
 
 			/*!
@@ -99,26 +99,26 @@ namespace QCode
 			virtual double getForwardWf(long d1, long d2) = 0;
 
 			/*!
-			* Este método es un getter que retorna la derivada del último factor de descuento calculado.
+			* Esta función es un getter que retorna la derivada del último factor de descuento calculado.
 			* @return valor de la derivada.
 			*/
 			virtual double dfDerivativeAt(unsigned int index) = 0;
 
             /*!
-            * Este método es un getter que retorna la derivada del último factor de descuento calculado.
+            * Esta función es un getter que retorna la derivada del último factor de descuento calculado.
             * @return valor de la derivada.
             */
             virtual double wfDerivativeAt(unsigned int index) = 0;
 
             /*!
-			* Este método es un getter que retorna la derivada del último factor de capitalización
+			* Esta función es un getter que retorna la derivada del último factor de capitalización
 			* forward calculado.
 			* @return valor de la derivada.
 			*/
 			virtual double fwdWfDerivativeAt(unsigned int index) = 0;
 
 			/*!
-			* Este método es un getter que retorna el largo de la curva
+			* Esta función es un getter que retorna el largo de la curva
 			* @return largo de la curva.
 			*/
 			size_t getLength() const
