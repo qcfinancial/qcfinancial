@@ -313,6 +313,8 @@ PYBIND11_MODULE(qcfinancial, m)
             .def("get_rate_from_wf", py::overload_cast<double, QCDate&, QCDate&>(&QCInterestRate::getRateFromWf))
             .def("get_rate_from_wf", py::overload_cast<double, long>(&QCInterestRate::getRateFromWf))
             .def("yf", &QCInterestRate::yf)
+            .def("get_year_fraction", &QCInterestRate::getYearFraction)
+            .def("get_wealth_factor", &QCInterestRate::getWealthFactor)
             .def("__str__", &QCInterestRate::description);
 
     // Tenor
