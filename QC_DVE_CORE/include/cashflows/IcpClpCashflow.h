@@ -53,7 +53,6 @@ namespace QCode
 			* @param	nominal		  	The nominal.
 			* @param	amortization  	The amortization.
 			* @param	doesAmortize  	Indicates whether amortization is cashflow or not.
-			* @param	currency	  	The currency.
 			* @param	spread		  	The spread.
 			* @param	gearing		  	The gearing.
 			*/
@@ -69,6 +68,11 @@ namespace QCode
 						   double endDateICP = DEFAULT_ICP);
 
             virtual std::string getType() const;
+
+
+			[[nodiscard]] virtual QCDate getSettlementDate() const {
+				return _settlementDate;
+			}
 
 			/**
 			* @fn	void IcpClpCashflow::setTnaDecimalPlaces(unsigned int decimalPlaces);
@@ -197,7 +201,7 @@ namespace QCode
 			*
 			* @brief	Sets the nominal amount.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	    17/11/2017
 			*
 			* @param	nominal	The nominal.

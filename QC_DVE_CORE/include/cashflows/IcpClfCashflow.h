@@ -99,6 +99,8 @@ namespace QCode
 
             double settlementAmount();
 
+			shared_ptr<QCCurrency> settlementCurrency();
+
 			/**
 			 * @fn	    double IcpClfCashflow::_getRateValue();
 			 *

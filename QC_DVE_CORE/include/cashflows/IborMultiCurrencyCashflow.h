@@ -109,7 +109,7 @@ namespace QCode
 			 *
 			 * @returns	A shared_ptr&lt;QCCurrency&gt;
 			 */
-			shared_ptr<QCCurrency> settlementCurrency();
+			shared_ptr<QCCurrency> settlementCurrency() override;
 
 			/**
 			 * @fn	void IborMultiCurrencyCashflow::setFxRateIndexValue(double fxRateIndexValue);
@@ -122,6 +122,8 @@ namespace QCode
 			 * @param	fxRateIndexValue	The fx rate index value.
 			 */
 			void setFxRateIndexValue(double fxRateIndexValue);
+
+			[[nodiscard]] std::string getFXRateIndexCode() const;
 
 			/**
 			 * @fn	double IborMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate,

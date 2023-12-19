@@ -219,5 +219,9 @@ namespace QCode
         shared_ptr<QCCurrency> IborCashflow::settlementCurrency() {
             return ccy();
         }
+
+        std::string IborCashflow::getInterestRateIndexCode() const {
+            return _index->getCode();
+        }
     }
 }

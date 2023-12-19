@@ -151,6 +151,12 @@ namespace QCode
 			return _currency;
 		}
 
+		shared_ptr<QCCurrency> IcpClfCashflow::settlementCurrency()
+		{
+			auto clp = QCCLP();
+			return std::make_shared<QCCLP>(clp);
+		}
+
 		shared_ptr<IcpClfCashflowWrapper> IcpClfCashflow::wrap()
 		{
 			    //QCDate,                 /* Start Date */
@@ -289,8 +295,8 @@ namespace QCode
             if (_doesAmortize) {
                 ufAmount += _amortization;
             }
-            auto clp = QCCLP();
-            return clp.amount(ufAmount * _endDateUF);
+            auto clp = settlementCurrency();
+            return clp->amount(ufAmount * _endDateUF);
         }
 
     }

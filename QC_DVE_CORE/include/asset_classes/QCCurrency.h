@@ -174,7 +174,7 @@ private:
  *
  * @brief	Representation for CLF (ISO Code and Number are ficticious).
  *
- * @author	Alvaro D�az V.
+ * @author	Alvaro Díaz V.
  * @date	09/10/2017
  */
 class QCCLF : public QCCurrency
@@ -303,7 +303,7 @@ public:
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro D�az V.
+	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 */
 	QCCAD() : QCCurrency("Canadian Dollar", "CAD", 124, 2)

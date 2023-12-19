@@ -60,7 +60,7 @@ namespace QCode::Financial {
                 std::shared_ptr<FXRateIndex> fxRateIndex);
 
 
-        shared_ptr<QCCurrency> settlementCurrency();
+        shared_ptr<QCCurrency> settlementCurrency() override;
 
 
         void setFxRateIndexValue(double fxRateIndexValue);

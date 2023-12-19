@@ -164,5 +164,9 @@ namespace QCode
         double IborMultiCurrencyCashflow::settlementAmount() {
             return _settlementCurrency->amount(amount());
         }
+
+		std::string IborMultiCurrencyCashflow::getFXRateIndexCode() const {
+	        return _fxRateIndex->getCode();
+        }
     }
 }
