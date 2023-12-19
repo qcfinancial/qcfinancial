@@ -53,12 +53,46 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::amount() {
-        auto interest = _calculateInterest(_endDate, _endDateIndex);
-        if (_doesAmortize) {
-            return _amortization + interest;
-        } else {
-            return interest;
+        // auto interest = _calculateInterest(_endDate, _endDateIndex);
+        // if (_doesAmortize) {
+        //     return _amortization + interest;
+        // } else {
+        //     return interest;
+        // }
+
+        auto wf = _endDateIndex / _startDateIndex;
+        auto interest = _notional * (wf - 1.0);
+        _rate.setValue(_spread);
+        auto spreadInterest = _notional * (_rate.wf(_startDate, _endDate) - 1.0);
+        _rate.setValue(getEqRate(_endDate, _endDateIndex));
+        if (_startDateIndexDerivatives.size() == _endDateIndexDerivatives.size())
+        {
+            _amountDerivatives.resize(_startDateIndexDerivatives.size());
+            for (size_t i = 0; i < _startDateIndexDerivatives.size(); ++i)
+            {
+                _amountDerivatives.at(i) = _notional *
+                        ((_endDateIndexDerivatives.at(i) * _startDateIndex -
+                          _endDateIndex * _startDateIndexDerivatives.at(i)) /
+                                pow(_startDateIndex, 2.0)
+                                );
+            }
         }
+        else
+        {
+            std::vector<double> zeroDerivatives(_startDateIndexDerivatives.size(), 0.0);
+            _amountDerivatives.resize(_startDateIndexDerivatives.size());
+            _amountDerivatives = zeroDerivatives;
+        }
+
+        if (_doesAmortize)
+        {
+            return _amortization + interest + spreadInterest;
+        }
+        else
+        {
+            return interest + spreadInterest;
+        }
+
     }
 
     void OvernightIndexCashflow::setEqRateDecimalPlaces(unsigned int decimalPlaces) {
@@ -89,6 +123,20 @@ namespace QCode::Financial {
         _startDateIndex = indexValue;
     };
 
+    void OvernightIndexCashflow::setStartDateIndexDerivatives(std::vector<double> der)
+    {
+        _startDateIndexDerivatives.resize(der.size());
+        for (size_t i = 0; i < der.size(); ++i)
+        {
+            _startDateIndexDerivatives.at(i) = der.at(i);
+        }
+    }
+
+    std::vector<double> OvernightIndexCashflow::getStartDateIndexDerivatives() const
+    {
+        return _startDateIndexDerivatives;
+    }
+
 
     double OvernightIndexCashflow::getStartDateIndex() const {
         return _startDateIndex;
@@ -103,6 +151,25 @@ namespace QCode::Financial {
     void OvernightIndexCashflow::setEndDateIndex(double indexValue) {
         _endDateIndex = indexValue;
     };
+
+    void OvernightIndexCashflow::setEndDateIndexDerivatives(std::vector<double> der)
+    {
+        _endDateIndexDerivatives.resize(der.size());
+        for (size_t i = 0; i < der.size(); ++i)
+        {
+            _endDateIndexDerivatives.at(i) = der.at(i);
+        }
+    }
+
+    std::vector<double> OvernightIndexCashflow::getEndDateIndexDerivatives() const
+    {
+        return _endDateIndexDerivatives;
+    }
+
+    std::vector<double> OvernightIndexCashflow::getAmountDerivatives() const
+    {
+        return _amountDerivatives;
+    }
 
 
     void OvernightIndexCashflow::setNotional(double notional) {

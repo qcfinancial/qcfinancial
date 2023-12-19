@@ -399,6 +399,7 @@ py::tuple show(const std::shared_ptr<qf::FixedRateCashflow>& fixedRateCashflow) 
         std::string wf = std::get<8>(*cashflow).getWealthFactor()->description();
         std::string yf = std::get<8>(*cashflow).getYearFraction()->description();
         tuple[10] = wf + yf;
+
         return tuple;
     } else {
         auto tuple = py::tuple(17);

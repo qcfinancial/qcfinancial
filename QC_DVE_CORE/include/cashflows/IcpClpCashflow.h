@@ -53,7 +53,6 @@ namespace QCode
 			* @param	nominal		  	The nominal.
 			* @param	amortization  	The amortization.
 			* @param	doesAmortize  	Indicates whether amortization is cashflow or not.
-			* @param	currency	  	The currency.
 			* @param	spread		  	The spread.
 			* @param	gearing		  	The gearing.
 			*/

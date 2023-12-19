@@ -2,26 +2,23 @@
 #define FORWARDRATES_H
 
 #include<vector>
-#include<memory>
 
 #include "asset_classes/ZeroCouponCurve.h"
 #include "time/QCDate.h"
 #include "cashflows/Cashflow.h"
-#include "cashflows/IborCashflow.h"
 #include "cashflows/IborCashflow2.h"
 #include "cashflows/IcpClpCashflow.h"
 #include "cashflows/IcpClpCashflow2.h"
 #include "cashflows/OvernightIndexCashflow.h"
 #include "cashflows/IcpClfCashflow.h"
-#include "cashflows/LinearInterestRateCashflow.h"
 #include "cashflows/CompoundedOvernightRateCashflow.h"
 #include "Leg.h"
 
-namespace QCode {
-    namespace Financial {
+
+    namespace QCode::Financial {
         class ForwardRates {
         public:
-            ForwardRates() {}
+            ForwardRates() = default;
 
             std::shared_ptr<IborCashflow2> setRateIborCashflow(
                     const QCDate &valuationDate,
@@ -300,74 +297,74 @@ namespace QCode {
                 }
             }
 
-//            std::shared_ptr<IcpClpCashflow3> setRateIcpClpCashflow3(
-//                    const QCDate &valuationDate,
-//                    double icpValuationDate,
-//                    Cashflow &icpClpCashflow3,
-//                    ZeroCouponCurve &curve)  {
-//                std::vector<double> zeroDerivatives;
-//                zeroDerivatives.resize(curve.getLength());
-//                for (size_t i = 0; i < curve.getLength(); ++i) {
-//                    zeroDerivatives.at(i) = 0.0;
-//                }
-//                auto icpClpCashflow_ = dynamic_cast<IcpClpCashflow3 &>(icpClpCashflow3);
-//
-//                if (valuationDate >= icpClpCashflow_.getEndDate()) {
-//                    icpClpCashflow_.setStartDateICPDerivatives(zeroDerivatives);
-//                    icpClpCashflow_.setEndDateICPDerivatives(zeroDerivatives);
-//                    return std::make_shared<IcpClpCashflow3>(icpClpCashflow_);
-//                } else if ((icpClpCashflow_.getStartDate() < valuationDate) &&
-//                           (valuationDate < icpClpCashflow_.getEndDate())) {
-//                    auto t = valuationDate.dayDiff(icpClpCashflow_.getEndDate());
-//                    icpClpCashflow_.setStartDateICPDerivatives(zeroDerivatives);
-//
-//                    icpClpCashflow_.setEndDateICP(icpValuationDate / curve.getDiscountFactorAt(t));
-//                    vector<double> endDateDerivatives;
-//                    endDateDerivatives.resize(curve.getLength());
-//                    for (size_t i = 0; i < curve.getLength(); ++i) {
-//                        endDateDerivatives.at(i) = icpValuationDate * curve.wfDerivativeAt(i);
-//                    }
-//                    icpClpCashflow_.setEndDateICPDerivatives(endDateDerivatives);
-//                    return std::make_shared<IcpClpCashflow3>(icpClpCashflow_);
-//                } else if (icpClpCashflow_.getStartDate() == valuationDate) {
-//                    auto t = valuationDate.dayDiff(icpClpCashflow_.getSettlementDate());
-//
-//                    t = valuationDate.dayDiff(icpClpCashflow_.getEndDate());
-//                    icpClpCashflow_.setStartDateICP(icpValuationDate);
-//                    icpClpCashflow_.setStartDateICPDerivatives(zeroDerivatives);
-//
-//                    icpClpCashflow_.setEndDateICP(icpValuationDate / curve.getDiscountFactorAt(t));
-//                    vector<double> endDateDerivatives;
-//                    endDateDerivatives.resize(curve.getLength());
-//                    for (size_t i = 0; i < curve.getLength(); ++i) {
-//                        endDateDerivatives.at(i) = icpValuationDate * curve.wfDerivativeAt(i);
-//                    }
-//                    icpClpCashflow_.setEndDateICPDerivatives(endDateDerivatives);
-//                    return std::make_shared<IcpClpCashflow3>(icpClpCashflow_);
-//                } else {
-//                    auto t1 = valuationDate.dayDiff(icpClpCashflow_.getSettlementDate());
-//
-//                    t1 = valuationDate.dayDiff(icpClpCashflow_.getStartDate());
-//                    icpClpCashflow_.setStartDateICP(icpValuationDate / curve.getDiscountFactorAt(t1));
-//                    vector<double> startDateDerivatives;
-//                    startDateDerivatives.resize(curve.getLength());
-//                    for (size_t i = 0; i < curve.getLength(); ++i) {
-//                        startDateDerivatives.at(i) = icpValuationDate * curve.wfDerivativeAt(i);
-//                    }
-//                    icpClpCashflow_.setStartDateICPDerivatives(startDateDerivatives);
-//
-//                    auto t2 = valuationDate.dayDiff(icpClpCashflow_.getEndDate());
-//                    icpClpCashflow_.setEndDateICP(icpValuationDate / curve.getDiscountFactorAt(t2));
-//                    vector<double> endDateDerivatives;
-//                    endDateDerivatives.resize(curve.getLength());
-//                    for (size_t i = 0; i < curve.getLength(); ++i) {
-//                        endDateDerivatives.at(i) = icpValuationDate * curve.wfDerivativeAt(i);
-//                    }
-//                    icpClpCashflow_.setEndDateICPDerivatives(endDateDerivatives);
-//
-//                    return std::make_shared<IcpClpCashflow3>(icpClpCashflow_);
-//                }
-//            }
+            std::shared_ptr<OvernightIndexCashflow> setRateOvernightIndexCashflow(
+                    const QCDate &valuationDate,
+                    double indexValuationDate,
+                    Cashflow &overnightIndexCashflow,
+                    ZeroCouponCurve &curve) {
+                std::vector<double> zeroDerivatives;
+                zeroDerivatives.resize(curve.getLength());
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    zeroDerivatives.at(i) = 0.0;
+                }
+                auto overnightIndexCashflow_ = dynamic_cast<OvernightIndexCashflow &>(overnightIndexCashflow);
+
+                if (valuationDate >= overnightIndexCashflow_.getEndDate()) {
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(zeroDerivatives);
+                    return std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow_);
+                } else if ((overnightIndexCashflow_.getStartDate() < valuationDate) &&
+                           (valuationDate < overnightIndexCashflow_.getEndDate())) {
+                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+                    return std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow_);
+                } else if (overnightIndexCashflow_.getStartDate() == valuationDate) {
+                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
+
+                    t = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    overnightIndexCashflow_.setStartDateIndex(indexValuationDate);
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+                    return std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow_);
+                } else {
+                    auto t1 = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
+
+                    t1 = valuationDate.dayDiff(overnightIndexCashflow_.getStartDate());
+                    overnightIndexCashflow_.setStartDateIndex(indexValuationDate / curve.getDiscountFactorAt(t1));
+                    vector<double> startDateDerivatives;
+                    startDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        startDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(startDateDerivatives);
+
+                    auto t2 = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t2));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+
+                    return std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow_);
+                }
+            }
 
             void setRatesIcpClpLeg(
                     const QCDate &valuationDate,
@@ -393,6 +390,21 @@ namespace QCode {
                             *(icpClpLeg2.getCashflowAt(i)),
                             curve);
                     icpClpLeg2.setCashflowAt(cashflow, i);
+                }
+            }
+
+            void setRatesOvernightIndexLeg(
+                const QCDate &valuationDate,
+                double indexValuationDate,
+                Leg &overnightIndexLeg,
+                ZeroCouponCurve &curve) {
+                for (size_t i = 0; i < overnightIndexLeg.size(); ++i) {
+                    auto cashflow = setRateOvernightIndexCashflow(
+                            valuationDate,
+                            indexValuationDate,
+                            *(overnightIndexLeg.getCashflowAt(i)),
+                            curve);
+                    overnightIndexLeg.setCashflowAt(cashflow, i);
                 }
             }
 
@@ -583,6 +595,6 @@ namespace QCode {
             std::vector<vector<double>> _derivatives2;
         };
     }
-}
+
 
 #endif //FORWARDRATES_H

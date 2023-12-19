@@ -57,8 +57,7 @@ namespace QCode
                     std::string  indexName,
                     unsigned int eqRateDecimalPlaces);
 
-
-            [[nodiscard]] virtual std::string getType() const;
+            double amount() override;
 
 
             shared_ptr<QCCurrency> ccy() override;
@@ -67,28 +66,46 @@ namespace QCode
             QCDate date() override;
 
 
-            double amount() override;
+            [[nodiscard]] virtual std::string getType() const;
 
 
-            virtual double settlementAmount();
+            [[nodiscard]] QCDate getStartDate() const;
 
 
-            virtual shared_ptr<QCCurrency> settlementCurrency();
+            [[nodiscard]] QCDate getEndDate() const;
 
 
-            void setEqRateDecimalPlaces(unsigned int decimalPlaces);
+            [[nodiscard]] QCDate getSettlementDate() const;
 
 
-            double accruedInterest(QCDate& accrualDate, double indexValue);
+            [[nodiscard]] double getNotional() const;
 
 
-            double accruedInterest(const QCDate& fecha, const TimeSeries& fixings);
+            void setNotional(double notional);
 
 
-            double getEqRate(QCDate& date, double indexValue);
+            [[nodiscard]] double getAmortization() const;
+
+
+            void setAmortization(double amortization);
 
 
             void setStartDateIndex(double indexValue);
+
+
+            void setStartDateIndexDerivatives(std::vector<double> der);
+
+
+            [[nodiscard]] std::vector<double> getStartDateIndexDerivatives() const;
+
+
+            void setEndDateIndex(double indexValue);
+
+
+            void setEndDateIndexDerivatives(std::vector<double> der);
+
+
+            [[nodiscard]] std::vector<double> getEndDateIndexDerivatives() const;
 
 
             [[nodiscard]] double getStartDateIndex() const;
@@ -97,19 +114,28 @@ namespace QCode
             [[nodiscard]] double getEndDateIndex() const;
 
 
-            void setEndDateIndex(double indexValue);
+            [[nodiscard]] QCDate getIndexStartDate() const;
 
 
-            void setNotional(double notional);
+            [[nodiscard]] QCDate getIndexEndDate() const;
 
 
-            [[nodiscard]] double getNotional() const;
+            void setEqRateDecimalPlaces(unsigned int decimalPlaces);
 
 
-            void setAmortization(double amortization);
+            double getEqRate(QCDate& date, double indexValue);
 
 
-            [[nodiscard]] double getAmortization() const;
+            double accruedInterest(QCDate& accrualDate, double indexValue);
+
+
+            double accruedInterest(const QCDate& fecha, const TimeSeries& fixings);
+
+
+            virtual double settlementAmount();
+
+
+            virtual shared_ptr<QCCurrency> settlementCurrency();
 
 
             shared_ptr<OvernightIndexCashflowWrapper> wrap();
@@ -121,25 +147,13 @@ namespace QCode
             std::string getTypeOfRate();
 
 
-            [[nodiscard]] QCDate getStartDate() const;
+            [[nodiscard]] std::string getIndexCode() const;
 
 
-            [[nodiscard]] QCDate getEndDate() const;
+            [[nodiscard]] std::vector<double> getAmountDerivatives() const;
 
 
-            [[nodiscard]] QCDate getIndexStartDate() const;
-
-
-            [[nodiscard]] QCDate getIndexEndDate() const;
-
-
-            [[nodiscard]] QCDate getSettlementDate() const;
-
-
-            std::string getIndexCode() const;
-
-
-            virtual ~OvernightIndexCashflow();
+            ~OvernightIndexCashflow() override;
 
         protected:
 
@@ -192,6 +206,21 @@ namespace QCode
             QCInterestRate _rate;
 
             std::string _indexName;
+
+            /** @brief	Stores de derivatives of Index at start date with respect to rates belonging to zero
+             * coupon curve.
+            */
+            std::vector<double> _startDateIndexDerivatives;
+
+            /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
+            * coupon curve.
+            */
+            std::vector<double> _amountDerivatives;
+
+            /** @brief	Stores de derivatives of Index at end date with respect to rates belonging to zero
+            * coupon curve.
+            */
+            std::vector<double> _endDateIndexDerivatives;
         };
     }
 }

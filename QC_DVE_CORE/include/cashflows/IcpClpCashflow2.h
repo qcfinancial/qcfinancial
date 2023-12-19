@@ -89,10 +89,10 @@ namespace QCode
             double accruedFixing(const QCDate& fecha, const TimeSeries& fixings) override;
 
 
-            bool doesAmortize() const override;
+            [[nodiscard]] bool doesAmortize() const override;
 
             // Methods specific to this class
-            std::vector<double> getAmountDerivatives() const;
+            [[nodiscard]] std::vector<double> getAmountDerivatives() const;
 
             void setTnaDecimalPlaces(unsigned int decimalPlaces);
 
@@ -102,17 +102,17 @@ namespace QCode
 
             void setStartDateICPDerivatives(std::vector<double> der);
 
-            std::vector<double> getStartDateICPDerivatives() const;
+            [[nodiscard]] std::vector<double> getStartDateICPDerivatives() const;
 
-            double getStartDateICP() const;
+            [[nodiscard]] double getStartDateICP() const;
 
-            double getEndDateICP() const;
+            [[nodiscard]] double getEndDateICP() const;
 
             void setEndDateICP(double icpValue);
 
             void setEndDateICPDerivatives(std::vector<double> der);
 
-            std::vector<double> getEndDateICPDerivatives() const;
+            [[nodiscard]] std::vector<double> getEndDateICPDerivatives() const;
 
             void setNominal(double nominal);
 
@@ -124,9 +124,9 @@ namespace QCode
 
             std::string getTypeOfRate();
 
-            double getSpread() const;
+            [[nodiscard]] double getSpread() const;
 
-            double getGearing() const;
+            [[nodiscard]] double getGearing() const;
 
             virtual ~IcpClpCashflow2();
 
