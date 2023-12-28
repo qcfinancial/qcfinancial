@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "42"; });
+                []() { return "44"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -219,7 +219,7 @@ PYBIND11_MODULE(qcfinancial, m) {
         py::class_<QCCNY, std::shared_ptr<QCCNY>, QCCurrency>(m, "QCCNY")
                         .def(py::init<>());
 
-        py::class_<QCPEN, std::shared_ptr<QCPEN>, QCCurrency>(m, "QCCPEN")
+        py::class_<QCPEN, std::shared_ptr<QCPEN>, QCCurrency>(m, "QCPEN")
                         .def(py::init<>());
 
         py::class_<QCNOK, std::shared_ptr<QCNOK>, QCCurrency>(m, "QCNOK")
@@ -1633,7 +1633,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("valor_pago2", &qf::ChileanFixedRateBond::settlementValue2);
 
         // get_column_names
-        m.def("get_column_names", getColumnNames);
+        m.def("get_column_names", getColumnNames, "Muestra on objeto Leg como pandas.DataFrame",
+              py::arg("type_of_cashflow"),
+              py::arg("type_of_subcashflow")="");
 
         // ForwardRates
         py::class_<qf::ForwardRates>(m, "ForwardRates")

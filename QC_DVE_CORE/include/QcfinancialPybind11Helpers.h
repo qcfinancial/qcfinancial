@@ -822,6 +822,30 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[13] = "gearing";
         result[14] = "tipo_tasa";
         return result;
+    } else if (cashflowType == "IborMultiCurrencyCashflow") {
+        auto result = py::tuple(21);
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
+        result[2] = "fecha_fixing";
+        result[3] = "fecha_pago";
+        result[4] = "nocional";
+        result[5] = "amortizacion";
+        result[6] = "interes";
+        result[7] = "amort_es_flujo";
+        result[8] = "flujo_moneda_pago";
+        result[9] = "moneda_nocional";
+        result[10] = "codigo_indice_tasa";
+        result[11] = "spread";
+        result[12] = "gearing";
+        result[13] = "valor_tasa";
+        result[14] = "tipo_tasa";
+        result[15] = "fecha_fixing_fx";
+        result[16] = "moneda_pago";
+        result[17] = "codigo_indice_fx";
+        result[18] = "valor_indice_fx";
+        result[19] = "amortizacion_moneda_pago";
+        result[20] = "interes_moneda_pago";
+        return result;
     } else if (cashflowType == "IcpClpCashflow" || cashflowType == "IcpClpCashflow2") {
         auto result = py::tuple(15);
         result[0] = "fecha_inicial";
