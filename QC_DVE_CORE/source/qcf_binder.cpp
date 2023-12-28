@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "42"; });
+                []() { return "43"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -219,7 +219,7 @@ PYBIND11_MODULE(qcfinancial, m) {
         py::class_<QCCNY, std::shared_ptr<QCCNY>, QCCurrency>(m, "QCCNY")
                         .def(py::init<>());
 
-        py::class_<QCPEN, std::shared_ptr<QCPEN>, QCCurrency>(m, "QCCPEN")
+        py::class_<QCPEN, std::shared_ptr<QCPEN>, QCCurrency>(m, "QCPEN")
                         .def(py::init<>());
 
         py::class_<QCNOK, std::shared_ptr<QCNOK>, QCCurrency>(m, "QCNOK")
