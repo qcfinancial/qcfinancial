@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "46"; });
+                []() { return "48"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -1139,7 +1139,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("end_date"),
                                 py::arg("bus_adj_rule"),
                                 py::arg("settlement_periodicity"),
-                                py::arg("stub_period"),
+                                py::arg("settlement_stub_period"),
                                 py::arg("settlement_calendar"),
                                 py::arg("settlement_lag"),
                                 py::arg("initial_notional"),
@@ -1159,7 +1159,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("end_date"),
                                 py::arg("bus_adj_rule"),
                                 py::arg("settlement_periodicity"),
-                                py::arg("stub_period"),
+                                py::arg("settlement_stub_period"),
                                 py::arg("settlement_calendar"),
                                 py::arg("settlement_lag"),
                                 py::arg("notional_and_amort"),
