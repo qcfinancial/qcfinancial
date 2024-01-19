@@ -186,6 +186,9 @@ PYBIND11_MODULE(qcfinancial, m) {
         py::class_<QCCLF, std::shared_ptr<QCCLF>, QCCurrency>(m, "QCCLF")
                         .def(py::init<>());
 
+        py::class_<QCCLF2, std::shared_ptr<QCCLF2>, QCCurrency>(m, "QCCLF2")
+                        .def(py::init<>());
+
         py::class_<QCBRL, std::shared_ptr<QCBRL>, QCCurrency>(m, "QCBRL")
                         .def(py::init<>());
 

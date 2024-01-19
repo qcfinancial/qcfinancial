@@ -194,6 +194,23 @@ public:
 	}
 };
 
+class QCCLF2 : public QCCurrency
+{
+public:
+
+	/**
+	 * @fn	QCCLF::QCCLF()
+	 *
+	 * @brief	Default constructor
+	 *
+	 * @author	Alvaro Díaz V.
+	 * @date	09/10/2017
+	 */
+	QCCLF2() : QCCurrency("Chilean Unidad de Fomento (montos con 2 decimales)", "CL2", 667, 2)
+	{
+	}
+};
+
 /**
  * @class	QCBRL
  *
