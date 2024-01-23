@@ -95,8 +95,13 @@ namespace QCode::Financial {
 
     }
 
+
     void OvernightIndexCashflow::setEqRateDecimalPlaces(unsigned int decimalPlaces) {
         _eqRateDecimalPlaces = decimalPlaces;
+    }
+
+    unsigned int OvernightIndexCashflow::getEqRateDecimalPlaces() const {
+        return _eqRateDecimalPlaces;
     }
 
 

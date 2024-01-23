@@ -38,17 +38,6 @@ namespace QCode
             return "FixedRateMultiCurrencyCashflow";
         }
 
-//		double FixedRateMultiCurrencyCashflow::amount()
-//		{
-//			QCCurrencyConverter ccyConverter;
-//			double cashflow = _interest;
-//			if (_doesAmortize)
-//			{
-//				cashflow += _amortization;
-//			}
-//
-//			return ccyConverter.convert(cashflow, _currency, _fxRateIndexValue, *_fxRateIndex);
-//		}
 
 		shared_ptr<QCCurrency> FixedRateMultiCurrencyCashflow::settlementCcy()
 		{
@@ -60,7 +49,10 @@ namespace QCode
 			_fxRateIndexValue = fxRateIndexValue;
 		}
 
-		double FixedRateMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues)
+		double FixedRateMultiCurrencyCashflow::accruedInterest(
+                const QCDate& valueDate,
+                const QCDate& fxRateIndexDate,
+                const TimeSeries& fxRateIndexValues)
 		{
 			double interest = FixedRateCashflow::accruedInterest(valueDate);
 
@@ -74,7 +66,11 @@ namespace QCode
 			else
 			{
 				double fxRateIndexValue{ fxRateIndexValues.at(fxRateIndexDate) };
-				return ccyConverter.convert(interest, _currency, fxRateIndexValue, *_fxRateIndex);
+				return ccyConverter.convert(
+                        interest,
+                        _currency,
+                        fxRateIndexValue,
+                        *_fxRateIndex);
 			}
 		}
 
@@ -104,8 +100,16 @@ namespace QCode
 
 			QCCurrencyConverter ccyConverter;
 			return FXVariation { interest2 - interest1,
-				                 ccyConverter.convert(_nominal, _currency, fx2, *_fxRateIndex) -
-								 ccyConverter.convert(_nominal, _currency, fx1, *_fxRateIndex) };
+				                 ccyConverter.convert(
+                                         _nominal,
+                                         _currency,
+                                         fx2,
+                                         *_fxRateIndex) -
+								 ccyConverter.convert(
+                                         _nominal,
+                                         _currency,
+                                         fx1,
+                                         *_fxRateIndex) };
 		}
 
 		double FixedRateMultiCurrencyCashflow::getAmortization(const TimeSeries& fxRateIndexValues)
@@ -174,13 +178,6 @@ namespace QCode
 
         double FixedRateMultiCurrencyCashflow::settlementAmount() {
             QCCurrencyConverter ccyConverter;
-//            double cashflow = _interest;
-//            if (_doesAmortize)
-//            {
-//                cashflow += _amortization;
-//            }
-
-            // cashflow = _currency->amount(cashflow);
             auto cashflow = _currency->amount(amount());
 
             cashflow = ccyConverter.convert(

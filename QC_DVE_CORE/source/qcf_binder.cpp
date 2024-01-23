@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "48"; });
+                []() { return "51"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -404,6 +404,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .value("CAD", QCCurrencyConverter::QCCurrencyEnum::qcCAD)
                         .value("CHF", QCCurrencyConverter::QCCurrencyEnum::qcCHF)
                         .value("CLF", QCCurrencyConverter::QCCurrencyEnum::qcCLF)
+                        .value("CL2", QCCurrencyConverter::QCCurrencyEnum::qcCL2)
                         .value("CLP", QCCurrencyConverter::QCCurrencyEnum::qcCLP)
                         .value("CNY", QCCurrencyConverter::QCCurrencyEnum::qcCNY)
                         .value("COP", QCCurrencyConverter::QCCurrencyEnum::qcCOP)
@@ -432,8 +433,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .value("USDCHF", QCCurrencyConverter::QCFxRateEnum::qcUSDCHF)
                         .value("CHFCLP", QCCurrencyConverter::QCFxRateEnum::qcCHFCLP)
                         .value("CLFCLF", QCCurrencyConverter::QCFxRateEnum::qcCLFCLF)
+                        .value("CL2CL2", QCCurrencyConverter::QCFxRateEnum::qcCL2CL2)
                         .value("USDCLF", QCCurrencyConverter::QCFxRateEnum::qcUSDCLF)
                         .value("CLFCLP", QCCurrencyConverter::QCFxRateEnum::qcCLFCLP)
+                        .value("CL2CLP", QCCurrencyConverter::QCFxRateEnum::qcCL2CLP)
                         .value("CLPCLP", QCCurrencyConverter::QCFxRateEnum::qcCLPCLP)
                         .value("USDCLP", QCCurrencyConverter::QCFxRateEnum::qcUSDCLP)
                         .value("CNYCNY", QCCurrencyConverter::QCFxRateEnum::qcCNYCNY)
@@ -780,6 +783,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def<double(qf::OvernightIndexCashflow::*)(const QCDate&, const qf::TimeSeries&)>(
                                 "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
                         .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
+                        .def("get_eq_rate_decimal_places", &qf::OvernightIndexCashflow::getEqRateDecimalPlaces)
                         .def("get_type", &qf::OvernightIndexCashflow::getType)
                         .def("get_index_code", &qf::OvernightIndexCashflow::getIndexCode)
                         .def("settlement_currency", &qf::OvernightIndexCashflow::settlementCurrency)
