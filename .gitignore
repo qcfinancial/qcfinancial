@@ -164,4 +164,5 @@ QC_DVE_CORE/.idea/
 QC_DVE_CORE/cmake-build-debug
 QC_DVE_CORE/cmake-build-release
 QC_DVE_CORE/cmake-build-centos8-release/
+QC_DVE_CORE/cmake-build-release-centos8/
 
