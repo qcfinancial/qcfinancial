@@ -165,4 +165,6 @@ QC_DVE_CORE/cmake-build-debug
 QC_DVE_CORE/cmake-build-release
 QC_DVE_CORE/cmake-build-centos8-release/
 QC_DVE_CORE/cmake-build-release-centos8/
+QC_DVE_CORE/cmake-build-docker-redhat85-amd64-py311/
+
 
