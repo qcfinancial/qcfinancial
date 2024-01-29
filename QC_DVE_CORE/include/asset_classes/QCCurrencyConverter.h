@@ -26,6 +26,7 @@ public:
         qcCAD,
         qcCHF,
 		qcCLF,
+		qcCL2,
 		qcCLP,
         qcCNY,
         qcCOP,
@@ -69,6 +70,9 @@ public:
         qcCLFCLF,
         qcUSDCLF,
         qcCLFCLP,
+
+    	qcCL2CL2,
+    	qcCL2CLP,
 
         qcCNYCNY,
         qcUSDCNY,
@@ -126,6 +130,7 @@ public:
         // QCCurrencyEnum ---> ISO Code
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcUSD, "USD"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcCLF, "CLF"));
+		_currencyCode.insert(pair<QCCurrencyEnum, string>(qcCL2, "CL2"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcCLP, "CLP"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcGBP, "GBP"));
         _currencyCode.insert(pair<QCCurrencyEnum, string>(qcEUR, "EUR"));
@@ -149,6 +154,9 @@ public:
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCLFCLF, "CLFCLF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDCLF, "USDCLF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCLFCLP, "CLFCLP"));
+
+		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcCL2CL2, "CL2CL2"));
+		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcCL2CLP, "CL2CLP"));
 
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcBRLBRL, "BRLBRL"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDBRL, "USDBRL"));
@@ -222,6 +230,10 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CLPCLF", qcCLFCLP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDCLF", qcUSDCLF));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("CLFUSD", qcUSDCLF));
+
+		_standardFxRate.insert(pair<string, QCFxRateEnum>("CL2CL2", qcCL2CL2));
+		_standardFxRate.insert(pair<string, QCFxRateEnum>("CL2CLP", qcCL2CLP));
+		_standardFxRate.insert(pair<string, QCFxRateEnum>("CLPCL2", qcCL2CLP));
 
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CLPCLP", qcCLPCLP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDCLP", qcUSDCLP));
@@ -326,6 +338,10 @@ public:
         _fxRateMktCode.insert(pair<std::string, std::string>("CLPCLF", "CLFCLP"));
         _fxRateMktCode.insert(pair<std::string, std::string>("USDCLF", "USDCLF"));
         _fxRateMktCode.insert(pair<std::string, std::string>("CLFUSD", "USDCLF"));
+
+		_fxRateMktCode.insert(pair<std::string, std::string>("CL2CL2", "CL2CL2"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CL2CLP", "CL2CLP"));
+		_fxRateMktCode.insert(pair<std::string, std::string>("CLPCL2", "CL2CLP"));
 
         _fxRateMktCode.insert(pair<std::string, std::string>("CLPCLP", "CLPCLP"));
         _fxRateMktCode.insert(pair<std::string, std::string>("USDCLP", "USDCLP"));

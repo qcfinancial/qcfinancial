@@ -720,7 +720,7 @@ py::tuple show(const std::shared_ptr<qf::OvernightIndexCashflow>& overnightIndex
 
 
 // Other Functions
-py::tuple getColumnNames(const std::string &cashflowType, const std::string &cashflowSubtype = "") {
+inline py::tuple getColumnNames(const std::string &cashflowType, const std::string &cashflowSubtype = "") {
     if (cashflowType == "FixedRateCashflow" || cashflowType == "FixedRateCashflow2") {
         auto result = py::tuple(11);
         result[0] = "fecha_inicial";
@@ -815,9 +815,9 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[6] = "interes";
         result[7] = "amort_es_flujo";
         result[8] = "flujo";
-        result[9] = "valor_tasa";
-        result[10] = "moneda";
-        result[11] = "codigo_indice_tasa";
+        result[9] = "moneda";
+        result[10] = "codigo_indice_tasa";
+        result[11] = "valor_tasa";
         result[12] = "spread";
         result[13] = "gearing";
         result[14] = "tipo_tasa";
@@ -917,7 +917,7 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[2] = "moneda";
         return result;
     } else if (cashflowType == "IcpClfCashflow") {
-        auto result = py::tuple(18);
+        auto result = py::tuple(17);
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
@@ -926,16 +926,15 @@ py::tuple getColumnNames(const std::string &cashflowType, const std::string &cas
         result[5] = "amort_es_flujo";
         result[6] = "flujo";
         result[7] = "moneda";
-        result[8] = "interes";
-        result[9] = "icp_inicial";
-        result[10] = "icp_final";
-        result[11] = "uf_inicial";
-        result[12] = "uf_final";
-        result[13] = "valor_tasa";
-        result[14] = "interes";
-        result[15] = "spread";
-        result[16] = "gearing";
-        result[17] = "tipo_tasa";
+        result[8] = "icp_inicial";
+        result[9] = "icp_final";
+        result[10] = "uf_inicial";
+        result[11] = "uf_final";
+        result[12] = "valor_tasa";
+        result[13] = "interes";
+        result[14] = "spread";
+        result[15] = "gearing";
+        result[16] = "tipo_tasa";
         return result;
     } else if (cashflowType == "CompoundedOvernightRateCashflow" || cashflowType == "CompoundedOvernightRateCashflow2") {
         auto result = py::tuple(14);

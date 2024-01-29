@@ -1,0 +1,31 @@
+# CLion remote docker environment
+#
+# Build and run:
+#   docker build -t clion/redhat85/cpp-env-py311:1.0 -f Dockerfile.cpp-env-redhat85-amd64-python311 .
+#   docker run -it --name redhat85-py311 -v /Users/nbacquet/Documents/Docker/Volumes/RedHat8Py311:/home/test_user/MyVolume --entrypoint /bin/bash clion/redhat85/cpp-env-py311:1.0
+#   docker run -it --name redhat85-py311 -v /Users/adiazv/Docker/Volumes/RedHat8Py311:/home/test_user/MyVolume --entrypoint /bin/bash clion/redhat85/cpp-env-py311:1.0
+
+FROM --platform=linux/amd64 redhat/ubi8:8.8-854
+
+RUN yum -y update
+RUN yum -y install dnf
+RUN yum -y install openssh-server
+RUN yum -y install make
+RUN yum -y install autoconf
+RUN yum -y install automake
+RUN yum -y install gcc
+RUN yum -y install gcc-c++
+RUN yum -y install gdb
+RUN yum -y install clang
+RUN yum -y install cmake
+RUN yum -y install rsync
+RUN yum -y install tar
+RUN yum -y install git
+RUN dnf -y install python3.11-devel
+RUN python3.11 -m ensurepip
+RUN python3.11 -m pip install twine
+RUN python3.11 -m pip install wheel
+RUN yum clean all
+RUN useradd -m test_user
+USER test_user
+#RUN git clone --recursive-submodules https://github.com/adiaz-efaa/derivative-valuation-engine.git /home/test_user/
