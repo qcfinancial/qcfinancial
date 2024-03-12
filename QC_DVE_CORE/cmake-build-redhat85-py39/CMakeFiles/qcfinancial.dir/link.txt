@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O3 -DNDEBUG -flto -shared  -o qcfinancial.cpython-39-x86_64-linux-gnu.so CMakeFiles/qcfinancial.dir/source/qcf_binder.cpp.o  QC_DVE_CORE.a 
