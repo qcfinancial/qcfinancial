@@ -10,5 +10,5 @@ python setup.py bdist_wheel
 pyenv global 3.11.6
 python setup.py bdist_wheel
 
-pyenv global 3.12.0
-python setup.py bdist_wheel
+# pyenv global 3.12.0
+# python setup.py bdist_wheel
