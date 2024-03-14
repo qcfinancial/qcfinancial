@@ -22,7 +22,10 @@ target_sources(QC_DVE_CORE
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
         cashflows/OvernightIndexCashflow.cpp
+        cashflows/OvernightIndexMultiCurrencyCashflow.cpp
         cashflows/CompoundedOvernightRateCashflow.cpp
+        cashflows/CompoundedOvernightRateCashflow2.cpp
+        cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.cpp
         cashflows/IborMultiCurrencyCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
@@ -90,7 +93,7 @@ set(QC_FINANCIAL_SOURCES
         cashflows/IcpClpCashflow.cpp
         cashflows/IcpClpCashflow2.cpp
         cashflows/OvernightIndexCashflow.cpp
-        cashflows/CompoundedOvernightRateCashflow.cppdea
+        cashflows/CompoundedOvernightRateCashflow.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp

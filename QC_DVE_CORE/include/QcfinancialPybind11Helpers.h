@@ -556,7 +556,7 @@ py::tuple show(const std::shared_ptr<qf::IcpClpCashflow>& icpClpCashflow) {
         tuple[3] = std::get<3>(*cashflow);
         tuple[4] = std::get<4>(*cashflow);
         tuple[5] = std::get<5>(*cashflow);
-        tuple[6] = icpClpCashflow->amount();
+        tuple[6] = std::get<4>(*cashflow) + std::get<12>(*cashflow); // icpClpCashflow->amount();
         tuple[7] = std::get<6>(*cashflow)->getIsoCode();
         tuple[8] = std::get<7>(*cashflow);
         tuple[9] = std::get<8>(*cashflow);
