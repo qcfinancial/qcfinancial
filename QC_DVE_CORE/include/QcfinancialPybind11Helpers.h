@@ -627,8 +627,8 @@ py::tuple show(const std::shared_ptr<qf::CompoundedOvernightRateCashflow2>& comp
         tuple[8] = std::get<8>(*cashflow);
         tuple[9] = std::get<9>(*cashflow);
         tuple[10] = std::get<10>(*cashflow);
-        tuple[11] = std::get<11>(*cashflow);
-        tuple[12] = std::get<12>(*cashflow);
+        tuple[11] = std::get<13>(*cashflow);
+        tuple[12] = std::get<11>(*cashflow);
         tuple[13] = std::get<12>(*cashflow);
         return tuple;
     } else {
@@ -948,10 +948,10 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[7] = "flujo";
         result[8] = "moneda";
         result[9] = "codigo_indice_tasa";
-        result[10] = "valor_tasa";
-        result[11] = "spread";
-        result[12] = "gearing";
-        result[13] = "tipo_tasa";
+        result[10] = "tipo_tasa";
+        result[11] = "valor_tasa";
+        result[12] = "spread";
+        result[13] = "gearing";
         return result;
     } else if (cashflowType == "CompoundedOvernightRateMultiCurrencyCashflow2") {
         auto result = py::tuple(21);
