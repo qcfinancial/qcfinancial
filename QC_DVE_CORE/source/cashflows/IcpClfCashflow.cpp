@@ -178,21 +178,23 @@ namespace QCode
 			//Se precalcula el interés porque eso permite asegurar que el valor
 			//de la tasa es consistente con los valores de ICP y UF ingresados.
 			double interest = accruedInterest(_endDate, _endDateICP, _endDateUF);
-			IcpClfCashflowWrapper tup = std::make_tuple(_startDate,
-														_endDate,
-														_settlementDate,
-														_nominal,
-														_amortization,
-														_doesAmortize,
-														_currency,
-														_startDateICP,
-														_endDateICP,
-														_startDateUF,
-														_endDateUF,
-														_rate.getValue(),
-														interest,
-														_spread,
-														_gearing);
+			IcpClfCashflowWrapper tup = std::make_tuple(
+                    _startDate,
+                    _endDate,
+                    _settlementDate,
+                    _nominal,
+                    _amortization,
+                    _doesAmortize,
+                    _currency,
+                    _startDateICP,
+                    _endDateICP,
+                    _startDateUF,
+                    _endDateUF,
+                    _rate.getValue(),
+                    interest,
+                    _spread,
+                    _gearing,
+                    settlementAmount());
 
 			return std::make_shared<IcpClfCashflowWrapper>(tup);
 

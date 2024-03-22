@@ -33,7 +33,8 @@ namespace QCode
 			double,                 /* Rate */
 			double,                 /* Interest */
 			double,                 /* Spread */
-			double                  /* Gearing */
+			double,                 /* Gearing */
+            double                  /* Amount in CLP */
 		> IcpClfCashflowWrapper;
 
 		class IcpClfCashflow : public IcpClpCashflow
@@ -212,11 +213,11 @@ namespace QCode
 
             void setEndDateUFCLFDerivatives(std::vector<double> der);
 
-            std::vector<double> getAmountICPDerivatives() const;
+            [[nodiscard]] std::vector<double> getAmountICPDerivatives() const;
 
-            std::vector<double> getAmountUFCLPDerivatives() const;
+            [[nodiscard]] std::vector<double> getAmountUFCLPDerivatives() const;
 
-            std::vector<double> getAmountUFCLFDerivatives() const;
+            [[nodiscard]] std::vector<double> getAmountUFCLFDerivatives() const;
 
 
             /**

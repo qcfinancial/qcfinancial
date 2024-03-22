@@ -548,7 +548,7 @@ py::tuple show(const std::shared_ptr<qf::IcpClpCashflow>& icpClpCashflow) {
         return tuple;
     } else {
         auto icpClfCashflow = std::dynamic_pointer_cast<qf::IcpClfCashflow>(icpClpCashflow);
-        auto tuple = py::tuple(17);
+        auto tuple = py::tuple(18);
         auto cashflow = icpClfCashflow->wrap();
         tuple[0] = std::get<0>(*cashflow).description(false);
         tuple[1] = std::get<1>(*cashflow).description(false);
@@ -567,6 +567,7 @@ py::tuple show(const std::shared_ptr<qf::IcpClpCashflow>& icpClpCashflow) {
         tuple[14] = std::get<13>(*cashflow);
         tuple[15] = std::get<14>(*cashflow);
         tuple[16] = icpClpCashflow->getTypeOfRate();
+        tuple[17] = std::get<15>(*cashflow);
         return tuple;
     }
 }
@@ -917,7 +918,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[2] = "moneda";
         return result;
     } else if (cashflowType == "IcpClfCashflow") {
-        auto result = py::tuple(17);
+        auto result = py::tuple(18);
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
@@ -935,6 +936,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[14] = "spread";
         result[15] = "gearing";
         result[16] = "tipo_tasa";
+        result[17] = "flujo_en_clp";
         return result;
     } else if (cashflowType == "CompoundedOvernightRateCashflow" || cashflowType == "CompoundedOvernightRateCashflow2") {
         auto result = py::tuple(14);
