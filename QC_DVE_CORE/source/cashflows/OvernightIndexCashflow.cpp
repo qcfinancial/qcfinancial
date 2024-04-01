@@ -53,13 +53,6 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::amount() {
-        // auto interest = _calculateInterest(_endDate, _endDateIndex);
-        // if (_doesAmortize) {
-        //     return _amortization + interest;
-        // } else {
-        //     return interest;
-        // }
-
         auto wf = _endDateIndex / _startDateIndex;
         auto interest = _notional * (wf - 1.0);
         _rate.setValue(_spread);
@@ -302,7 +295,15 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexCashflow::settlementAmount() {
-        return _notionalCurrency->amount(amount());
+        auto interest = _calculateInterest(_endDate, _endDateIndex);
+        double settAmount = 0.0;
+        if (_doesAmortize) {
+            settAmount = _amortization + interest;
+        } else {
+            settAmount = interest;
+        }
+        // }
+        return _notionalCurrency->amount(settAmount);
     }
 
     shared_ptr<QCCurrency> OvernightIndexCashflow::settlementCurrency() {

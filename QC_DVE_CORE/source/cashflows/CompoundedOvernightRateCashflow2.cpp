@@ -211,6 +211,7 @@
         double CompoundedOvernightRateCashflow2::_getFixingWf(
                 QCDate &fecha,
                 const QCode::Financial::TimeSeries &fixings) {
+            // Aquí hacer un round a 4 decimales
             auto fix_rate = fixings.find(fecha);
             if (fix_rate != fixings.end()) {
                 _index->setRateValue(fix_rate->second);
