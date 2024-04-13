@@ -80,6 +80,10 @@ namespace QCode
             return _fixingDate;
         }
 
+        QCDate  IborCashflow::getSettlementDate() const {
+            return _settlementDate;
+        }
+
 
         QCDate IborCashflow::getIndexStartDate()
         {
@@ -124,6 +128,22 @@ namespace QCode
             _calculateInterest();
         }
 
+        void QCode::Financial::IborCashflow::setForwardRateWfDerivatives(const std::vector<double> &der) {
+            _forwardRateWfDerivatives.resize(der.size());
+            for (size_t i = 0; i < der.size(); ++i) {
+                _forwardRateWfDerivatives.at(i) = der.at(i);
+            }
+        }
+
+        std::vector<double> QCode::Financial::IborCashflow::getAmountDerivatives() const {
+            return _amountDerivatives;
+        }
+
+
+        std::shared_ptr<InterestRateIndex> QCode::Financial::IborCashflow::getInterestRateIndex() const {
+            return _index;
+        }
+
 
         double IborCashflow::getInterestRateValue() const
         {
@@ -148,21 +168,22 @@ namespace QCode
 
         shared_ptr<IborCashflowWrapper> IborCashflow::wrap()
         {
-            IborCashflowWrapper tup = std::make_tuple(_startDate,
-                                                      _endDate,
-                                                      _fixingDate,
-                                                      _settlementDate,
-                                                      _nominal,
-                                                      _amortization,
-                                                      _interest,
-                                                      _doesAmortize,
-                                                      amount(),
-                                                      _currency,
-                                                      _index->getCode(),
-                                                      _index->getRate(),
-                                                      _spread,
-                                                      _gearing,
-                                                      _rateValue);
+            IborCashflowWrapper tup = std::make_tuple(
+                    _startDate,
+                    _endDate,
+                    _fixingDate,
+                    _settlementDate,
+                    _nominal,
+                    _amortization,
+                    _interest,
+                    _doesAmortize,
+                    amount(),
+                    _currency,
+                    _index->getCode(),
+                    _index->getRate(),
+                    _spread,
+                    _gearing,
+                    _rateValue);
 
             return std::make_shared<IborCashflowWrapper>(tup);
         }

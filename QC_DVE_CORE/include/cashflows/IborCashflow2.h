@@ -46,13 +46,15 @@ namespace QCode
                     double spread,
                     double gearing);
 
+            string getType() const override;
+
             double amount() override;
 
             shared_ptr<QCCurrency> ccy() override;
 
             QCDate date() override;
 
-            string getType() const override;
+
 
             shared_ptr<QCCurrency> getInitialCcy() const override;
 

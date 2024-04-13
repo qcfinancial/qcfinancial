@@ -50,6 +50,36 @@
                 return std::make_shared<IborCashflow2>(iborCashflow_);
             }
 
+            std::shared_ptr<IborCashflow> setRateIborCashflow1(
+                    const QCDate &valuationDate,
+                    Cashflow &iborCashflow,
+                    ZeroCouponCurve &curve) {
+                auto iborCashflow_ = dynamic_cast<IborCashflow &>(iborCashflow);
+                std::vector<double> derivatives;
+                derivatives.resize(curve.getLength());
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    derivatives.at(i) = 0.0;
+                }
+                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+                auto fixingDate = iborCashflow_.getFixingDate();
+                if (valuationDate > fixingDate) {
+                    return std::make_shared<IborCashflow>(iborCashflow_);
+                }
+                QCDate fecha1 = iborCashflow_.getIndexStartDate();
+                QCDate fecha2 = iborCashflow_.getIndexEndDate();
+                long t1 = valuationDate.dayDiff(fecha1);
+                long t2 = valuationDate.dayDiff(fecha2);
+                auto iborRate = iborCashflow_.getInterestRateIndex()->getRate();
+                auto tasaForward = curve.getForwardRateWithRate(iborRate, t1, t2);
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    derivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                }
+                iborCashflow_.setInterestRateValue(tasaForward);
+                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+                auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
+                return std::make_shared<IborCashflow>(iborCashflow_);
+            }
+
 
             void setRatesIborLeg(
                     const QCDate &valuationDate,
@@ -58,6 +88,17 @@
                 _derivatives2.resize(iborLeg.size(), vector<double>(curve.getLength(), 0.0));
                 for (size_t i = 0; i < iborLeg.size(); ++i) {
                     auto cashflow = setRateIborCashflow(valuationDate, *(iborLeg.getCashflowAt(i)), curve);
+                    iborLeg.setCashflowAt(cashflow, i);
+                }
+            }
+
+            void setRatesIborLeg1(
+                    const QCDate &valuationDate,
+                    Leg &iborLeg,
+                    ZeroCouponCurve &curve) {
+                _derivatives2.resize(iborLeg.size(), vector<double>(curve.getLength(), 0.0));
+                for (size_t i = 0; i < iborLeg.size(); ++i) {
+                    auto cashflow = setRateIborCashflow1(valuationDate, *(iborLeg.getCashflowAt(i)), curve);
                     iborLeg.setCashflowAt(cashflow, i);
                 }
             }
@@ -74,6 +115,26 @@
                     // Calcular el fixing
                     auto accruedFixing = initialCashflow->accruedFixing(valuationDate, fixings);
                     auto cashflow = setRateCompoundedOvernightCashflow(
+                            valuationDate,
+                            accruedFixing,
+                            *initialCashflow,
+                            curve);
+                    compoundedONLeg.setCashflowAt(cashflow, i);
+                }
+            }
+
+            void setRatesCompoundedOvernightLeg2(
+                    const QCDate &valuationDate,
+                    Leg &compoundedONLeg,
+                    ZeroCouponCurve &curve,
+                    const TimeSeries& fixings) {
+                _derivatives2.resize(compoundedONLeg.size(), vector<double>(curve.getLength(), 0.0));
+                for (size_t i = 0; i < compoundedONLeg.size(); ++i) {
+                    auto initialCashflow = std::dynamic_pointer_cast<CompoundedOvernightRateCashflow2>(compoundedONLeg.getCashflowAt(i));
+
+                    // Calcular el fixing
+                    auto accruedFixing = initialCashflow->accruedFixing(valuationDate, fixings);
+                    auto cashflow = setRateCompoundedOvernightCashflow2(
                             valuationDate,
                             accruedFixing,
                             *initialCashflow,
@@ -156,6 +217,81 @@
                     return std::make_shared<CompoundedOvernightRateCashflow>(compoundedONRateCashflow_);
                 }
             }
+
+            std::shared_ptr<CompoundedOvernightRateCashflow2> setRateCompoundedOvernightCashflow2(
+                    const QCDate &valuationDate,
+                    double accruedFixing,
+                    Cashflow &compoundedONRateCashflow,
+                    ZeroCouponCurve &curve) {
+                std::vector<double> zeroDerivatives(curve.getLength(), 0.0);
+
+                auto compoundedONRateCashflow_ = dynamic_cast<CompoundedOvernightRateCashflow2 &>(compoundedONRateCashflow);
+                auto notional_ = compoundedONRateCashflow_.getNotional();
+
+                if (valuationDate >= compoundedONRateCashflow_.getEndDate())
+                {
+                    compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
+                    compoundedONRateCashflow_.setInitialDateWf(1.0);
+                    compoundedONRateCashflow_.getInterestRateIndex()->setRateValue(accruedFixing);
+                    auto t = compoundedONRateCashflow_.getStartDate().dayDiff(compoundedONRateCashflow_.getEndDate());
+                    auto endDateWf = compoundedONRateCashflow_.getInterestRateIndex()->getRate().wf(t);
+                    compoundedONRateCashflow_.setEndDateWf(endDateWf);
+                    return std::make_shared<CompoundedOvernightRateCashflow2>(compoundedONRateCashflow_);
+
+                }
+                else if ((compoundedONRateCashflow_.getStartDate() < valuationDate) &&
+                         (valuationDate < compoundedONRateCashflow_.getEndDate()))
+                {
+                    compoundedONRateCashflow_.setInitialDateWf(1.0);
+                    auto t1 = compoundedONRateCashflow_.getStartDate().dayDiff(valuationDate);
+                    auto t2 = valuationDate.dayDiff(compoundedONRateCashflow_.getEndDate());
+                    compoundedONRateCashflow_.getInterestRateIndex()->setRateValue(accruedFixing);
+                    auto accruedWf = compoundedONRateCashflow_.getInterestRateIndex()->getRate().wf(t1);
+                    compoundedONRateCashflow_.setEndDateWf(accruedWf / curve.getDiscountFactorAt(t2));
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        zeroDerivatives.at(i) = notional_ * accruedWf * curve.wfDerivativeAt(i);
+                    }
+                    compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
+                    return std::make_shared<CompoundedOvernightRateCashflow2>(compoundedONRateCashflow_);
+                }
+                else if (compoundedONRateCashflow_.getStartDate() == valuationDate)
+                {
+                    compoundedONRateCashflow_.setInitialDateWf(1.0);
+                    auto t = valuationDate.dayDiff(compoundedONRateCashflow_.getEndDate());
+                    auto endDateWf = 1.0 / curve.getDiscountFactorAt(t);
+                    compoundedONRateCashflow_.setEndDateWf(endDateWf);
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        zeroDerivatives.at(i) = notional_ * curve.wfDerivativeAt(i);
+                    }
+                    compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
+                    return std::make_shared<CompoundedOvernightRateCashflow2>(compoundedONRateCashflow_);
+                }
+                else
+                {
+                    auto t1 = valuationDate.dayDiff(compoundedONRateCashflow_.getStartDate());
+                    compoundedONRateCashflow_.setInitialDateWf(1.0 / curve.getDiscountFactorAt(t1));
+                    vector<double> startDateDerivatives(curve.getLength(), 0.0);
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        startDateDerivatives.at(i) = curve.wfDerivativeAt(i);
+                    }
+
+                    auto t2 = valuationDate.dayDiff(compoundedONRateCashflow_.getEndDate());
+                    compoundedONRateCashflow_.setEndDateWf(1.0 / curve.getDiscountFactorAt(t2));
+                    vector<double> endDateDerivatives(curve.getLength(), 0.0);
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = curve.wfDerivativeAt(i);
+                    }
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        zeroDerivatives.at(i) = notional_ * (endDateDerivatives.at(i) / curve.getDiscountFactorAt(t1) -
+                                                             startDateDerivatives.at(i) / curve.getDiscountFactorAt(t2)) *
+                                                std::pow(curve.getDiscountFactorAt(t1), 2.0);
+                    }
+                    compoundedONRateCashflow_.setAmountDerivatives(zeroDerivatives);
+
+                    return std::make_shared<CompoundedOvernightRateCashflow2>(compoundedONRateCashflow_);
+                }
+            }
+
 
 
             std::shared_ptr<IcpClpCashflow2> setRateIcpClpCashflow(
