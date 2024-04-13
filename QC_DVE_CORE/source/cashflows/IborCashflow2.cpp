@@ -190,7 +190,7 @@ double QCode::Financial::IborCashflow2::accruedInterest(const QCDate &fecha) {
 
 double QCode::Financial::IborCashflow2::accruedInterest(const QCDate &fecha,
                                                         const QCode::Financial::TimeSeries &fixings) {
-    if (fecha < _startDate || _endDate >= fecha) {
+    if ((fecha < _startDate) || (_endDate <= fecha)) {
         return 0.0;
     }
     try {

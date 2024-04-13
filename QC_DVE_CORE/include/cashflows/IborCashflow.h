@@ -83,7 +83,7 @@ namespace QCode
 						 double spread,
 						 double gearing);
 
-            virtual std::string getType() const;
+            [[nodiscard]] virtual std::string getType() const;
 
 			/**
 			 * @fn	double IborCashflow::amount();
@@ -97,6 +97,30 @@ namespace QCode
 			 */
 			double amount() override;
 
+            /**
+ * @fn	shared_ptr<QCCurrency> IborCashflow::ccy();
+ *
+ * @brief	Gets the ccy
+ *
+ * @author	Alvaro Díaz V.
+ * @date	29/09/2017
+ *
+ * @return	A shared_ptr&lt;QCCurrency&gt;
+ */
+            shared_ptr<QCCurrency> ccy() override;
+
+            /**
+ * @fn	QCDate IborCashflow::date();
+ *
+ * @brief	Gets the date
+ *
+ * @author	Alvaro Díaz V.
+ * @date	29/09/2017
+ *
+ * @return	A QCDate.
+ */
+            QCDate date() override;
+
 
             virtual double settlementAmount();
 
@@ -106,29 +130,6 @@ namespace QCode
 
 			[[nodiscard]] std::string getInterestRateIndexCode() const;
 
-			/**
-			 * @fn	shared_ptr<QCCurrency> IborCashflow::ccy();
-			 *
-			 * @brief	Gets the ccy
-			 *
-			 * @author	Alvaro Díaz V.
-			 * @date	29/09/2017
-			 *
-			 * @return	A shared_ptr&lt;QCCurrency&gt;
-			 */
-			shared_ptr<QCCurrency> ccy() override;
-
-			/**
-			 * @fn	QCDate IborCashflow::date();
-			 *
-			 * @brief	Gets the date
-			 *
-			 * @author	Alvaro Díaz V.
-			 * @date	29/09/2017
-			 *
-			 * @return	A QCDate.
-			 */
-			QCDate date() override;
 
 			/**
 			 * @fn	QCDate IborCashflow::getStartDate();
@@ -140,7 +141,7 @@ namespace QCode
 			 *
 			 * @return	The start date.
 			 */
-			QCDate getStartDate() const;
+			[[nodiscard]] QCDate getStartDate() const;
 
 			/**
 			 * @fn	QCDate IborCashflow::getEndDate() const;
@@ -152,7 +153,7 @@ namespace QCode
 			 *
 			 * @return	The end date.
 			 */
-			QCDate getEndDate() const;
+			[[nodiscard]] QCDate getEndDate() const;
 
 			/**
 			* @fn	    QCDate IborCashflow::getFixingDate();
@@ -164,7 +165,10 @@ namespace QCode
 			*
 			* @return	QCDate;
 			*/
-			QCDate getFixingDate() const;
+			[[nodiscard]] QCDate getFixingDate() const;
+
+            [[nodiscard]] QCDate getSettlementDate() const;
+
 
 			/**
 			 * @fn	QCDate IborCashflow::getIndexStartDate() const;
@@ -212,7 +216,7 @@ namespace QCode
 			 *
 			 * @return	The nominal.
 			 */
-			double getNominal() const;
+			[[nodiscard]] double getNominal() const;
 
 			/**
 			* @fn	void iborCashflow::setAmortization(double amortization);
@@ -236,7 +240,7 @@ namespace QCode
 			 *
 			 * @return	The amortization.
 			 */
-			double getAmortization() const;
+			[[nodiscard]] double getAmortization() const;
 
 			/**
 			* @fn	void iborCashflow::setInterestRateValue(double value);
@@ -260,7 +264,7 @@ namespace QCode
 			 *
 			 * @return	The interest rate value.
 			 */
-			double getInterestRateValue() const;
+			[[nodiscard]] double getInterestRateValue() const;
 
 			/**
 			 * @fn	double IborCashflow::accruedInterest(const QCDate& valueDate);
@@ -288,6 +292,12 @@ namespace QCode
 			 */
 			shared_ptr<IborCashflowWrapper> wrap();
 
+            void setForwardRateWfDerivatives(const std::vector<double>& der);
+
+            [[nodiscard]] std::vector<double> getAmountDerivatives() const;
+
+            [[nodiscard]] std::shared_ptr<InterestRateIndex> getInterestRateIndex() const;
+
 			/**
 			 * @fn	virtual IborCashflow::~IborCashflow();
 			 *
@@ -296,7 +306,7 @@ namespace QCode
 			 * @author	Alvaro Díaz V.
 			 * @date	29/09/2017
 			 */
-			virtual ~IborCashflow();
+			~IborCashflow() override;
 
 		protected:
 			/** @brief	The interest rate index value */
@@ -366,7 +376,18 @@ namespace QCode
 			 * @return	True if it succeeds, false if it fails.
 			 */
 			bool _validate();
-		};
+
+            /** @brief	Stores de derivatives of forward rate wealth factor with respect to rates belonging to zero
+             * coupon curve.
+           */
+            std::vector<double> _forwardRateWfDerivatives;
+
+            /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
+            * coupon curve.
+            */
+            std::vector<double> _amountDerivatives;
+
+        };
 
 	}
 }

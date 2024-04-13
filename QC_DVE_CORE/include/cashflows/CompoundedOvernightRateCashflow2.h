@@ -208,7 +208,7 @@ namespace QCode::Financial {
 
         double _calculateInterest(double rateValue, QCDate &fecha);
 
-        double _getRateValue() const;
+        [[nodiscard]] double _getRateValue() const;
 
 
     };
