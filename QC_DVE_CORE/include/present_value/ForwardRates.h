@@ -451,7 +451,7 @@
                     return std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow_);
                 } else if ((overnightIndexCashflow_.getStartDate() < valuationDate) &&
                            (valuationDate < overnightIndexCashflow_.getEndDate())) {
-                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); //AQUI
                     overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
 
                     overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t));
@@ -465,7 +465,7 @@
                 } else if (overnightIndexCashflow_.getStartDate() == valuationDate) {
                     auto t = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
 
-                    t = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    t = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); // AQUI
                     overnightIndexCashflow_.setStartDateIndex(indexValuationDate);
                     overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
 
@@ -480,7 +480,7 @@
                 } else {
                     auto t1 = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
 
-                    t1 = valuationDate.dayDiff(overnightIndexCashflow_.getStartDate());
+                    t1 = valuationDate.dayDiff(overnightIndexCashflow_.getIndexStartDate()); // AQUI
                     overnightIndexCashflow_.setStartDateIndex(indexValuationDate / curve.getDiscountFactorAt(t1));
                     vector<double> startDateDerivatives;
                     startDateDerivatives.resize(curve.getLength());
@@ -489,7 +489,7 @@
                     }
                     overnightIndexCashflow_.setStartDateIndexDerivatives(startDateDerivatives);
 
-                    auto t2 = valuationDate.dayDiff(overnightIndexCashflow_.getEndDate());
+                    auto t2 = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); // AQUI
                     overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t2));
                     vector<double> endDateDerivatives;
                     endDateDerivatives.resize(curve.getLength());
