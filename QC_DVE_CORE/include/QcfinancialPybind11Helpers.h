@@ -967,10 +967,10 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[7] = "flujo";
         result[8] = "moneda";
         result[9] = "codigo_indice_tasa";
-        result[10] = "valor_tasa";
+        result[10] = "tipo_tasa";
         result[11] = "spread";
         result[12] = "gearing";
-        result[13] = "tipo_tasa";
+        result[13] = "valor_tasa";
         result[14] = "moneda_pago";
         result[15] = "fx_rate_index";
         result[16] = "fecha_fixing_fx";
