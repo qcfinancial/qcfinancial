@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "v0.9.０ 2024-05-29 13:30"; });
+                []() { return "v0.9.０ 2024-06-01 08:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -510,6 +510,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                         QCCurrency>,
                                 std::shared_ptr<qf::FXRateIndex>, double>())
                         .def("amount", &qf::SimpleMultiCurrencyCashflow::amount)
+                        .def("settlement_amount", &qf::SimpleMultiCurrencyCashflow::settlementAmount)
                         .def("nominal", &qf::SimpleMultiCurrencyCashflow::nominal)
                         .def("ccy", &qf::SimpleMultiCurrencyCashflow::ccy)
                         .def("settlement_ccy", &qf::SimpleMultiCurrencyCashflow::settlementCcy)
