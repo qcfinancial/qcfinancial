@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-01 08:40"; });
+                []() { return "version: 0.9.0, build: 2024-06-01 09:30"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -550,19 +550,15 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 double, double, bool,
                                 const QCInterestRate &, shared_ptr<QCCurrency>, QCDate &,
                                 shared_ptr<QCCurrency>, shared_ptr<qf::FXRateIndex>, double>())
-                        // .def("amount", &qf::FixedRateMultiCurrencyCashflow::amount)
                         .def("get_fx_fixing_date", &qf::FixedRateMultiCurrencyCashflow::getFXPublishDate)
                         .def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCcy)
                         .def("set_fx_rate_index_value", &qf::FixedRateMultiCurrencyCashflow::setFxRateIndexValue)
-                        .def("accrued_interest", &qf::FixedRateCashflow::accruedInterest)
-                        .def("accrued_interest", &qf::FixedRateMultiCurrencyCashflow::accruedInterest)
-                        .def("get_amortization", &qf::FixedRateCashflow::getAmortization)
-                        .def("get_amortization", &qf::FixedRateMultiCurrencyCashflow::getAmortization)
+                        .def("accrued_interest_in_sett_ccy", &qf::FixedRateMultiCurrencyCashflow::accruedInterestInSettCcy)
+                        .def("get_amortization_in_sett_ccy", &qf::FixedRateMultiCurrencyCashflow::getAmortizationInSettCcy)
                         .def("get_fx_rate_index", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndex)
                         .def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
                         .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType)
-                        .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount)
-                        .def("settlement_currency", &qf::FixedRateMultiCurrencyCashflow::settlementCurrency);
+                        .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount);
 
         // LinearInterestRateCashflow
         py::class_<qf::LinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>,

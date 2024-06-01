@@ -49,23 +49,22 @@ namespace QCode
 			_fxRateIndexValue = fxRateIndexValue;
 		}
 
-		double FixedRateMultiCurrencyCashflow::accruedInterest(
+		double FixedRateMultiCurrencyCashflow::accruedInterestInSettCcy(
                 const QCDate& valueDate,
-                const QCDate& fxRateIndexDate,
                 const TimeSeries& fxRateIndexValues)
 		{
 			double interest = FixedRateCashflow::accruedInterest(valueDate);
 
 			QCCurrencyConverter ccyConverter;
-			if (!QCode::Helpers::isDateInTimeSeries(fxRateIndexDate, fxRateIndexValues))
+			if (!QCode::Helpers::isDateInTimeSeries(_fxRateIndexFixingDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
-				msg += _fxRateIndex->getCode() + " and date " + fxRateIndexDate.description(false) + ".";
+				msg += _fxRateIndex->getCode() + " and date " + _fxRateIndexFixingDate.description(false) + ".";
 				throw invalid_argument(msg);
 			}
 			else
 			{
-				double fxRateIndexValue{ fxRateIndexValues.at(fxRateIndexDate) };
+				double fxRateIndexValue{ fxRateIndexValues.at(_fxRateIndexFixingDate) };
 				return ccyConverter.convert(
                         interest,
                         _currency,
@@ -84,7 +83,6 @@ namespace QCode
 				throw invalid_argument(msg);
 			}
 
-			//QCDate _valueDate{ valueDate };
 			if (!QCode::Helpers::isDateInTimeSeries(valueDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
@@ -112,11 +110,15 @@ namespace QCode
                                          *_fxRateIndex) };
 		}
 
-		double FixedRateMultiCurrencyCashflow::getAmortization(const TimeSeries& fxRateIndexValues)
+		double FixedRateMultiCurrencyCashflow::getAmortizationInSettCcy(const TimeSeries& fxRateIndexValues)
 		{
 			double amort = FixedRateCashflow::getAmortization();
 			QCCurrencyConverter converter;
-			return converter.convert(amort, _currency, fxRateIndexValues.at(_fxRateIndexFixingDate), *_fxRateIndex);
+			return converter.convert(
+                    amort,
+                    _currency,
+                    fxRateIndexValues.at(_fxRateIndexFixingDate),
+                    *_fxRateIndex);
 		}
 
 		std::string FixedRateMultiCurrencyCashflow::getFXRateIndexCode() const

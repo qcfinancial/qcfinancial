@@ -65,18 +65,19 @@ namespace QCode
 			 * @param	fxRateIndex			 	The fx rate index.
 			 * @param	fxRateIndexValue	 	(Optional) The fx rate index value.
 			 */
-			FixedRateMultiCurrencyCashflow(const QCDate& startDate,
-				const QCDate& endDate,
-				const QCDate& settlementDate,
-				double nominal,
-				double amortization,
-				bool doesAmortize,
-				const QCInterestRate& rate,
-				std::shared_ptr<QCCurrency> notionalCurrency,
-				const QCDate& fxRateIndexFixingDate,
-				std::shared_ptr<QCCurrency> settlementCurrency,
-				std::shared_ptr<FXRateIndex> fxRateIndex,
-				double fxRateIndexValue = 1.0);
+			FixedRateMultiCurrencyCashflow(
+                    const QCDate& startDate,
+				    const QCDate& endDate,
+				    const QCDate& settlementDate,
+				    double nominal,
+				    double amortization,
+				    bool doesAmortize,
+				    const QCInterestRate& rate,
+				    std::shared_ptr<QCCurrency> notionalCurrency,
+				    const QCDate& fxRateIndexFixingDate,
+				    std::shared_ptr<QCCurrency> settlementCurrency,
+				    std::shared_ptr<FXRateIndex> fxRateIndex,
+				    double fxRateIndexValue = 1.0);
 
 			/**
 			 * @fn		double FixedRateMultiCurrencyCashflow::amount();
@@ -134,7 +135,7 @@ namespace QCode
 			 *
 			 * @returns	A double.
 			 */
-			double accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+			double accruedInterestInSettCcy(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 
 			/**
 			 * @fn	double FixedRateMultiCurrencyCashflow::getAmortization(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
@@ -149,7 +150,7 @@ namespace QCode
 			 *
 			 * @returns	The amortization.
 			 */
-			double getAmortization(const TimeSeries& fxRateIndexValues);
+			double getAmortizationInSettCcy(const TimeSeries& fxRateIndexValues);
 
 			/**
 			 * @fn	FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
