@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-01 08:20"; });
+                []() { return "version: 0.9.0, build: 2024-06-01 08:40"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
@@ -534,6 +534,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_nominal", &qf::FixedRateCashflow::getNominal)
                         .def("set_amortization", &qf::FixedRateCashflow::setAmortization)
                         .def("get_amortization", &qf::FixedRateCashflow::getAmortization)
+                        .def("set_rate_value", &qf::FixedRateCashflow::setRateValue)
                         .def("get_type", &qf::FixedRateCashflow::getType)
                         .def("settlement_amount", &qf::FixedRateCashflow::settlementAmount)
                         .def("settlement_currency", &qf::FixedRateCashflow::settlementCurrency);
