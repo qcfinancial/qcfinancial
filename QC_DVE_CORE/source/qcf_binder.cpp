@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "v0.8.3 2024-05-13 13:15"; });
+                []() { return "v0.9.０ 2024-05-29 13:30"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(
