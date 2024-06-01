@@ -917,6 +917,16 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[1] = "monto";
         result[2] = "moneda";
         return result;
+    } else if (cashflowType == "SimpleMultiCurrencyCashflow") {
+        auto result = py::tuple(7);
+        result[0] = "fecha_pago";
+        result[1] = "monto";
+        result[2] = "moneda_nominal";
+        result[3] = "fecha_fixing";
+        result[4] = "moneda_pago";
+        result[5] = "codigo_indice_fx";
+        result[6] = "valor_indice_fx";
+        return result;
     } else if (cashflowType == "IcpClfCashflow") {
         auto result = py::tuple(18);
         result[0] = "fecha_inicial";
