@@ -18,7 +18,6 @@
  * @author	Alvaro Díaz V.
  * @date	21/09/2017
  */
-
 class QCCurrency
 {
 public:
@@ -169,96 +168,46 @@ private:
 
 };
 
-/**
- * @class	QCCLF
- *
- * @brief	Representation for CLF (ISO Code and Number are ficticious).
- *
- * @author	Alvaro Díaz V.
- * @date	09/10/2017
- */
-class QCCLF : public QCCurrency
+class QCAUD : public QCCurrency
 {
 public:
-
-	/**
-	 * @fn	QCCLF::QCCLF()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	09/10/2017
-	 */
-	QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 4)
-	{
-	}
+    QCAUD() : QCCurrency("Dólar australiano", "AUD", 36, 2)
+    {
+    }
 };
 
-class QCCLF2 : public QCCurrency
-{
-public:
-
-	/**
-	 * @fn	QCCLF::QCCLF()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	09/10/2017
-	 */
-	QCCLF2() : QCCurrency("Chilean Unidad de Fomento (montos con 2 decimales)", "CL2", 667, 2)
-	{
-	}
-};
-
-/**
- * @class	QCBRL
- *
- * @brief	Representation for BRL.
- *
- * @author	Alvaro Díaz V.
- * @date	27/09/2017
- */
 class QCBRL : public QCCurrency
 {
 public:
 
-	/**
-	 * @fn	QCBRL::QCBRL()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	27/09/2017
-	 */
-	QCBRL() : QCCurrency("Brazilian Real", "BRL", 986, 2)
-	{
-	}
+    /**
+     * @fn	QCBRL::QCBRL()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro Díaz V.
+     * @date	27/09/2017
+     */
+    QCBRL() : QCCurrency("Brazilian Real", "BRL", 986, 2)
+    {
+    }
 };
 
-/**
- * @class	QCCLP
- *
- * @brief	Representation for CLP.
- *
- * @author	Alvaro Díaz V.
- * @date	27/09/2017
- */
-class QCCLP : public QCCurrency
+class QCCAD : public QCCurrency
 {
 public:
 
-	/**
-	 * @fn	QCCLP::QCCLP()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro Díaz V.
-	 * @date	27/09/2017
-	 */
-	QCCLP() : QCCurrency("Chilean Peso", "CLP", 152, 0)
-	{
-	}
+    /**
+     * @fn	QCCAD::QCCAD()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro Díaz V.
+     * @date	27/09/2017
+     */
+    QCCAD() : QCCurrency("Canadian Dollar", "CAD", 124, 2)
+    {
+    }
 };
 
 class QCCHF : public QCCurrency
@@ -278,64 +227,65 @@ public:
     }
 };
 
-/**
- * @class	QCMXN
- *
- * @brief	Representation for MXN.
- *
- * @author	Alvaro D�az V.
- * @date	27/09/2017
- */
-class QCMXN : public QCCurrency
+class QCCLF : public QCCurrency
+{
+public:
+
+    /**
+     * @fn	QCCLF::QCCLF()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro Díaz V.
+     * @date	09/10/2017
+     */
+    QCCLF() : QCCurrency("Chilean Unidad de Fomento", "CLF", 666, 4)
+    {
+    }
+};
+
+class QCCLF2 : public QCCurrency
 {
 public:
 
 	/**
-	 * @fn	QCMXN::QCMXN()
+	 * @fn	QCCLF::QCCLF()
 	 *
 	 * @brief	Default constructor
 	 *
-	 * @author	Alvaro D�az V.
-	 * @date	27/09/2017
+	 * @author	Alvaro Díaz V.
+	 * @date	09/10/2017
 	 */
-	QCMXN() : QCCurrency("Mexican Peso", "MXN", 484, 2)
+	QCCLF2() : QCCurrency("Chilean Unidad de Fomento (montos con 2 decimales)", "CL2", 667, 2)
 	{
 	}
 };
 
-/**
- * @class	QCCAD
- *
- * @brief	Representation for CAD.
- *
- * @author	Alvaro Díaz V.
- * @date	27/09/2017
- */
-class QCCAD : public QCCurrency
+class QCCLP : public QCCurrency
 {
 public:
 
 	/**
-	 * @fn	QCCAD::QCCAD()
+	 * @fn	QCCLP::QCCLP()
 	 *
 	 * @brief	Default constructor
 	 *
 	 * @author	Alvaro Díaz V.
 	 * @date	27/09/2017
 	 */
-	QCCAD() : QCCurrency("Canadian Dollar", "CAD", 124, 2)
+	QCCLP() : QCCurrency("Chilean Peso", "CLP", 152, 0)
 	{
 	}
 };
 
-/**
- * @class	QCCOP
- *
- * @brief	Representation for COP.
- *
- * @author	Alvaro Díaz V.
- * @date	27/07/2021
- */
+class QCCNY : public QCCurrency
+{
+public:
+    QCCNY() : QCCurrency("Chinese CNY", "CNY", 156, 2)
+    {
+    }
+};
+
 class QCCOP : public QCCurrency
 {
 public:
@@ -353,14 +303,105 @@ public:
     }
 };
 
-/**
- * @class	QCUSD
- *
- * @brief	Representation for USD.
- *
- * @author	Alvaro D�az V.
- * @date	27/09/2017
- */
+class QCDKK : public QCCurrency
+{
+public:
+    QCDKK() : QCCurrency("Corona danesa", "DKK", 208, 2)
+    {
+    }
+};
+
+class QCEUR : public QCCurrency
+{
+public:
+
+    /**
+     * @fn	QCEUR::QCEUR()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro D�az V.
+     * @date	27/09/2017
+     */
+    QCEUR() : QCCurrency("European Euro", "EUR", 978, 2)
+    {
+    }
+};
+
+class QCGBP : public QCCurrency
+{
+public:
+
+    /**
+     * @fn	QCGBP::QCGBP()
+     *
+     * @brief	Default constructor
+     *
+     * @author	Alvaro D�az V.
+     * @date	27/09/2017
+     */
+    QCGBP() : QCCurrency("British Pound Sterling", "GBP", 826, 2)
+    {
+    }
+};
+
+class QCHKD : public QCCurrency
+{
+public:
+    QCHKD() : QCCurrency("Dólar de Hong Kong", "HKD", 344, 2)
+    {
+    }
+};
+
+class QCJPY : public QCCurrency
+{
+public:
+    QCJPY() : QCCurrency("Japanese Yen", "JPY", 392, 2)
+    {
+    }
+};
+
+class QCMXN : public QCCurrency
+{
+public:
+
+	/**
+	 * @fn	QCMXN::QCMXN()
+	 *
+	 * @brief	Default constructor
+	 *
+	 * @author	Alvaro D�az V.
+	 * @date	27/09/2017
+	 */
+	QCMXN() : QCCurrency("Mexican Peso", "MXN", 484, 2)
+	{
+	}
+};
+
+class QCNOK : public QCCurrency
+{
+public:
+    QCNOK() : QCCurrency("Corona noruega", "NOK", 578, 2)
+    {
+    }
+};
+
+class QCPEN : public QCCurrency
+{
+public:
+    QCPEN() : QCCurrency("Sol peruano", "PEN", 604, 2)
+    {
+    }
+};
+
+class QCSEK : public QCCurrency
+{
+public:
+    QCSEK() : QCCurrency("Corona sueca", "SEK", 752, 2)
+    {
+    }
+};
+
 class QCUSD : public QCCurrency
 {
 public:
@@ -377,137 +418,6 @@ public:
 	{
 	}
 };
-
-/**
- * @class	QCEUR
- *
- * @brief	Representation for EUR.
- *
- * @author	Alvaro D�az V.
- * @date	27/09/2017
- */
-class QCEUR : public QCCurrency
-{
-public:
-
-	/**
-	 * @fn	QCEUR::QCEUR()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro D�az V.
-	 * @date	27/09/2017
-	 */
-	QCEUR() : QCCurrency("European Euro", "EUR", 978, 2)
-	{
-	}
-};
-
-/**
- * @class	QCGBP
- *
- * @brief	Representation for GBP.
- *
- * @author	Alvaro D�az V.
- * @date	27/09/2017
- */
-class QCGBP : public QCCurrency
-{
-public:
-
-	/**
-	 * @fn	QCGBP::QCGBP()
-	 *
-	 * @brief	Default constructor
-	 *
-	 * @author	Alvaro D�az V.
-	 * @date	27/09/2017
-	 */
-	QCGBP() : QCCurrency("British Pound Sterling", "GBP", 826, 2)
-	{
-	}
-};
-
-/**
-* @fn	QCJPY::QCJPY()
-*
-* @brief	Default constructor
-*
-* @author	Alvaro D�az V.
-* @date	07/01/2019
-*/
-class QCJPY : public QCCurrency
-{
-public:
-	QCJPY() : QCCurrency("Japanese Yen", "JPY", 392, 2)
-	{
-	}
-};
-
-/**
-* @fn	QCCNY::QCCNY()
-*
-* @brief	Default constructor
-*
-* @author	Alvaro Diaz V.
-* @date	10/07/2022
-*/
-class QCCNY : public QCCurrency
-{
-public:
-    QCCNY() : QCCurrency("Chinese CNY", "CNY", 156, 2)
-    {
-    }
-};
-
-class QCPEN : public QCCurrency
-{
-public:
-    QCPEN() : QCCurrency("Sol peruano", "PEN", 604, 2)
-    {
-    }
-};
-
-class QCNOK : public QCCurrency
-{
-public:
-    QCNOK() : QCCurrency("Corona noruega", "NOK", 578, 2)
-    {
-    }
-};
-
-class QCSEK : public QCCurrency
-{
-public:
-    QCSEK() : QCCurrency("Corona sueca", "SEK", 752, 2)
-    {
-    }
-};
-
-class QCDKK : public QCCurrency
-{
-public:
-    QCDKK() : QCCurrency("Corona danesa", "DKK", 208, 2)
-    {
-    }
-};
-
-class QCAUD : public QCCurrency
-{
-public:
-    QCAUD() : QCCurrency("Dólar australiano", "AUD", 36, 2)
-    {
-    }
-};
-
-class QCHKD : public QCCurrency
-{
-public:
-    QCHKD() : QCCurrency("Dólar de Hong Kong", "HKD", 344, 2)
-    {
-    }
-};
-
 
 
 #endif //QCCURRENCY_H
