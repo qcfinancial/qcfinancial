@@ -142,7 +142,7 @@ namespace QCode
 			 *
 			 * @returns	A double.
 			 */
-			double accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+			double accruedInterestInSettCcy(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 
 			/**
 			 * @fn	FXVariation IborMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
