@@ -711,8 +711,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)
                         .def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
                         .def("get_fx_rate_index_code", &qf::IborMultiCurrencyCashflow::getFXRateIndexCode)
-                        .def("accrued_interest", &qf::IborCashflow::accruedInterest)
-                        .def("accrued_interest", &qf::IborMultiCurrencyCashflow::accruedInterest);
+                        .def("accrued_interest_in_sett_ccy", &qf::IborMultiCurrencyCashflow::accruedInterestInSettCcy);
 
         // IcpClpCashflow
         py::class_<qf::IcpClpCashflow, std::shared_ptr<qf::IcpClpCashflow>, qf::Cashflow>(
