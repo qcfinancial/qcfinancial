@@ -112,6 +112,8 @@ namespace QCode
 			 */
 			void setFxRateIndexValue(double fxRateIndexValue);
 
+            double getFxRateIndexValue() const;
+
 			[[nodiscard]] std::string getFXRateIndexCode() const;
 
 			/**

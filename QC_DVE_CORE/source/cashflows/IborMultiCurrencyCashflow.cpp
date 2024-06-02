@@ -46,6 +46,11 @@ namespace QCode
 			_fxRateIndexValue = fxRateIndexValue;
 		}
 
+        double IborMultiCurrencyCashflow::getFxRateIndexValue() const
+        {
+            return _fxRateIndexValue;
+        }
+
 		double IborMultiCurrencyCashflow::accruedInterestInSettCcy(const QCDate& valueDate, const TimeSeries& fxRateIndexValues)
 		{
 			double interest = IborCashflow::accruedInterest(valueDate);
