@@ -85,18 +85,6 @@ namespace QCode
 
             [[nodiscard]] std::string getType() const override;
 
-			/**
-			 * @fn	double IborMultiCurrencyCashflow::amount() override;
-			 *
-			 * @brief	Gets the amount of the cashflow in settlement currency.
-			 *
-			 * @author	A Diaz V
-			 * @date	01-03-2019
-			 *
-			 * @returns	A double.
-			 */
-			double amount() override;
-
 
             double settlementAmount() override;
 
