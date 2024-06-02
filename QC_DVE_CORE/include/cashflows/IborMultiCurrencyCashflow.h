@@ -66,21 +66,22 @@ namespace QCode
 			 * @param	fxRateIndex			 	Fx rate index object.
 			 * @param	fxRateIndexValue	 	(Optional) The fx rate index value.
 			 */
-			IborMultiCurrencyCashflow(std::shared_ptr<InterestRateIndex> index,
-				const QCDate& startDate,
-				const QCDate& endDate,
-				const QCDate& fixingDate,
-				const QCDate& settlementDate,
-				double nominal,
-				double amortization,
-				bool doesAmortize,
-				std::shared_ptr<QCCurrency> nominalCurrency,
-				double spread,
-				double gearing,
-				const QCDate& fxRateIndexFixingDate,
-				std::shared_ptr<QCCurrency> settlementCurrency,
-				std::shared_ptr<FXRateIndex> fxRateIndex,
-				double fxRateIndexValue = 1.0);
+			IborMultiCurrencyCashflow(
+                    std::shared_ptr<InterestRateIndex> index,
+				    const QCDate& startDate,
+				    const QCDate& endDate,
+				    const QCDate& fixingDate,
+				    const QCDate& settlementDate,
+				    double nominal,
+				    double amortization,
+				    bool doesAmortize,
+				    std::shared_ptr<QCCurrency> nominalCurrency,
+				    double spread,
+				    double gearing,
+				    const QCDate& fxRateIndexFixingDate,
+				    std::shared_ptr<QCCurrency> settlementCurrency,
+				    std::shared_ptr<FXRateIndex> fxRateIndex,
+				    double fxRateIndexValue = 1.0);
 
             [[nodiscard]] std::string getType() const override;
 

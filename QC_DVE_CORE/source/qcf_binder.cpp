@@ -99,24 +99,16 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-01 09:30"; });
+                []() { return "version: 0.9.0, build: 2024-06-01 09:50"; });
 
         // QCDate
-        py::class_<QCDate>(m, "QCDate", R"pbdoc(
-        Permite representar una fecha en calendario gregoriano.
-    )pbdoc")
-                        .def(py::init<int, int, int>(), R"pbdoc(
-- d: int, es el día de la fecha.
-- m: int, es el mes de la fecha.
-- y: int, es el año de la fecha.)pbdoc")
+        py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
+                        .def(py::init<int, int, int>(),
+                                R"pbdoc(- d: int, es el día de la fecha. - m: int, es el mes de la fecha. - y: int, es el año de la fecha.)pbdoc")
                         .def(py::init<>())
                         .def(py::init<long>())
                         .def(py::init<std::string &>())
-                        .def("set_day", &QCDate::setDay, R"pbdoc(
-            Establece el día de la fecha.
-
-            - d: int
-            )pbdoc")
+                        .def("set_day", &QCDate::setDay, R"pbdoc(Establece el día de la fecha.- d: int)pbdoc")
                         .def("set_month", &QCDate::setMonth, "Establece el mes")
                         .def("set_year", &QCDate::setYear, "Establece el año")
                         .def("day", &QCDate::day, "Obtiene el día")
@@ -645,6 +637,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_interest_rate_index_code", &qf::IborCashflow::getInterestRateIndexCode)
                         .def("set_interest_rate_value", &qf::IborCashflow::setInterestRateValue)
                         .def("get_interest_rate_value", &qf::IborCashflow::getInterestRateValue)
+                        .def("set_spread", &qf::IborCashflow::setSpread)
+                        .def("get_spread", &qf::IborCashflow::getSpread)
                         .def("set_nominal", &qf::IborCashflow::setNominal)
                         .def("get_nominal", &qf::IborCashflow::getNominal)
                         .def("set_amortization", &qf::IborCashflow::setAmortization)
@@ -712,7 +706,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 std::shared_ptr<QCCurrency>,
                                 std::shared_ptr<qf::FXRateIndex>,
                                 double>())
-                        .def("amount", &qf::IborMultiCurrencyCashflow::amount)
                         .def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCurrency)
                         .def("settlement_amount", &qf::IborMultiCurrencyCashflow::settlementAmount)
                         .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)

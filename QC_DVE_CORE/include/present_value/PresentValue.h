@@ -91,8 +91,9 @@ namespace QCode
 			* @return	A double with the present value. Derivative is stored in the class and has
 			*           its own set of accessors.
 			*/
-			double pv(QCDate& valuationDate, const std::shared_ptr<Cashflow>& cashflow,
-				QCInterestRate& intRate)
+			double pv(QCDate& valuationDate,
+                      const std::shared_ptr<Cashflow>& cashflow,
+                      QCInterestRate& intRate)
 			{
 				auto days = valuationDate.dayDiff(cashflow->date());
 				if (days <= 0)

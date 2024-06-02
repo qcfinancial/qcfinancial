@@ -153,6 +153,16 @@ namespace QCode
             return _rateValue;
         }
 
+        void IborCashflow::setSpread(double spread)
+        {
+            _spread = spread;
+        }
+
+        double IborCashflow::getSpread() const
+        {
+            return _spread;
+        }
+
 
         double IborCashflow::accruedInterest(const QCDate& valueDate)
         {
