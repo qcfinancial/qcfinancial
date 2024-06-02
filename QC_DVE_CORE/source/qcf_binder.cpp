@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-02 09:00"; });
+                []() { return "version: 0.9.0, build: 2024-06-02 09:30"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -761,6 +761,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_index_end_date", &qf::OvernightIndexCashflow::getIndexEndDate)
                         .def("get_settlement_date", &qf::OvernightIndexCashflow::getSettlementDate)
                         .def("set_start_date_index", &qf::OvernightIndexCashflow::setStartDateIndex)
+                        .def("get_dates_for_eq_rate", &qf::OvernightIndexCashflow::getDatesForEqRate)
+                        .def("set_dates_for_eq_rate", &qf::OvernightIndexCashflow::setDatesForEqRate)
                         .def("set_end_date_index", &qf::OvernightIndexCashflow::setEndDateIndex)
                         .def("get_start_date_index", &qf::OvernightIndexCashflow::getStartDateIndex)
                         .def("get_end_date_index", &qf::OvernightIndexCashflow::getEndDateIndex)

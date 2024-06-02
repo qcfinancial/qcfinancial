@@ -151,6 +151,12 @@ namespace QCode
             shared_ptr<OvernightIndexCashflowWrapper> wrap();
 
 
+            DatesForEquivalentRate getDatesForEqRate() const;
+
+
+            void setDatesForEqRate(DatesForEquivalentRate datesForEqRate);
+
+
             double getRateValue();
 
 

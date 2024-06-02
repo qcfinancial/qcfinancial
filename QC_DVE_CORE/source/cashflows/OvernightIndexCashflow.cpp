@@ -134,6 +134,16 @@ namespace QCode::Financial {
     }
 
 
+    DatesForEquivalentRate OvernightIndexCashflow::getDatesForEqRate() const {
+        return _datesForEquivalentRate;
+    }
+
+
+    void OvernightIndexCashflow::setDatesForEqRate(DatesForEquivalentRate datesForEqRate) {
+        _datesForEquivalentRate = datesForEqRate;
+    }
+
+
     double OvernightIndexCashflow::accruedInterest(QCDate &accrualDate, double indexValue) {
         return _calculateInterest(accrualDate, indexValue);
     }
