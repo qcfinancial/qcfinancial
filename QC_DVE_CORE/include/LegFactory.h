@@ -636,7 +636,8 @@ namespace QCode
                     QCInterestRate rate,
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency);
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             static Leg buildBulletOvernightIndexMultiCurrencyLeg(
                     RecPay recPay,
@@ -659,7 +660,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> notionalCurrency,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag);
+                    unsigned int fxRateIndexFixingLag,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
 
             static Leg buildCustomAmortOvernightIndexLeg(
@@ -680,7 +682,8 @@ namespace QCode
                     QCInterestRate rate,
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency);
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
                     RecPay recPay,
@@ -703,7 +706,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> notionalCurrency,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag);
+                    unsigned int fxRateIndexFixingLag,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             /**
             * @fn	static Leg LegFactory::buildBulletIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);

@@ -57,7 +57,8 @@ namespace QCode::Financial {
                 unsigned int eqRateDecimalPlaces,
                 const QCDate &fxRateIndexFixingDate,
                 std::shared_ptr<QCCurrency> settlementCurrency,
-                std::shared_ptr<FXRateIndex> fxRateIndex);
+                std::shared_ptr<FXRateIndex> fxRateIndex,
+                DatesForEquivalentRate datesForEquivalentRate);
 
 
         shared_ptr<QCCurrency> settlementCurrency() override;

@@ -39,6 +39,12 @@ namespace QCode
         double                       /* Gearing */
         > OvernightIndexCashflowWrapper;
 
+        enum class DatesForEquivalentRate
+        {
+            qcAccrual = 1,
+            qcIndex = 2
+        };
+
         class OvernightIndexCashflow : public Cashflow {
         public:
             OvernightIndexCashflow(
@@ -55,7 +61,8 @@ namespace QCode
                     double gearing,
                     const QCInterestRate &rate,
                     std::string  indexName,
-                    unsigned int eqRateDecimalPlaces);
+                    unsigned int eqRateDecimalPlaces,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             double amount() override;
 
@@ -162,6 +169,8 @@ namespace QCode
 
             /** @brief	The default amount of decimal places for TNA. */
             unsigned int _eqRateDecimalPlaces;
+
+            DatesForEquivalentRate _datesForEquivalentRate;
 
             /** @brief	Calculates interest (final or accrued) given a date and ICP value. */
             double _calculateInterest(QCDate &date, double indexValue);

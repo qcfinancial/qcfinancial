@@ -26,7 +26,8 @@ namespace QCode::Financial {
             unsigned int eqRateDecimalPlaces,
             const QCDate& fxRateIndexFixingDate,
             std::shared_ptr<QCCurrency> settlementCurrency,
-            shared_ptr<FXRateIndex> fxRateIndex) :
+            shared_ptr<FXRateIndex> fxRateIndex,
+            DatesForEquivalentRate datesForEquivalentRate) :
             OvernightIndexCashflow(
                     accrualStartDate,
                     accrualEndDate,
@@ -41,8 +42,8 @@ namespace QCode::Financial {
                     gearing,
                     rate,
                     std::move(indexName),
-                    eqRateDecimalPlaces
-                    ),
+                    eqRateDecimalPlaces,
+                    datesForEquivalentRate),
                     _fxRateIndexFixingDate(fxRateIndexFixingDate),
                     _settlementCurrency(std::move(settlementCurrency)),
                     _fxRateIndex(std::move(fxRateIndex)),
