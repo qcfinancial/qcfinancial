@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-02 08:45"; });
+                []() { return "version: 0.9.0, build: 2024-06-02 09:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1095,6 +1095,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("pushback_notional_amort", &qf::CustomNotionalAmort::pushbackNotionalAmort)
                         .def("get_notional_at", &qf::CustomNotionalAmort::getNotionalAt)
                         .def("get_amort_at", &qf::CustomNotionalAmort::getAmortAt);
+
+        py::enum_<qf::DatesForEquivalentRate>(m, "DatesForEquivalentRate")
+                .value("ACCRUAL", qf::DatesForEquivalentRate::qcAccrual)
+                .value("INDEX", qf::DatesForEquivalentRate::qcIndex);
 
         // LegFactory
         py::class_<qf::LegFactory>(m, "LegFactory")
