@@ -36,18 +36,6 @@ namespace QCode
             return "IborMultiCurrencyCashflow";
         }
 
-		double IborMultiCurrencyCashflow::amount()
-		{
-			QCCurrencyConverter ccyConverter;
-			double cashflow = _interest;
-			if (_doesAmortize)
-			{
-				cashflow += _amortization;
-			}
-
-			return ccyConverter.convert(cashflow, _currency, _fxRateIndexValue, *_fxRateIndex);
-		}
-
 		shared_ptr<QCCurrency> IborMultiCurrencyCashflow::settlementCurrency()
 		{
 			return _settlementCurrency;
