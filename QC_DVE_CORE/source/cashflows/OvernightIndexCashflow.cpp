@@ -55,72 +55,41 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::amount() {
-        if (_datesForEquivalentRate == DatesForEquivalentRate::qcIndex) {
-            auto wf = _endDateIndex / _startDateIndex;
-            auto interest = _notional * (wf - 1.0);
-            _rate.setValue(_spread);
-            auto spreadInterest = _notional * (_rate.wf(_startDate, _endDate) - 1.0);
-            _rate.setValue(getEqRate(_endDate, _endDateIndex));
-            if (_startDateIndexDerivatives.size() == _endDateIndexDerivatives.size())
-            {
-                _amountDerivatives.resize(_startDateIndexDerivatives.size());
-                for (size_t i = 0; i < _startDateIndexDerivatives.size(); ++i)
-                {
-                    _amountDerivatives.at(i) = _notional *
-                                               ((_endDateIndexDerivatives.at(i) * _startDateIndex -
-                                                 _endDateIndex * _startDateIndexDerivatives.at(i)) /
-                                                pow(_startDateIndex, 2.0)
-                                               );
-                }
-            }
-            else
-            {
-                std::vector<double> zeroDerivatives(_startDateIndexDerivatives.size(), 0.0);
-                _amountDerivatives.resize(_startDateIndexDerivatives.size());
-                _amountDerivatives = zeroDerivatives;
-            }
+        auto tempDecimalPlaces = _eqRateDecimalPlaces;
+        _eqRateDecimalPlaces = 20;
+        auto endDate = (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) ? _endDate : _indexEndDate;
+        auto rate = getEqRate(endDate, _endDateIndex);
+        _rate.setValue(_spread + rate);
+        auto interest = _notional * (_rate.wf(_startDate, _endDate) - 1.0);
 
-            if (_doesAmortize)
+        // Falta probar las derivadas
+        if (_startDateIndexDerivatives.size() == _endDateIndexDerivatives.size())
+        {
+            _amountDerivatives.resize(_startDateIndexDerivatives.size());
+            for (size_t i = 0; i < _startDateIndexDerivatives.size(); ++i)
             {
-                return _amortization + interest + spreadInterest;
+                _amountDerivatives.at(i) = _notional *
+                        ((_endDateIndexDerivatives.at(i) * _startDateIndex -
+                        _endDateIndex * _startDateIndexDerivatives.at(i)) /
+                        pow(_startDateIndex, 2.0));
             }
-            else
-            {
-                return interest + spreadInterest;
-            }
-        } else {
-            auto wf = _endDateIndex / _startDateIndex;
-            auto interest = _notional * (wf - 1.0);
-            _rate.setValue(_spread);
-            auto spreadInterest = _notional * (_rate.wf(_startDate, _endDate) - 1.0);
-            _rate.setValue(getEqRate(_endDate, _endDateIndex));
-            if (_startDateIndexDerivatives.size() == _endDateIndexDerivatives.size())
-            {
-                _amountDerivatives.resize(_startDateIndexDerivatives.size());
-                for (size_t i = 0; i < _startDateIndexDerivatives.size(); ++i)
-                {
-                    _amountDerivatives.at(i) = _notional *
-                                               ((_endDateIndexDerivatives.at(i) * _startDateIndex -
-                                                 _endDateIndex * _startDateIndexDerivatives.at(i)) /
-                                                pow(_startDateIndex, 2.0)
-                                               );
-                }
-            }
-            else
-            {
-                std::vector<double> zeroDerivatives(_startDateIndexDerivatives.size(), 0.0);
-                _amountDerivatives.resize(_startDateIndexDerivatives.size());
-                _amountDerivatives = zeroDerivatives;
-            }
+        }
+        else
+        {
+            std::vector<double> zeroDerivatives(_startDateIndexDerivatives.size(), 0.0);
+            _amountDerivatives.resize(_startDateIndexDerivatives.size());
+            _amountDerivatives = zeroDerivatives;
+        }
 
-            if (_doesAmortize)
-            {
-                return _amortization + interest + spreadInterest;
-            }
-            else
-            {
-                return interest + spreadInterest;
-            }
+        if (_doesAmortize)
+        {
+            _eqRateDecimalPlaces = tempDecimalPlaces;
+            return _amortization + interest;
+        }
+        else
+        {
+            _eqRateDecimalPlaces = tempDecimalPlaces;
+            return interest;
         }
     }
 
@@ -150,7 +119,14 @@ namespace QCode::Financial {
 
     double OvernightIndexCashflow::getEqRate(QCDate &date, double indexValue) {
         unsigned int LIMIT_EQ_RATE_DECIMAL_PLACES = 12;
-        double yf = _rate.yf(_startDate, date);
+        double yf = 0.0;
+        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
+            yf = _rate.yf(_startDate, date);
+        }
+        else {
+            yf = _rate.yf(_indexStartDate, date);
+        }
+
         if (yf == 0.0) {
             return 0.0;
         }
@@ -162,6 +138,7 @@ namespace QCode::Financial {
             return round(eqRate * factor) / factor;
         }
     }
+
 
     void OvernightIndexCashflow::setStartDateIndex(double indexValue) {
         _startDateIndex = indexValue;
@@ -195,6 +172,7 @@ namespace QCode::Financial {
     void OvernightIndexCashflow::setEndDateIndex(double indexValue) {
         _endDateIndex = indexValue;
     };
+
 
     void OvernightIndexCashflow::setEndDateIndexDerivatives(std::vector<double> der)
     {
@@ -260,6 +238,12 @@ namespace QCode::Financial {
         auto flujo = interes;
         if (_doesAmortize)
             flujo += _amortization;
+        double rate = 0.0;
+        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
+            rate = getEqRate(_endDate, _endDateIndex);
+        } else {
+            rate = getEqRate(_indexEndDate, _endDateIndex);
+        }
         OvernightIndexCashflowWrapper tup = std::make_tuple(
                 _startDate.description(false),
                 _endDate.description(false),
@@ -273,7 +257,7 @@ namespace QCode::Financial {
                 _indexName,
                 _startDateIndex,
                 _endDateIndex,
-                getEqRate(_endDate, _endDateIndex),
+                rate,
                 getTypeOfRate(),
                 interes,
                 flujo,
@@ -285,7 +269,11 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::getRateValue() {
-        return getEqRate(_endDate, _endDateIndex);
+        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
+            return getEqRate(_endDate, _endDateIndex);
+        } else {
+            return getEqRate(_indexEndDate, _endDateIndex);
+        }
     };
 
 

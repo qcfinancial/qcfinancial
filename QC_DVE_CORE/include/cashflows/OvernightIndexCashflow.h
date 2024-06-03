@@ -130,7 +130,7 @@ namespace QCode
             void setEqRateDecimalPlaces(unsigned int decimalPlaces);
 
 
-            unsigned int getEqRateDecimalPlaces() const;
+            [[nodiscard]] unsigned int getEqRateDecimalPlaces() const;
 
 
             double getEqRate(QCDate& date, double indexValue);
