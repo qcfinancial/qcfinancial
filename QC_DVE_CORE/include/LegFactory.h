@@ -658,10 +658,10 @@ namespace QCode
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
                     std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag,
-                    DatesForEquivalentRate datesForEquivalentRate);
+                    unsigned int fxRateIndexFixingLag);
 
 
             static Leg buildCustomAmortOvernightIndexLeg(
@@ -704,10 +704,10 @@ namespace QCode
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
                     std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag,
-                    DatesForEquivalentRate datesForEquivalentRate);
+                    unsigned int fxRateIndexFixingLag);
 
             /**
             * @fn	static Leg LegFactory::buildBulletIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);

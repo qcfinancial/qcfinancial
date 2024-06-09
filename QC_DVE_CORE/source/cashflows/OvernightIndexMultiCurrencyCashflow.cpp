@@ -24,10 +24,10 @@ namespace QCode::Financial {
             const QCInterestRate &rate,
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
+            DatesForEquivalentRate datesForEquivalentRate,
             const QCDate& fxRateIndexFixingDate,
             std::shared_ptr<QCCurrency> settlementCurrency,
-            shared_ptr<FXRateIndex> fxRateIndex,
-            DatesForEquivalentRate datesForEquivalentRate) :
+            shared_ptr<FXRateIndex> fxRateIndex) :
             OvernightIndexCashflow(
                     accrualStartDate,
                     accrualEndDate,

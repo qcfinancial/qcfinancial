@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.9.0, build: 2024-06-03 05:20"; });
+                []() { return "version: 0.10.0, build: 2024-06-09 10:20"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -800,10 +800,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 const QCInterestRate &,
                                 std::string,
                                 unsigned int,
+                                qf::DatesForEquivalentRate,
                                 const QCDate &,
                                 std::shared_ptr<QCCurrency>,
-                                std::shared_ptr<qf::FXRateIndex>,
-                                qf::DatesForEquivalentRate>())
+                                std::shared_ptr<qf::FXRateIndex>>())
                         .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrency)
                         .def("settlement_amount", &qf::OvernightIndexMultiCurrencyCashflow::settlementAmount)
                         .def("set_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::setFxRateIndexValue)
@@ -1317,10 +1317,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("index_name"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("notional_currency"),
+                                py::arg("dates_for_eq_rate"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag"),
-                                py::arg("dates_for_eq_rate")
+                                py::arg("fx_rate_index_fixing_lag")
                         )
                         .def_static(
                                 "build_custom_amort_overnight_index_leg",
@@ -1368,10 +1368,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("index_name"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("notional_currency"),
+                                py::arg("dates_for_eq_rate"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag"),
-                                py::arg("dates_for_eq_rate")
+                                py::arg("fx_rate_index_fixing_lag")
                         )
                         .def_static(
                                 "build_bullet_icp_clp_leg",
@@ -1592,6 +1592,7 @@ PYBIND11_MODULE(qcfinancial, m) {
         py::class_<qf::InterestRateCurve, std::shared_ptr<qf::InterestRateCurve>, PyInterestRateCurve>(
                                 m, "InterestRateCurve")
                         .def(py::init<shared_ptr<QCInterpolator>, QCInterestRate>())
+                        .def("get_length", &qf::InterestRateCurve::getLength)
                         .def("get_rate_at", &qf::InterestRateCurve::getRateAt)
                         .def("get_qc_interest_rate_at", &qf::InterestRateCurve::getQCInterestRateAt)
                         .def("get_discount_factor_at", &qf::InterestRateCurve::getDiscountFactorAt)
