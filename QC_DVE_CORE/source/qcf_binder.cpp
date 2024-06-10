@@ -800,10 +800,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 const QCInterestRate &,
                                 std::string,
                                 unsigned int,
+                                qf::DatesForEquivalentRate,
                                 const QCDate &,
                                 std::shared_ptr<QCCurrency>,
-                                std::shared_ptr<qf::FXRateIndex>,
-                                qf::DatesForEquivalentRate>())
+                                std::shared_ptr<qf::FXRateIndex>>())
                         .def("settlement_currency", &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrency)
                         .def("settlement_amount", &qf::OvernightIndexMultiCurrencyCashflow::settlementAmount)
                         .def("set_fx_rate_index_value", &qf::OvernightIndexMultiCurrencyCashflow::setFxRateIndexValue)
