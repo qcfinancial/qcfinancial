@@ -49,23 +49,22 @@ namespace QCode
 			_fxRateIndexValue = fxRateIndexValue;
 		}
 
-		double FixedRateMultiCurrencyCashflow::accruedInterest(
+		double FixedRateMultiCurrencyCashflow::accruedInterestInSettCcy(
                 const QCDate& valueDate,
-                const QCDate& fxRateIndexDate,
                 const TimeSeries& fxRateIndexValues)
 		{
 			double interest = FixedRateCashflow::accruedInterest(valueDate);
 
 			QCCurrencyConverter ccyConverter;
-			if (!QCode::Helpers::isDateInTimeSeries(fxRateIndexDate, fxRateIndexValues))
+			if (!QCode::Helpers::isDateInTimeSeries(valueDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
-				msg += _fxRateIndex->getCode() + " and date " + fxRateIndexDate.description(false) + ".";
+				msg += _fxRateIndex->getCode() + " and date " + valueDate.description(false) + ".";
 				throw invalid_argument(msg);
 			}
 			else
 			{
-				double fxRateIndexValue{ fxRateIndexValues.at(fxRateIndexDate) };
+				double fxRateIndexValue{ fxRateIndexValues.at(valueDate) };
 				return ccyConverter.convert(
                         interest,
                         _currency,
@@ -74,6 +73,7 @@ namespace QCode
 			}
 		}
 
+        // Este method no se expone a Python ya que es todavía experimental y puede que se deje de utilizar
 		FXVariation FixedRateMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate,
 			const TimeSeries& fxRateIndexValues)
 		{
@@ -84,7 +84,6 @@ namespace QCode
 				throw invalid_argument(msg);
 			}
 
-			//QCDate _valueDate{ valueDate };
 			if (!QCode::Helpers::isDateInTimeSeries(valueDate, fxRateIndexValues))
 			{
 				std::string msg = "No value for ";
@@ -95,8 +94,8 @@ namespace QCode
 			double fx1 = fxRateIndexValues.at(_startDate);
 			double fx2 = fxRateIndexValues.at(valueDate);
 
-			double interest1 = accruedInterest(valueDate, _startDate, fxRateIndexValues);
-			double interest2 = accruedInterest(valueDate, valueDate, fxRateIndexValues);
+			double interest1 = accruedInterestInSettCcy(valueDate, fxRateIndexValues);
+			double interest2 = accruedInterestInSettCcy(valueDate, fxRateIndexValues);
 
 			QCCurrencyConverter ccyConverter;
 			return FXVariation { interest2 - interest1,
@@ -112,11 +111,15 @@ namespace QCode
                                          *_fxRateIndex) };
 		}
 
-		double FixedRateMultiCurrencyCashflow::getAmortization(const TimeSeries& fxRateIndexValues)
+		double FixedRateMultiCurrencyCashflow::getAmortizationInSettCcy(const TimeSeries& fxRateIndexValues)
 		{
 			double amort = FixedRateCashflow::getAmortization();
 			QCCurrencyConverter converter;
-			return converter.convert(amort, _currency, fxRateIndexValues.at(_fxRateIndexFixingDate), *_fxRateIndex);
+			return converter.convert(
+                    amort,
+                    _currency,
+                    fxRateIndexValues.at(_fxRateIndexFixingDate),
+                    *_fxRateIndex);
 		}
 
 		std::string FixedRateMultiCurrencyCashflow::getFXRateIndexCode() const

@@ -4,22 +4,23 @@ namespace QCode
 {
 	namespace Financial
 	{
-		FixedRateCashflow::FixedRateCashflow(const QCDate& startDate,
-											 const QCDate& endDate,
-											 const QCDate& settlementDate,
-											 double nominal,
-											 double amortization,
-											 bool doesAmortize,
-											 const QCInterestRate& rate,
-											 shared_ptr<QCCurrency> currency) :
-											 _startDate(startDate),
-											 _endDate(endDate),
-											 _settlementDate(settlementDate),
-											 _nominal(nominal),
-											 _amortization(amortization),
-											 _doesAmortize(doesAmortize),
-											 _rate(rate),
-											 _currency(currency)
+		FixedRateCashflow::FixedRateCashflow(
+                const QCDate& startDate,
+                const QCDate& endDate,
+                const QCDate& settlementDate,
+                double nominal,
+                double amortization,
+                bool doesAmortize,
+                const QCInterestRate& rate,
+                shared_ptr<QCCurrency> currency) :
+                _startDate(startDate),
+                _endDate(endDate),
+                _settlementDate(settlementDate),
+                _nominal(nominal),
+                _amortization(amortization),
+                _doesAmortize(doesAmortize),
+                _rate(rate),
+                _currency(currency)
 		{
 #ifndef NO_CONSTRUCTOR_VALIDATION
 			if (!_validate())
@@ -81,6 +82,11 @@ namespace QCode
 		{
 			_amortization = amortization;
 		}
+
+        void FixedRateCashflow::setRateValue(double rateValue)
+        {
+            _rate.setValue(rateValue);
+        }
 
         const QCInterestRate& FixedRateCashflow::getRate() const
         {

@@ -266,6 +266,10 @@ namespace QCode
 			 */
 			[[nodiscard]] double getInterestRateValue() const;
 
+            void setSpread(double spread);
+
+            double getSpread() const;
+
 			/**
 			 * @fn	double IborCashflow::accruedInterest(const QCDate& valueDate);
 			 *

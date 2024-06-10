@@ -55,13 +55,14 @@ namespace QCode::Financial {
         * @param	settlementCurrency	  	    The currency in which the cashflow occurs.
         * @param	fxRateIndex	  	            The FXRateIndex.
         */
-        SimpleMultiCurrencyCashflow(const QCDate &endDate,
-                                    double nominal,
-                                    std::shared_ptr<QCCurrency> currency,
-                                    const QCDate &fxRateIndexFixingDate,
-                                    std::shared_ptr<QCCurrency> settlementCurrency,
-                                    std::shared_ptr<FXRateIndex> fxRateIndex,
-                                    double fxRateIndexValue = 1.0);
+        SimpleMultiCurrencyCashflow(
+                const QCDate &endDate,
+                double nominal,
+                std::shared_ptr<QCCurrency> currency,
+                const QCDate &fxRateIndexFixingDate,
+                std::shared_ptr<QCCurrency> settlementCurrency,
+                std::shared_ptr<FXRateIndex> fxRateIndex,
+                double fxRateIndexValue = 1.0);
 
         std::string getType() const override;
 
@@ -76,6 +77,8 @@ namespace QCode::Financial {
         * @return	A double.
         */
         double amount() override;
+
+        double settlementAmount();
 
         /**
         * @fn	    double SimpleMultiCurrencyCashflow::nominal();

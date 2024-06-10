@@ -165,6 +165,8 @@ namespace QCode
 			 */
 			void setAmortization(double amortization);
 
+            void setRateValue(double rateValue);
+
 			/**
 			 *
 			 * @return
@@ -188,7 +190,7 @@ namespace QCode
 			*
 			* @brief	Gets the accrued interest given a value date.
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*
 			* @return	A double.
@@ -202,7 +204,7 @@ namespace QCode
 			*
 			* @brief	Destructor
 			*
-			* @author	Alvaro D�az V.
+			* @author	Alvaro Díaz V.
 			* @date	27/09/2017
 			*/
 			virtual ~FixedRateCashflow();

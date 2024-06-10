@@ -731,6 +731,7 @@ namespace QCode::Financial {
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
             std::shared_ptr<QCCurrency> notionalCurrency,
+            DatesForEquivalentRate datesForEquivalentRate,
             std::shared_ptr<QCCurrency> settlementCurrency,
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag) {
@@ -754,6 +755,7 @@ namespace QCode::Financial {
                 indexName,
                 eqRateDecimalPlaces,
                 notionalCurrency,
+                datesForEquivalentRate,
                 settlementCurrency,
                 fxRateIndex,
                 fxRateIndexFixingLag);
@@ -1145,7 +1147,8 @@ namespace QCode::Financial {
             QCInterestRate rate,
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
-            std::shared_ptr<QCCurrency> notionalCurrency) {
+            std::shared_ptr<QCCurrency> notionalCurrency,
+            DatesForEquivalentRate datesForEquivalentRate) {
 
         // Make all the holidays in the calendars into a shared_ptr.
         auto settCal = std::make_shared<std::vector<QCDate>>(
@@ -1212,7 +1215,8 @@ namespace QCode::Financial {
                     gearing,
                     rate,
                     indexName,
-                    eqRateDecimalPlaces
+                    eqRateDecimalPlaces,
+                    datesForEquivalentRate
             };
             overnightIndexLeg.setCashflowAt(std::make_shared<OvernightIndexCashflow>(overnightIndexCashflow), i);
             ++i;
@@ -1242,6 +1246,7 @@ namespace QCode::Financial {
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
             std::shared_ptr<QCCurrency> notionalCurrency,
+            DatesForEquivalentRate datesForEquivalentRate,
             std::shared_ptr<QCCurrency> settlementCurrency,
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag) {
@@ -1312,9 +1317,10 @@ namespace QCode::Financial {
                     rate,
                     indexName,
                     eqRateDecimalPlaces,
+                    datesForEquivalentRate,
                     fxRateIndexFixingDate,
                     settlementCurrency,
-                    fxRateIndex
+                    fxRateIndex,
             };
             overnightIndexMccyLeg.setCashflowAt(
                     std::make_shared<OvernightIndexMultiCurrencyCashflow>(overnightIndexMccyCashflow), i);
@@ -1344,7 +1350,8 @@ namespace QCode::Financial {
             QCInterestRate rate,
             std::string indexName,
             unsigned int eqRateDecimalPlaces,
-            std::shared_ptr<QCCurrency> notionalCurrency) {
+            std::shared_ptr<QCCurrency> notionalCurrency,
+            DatesForEquivalentRate datesForEquivalentRate) {
 
         auto bulletLeg = buildBulletOvernightIndexLeg(
                 recPay,
@@ -1364,8 +1371,8 @@ namespace QCode::Financial {
                 rate,
                 std::move(indexName), // a ver que pasa
                 eqRateDecimalPlaces,
-                std::move(notionalCurrency) // a ver que pasa
-        );
+                std::move(notionalCurrency),
+                datesForEquivalentRate);
 
         customizeAmortization(
                 recPay,
@@ -1809,6 +1816,11 @@ namespace QCode::Financial {
                 fixingDates.emplace_back(fixingDate);
                 fixingDate = fixingCalendar.shift(fixingDate, 1);
             }
+            /*auto fixingDate = fixingCalendar.shift(thisStartDate, -lookback);
+            while (fixingDate < fixingCalendar.shift(thisEndDate, -lookback)) {
+                fixingDates.emplace_back(fixingDate);
+                fixingDate = fixingCalendar.shift(fixingDate, 1);
+            }*/
             double amort = 0.0;
             if (i == numPeriods - 1) {
                 amort = sign * notional;

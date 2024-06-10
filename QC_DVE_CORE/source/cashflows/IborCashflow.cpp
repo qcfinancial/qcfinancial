@@ -42,12 +42,15 @@ namespace QCode
 
         double IborCashflow::amount()
         {
-            double amort{ 0.0 };
-            if (_doesAmortize)
-            {
+            double amort{0.0};
+            _amountDerivatives.resize(_forwardRateWfDerivatives.size());
+            for (size_t i = 0; i < _forwardRateWfDerivatives.size(); ++i) {
+                _amountDerivatives.at(i) = _nominal * _forwardRateWfDerivatives.at(i);
+            }
+            if (_doesAmortize) {
                 amort = _amortization;
             }
-            return  amort + _interest;
+            return amort + _interest;
         }
 
 
@@ -148,6 +151,16 @@ namespace QCode
         double IborCashflow::getInterestRateValue() const
         {
             return _rateValue;
+        }
+
+        void IborCashflow::setSpread(double spread)
+        {
+            _spread = spread;
+        }
+
+        double IborCashflow::getSpread() const
+        {
+            return _spread;
         }
 
 
