@@ -833,7 +833,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[5] = "amortizacion";
         result[6] = "interes";
         result[7] = "amort_es_flujo";
-        result[8] = "flujo_moneda_pago";
+        result[8] = "flujo";
         result[9] = "moneda_nocional";
         result[10] = "codigo_indice_tasa";
         result[11] = "spread";
@@ -916,6 +916,17 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_pago";
         result[1] = "monto";
         result[2] = "moneda";
+        return result;
+    } else if (cashflowType == "SimpleMultiCurrencyCashflow") {
+        auto result = py::tuple(8);
+        result[0] = "fecha_pago";
+        result[1] = "monto_nominal";
+        result[2] = "moneda_nominal";
+        result[3] = "fecha_fixing";
+        result[4] = "moneda_pago";
+        result[5] = "codigo_indice_fx";
+        result[6] = "valor_indice_fx";
+        result[7] = "monto_moneda_pago";
         return result;
     } else if (cashflowType == "IcpClfCashflow") {
         auto result = py::tuple(18);

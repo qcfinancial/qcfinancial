@@ -636,7 +636,8 @@ namespace QCode
                     QCInterestRate rate,
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency);
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             static Leg buildBulletOvernightIndexMultiCurrencyLeg(
                     RecPay recPay,
@@ -657,6 +658,7 @@ namespace QCode
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
                     std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag);
@@ -680,7 +682,8 @@ namespace QCode
                     QCInterestRate rate,
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency);
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate);
 
             static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
                     RecPay recPay,
@@ -701,6 +704,7 @@ namespace QCode
                     std::string indexName,
                     unsigned int eqRateDecimalPlaces,
                     std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag);

@@ -44,7 +44,7 @@ namespace QCode
                     throw std::invalid_argument("Publishing date must not be a holiday.");
                 }
 
-                // Sólo se consideran los días de _fixingRule.
+                // Sólo se considera los días de _fixingRule.
 				auto dias = (int)_fixingRule.getDays();
 				return _calendar.shift(publishDate, -dias);
 			}

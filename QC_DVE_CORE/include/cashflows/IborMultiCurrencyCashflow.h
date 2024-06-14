@@ -66,35 +66,24 @@ namespace QCode
 			 * @param	fxRateIndex			 	Fx rate index object.
 			 * @param	fxRateIndexValue	 	(Optional) The fx rate index value.
 			 */
-			IborMultiCurrencyCashflow(std::shared_ptr<InterestRateIndex> index,
-				const QCDate& startDate,
-				const QCDate& endDate,
-				const QCDate& fixingDate,
-				const QCDate& settlementDate,
-				double nominal,
-				double amortization,
-				bool doesAmortize,
-				std::shared_ptr<QCCurrency> nominalCurrency,
-				double spread,
-				double gearing,
-				const QCDate& fxRateIndexFixingDate,
-				std::shared_ptr<QCCurrency> settlementCurrency,
-				std::shared_ptr<FXRateIndex> fxRateIndex,
-				double fxRateIndexValue = 1.0);
+			IborMultiCurrencyCashflow(
+                    std::shared_ptr<InterestRateIndex> index,
+				    const QCDate& startDate,
+				    const QCDate& endDate,
+				    const QCDate& fixingDate,
+				    const QCDate& settlementDate,
+				    double nominal,
+				    double amortization,
+				    bool doesAmortize,
+				    std::shared_ptr<QCCurrency> nominalCurrency,
+				    double spread,
+				    double gearing,
+				    const QCDate& fxRateIndexFixingDate,
+				    std::shared_ptr<QCCurrency> settlementCurrency,
+				    std::shared_ptr<FXRateIndex> fxRateIndex,
+				    double fxRateIndexValue = 1.0);
 
             [[nodiscard]] std::string getType() const override;
-
-			/**
-			 * @fn	double IborMultiCurrencyCashflow::amount() override;
-			 *
-			 * @brief	Gets the amount of the cashflow in settlement currency.
-			 *
-			 * @author	A Diaz V
-			 * @date	01-03-2019
-			 *
-			 * @returns	A double.
-			 */
-			double amount() override;
 
 
             double settlementAmount() override;
@@ -123,6 +112,8 @@ namespace QCode
 			 */
 			void setFxRateIndexValue(double fxRateIndexValue);
 
+            double getFxRateIndexValue() const;
+
 			[[nodiscard]] std::string getFXRateIndexCode() const;
 
 			/**
@@ -141,7 +132,7 @@ namespace QCode
 			 *
 			 * @returns	A double.
 			 */
-			double accruedInterest(const QCDate& valueDate, const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
+			double accruedInterestInSettCcy(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);
 
 			/**
 			 * @fn	FXVariation IborMultiCurrencyCashflow::accruedFXVariation(const QCDate& valueDate, const TimeSeries& fxRateIndexValues);

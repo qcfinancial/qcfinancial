@@ -21,6 +21,10 @@ namespace QCode {
         }
 
         double SimpleMultiCurrencyCashflow::amount() {
+            return _nominal;
+        }
+
+        double SimpleMultiCurrencyCashflow::settlementAmount() {
             if (_currency->getIsoCode() == _settlementCurrency->getIsoCode()) {
                 return _nominal;
             }
