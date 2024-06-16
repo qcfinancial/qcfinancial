@@ -4,7 +4,7 @@
 #include <memory>
 #include <tuple>
 
-#include "time/QCDate.h"
+#include <time/QCDate.h>
 
 using namespace std;
 
@@ -78,8 +78,7 @@ public:
 	* amortización, esAmortFlujo, nocional, fechaInicio, fechaFinal, fechaPago, fechaFixing,
 	* fechaInicioIndice, fechaFinalIndice
 	*/
-	typedef tuple<double, bool, double, bool, double,
-		QCDate, QCDate, QCDate, QCDate, QCDate, QCDate> QCInterestRatePeriod;
+	typedef tuple<double, bool, double, bool, double, QCDate, QCDate, QCDate, QCDate, QCDate, QCDate> QCInterestRatePeriod;
 
 	/*!
 	* Vector de QCInterestRatePeriod. Objeto base de un QCInterestRateLeg.

@@ -14,7 +14,8 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	shared_ptr<std::vector<QCDate>> fixingCalendar,
 	unsigned int fixingLag,
 	unsigned int indexStartDateLag,
-	string indexTenor
+	string indexTenor,
+    QCDate::QCSettlementLagBehaviour settLagBehaviour
 	) :
 	_startDate(startDate),
 	_endDate(endDate),
@@ -28,7 +29,8 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	_fixingCalendar(fixingCalendar),
 	_fixingLag(fixingLag),
 	_indexStartDateLag(indexStartDateLag),
-	_indexTenor(indexTenor)
+	_indexTenor(indexTenor),
+    _settLagBehaviour(settLagBehaviour)
 {}
 
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::getPeriods()
@@ -95,7 +97,10 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	QCInterestRateLeg::QCInterestRatePeriods result;
 
 	// Saca los basicperiods de settlement
-	_settlementBasicDates = _buildBasicDates2(_settlementPeriodicity, _settlementStubPeriod, _settlementCalendar);
+	_settlementBasicDates = _buildBasicDates2(
+            _settlementPeriodicity,
+            _settlementStubPeriod,
+            _settlementCalendar);
 
 	// Aprovechamos de darle size a result
 	result.resize(_settlementBasicDates.size());
@@ -111,8 +116,11 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	for (unsigned int i = 0; i < _settlementBasicDates.size(); ++i)
 	{
 		// Calcula settlement date
-		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(_settlementCalendar, _settlementLag,
-			QCDate::qcFollow);
+		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+                        _settlementCalendar,
+                        _settlementLag,
+                        QCDate::qcFollow,
+                        _settLagBehaviour);
 
 		// Asigna el fixing date. El primero es el primero de los basic dates de fixing
 		for (size_t j = _fixingBasicDates.size(); j-- > 0;)

@@ -322,24 +322,24 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 
 
 QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
-	QCDate::QCBusDayAdjRules direction) const
+	QCDate::QCBusDayAdjRules direction, QCSettlementLagBehaviour settLagBehaviour) const
 {
-	//cout << "Enter shift" << endl;
-	//cout << "nDays: " << nDays << endl;
 	QCDate result{ _day, _month, _year };
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
-		result = result.businessDay(calendar, QCDate::qcFollow);
-		//cout << "result (primero): " << result.description() << endl;
+        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
+            result = result.businessDay(calendar, QCDate::qcFollow);
+        }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
-			//cout << "result " << i << ": " << result.description() << endl;
 		}
 	}
 	else
 	{
-		result = result.businessDay(calendar, QCDate::qcPrev);
+        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
+            result = result.businessDay(calendar, QCDate::qcPrev);
+        }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
@@ -350,12 +350,14 @@ QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
 
 
 QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
-	QCDate::QCBusDayAdjRules direction) const
+	QCDate::QCBusDayAdjRules direction, QCSettlementLagBehaviour settLagBehaviour) const
 {
 	QCDate result{ _day, _month, _year };
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
-		result = result.businessDay(calendar, QCDate::qcFollow);
+        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
+            result = result.businessDay(calendar, QCDate::qcFollow);
+        }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
@@ -363,7 +365,9 @@ QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 	}
 	else
 	{
-		result = result.businessDay(calendar, QCDate::qcPrev);
+        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
+            result = result.businessDay(calendar, QCDate::qcPrev);
+        }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);

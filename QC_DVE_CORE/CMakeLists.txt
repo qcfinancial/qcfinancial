@@ -8,7 +8,7 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_library(QC_DVE_CORE STATIC "")
 set_target_properties(QC_DVE_CORE PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-# set(Python_ROOT_DIR /users/adiazv/.pyenv/versions/3.11.7)
+set(Python_ROOT_DIR /users/adiazv/.pyenv/versions/3.11.7)
 add_subdirectory(pybind11)
 pybind11_add_module(qcfinancial source/qcf_binder.cpp)
 target_link_libraries(qcfinancial PRIVATE QC_DVE_CORE)

@@ -99,6 +99,8 @@ namespace QCode
                 overnightIndexMultiCurrencyCashflow,
 			};
 
+            static bool isPeriodicityZero(Tenor periodicity);
+
 			/**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateLeg(RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency, bool forBonds = false);
 			 *
@@ -140,9 +142,566 @@ namespace QCode
 				bool doesAmortize,
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency,
-				bool forBonds = false);
+				bool forBonds = false,
+                QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
 
-			/**
+            /**
+ * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
+ *
+ * @brief	Builds custom amort fixed rate leg
+ *
+ * @author	Alvaro Diaz V.
+ * @date	07/07/2018
+ *
+ * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+ * @param	startDate			 	The start date.
+ * @param	endDate				 	The end date.
+ * @param	endDateAdjustment	 	The end date adjustment.
+ * @param	settlementPeriodicity	The settlement periodicity.
+ * @param	settlementStubPeriod 	The settlement stub period.
+ * @param	settlementCalendar   	The settlement calendar.
+ * @param	settlementLag		 	The settlement lag.
+ * @param	notionalAndAmort	 	The notional and amort.
+ * @param	doesAmortize		 	True to does amortize.
+ * @param	rate				 	The rate.
+ * @param	currency			 	The currency.
+ *
+ * @return	A Leg.
+ */
+            static Leg buildCustomAmortFixedRateLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    QCInterestRate rate,
+                    std::shared_ptr<QCCurrency> currency,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            /**
+ * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
+ *
+ * @brief	Builds bullet fixed rate multi currency leg
+ *
+ * @author	A Diaz V
+ * @date	05-03-2019
+ *
+ * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+ * @param	startDate			 	The start date.
+ * @param	endDate				 	The end date.
+ * @param	endDateAdjustment	 	The end date adjustment.
+ * @param	settlementPeriodicity	The settlement periodicity.
+ * @param	settlementStubPeriod 	The settlement stub period.
+ * @param	settlementCalendar   	The settlement calendar.
+ * @param	settlementLag		 	The settlement lag.
+ * @param	notional			 	The notional.
+ * @param	doesAmortize		 	True to does amortize.
+ * @param	rate				 	The rate.
+ * @param	notionalCurrency	 	The notional currency.
+ * @param	settlementCurrency   	The settlement currency.
+ * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
+ * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
+ * @param	forBonds			 	(Optional) True to for bonds. This forces settlement
+ * 									date to coincide with end date for each period.
+ * 									This allows the correct calculation of present value
+ * 									using yield to maturity and the usual fixed rate market
+ * 									conventions.
+ *
+ * @returns	A Leg.
+ */
+            static Leg buildBulletFixedRateMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    QCInterestRate rate,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    bool forBonds = false,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    QCInterestRate rate,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    bool forBonds = false,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            /**
+ * @fn	static Leg LegFactory::buildBulletIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
+ *
+ * @brief	Builds bullet ibor leg
+ *
+ * @author	Alvaro Diaz V.
+ * @date	07/07/2018
+ *
+ * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+ * @param	startDate			 	The start date.
+ * @param	endDate				 	The end date.
+ * @param	endDateAdjustment	 	The end date adjustment.
+ * @param	settlementPeriodicity	The settlement periodicity.
+ * @param	settlementStubPeriod 	The settlement stub period.
+ * @param	settlementCalendar   	The settlement calendar.
+ * @param	settlementLag		 	The settlement lag.
+ * @param	fixingPeriodicity	 	The fixing periodicity.
+ * @param	fixingStubPeriod	 	The fixing stub period.
+ * @param	fixingCalendar		 	The fixing calendar.
+ * @param	fixingLag			 	The fixing lag.
+ * @param	index				 	Zero-based index of the.
+ * @param	notional			 	The notional.
+ * @param	doesAmortize		 	True to does amortize.
+ * @param	currency			 	The currency.
+ * @param	spread				 	The spread.
+ * @param	gearing				 	The gearing.
+ *
+ * @returns	A Leg.
+ */
+            static Leg buildBulletIborLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    double notional,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> currency,
+                    double spread,
+                    double gearing,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            /**
+ * @fn	static Leg LegFactory::buildCustomAmortIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
+ *
+ * @brief	Builds custom amort ibor leg
+ *
+ * @author	Alvaro Diaz V.
+ * @date	07/07/2018
+ *
+ * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+ * @param	startDate			 	The start date.
+ * @param	endDate				 	The end date.
+ * @param	endDateAdjustment	 	The end date adjustment.
+ * @param	settlementPeriodicity	The settlement periodicity.
+ * @param	settlementStubPeriod 	The settlement stub period.
+ * @param	settlementCalendar   	The settlement calendar.
+ * @param	settlementLag		 	The settlement lag.
+ * @param	notionalAndAmort	 	The notional and amort.
+ * @param	fixingPeriodicity	 	The fixing periodicity.
+ * @param	fixingStubPeriod	 	The fixing stub period.
+ * @param	fixingCalendar		 	The fixing calendar.
+ * @param	fixingLag			 	The fixing lag.
+ * @param	index				 	Zero-based index of the.
+ * @param	doesAmortize		 	True to does amortize.
+ * @param	currency			 	The currency.
+ * @param	spread				 	The spread.
+ * @param	gearing				 	The gearing.
+ *
+ * @return	A Leg.
+ */
+            static Leg buildCustomAmortIborLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> currency,
+                    double spread,
+                    double gearing,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+
+            /**
+             * @fn	static Leg LegFactory::buildBulletIborMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
+             *
+             * @brief	Builds bullet ibor multi currency leg
+             *
+             * @author	A Diaz V
+             * @date	05-03-2019
+             *
+             * @param	recPay				 	The record pay.
+             * @param	startDate			 	The start date.
+             * @param	endDate				 	The end date.
+             * @param	endDateAdjustment	 	The end date adjustment.
+             * @param	settlementPeriodicity	The settlement periodicity.
+             * @param	settlementStubPeriod 	The settlement stub period.
+             * @param	settlementCalendar   	The settlement calendar.
+             * @param	settlementLag		 	The settlement lag.
+             * @param	fixingPeriodicity	 	The fixing periodicity.
+             * @param	fixingStubPeriod	 	The fixing stub period.
+             * @param	fixingCalendar		 	The fixing calendar.
+             * @param	fixingLag			 	The fixing lag.
+             * @param	index				 	Zero-based index of the.
+             * @param	notional			 	The notional.
+             * @param	doesAmortize		 	True to does amortize.
+             * @param	currency			 	The currency.
+             * @param	spread				 	The spread.
+             * @param	gearing				 	The gearing.
+             * @param	settlementCurrency   	The settlement currency.
+             * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
+             * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
+             *
+             * @returns	A Leg.
+             */
+            static Leg buildBulletIborMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    double notional,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    double spread,
+                    double gearing,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildCustomAmortIborMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    Tenor fixingPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int fixingLag,
+                    std::shared_ptr<InterestRateIndex> index,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    double spread,
+                    double gearing,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildBulletOvernightIndexLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildCustomAmortOvernightIndexLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildBulletOvernightIndexMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+
+            static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    QCDate::QCBusDayAdjRules indexDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    QCBusinessCalendar fixingCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing,
+                    QCInterestRate rate,
+                    std::string indexName,
+                    unsigned int eqRateDecimalPlaces,
+                    std::shared_ptr<QCCurrency> notionalCurrency,
+                    DatesForEquivalentRate datesForEquivalentRate,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    unsigned int fxRateIndexFixingLag,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildBulletCompoundedOvernightRateLeg2(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    double notional,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    const QCInterestRate& interestRate,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildCustomAmortCompoundedOvernightRateLeg2(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    const QCInterestRate& interestRate,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildBulletCompoundedOvernightRateMultiCurrencyLeg2(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    double notional,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    const QCInterestRate& interestRate,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout,
+                    unsigned int &fxRateIndexFixingLag,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            static Leg buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2(
+                    RecPay recPay,
+                    const QCDate& startDate,
+                    const QCDate& endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    QCBusinessCalendar fixingCalendar,
+                    const shared_ptr<InterestRateIndex>& index,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    const shared_ptr<QCCurrency>& currency,
+                    double spread,
+                    double gearing,
+                    const QCInterestRate& interestRate,
+                    unsigned int eqRateDecimalPlaces,
+                    unsigned int lookback,
+                    unsigned int lockout,
+                    unsigned int &fxRateIndexFixingLag,
+                    std::shared_ptr<QCCurrency> settlementCurrency,
+                    std::shared_ptr<FXRateIndex> fxRateIndex,
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+
+            /**
+ * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
+ *
+ * @brief	Builds bullet icp clf leg
+ *
+ * @author	Alvaro Diaz V.
+ * @date	07/07/2018
+ *
+ * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+ * @param	startDate			 	The start date.
+ * @param	endDate				 	The end date.
+ * @param	endDateAdjustment	 	The end date adjustment.
+ * @param	settlementPeriodicity	The settlement periodicity.
+ * @param	settlementStubPeriod 	The settlement stub period.
+ * @param	settlementCalendar   	The settlement calendar.
+ * @param	settlementLag		 	The settlement lag.
+ * @param	notional			 	The notional.
+ * @param	doesAmortize		 	True to does amortize.
+ * @param	spread				 	The spread.
+ * @param	gearing				 	The gearing.
+ *
+ * @return	A Leg.
+ */
+            static Leg buildBulletIcpClfLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    double notional,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing);
+
+            /**
+             * @fn	static Leg LegFactory::buildCustomAmortIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
+             *
+             * @brief	Builds custom amort icp clf leg
+             *
+             * @author	Alvaro Diaz V.
+             * @date	07/07/2018
+             *
+             * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
+             * @param	startDate			 	The start date.
+             * @param	endDate				 	The end date.
+             * @param	endDateAdjustment	 	The end date adjustment.
+             * @param	settlementPeriodicity	The settlement periodicity.
+             * @param	settlementStubPeriod 	The settlement stub period.
+             * @param	settlementCalendar   	The settlement calendar.
+             * @param	settlementLag		 	The settlement lag.
+             * @param	notionalAndAmort	 	The notional and amort.
+             * @param	doesAmortize		 	True to does amortize.
+             * @param	spread				 	The spread.
+             * @param	gearing				 	The gearing.
+             *
+             * @return	A Leg.
+             */
+            static Leg buildCustomAmortIcpClfLeg(
+                    RecPay recPay,
+                    QCDate startDate,
+                    QCDate endDate,
+                    QCDate::QCBusDayAdjRules endDateAdjustment,
+                    Tenor settlementPeriodicity,
+                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
+                    QCBusinessCalendar settlementCalendar,
+                    unsigned int settlementLag,
+                    CustomNotionalAmort notionalAndAmort,
+                    bool doesAmortize,
+                    double spread,
+                    double gearing);
+
+            // #############################################################################
+            // De aquí para abajo la totalidad está deprecated
+            // #############################################################################
+
+
+            /**
 			 * @fn	static Leg LegFactory::buildBulletFixedRateLeg2( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency, bool forBonds = false);
 			 *
 			 * @brief	Builds bullet fixed rate leg 2 (cashflows are of type FixedRateCashflow2)
@@ -222,111 +781,6 @@ namespace QCode
             static manyCae buildBulkCae(const dataManyCae& data, const std::vector<double>& probabilidades);
 
 			/**
-			 * @fn	static Leg LegFactory::buildBulletFixedRateMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> notionalCurrency, std::shared_ptr<QCCurrency> settlementCurrency, std::shared_ptr<FXRateIndex> fxRateIndex, unsigned int fxRateIndexFixingLag, bool forBonds = false);
-			 *
-			 * @brief	Builds bullet fixed rate multi currency leg
-			 *
-			 * @author	A Diaz V
-			 * @date	05-03-2019
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	notional			 	The notional.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	rate				 	The rate.
-			 * @param	notionalCurrency	 	The notional currency.
-			 * @param	settlementCurrency   	The settlement currency.
-			 * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
-			 * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
-			 * @param	forBonds			 	(Optional) True to for bonds. This forces settlement
-			 * 									date to coincide with end date for each period.
-			 * 									This allows the correct calculation of present value
-			 * 									using yield to maturity and the usual fixed rate market
-			 * 									conventions.
-			 *
-			 * @returns	A Leg.
-			 */
-			static Leg buildBulletFixedRateMultiCurrencyLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				double notional,
-				bool doesAmortize,
-				QCInterestRate rate,
-				std::shared_ptr<QCCurrency> notionalCurrency,
-				std::shared_ptr<QCCurrency> settlementCurrency,
-				std::shared_ptr<FXRateIndex> fxRateIndex,
-				unsigned int fxRateIndexFixingLag,
-				bool forBonds = false);
-
-            static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    QCInterestRate rate,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag,
-                    bool forBonds = false);
-
-
-			/**
-			 * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
-			 *
-			 * @brief	Builds custom amort fixed rate leg
-			 *
-			 * @author	Alvaro Diaz V.
-			 * @date	07/07/2018
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	notionalAndAmort	 	The notional and amort.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	rate				 	The rate.
-			 * @param	currency			 	The currency.
-			 *
-			 * @return	A Leg.
-			 */
-			static Leg buildCustomAmortFixedRateLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				CustomNotionalAmort notionalAndAmort,
-				bool doesAmortize,
-				QCInterestRate rate,
-				std::shared_ptr<QCCurrency> currency); 
-
-			/**
 			 * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg2( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
 			 *
 			 * @brief	Builds custom amort fixed rate leg 2
@@ -363,55 +817,6 @@ namespace QCode
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency);
 
-			/**
-			 * @fn	static Leg LegFactory::buildBulletIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
-			 *
-			 * @brief	Builds bullet ibor leg
-			 *
-			 * @author	Alvaro Diaz V.
-			 * @date	07/07/2018
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	fixingPeriodicity	 	The fixing periodicity.
-			 * @param	fixingStubPeriod	 	The fixing stub period.
-			 * @param	fixingCalendar		 	The fixing calendar.
-			 * @param	fixingLag			 	The fixing lag.
-			 * @param	index				 	Zero-based index of the.
-			 * @param	notional			 	The notional.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	currency			 	The currency.
-			 * @param	spread				 	The spread.
-			 * @param	gearing				 	The gearing.
-			 *
-			 * @returns	A Leg.
-			 */
-			static Leg buildBulletIborLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				Tenor fixingPeriodicity,
-				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-				QCBusinessCalendar fixingCalendar,
-				unsigned int fixingLag,
-				std::shared_ptr<InterestRateIndex> index,
-				double notional,
-				bool doesAmortize,
-				std::shared_ptr<QCCurrency> currency,
-				double spread,
-				double gearing);
-
             static Leg buildBulletIbor2Leg(
                     RecPay recPay,
                     QCDate startDate,
@@ -431,135 +836,6 @@ namespace QCode
                     shared_ptr<QCCurrency> currency,
                     double spread,
                     double gearing);
-
-			/**
-			 * @fn	static Leg LegFactory::buildBulletIborMultiCurrencyLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
-			 *
-			 * @brief	Builds bullet ibor multi currency leg
-			 *
-			 * @author	A Diaz V
-			 * @date	05-03-2019
-			 *
-			 * @param	recPay				 	The record pay.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	fixingPeriodicity	 	The fixing periodicity.
-			 * @param	fixingStubPeriod	 	The fixing stub period.
-			 * @param	fixingCalendar		 	The fixing calendar.
-			 * @param	fixingLag			 	The fixing lag.
-			 * @param	index				 	Zero-based index of the.
-			 * @param	notional			 	The notional.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	currency			 	The currency.
-			 * @param	spread				 	The spread.
-			 * @param	gearing				 	The gearing.
-			 * @param	settlementCurrency   	The settlement currency.
-			 * @param	fxRateIndex			 	FX rate index used to convert cashflow to settlement currency.
-			 * @param	fxRateIndexFixingLag 	FX rate index fixing lag (with respect to settlement date).
-			 *
-			 * @returns	A Leg.
-			 */
-			static Leg buildBulletIborMultiCurrencyLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				Tenor fixingPeriodicity,
-				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-				QCBusinessCalendar fixingCalendar,
-				unsigned int fixingLag,
-				std::shared_ptr<InterestRateIndex> index,
-				double notional,
-				bool doesAmortize,
-				std::shared_ptr<QCCurrency> notionalCurrency,
-				double spread,
-				double gearing,
-				std::shared_ptr<QCCurrency> settlementCurrency,
-				std::shared_ptr<FXRateIndex> fxRateIndex,
-				unsigned int fxRateIndexFixingLag
-				);
-
-            static Leg buildCustomAmortIborMultiCurrencyLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    Tenor fixingPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-                    QCBusinessCalendar fixingCalendar,
-                    unsigned int fixingLag,
-                    std::shared_ptr<InterestRateIndex> index,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    double spread,
-                    double gearing,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag);
-
-
-			/**
-			 * @fn	static Leg LegFactory::buildCustomAmortIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
-			 *
-			 * @brief	Builds custom amort ibor leg
-			 *
-			 * @author	Alvaro Diaz V.
-			 * @date	07/07/2018
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	notionalAndAmort	 	The notional and amort.
-			 * @param	fixingPeriodicity	 	The fixing periodicity.
-			 * @param	fixingStubPeriod	 	The fixing stub period.
-			 * @param	fixingCalendar		 	The fixing calendar.
-			 * @param	fixingLag			 	The fixing lag.
-			 * @param	index				 	Zero-based index of the.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	currency			 	The currency.
-			 * @param	spread				 	The spread.
-			 * @param	gearing				 	The gearing.
-			 *
-			 * @return	A Leg.
-			 */
-			static Leg buildCustomAmortIborLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				CustomNotionalAmort notionalAndAmort,
-				Tenor fixingPeriodicity,
-				QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-				QCBusinessCalendar fixingCalendar,
-				unsigned int fixingLag,
-				std::shared_ptr<InterestRateIndex> index,
-				bool doesAmortize,
-				std::shared_ptr<QCCurrency> currency,
-				double spread,
-				double gearing);
 
             static Leg buildCustomAmortIbor2Leg(
                     RecPay recPay,
@@ -618,96 +894,6 @@ namespace QCode
 				double spread,
 				double gearing);
 
-            static Leg buildBulletOvernightIndexLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    QCDate::QCBusDayAdjRules indexDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    QCBusinessCalendar fixingCalendar,
-                    unsigned int settlementLag,
-                    double notional,
-                    bool doesAmortize,
-                    double spread,
-                    double gearing,
-                    QCInterestRate rate,
-                    std::string indexName,
-                    unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    DatesForEquivalentRate datesForEquivalentRate);
-
-            static Leg buildBulletOvernightIndexMultiCurrencyLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    QCDate::QCBusDayAdjRules indexDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    QCBusinessCalendar fixingCalendar,
-                    unsigned int settlementLag,
-                    double notional,
-                    bool doesAmortize,
-                    double spread,
-                    double gearing,
-                    QCInterestRate rate,
-                    std::string indexName,
-                    unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    DatesForEquivalentRate datesForEquivalentRate,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag);
-
-
-            static Leg buildCustomAmortOvernightIndexLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    QCDate::QCBusDayAdjRules indexDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    QCBusinessCalendar fixingCalendar,
-                    unsigned int settlementLag,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    double spread,
-                    double gearing,
-                    QCInterestRate rate,
-                    std::string indexName,
-                    unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    DatesForEquivalentRate datesForEquivalentRate);
-
-            static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
-                    RecPay recPay,
-                    QCDate startDate,
-                    QCDate endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    QCDate::QCBusDayAdjRules indexDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    QCBusinessCalendar fixingCalendar,
-                    unsigned int settlementLag,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    double spread,
-                    double gearing,
-                    QCInterestRate rate,
-                    std::string indexName,
-                    unsigned int eqRateDecimalPlaces,
-                    std::shared_ptr<QCCurrency> notionalCurrency,
-                    DatesForEquivalentRate datesForEquivalentRate,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex,
-                    unsigned int fxRateIndexFixingLag);
 
             /**
             * @fn	static Leg LegFactory::buildBulletIcpClpLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
@@ -827,79 +1013,6 @@ namespace QCode
                     double gearing,
                     bool isAct360 = false);
 
-            /**
-			 * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
-			 *
-			 * @brief	Builds bullet icp clf leg
-			 *
-			 * @author	Alvaro Diaz V.
-			 * @date	07/07/2018
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	notional			 	The notional.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	spread				 	The spread.
-			 * @param	gearing				 	The gearing.
-			 *
-			 * @return	A Leg.
-			 */
-			static Leg buildBulletIcpClfLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				double notional,
-				bool doesAmortize,
-				double spread,
-				double gearing);
-
-			/**
-			 * @fn	static Leg LegFactory::buildCustomAmortIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, double spread, double gearing);
-			 *
-			 * @brief	Builds custom amort icp clf leg
-			 *
-			 * @author	Alvaro Diaz V.
-			 * @date	07/07/2018
-			 *
-			 * @param	recPay				 	Indicates if the cashflows in the leg are received or payed.
-			 * @param	startDate			 	The start date.
-			 * @param	endDate				 	The end date.
-			 * @param	endDateAdjustment	 	The end date adjustment.
-			 * @param	settlementPeriodicity	The settlement periodicity.
-			 * @param	settlementStubPeriod 	The settlement stub period.
-			 * @param	settlementCalendar   	The settlement calendar.
-			 * @param	settlementLag		 	The settlement lag.
-			 * @param	notionalAndAmort	 	The notional and amort.
-			 * @param	doesAmortize		 	True to does amortize.
-			 * @param	spread				 	The spread.
-			 * @param	gearing				 	The gearing.
-			 *
-			 * @return	A Leg.
-			 */
-			static Leg buildCustomAmortIcpClfLeg(
-				RecPay recPay,
-				QCDate startDate,
-				QCDate endDate,
-				QCDate::QCBusDayAdjRules endDateAdjustment,
-				Tenor settlementPeriodicity,
-				QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-				QCBusinessCalendar settlementCalendar,
-				unsigned int settlementLag,
-				CustomNotionalAmort notionalAndAmort,
-				bool doesAmortize,
-				double spread,
-				double gearing);
 
             static Leg buildBulletCompoundedOvernightLeg(
                     RecPay recPay,
@@ -921,96 +1034,6 @@ namespace QCode
                     unsigned int eqRateDecimalPlaces,
                     unsigned int lookback,
                     unsigned int lockout);
-
-            static Leg buildBulletCompoundedOvernightRateLeg2(
-                    RecPay recPay,
-                    const QCDate& startDate,
-                    const QCDate& endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    QCBusinessCalendar fixingCalendar,
-                    const shared_ptr<InterestRateIndex>& index,
-                    double notional,
-                    bool doesAmortize,
-                    const shared_ptr<QCCurrency>& currency,
-                    double spread,
-                    double gearing,
-                    const QCInterestRate& interestRate,
-                    unsigned int eqRateDecimalPlaces,
-                    unsigned int lookback,
-                    unsigned int lockout);
-
-            static Leg buildBulletCompoundedOvernightRateMultiCurrencyLeg2(
-                    RecPay recPay,
-                    const QCDate& startDate,
-                    const QCDate& endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    QCBusinessCalendar fixingCalendar,
-                    const shared_ptr<InterestRateIndex>& index,
-                    double notional,
-                    bool doesAmortize,
-                    const shared_ptr<QCCurrency>& currency,
-                    double spread,
-                    double gearing,
-                    const QCInterestRate& interestRate,
-                    unsigned int eqRateDecimalPlaces,
-                    unsigned int lookback,
-                    unsigned int lockout,
-                    unsigned int &fxRateIndexFixingLag,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex);
-
-            static Leg buildCustomAmortCompoundedOvernightRateLeg2(
-                    RecPay recPay,
-                    const QCDate& startDate,
-                    const QCDate& endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    QCBusinessCalendar fixingCalendar,
-                    const shared_ptr<InterestRateIndex>& index,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    const shared_ptr<QCCurrency>& currency,
-                    double spread,
-                    double gearing,
-                    const QCInterestRate& interestRate,
-                    unsigned int eqRateDecimalPlaces,
-                    unsigned int lookback,
-                    unsigned int lockout);
-
-            static Leg buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2(
-                    RecPay recPay,
-                    const QCDate& startDate,
-                    const QCDate& endDate,
-                    QCDate::QCBusDayAdjRules endDateAdjustment,
-                    Tenor settlementPeriodicity,
-                    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-                    QCBusinessCalendar settlementCalendar,
-                    unsigned int settlementLag,
-                    QCBusinessCalendar fixingCalendar,
-                    const shared_ptr<InterestRateIndex>& index,
-                    CustomNotionalAmort notionalAndAmort,
-                    bool doesAmortize,
-                    const shared_ptr<QCCurrency>& currency,
-                    double spread,
-                    double gearing,
-                    const QCInterestRate& interestRate,
-                    unsigned int eqRateDecimalPlaces,
-                    unsigned int lookback,
-                    unsigned int lockout,
-                    unsigned int &fxRateIndexFixingLag,
-                    std::shared_ptr<QCCurrency> settlementCurrency,
-                    std::shared_ptr<FXRateIndex> fxRateIndex);
 
 
             static Leg buildCustomAmortCompoundedOvernightLeg(

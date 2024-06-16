@@ -44,7 +44,8 @@ public:
 		    shared_ptr<std::vector<QCDate>> fixingCalendar,
 		    unsigned int fixingLag,
 		    unsigned int indexStartDateLag,
-		    string indexTenor
+		    string indexTenor,
+            QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove
 		);
 
 	/*!
@@ -68,6 +69,8 @@ private:
 
 	/*! Periodicidad de pago */
 	string _settlementPeriodicity;
+
+    QCDate::QCSettlementLagBehaviour _settLagBehaviour;
 
 	/*! Tipo de período irregular de pago */
 	QCInterestRateLeg::QCStubPeriod _settlementStubPeriod;

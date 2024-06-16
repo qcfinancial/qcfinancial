@@ -99,7 +99,8 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.10.3, build: 2024-06-11 11:42"; });
+                []() { return "version: 0.11.0, build: 2024-06-16 09:00"; });
+
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1102,6 +1103,10 @@ PYBIND11_MODULE(qcfinancial, m) {
                 .value("ACCRUAL", qf::DatesForEquivalentRate::qcAccrual)
                 .value("INDEX", qf::DatesForEquivalentRate::qcIndex);
 
+        py::enum_<QCDate::QCSettlementLagBehaviour>(m, "SettLagBehaviour")
+            .value("MOVE_TO_WORKING_DAY", QCDate::QCSettlementLagBehaviour::qcMoveToWorkingDay)
+            .value("DONT_MOVE", QCDate::QCSettlementLagBehaviour::qcDontMove);
+
         // LegFactory
         py::class_<qf::LegFactory>(m, "LegFactory")
                         .def_static(
@@ -1120,7 +1125,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("amort_is_cashflow"),
                                 py::arg("interest_rate"),
                                 py::arg("notional_currency"),
-                                py::arg("is_bond"))
+                                py::arg("is_bond"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_fixed_rate_leg",
                                 &qf::LegFactory::buildCustomAmortFixedRateLeg,
@@ -1136,7 +1142,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("notional_and_amort"),
                                 py::arg("amort_is_cashflow"),
                                 py::arg("interest_rate"),
-                                py::arg("notional_currency"))
+                                py::arg("notional_currency"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_fixed_rate_mccy_leg",
                                 &qf::LegFactory::buildBulletFixedRateMultiCurrencyLeg,
@@ -1156,7 +1163,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
                                 py::arg("fx_rate_index_fixing_lag"),
-                                py::arg("is_bond"))
+                                py::arg("is_bond"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_fixed_rate_mccy_leg",
                                 &qf::LegFactory::buildCustomAmortFixedRateMultiCurrencyLeg,
@@ -1176,7 +1184,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
                                 py::arg("fx_rate_index_fixing_lag"),
-                                py::arg("is_bond"))
+                                py::arg("is_bond"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_ibor_leg",
                                 &qf::LegFactory::buildBulletIborLeg,
@@ -1198,7 +1207,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("amort_is_cashflow"),
                                 py::arg("notional_currency"),
                                 py::arg("spread"),
-                                py::arg("gearing"))
+                                py::arg("gearing"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_ibor_leg",
                                 &qf::LegFactory::buildCustomAmortIborLeg,
@@ -1220,7 +1230,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("amort_is_cashflow"),
                                 py::arg("notional_currency"),
                                 py::arg("spread"),
-                                py::arg("gearing"))
+                                py::arg("gearing"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_ibor_mccy_leg",
                                 &qf::LegFactory::buildBulletIborMultiCurrencyLeg,
@@ -1245,7 +1256,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("gearing"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag"))
+                                py::arg("fx_rate_index_fixing_lag"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_ibor_mccy_leg",
                                 &qf::LegFactory::buildCustomAmortIborMultiCurrencyLeg,
@@ -1270,7 +1282,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("gearing"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag"))
+                                py::arg("fx_rate_index_fixing_lag"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_overnight_index_leg",
                                 &qf::LegFactory::buildBulletOvernightIndexLeg,
@@ -1293,8 +1306,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("index_name"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("notional_currency"),
-                                py::arg("dates_for_eq_rate")
-                        )
+                                py::arg("dates_for_eq_rate"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_overnight_index_multi_currency_leg",
                                 &qf::LegFactory::buildBulletOvernightIndexMultiCurrencyLeg,
@@ -1320,8 +1333,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("dates_for_eq_rate"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag")
-                        )
+                                py::arg("fx_rate_index_fixing_lag"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_overnight_index_leg",
                                 &qf::LegFactory::buildCustomAmortOvernightIndexLeg,
@@ -1344,8 +1357,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("index_name"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("notional_currency"),
-                                py::arg("dates_for_eq_rate")
-                        )
+                                py::arg("dates_for_eq_rate"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_overnight_index_multi_currency_leg",
                                 &qf::LegFactory::buildCustomAmortOvernightIndexMultiCurrencyLeg,
@@ -1371,9 +1384,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("dates_for_eq_rate"),
                                 py::arg("settlement_currency"),
                                 py::arg("fx_rate_index"),
-                                py::arg("fx_rate_index_fixing_lag")
-                                )
-
+                                py::arg("fx_rate_index_fixing_lag"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_icp_clp_leg",
                                 &qf::LegFactory::buildBulletIcpClpLeg,
@@ -1389,8 +1401,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("initial_notional"),
                                 py::arg("amort_is_cashflow"),
                                 py::arg("spread"),
-                                py::arg("gearing")
-                        )
+                                py::arg("gearing"))
                         .def_static(
                                 "build_custom_amort_icp_clp_leg",
                                 &qf::LegFactory::buildCustomAmortIcpClpLeg,
@@ -1406,8 +1417,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("notional_and_amort"),
                                 py::arg("amort_is_cashflow"),
                                 py::arg("spread"),
-                                py::arg("gearing")
-                        )
+                                py::arg("gearing"))
                         .def_static(
                                 "build_bullet_icp_clf_leg",
                                 &qf::LegFactory::buildBulletIcpClfLeg,
@@ -1423,8 +1433,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("initial_notional"),
                                 py::arg("amort_is_cashflow"),
                                 py::arg("spread"),
-                                py::arg("gearing")
-                        )
+                                py::arg("gearing"))
                         .def_static(
                                 "build_custom_amort_icp_clf_leg",
                                 &qf::LegFactory::buildCustomAmortIcpClfLeg,
@@ -1440,8 +1449,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("notional_and_amort"),
                                 py::arg("amort_is_cashflow"),
                                 py::arg("spread"),
-                                py::arg("gearing")
-                        )
+                                py::arg("gearing"))
                         .def_static("build_bullet_fixed_rate_leg_2", &qf::LegFactory::buildBulletFixedRateLeg2)
                         .def_static("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
                         .def_static("build_custom_amort_fixed_rate_leg_2",
@@ -1477,7 +1485,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("interest_rate"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("lookback"),
-                                py::arg("lockout"))
+                                py::arg("lockout"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_bullet_compounded_overnight_rate_mccy_leg_2",
                                 &qf::LegFactory::buildBulletCompoundedOvernightRateMultiCurrencyLeg2,
@@ -1503,7 +1512,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("lockout"),
                                 py::arg("fx_rate_index_fixing_lag"),
                                 py::arg("settlement_currency"),
-                                py::arg("fx_rate_index"))
+                                py::arg("fx_rate_index"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static("build_custom_amort_compounded_overnight_rate_leg",
                                     &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg)
                         .def_static(
@@ -1528,7 +1538,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("interest_rate"),
                                 py::arg("eq_rate_decimal_places"),
                                 py::arg("lookback"),
-                                py::arg("lockout"))
+                                py::arg("lockout"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
                         .def_static(
                                 "build_custom_amort_compounded_overnight_rate_multi_currency_leg_2",
                                 &qf::LegFactory::buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2,
@@ -1554,7 +1565,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("lockout"),
                                 py::arg("fx_rate_index_fixing_lag"),
                                 py::arg("settlement_currency"),
-                                py::arg("fx_rate_index"));
+                                py::arg("fx_rate_index"),
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove);
 
         // long_vec
         py::bind_vector<std::vector<long>>(m, "long_vec");

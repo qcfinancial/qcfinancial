@@ -71,7 +71,7 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        Tenor.cpp
+        asset_classes/Tenor.cpp
         ZeroCouponCurve.cpp
         LegFactory.cpp)
 
@@ -138,5 +138,5 @@ set(QC_FINANCIAL_SOURCES
         QCZeroCurveBootstrappingFromRatesAndFloatingLegsProjCurve.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFixedLegs.cpp
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
-        Tenor.cpp
+        asset_classes/Tenor.cpp
         ZeroCouponCurve.cpp)

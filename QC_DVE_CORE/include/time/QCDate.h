@@ -22,6 +22,12 @@ using namespace std;
 class QCDate
 {
     public:
+        enum QCSettlementLagBehaviour
+        {
+            qcMoveToWorkingDay,
+            qcDontMove,
+        };
+
         /*!
          * QCWeekDay es un enum que sirve para identificar los días de la semana.
          */
@@ -272,18 +278,21 @@ class QCDate
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate shift(vector<QCDate>& calendar, unsigned int nDays,
-			QCDate::QCBusDayAdjRules direction) const;
+		QCDate shift(vector<QCDate>& calendar,
+                unsigned int nDays,
+                QCDate::QCBusDayAdjRules direction,
+                QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
 
 		/*!
 		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
 		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
-		* @param nDays (unsigned int) numero de dias habiles
+		* @param nDays (unsigned int) numero de dias hábiles
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
 		QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
-			QCDate::QCBusDayAdjRules direction) const;
+			QCDate::QCBusDayAdjRules direction,
+            QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
 
 		/*!
          * Calcula la fecha que resulta de sumar un número de meses a si misma
