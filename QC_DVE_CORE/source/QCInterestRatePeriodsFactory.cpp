@@ -133,7 +133,11 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		}
 
 		// Calcula la fecha de fixing con el fixing lag
-		fixingDate = fixingDate.shift(_fixingCalendar, _fixingLag, QCDate::qcPrev);
+		fixingDate = fixingDate.shift(
+                _fixingCalendar,
+                _fixingLag,
+                QCDate::qcPrev,
+                QCDate::QCSettlementLagBehaviour::qcMoveToWorkingDay);
 
 		// Calcula la fecha de inicio del indice con start date rule
 		QCDate indexStartDate = fixingDate.shift(_fixingCalendar, _indexStartDateLag, QCDate::qcFollow);

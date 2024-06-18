@@ -120,6 +120,7 @@ namespace QCode::Financial {
             QCInterestRate rate,
             std::shared_ptr<QCCurrency> currency,
             QCDate::QCSettlementLagBehaviour settLagBehaviour) {
+
         Leg fixedRateLeg = buildBulletFixedRateLeg(
                 recPay,
                 startDate,
@@ -338,7 +339,7 @@ namespace QCode::Financial {
         //Se generan los periodos
         auto periods = factory.getPeriods();
 
-        // Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+        // Load the periods into the structure of FixedRateCashflow and construct the Leg.
         Leg iborLeg;
         size_t numPeriods = periods.size();
         iborLeg.resize(numPeriods);

@@ -321,8 +321,10 @@ QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDay
 }
 
 
-QCDate QCDate::shift(vector<QCDate>& calendar, unsigned int nDays,
-	QCDate::QCBusDayAdjRules direction, QCSettlementLagBehaviour settLagBehaviour) const
+QCDate QCDate::shift(vector<QCDate>& calendar,
+        unsigned int nDays,
+        QCDate::QCBusDayAdjRules direction,
+        QCSettlementLagBehaviour settLagBehaviour) const
 {
 	QCDate result{ _day, _month, _year };
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)

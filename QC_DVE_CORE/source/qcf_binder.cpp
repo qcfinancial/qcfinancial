@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.11.0, build: 2024-06-16 09:00"; });
+                []() { return "version: 0.11.0, build: 2024-06-18 08:12"; });
 
 
         // QCDate
@@ -124,8 +124,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("add_months", &QCDate::addMonths)
                         .def("add_days", &QCDate::addDays)
                         .def("day_diff", &QCDate::dayDiff)
-                        // .def("month_diff_day_remainder", mddiff_1)
-                        // .def("month_diff_day_remainder", mddiff_2)
                         .def("__lt__", &QCDate::operator<)
                         .def("__le__", &QCDate::operator<=)
                         .def("__eq__", &QCDate::operator==)

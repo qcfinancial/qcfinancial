@@ -133,7 +133,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="qcfinancial",
-    version="0.11.0",
+    version="0.11.1",
     author="Alvaro Diaz V.",
     author_email="alvaro@efaa.cl",
     description="A Library for Valuation of Linear Interest Rate and FX Derivatives",
@@ -143,5 +143,5 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0"]},
-    python_requires=">=3.7",
+    python_requires=">=3.8",
 )
