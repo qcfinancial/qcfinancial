@@ -59,8 +59,19 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	for (unsigned int i = 0; i < _settlementBasicDates.size(); ++i)
 	{
 		//Calcula settlement date
-		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(_settlementCalendar, _settlementLag,
-			QCDate::qcFollow);
+		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+                        _settlementCalendar,
+                        _settlementLag,
+                        QCDate::qcFollow
+                        );
+
+        if (_endDateAdjustment == QCDate::QCBusDayAdjRules::qcNo && _settlementLag == 0) {
+            settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+                    _settlementCalendar,
+                    _settlementLag,
+                    QCDate::qcFollow
+            );
+        }
 		
 		//Asigna el fixing date. El primero es el primero de los basic dates de fixing
 		for (size_t j = _fixingBasicDates.size(); j-- > 0;)
@@ -121,6 +132,14 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
                         _settlementLag,
                         QCDate::qcFollow,
                         _settLagBehaviour);
+
+        if (_endDateAdjustment == QCDate::QCBusDayAdjRules::qcNo && _settlementLag == 0) {
+            settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+                    _settlementCalendar,
+                    _settlementLag,
+                    QCDate::qcFollow,
+                    QCDate::QCSettlementLagBehaviour::qcMoveToWorkingDay);
+        }
 
 		// Asigna el fixing date. El primero es el primero de los basic dates de fixing
 		for (size_t j = _fixingBasicDates.size(); j-- > 0;)
