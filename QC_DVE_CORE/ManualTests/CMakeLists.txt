@@ -1,39 +1,42 @@
 set(QC_INCLUDE ../include)
+set(AUTODIFF ../autodiff)
+set(EIGEN ../eigen)
 
-#[[
-target_include_directories(manual_tests
-        PRIVATE
-        ${QC_INCLUDE})
-]]
 
-#[[target_sources(manual_tests
+target_include_directories(ad_wf
         PRIVATE
-        manualTests.cpp
-        ../source/Leg.cpp
-        ../source/LegFactory.cpp
-        ../source/QCInterestRatePeriodsFactory.cpp
-        ../source/QCHelperFunctions.cpp
+        ${QC_INCLUDE}
+        ${AUTODIFF}
+        ${EIGEN}
+)
+
+target_sources(ad_wf
+        PRIVATE
+        AD_wealth_factors.cpp
+        ../include/asset_classes/ADWealthFactor.h
+        ../include/asset_classes/ADLinearWf.h
+        ../include/asset_classes/ADContinousWf.h
+)
+
+target_include_directories(ad_zcc
+        PRIVATE
+        ${QC_INCLUDE}
+        ${AUTODIFF}
+        ${EIGEN}
+)
+
+target_sources(ad_zcc
+        PRIVATE
+        AD_zero_coupon_curve.cpp
+        ../include/asset_classes/ADInterestRate.h
+        ../include/asset_classes/ADWealthFactor.h
+        ../include/asset_classes/ADLinearWf.h
+        ../include/asset_classes/ADContinousWf.h
+        ../include/curves/ADScatter.h
+        ../include/curves/ADInterpolator.h
+        ../include/curves/ADLinearInterpolator.h
+        ../include/asset_classes/ADZeroCouponCurve.h
+        ../source/asset_classes/QCAct365.cpp
         ../source/time/QCDate.cpp
         ../source/time/QCBusinessCalendar.cpp
-        ../source/Tenor.cpp
-        ../source/cashflows/IborCashflow.cpp
-        ../source/cashflows/IborCashflow2.cpp
-        ../source/cashflows/FixedRateCashflow.cpp
-        ../source/cashflows/FixedRateCashflow2.cpp
-        ../source/cashflows/FixedRateMultiCurrencyCashflow.cpp
-        ../source/cashflows/IcpClpCashflow.cpp
-        ../source/cashflows/IcpClpCashflow2.cpp
-        ../source/cashflows/IcpClfCashflow.cpp
-        ../source/cashflows/IborMultiCurrencyCashflow.cpp
-        ../source/asset_classes/InterestRateIndex.cpp
-        ../source/asset_classes/QC3030.cpp
-        ../source/asset_classes/QC30360.cpp
-        ../source/asset_classes/QCAct30.cpp
-        ../source/asset_classes/QCAct360.cpp
-        ../source/asset_classes/QCAct365.cpp
-        ../source/QCInterestRate.cpp
-        ../source/QCWealthFactor.cpp
-        ../source/QCLinearWf.cpp
-        ../source/HelperFunctions.cpp
-        ../source/QCHelperFunctions.cpp
-        )]]
+)

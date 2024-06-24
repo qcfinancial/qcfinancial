@@ -8,8 +8,8 @@ class QCLinearWf :
 {
 public:
 	QCLinearWf();
-	virtual double wf(double rate, double yf) override;
-	virtual double rate(double wf, double yf) override;
+	double wf(double rate, double yf) override;
+	double rate(double wf, double yf) override;
 	
 	/**
 	* @fn	virtual std::string QCWealthFactor::description();
@@ -21,7 +21,7 @@ public:
 	*
 	* @return	A std::string.
 	*/
-	virtual std::string description() override;
+	std::string description() override;
 	~QCLinearWf();
 };
 
