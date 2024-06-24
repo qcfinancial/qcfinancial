@@ -104,10 +104,12 @@ namespace QCode
 			*
 			* @return	True if expired, false if not.
 			*/
-             virtual bool isExpired(const QCDate& refDate)
+			virtual bool isExpired(const QCDate& refDate)
 			{
 				return refDate > date();
 			}
+
+            virtual std::string getType() const = 0;
 
 			/**
 			 * @fn	virtual Cashflow::~Cashflow()

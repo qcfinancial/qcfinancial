@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: save-present-value, build: 2024-06-19 15:10"; });
+                []() { return "version: save-present-value, build: 2024-06-24 13:15"; });
 
 
         // QCDate
@@ -1026,6 +1026,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 std::shared_ptr<qf::FXRateIndex>>())
                         .def("settlement_currency",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrency)
+                        .def("get_type", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getType)
                         .def("settlement_amount", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount)
                         .def<void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(const qf::TimeSeries&)>(
                                 "set_fx_rate_index_value",
@@ -1680,8 +1681,11 @@ PYBIND11_MODULE(qcfinancial, m) {
                              &qf::ForwardRates::setRateCompoundedOvernightCashflow)
                         .def("set_rate_compounded_overnight_cashflow2",
                              &qf::ForwardRates::setRateCompoundedOvernightCashflow2)
+                        .def("set_rate_compounded_overnight_mccy_cashflow2",
+                               &qf::ForwardRates::setRateCompoundedOvernightMccyCashflow2)
                         .def("set_rates_compounded_overnight_leg", &qf::ForwardRates::setRatesCompoundedOvernightLeg)
-                        .def("set_rates_compounded_overnight_leg2", &qf::ForwardRates::setRatesCompoundedOvernightLeg2);
+                        .def("set_rates_compounded_overnight_leg2", &qf::ForwardRates::setRatesCompoundedOvernightLeg2)
+                        .def("set_rates_compounded_overnight_mccy_leg2", &qf::ForwardRates::setRatesCompoundedOvernightMccyLeg2);
 
 
 #ifdef VERSION_INFO
