@@ -33,6 +33,20 @@ public:
                 amount);          /* Name of function in C++ (must match Python name) */
     }
 
+    double getPresentValue() const override {
+        PYBIND11_OVERRIDE_PURE(
+                double,           /* Return type */
+                qf::Cashflow,     /* Parent class */
+                getPresentValue);          /* Name of function in C++ (must match Python name) */
+    }
+
+    double getDiscountFactor() const override {
+        PYBIND11_OVERRIDE_PURE(
+                double,           /* Return type */
+                qf::Cashflow,     /* Parent class */
+                getDiscountFactor);          /* Name of function in C++ (must match Python name) */
+    }
+
     std::shared_ptr<QCCurrency> ccy() override {
         PYBIND11_OVERRIDE_PURE(
                 std::shared_ptr<QCCurrency>,
