@@ -112,6 +112,10 @@ namespace QCode
 					_derivative = -amount * dwf * pow(wf, -2.0);
 					_derivative2 = -amount * (d2wf * pow(wf, -2.0) - 2.0 * pow(wf, -3.0) * dwf * dwf);
 					_rate = intRate.getValue();
+
+                    cashflow->saveDiscountFactor(1 / wf);
+                    cashflow->savePresentValue(pv);
+
 					return pv;
 				}
 			}
@@ -156,6 +160,8 @@ namespace QCode
 					{
 						_derivatives[i] = curve->dfDerivativeAt((unsigned)i) * amount;
 					}
+                    cashflow->saveDiscountFactor(df);
+                    cashflow->savePresentValue(pv);
 					return pv;
 				}
 			}

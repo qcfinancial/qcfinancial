@@ -59,6 +59,7 @@ public:
         qcUSDCHF,
         qcEURCHF,
         qcCHFCLP,
+        qcCHFCLF,
 
         qcCADCAD,
         qcUSDCAD,
@@ -181,6 +182,7 @@ public:
 		_fxRateCode.insert(pair<QCFxRateEnum, string>(qcEURCHF, "EURCHF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDCHF, "USDCHF"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCHFCLP, "CHFCLP"));
+        _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCHFCLF, "CHFCLF"));
 
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcCOPCOP, "COPCOP"));
         _fxRateCode.insert(pair<QCFxRateEnum, string>(qcUSDCOP, "USDCOP"));
@@ -268,6 +270,7 @@ public:
 		_standardFxRate.insert(pair<string, QCFxRateEnum>("CHFEUR", qcEURCHF));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDCHF", qcUSDCHF));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("CHFUSD", qcUSDCHF));
+        _standardFxRate.insert(pair<string, QCFxRateEnum>("CHFCLF", qcCHFCLF));
 
         _standardFxRate.insert(pair<string, QCFxRateEnum>("COPCOP", qcCOPCOP));
         _standardFxRate.insert(pair<string, QCFxRateEnum>("USDCOP", qcUSDCOP));
@@ -372,6 +375,8 @@ public:
         _fxRateMktCode.insert(pair<std::string, std::string>("CLPCHF", "CHFCLP"));
         _fxRateMktCode.insert(pair<std::string, std::string>("EURCHF", "EURCHF"));
         _fxRateMktCode.insert(pair<std::string, std::string>("CHFEUR", "EURCHF"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("CHFCLF", "CHFCLF"));
+        _fxRateMktCode.insert(pair<std::string, std::string>("CLFCHF", "CHFCLF"));
 
         _fxRateMktCode.insert(pair<std::string, std::string>("COPCOP", "COPCOP"));
         _fxRateMktCode.insert(pair<std::string, std::string>("USDCOP", "USDCOP"));

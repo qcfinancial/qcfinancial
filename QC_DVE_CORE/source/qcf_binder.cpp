@@ -475,7 +475,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def(py::init<>())
                         .def("amount", &qf::Cashflow::amount)
                         .def("ccy", &qf::Cashflow::ccy)
-                        .def("date", &qf::Cashflow::date);
+                        .def("date", &qf::Cashflow::date)
+                .def("get_pv", &qf::Cashflow::getPresentValue)
+                .def("get_df", &qf::Cashflow::getDiscountFactor);
 
         // SimpleCashflow
         py::class_<qf::SimpleCashflow, qf::Cashflow, std::shared_ptr<qf::SimpleCashflow>>(m, "SimpleCashflow")
@@ -1024,6 +1026,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 std::shared_ptr<qf::FXRateIndex>>())
                         .def("settlement_currency",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrency)
+                        .def("get_type", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getType)
                         .def("settlement_amount", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount)
                         .def<void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(const qf::TimeSeries&)>(
                                 "set_fx_rate_index_value",
@@ -1664,22 +1667,29 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def(py::init<>())
                         .def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
                         .def("set_rate_ibor_cashflow1", &qf::ForwardRates::setRateIborCashflow1)
+                        .def("set_rate_ibor_mccy_cashflow1", &qf::ForwardRates::setRateIborMccyCashflow1)
                         .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
                         .def("set_rate_icp_clp_cashflow2", &qf::ForwardRates::setRateIcpClpCashflow2)
                         .def("set_rate_overnight_index_cashflow", &qf::ForwardRates::setRateOvernightIndexCashflow)
+                        .def("set_rate_overnight_index_mccy_cashflow", &qf::ForwardRates::setRateOvernightIndexMccyCashflow)
                         .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
                         .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
                         .def("set_rates_overnight_index_leg", &qf::ForwardRates::setRatesOvernightIndexLeg)
+                        .def("set_rates_overnight_index_mccy_leg", &qf::ForwardRates::setRatesOvernightIndexMccyLeg)
                         .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
                         .def("set_rates_ibor_leg1", &qf::ForwardRates::setRatesIborLeg1)
+                        .def("set_rates_ibor_mccy_leg1", &qf::ForwardRates::setRatesIborMccyLeg1)
                         .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
                         .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
                         .def("set_rate_compounded_overnight_cashflow",
                              &qf::ForwardRates::setRateCompoundedOvernightCashflow)
                         .def("set_rate_compounded_overnight_cashflow2",
                              &qf::ForwardRates::setRateCompoundedOvernightCashflow2)
+                        .def("set_rate_compounded_overnight_mccy_cashflow2",
+                               &qf::ForwardRates::setRateCompoundedOvernightMccyCashflow2)
                         .def("set_rates_compounded_overnight_leg", &qf::ForwardRates::setRatesCompoundedOvernightLeg)
-                        .def("set_rates_compounded_overnight_leg2", &qf::ForwardRates::setRatesCompoundedOvernightLeg2);
+                        .def("set_rates_compounded_overnight_leg2", &qf::ForwardRates::setRatesCompoundedOvernightLeg2)
+                        .def("set_rates_compounded_overnight_mccy_leg2", &qf::ForwardRates::setRatesCompoundedOvernightMccyLeg2);
 
 
 #ifdef VERSION_INFO

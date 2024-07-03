@@ -83,7 +83,7 @@ namespace QCode
 						 double spread,
 						 double gearing);
 
-            [[nodiscard]] virtual std::string getType() const;
+            [[nodiscard]] std::string getType() const override;
 
 			/**
 			 * @fn	double IborCashflow::amount();

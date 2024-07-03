@@ -67,10 +67,10 @@ namespace QCode
 						   double startDateICP = DEFAULT_ICP,
 						   double endDateICP = DEFAULT_ICP);
 
-            virtual std::string getType() const;
+            std::string getType() const override;
 
 
-			[[nodiscard]] virtual QCDate getSettlementDate() const {
+			[[nodiscard]] QCDate getSettlementDate() const {
 				return _settlementDate;
 			}
 
