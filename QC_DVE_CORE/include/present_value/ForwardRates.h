@@ -50,6 +50,7 @@
                 return std::make_shared<IborCashflow2>(iborCashflow_);
             }
 
+
             std::shared_ptr<IborCashflow> setRateIborCashflow1(
                     const QCDate &valuationDate,
                     Cashflow &iborCashflow,
@@ -81,6 +82,37 @@
             }
 
 
+            std::shared_ptr<IborMultiCurrencyCashflow> setRateIborMccyCashflow1(
+                    const QCDate &valuationDate,
+                    Cashflow &iborCashflow,
+                    ZeroCouponCurve &curve) {
+                auto iborCashflow_ = dynamic_cast<IborMultiCurrencyCashflow &>(iborCashflow);
+                std::vector<double> derivatives;
+                derivatives.resize(curve.getLength());
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    derivatives.at(i) = 0.0;
+                }
+                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+                auto fixingDate = iborCashflow_.getFixingDate();
+                if (valuationDate > fixingDate) {
+                    return std::make_shared<IborMultiCurrencyCashflow>(iborCashflow_);
+                }
+                QCDate fecha1 = iborCashflow_.getIndexStartDate();
+                QCDate fecha2 = iborCashflow_.getIndexEndDate();
+                long t1 = valuationDate.dayDiff(fecha1);
+                long t2 = valuationDate.dayDiff(fecha2);
+                auto iborRate = iborCashflow_.getInterestRateIndex()->getRate();
+                auto tasaForward = curve.getForwardRateWithRate(iborRate, t1, t2);
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    derivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                }
+                iborCashflow_.setInterestRateValue(tasaForward);
+                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+                auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
+                return std::make_shared<IborMultiCurrencyCashflow>(iborCashflow_);
+            }
+
+
             void setRatesIborLeg(
                     const QCDate &valuationDate,
                     Leg &iborLeg,
@@ -92,6 +124,7 @@
                 }
             }
 
+
             void setRatesIborLeg1(
                     const QCDate &valuationDate,
                     Leg &iborLeg,
@@ -99,6 +132,18 @@
                 _derivatives2.resize(iborLeg.size(), vector<double>(curve.getLength(), 0.0));
                 for (size_t i = 0; i < iborLeg.size(); ++i) {
                     auto cashflow = setRateIborCashflow1(valuationDate, *(iborLeg.getCashflowAt(i)), curve);
+                    iborLeg.setCashflowAt(cashflow, i);
+                }
+            }
+
+
+            void setRatesIborMccyLeg1(
+                    const QCDate &valuationDate,
+                    Leg &iborLeg,
+                    ZeroCouponCurve &curve) {
+                _derivatives2.resize(iborLeg.size(), vector<double>(curve.getLength(), 0.0));
+                for (size_t i = 0; i < iborLeg.size(); ++i) {
+                    auto cashflow = setRateIborMccyCashflow1(valuationDate, *(iborLeg.getCashflowAt(i)), curve);
                     iborLeg.setCashflowAt(cashflow, i);
                 }
             }
@@ -597,6 +642,75 @@
                 }
             }
 
+            std::shared_ptr<OvernightIndexMultiCurrencyCashflow> setRateOvernightIndexMccyCashflow(
+                    const QCDate &valuationDate,
+                    double indexValuationDate,
+                    Cashflow &overnightIndexCashflow,
+                    ZeroCouponCurve &curve) {
+                std::vector<double> zeroDerivatives;
+                zeroDerivatives.resize(curve.getLength());
+                for (size_t i = 0; i < curve.getLength(); ++i) {
+                    zeroDerivatives.at(i) = 0.0;
+                }
+                auto overnightIndexCashflow_ = dynamic_cast<OvernightIndexMultiCurrencyCashflow &>(overnightIndexCashflow);
+
+                if (valuationDate >= overnightIndexCashflow_.getEndDate()) {
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(zeroDerivatives);
+                    return std::make_shared<OvernightIndexMultiCurrencyCashflow>(overnightIndexCashflow_);
+                } else if ((overnightIndexCashflow_.getStartDate() < valuationDate) &&
+                           (valuationDate < overnightIndexCashflow_.getEndDate())) {
+                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); //AQUI
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+                    return std::make_shared<OvernightIndexMultiCurrencyCashflow>(overnightIndexCashflow_);
+                } else if (overnightIndexCashflow_.getStartDate() == valuationDate) {
+                    auto t = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
+
+                    t = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); // AQUI
+                    overnightIndexCashflow_.setStartDateIndex(indexValuationDate);
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(zeroDerivatives);
+
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+                    return std::make_shared<OvernightIndexMultiCurrencyCashflow>(overnightIndexCashflow_);
+                } else {
+                    auto t1 = valuationDate.dayDiff(overnightIndexCashflow_.getSettlementDate());
+
+                    t1 = valuationDate.dayDiff(overnightIndexCashflow_.getIndexStartDate()); // AQUI
+                    overnightIndexCashflow_.setStartDateIndex(indexValuationDate / curve.getDiscountFactorAt(t1));
+                    vector<double> startDateDerivatives;
+                    startDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        startDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setStartDateIndexDerivatives(startDateDerivatives);
+
+                    auto t2 = valuationDate.dayDiff(overnightIndexCashflow_.getIndexEndDate()); // AQUI
+                    overnightIndexCashflow_.setEndDateIndex(indexValuationDate / curve.getDiscountFactorAt(t2));
+                    vector<double> endDateDerivatives;
+                    endDateDerivatives.resize(curve.getLength());
+                    for (size_t i = 0; i < curve.getLength(); ++i) {
+                        endDateDerivatives.at(i) = indexValuationDate * curve.wfDerivativeAt(i);
+                    }
+                    overnightIndexCashflow_.setEndDateIndexDerivatives(endDateDerivatives);
+
+                    return std::make_shared<OvernightIndexMultiCurrencyCashflow>(overnightIndexCashflow_);
+                }
+            }
+
             void setRatesIcpClpLeg(
                     const QCDate &valuationDate,
                     double icpValuationDate,
@@ -631,6 +745,22 @@
                 ZeroCouponCurve &curve) {
                 for (size_t i = 0; i < overnightIndexLeg.size(); ++i) {
                     auto cashflow = setRateOvernightIndexCashflow(
+                            valuationDate,
+                            indexValuationDate,
+                            *(overnightIndexLeg.getCashflowAt(i)),
+                            curve);
+                    overnightIndexLeg.setCashflowAt(cashflow, i);
+                }
+            }
+
+
+            void setRatesOvernightIndexMccyLeg(
+                    const QCDate &valuationDate,
+                    double indexValuationDate,
+                    Leg &overnightIndexLeg,
+                    ZeroCouponCurve &curve) {
+                for (size_t i = 0; i < overnightIndexLeg.size(); ++i) {
+                    auto cashflow = setRateOvernightIndexMccyCashflow(
                             valuationDate,
                             indexValuationDate,
                             *(overnightIndexLeg.getCashflowAt(i)),

@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: save-present-value, build: 2024-06-24 13:15"; });
+                []() { return "version: save-present-value, build: 2024-06-24 16:36"; });
 
 
         // QCDate
@@ -1667,14 +1667,18 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def(py::init<>())
                         .def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
                         .def("set_rate_ibor_cashflow1", &qf::ForwardRates::setRateIborCashflow1)
+                        .def("set_rate_ibor_mccy_cashflow1", &qf::ForwardRates::setRateIborMccyCashflow1)
                         .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
                         .def("set_rate_icp_clp_cashflow2", &qf::ForwardRates::setRateIcpClpCashflow2)
                         .def("set_rate_overnight_index_cashflow", &qf::ForwardRates::setRateOvernightIndexCashflow)
+                        .def("set_rate_overnight_index_mccy_cashflow", &qf::ForwardRates::setRateOvernightIndexMccyCashflow)
                         .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
                         .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
                         .def("set_rates_overnight_index_leg", &qf::ForwardRates::setRatesOvernightIndexLeg)
+                        .def("set_rates_overnight_index_mccy_leg", &qf::ForwardRates::setRatesOvernightIndexMccyLeg)
                         .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
                         .def("set_rates_ibor_leg1", &qf::ForwardRates::setRatesIborLeg1)
+                        .def("set_rates_ibor_mccy_leg1", &qf::ForwardRates::setRatesIborMccyLeg1)
                         .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
                         .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
                         .def("set_rate_compounded_overnight_cashflow",
