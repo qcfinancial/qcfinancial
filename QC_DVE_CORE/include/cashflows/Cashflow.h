@@ -72,6 +72,25 @@ namespace QCode
 			*/
 			virtual QCDate date() = 0;
 
+            void savePresentValue(double presentValue)
+            {
+                _presentValue = presentValue;
+            };
+
+            void saveDiscountFactor(double discountFactor)
+            {
+                _discountFactor = discountFactor;
+            };
+
+            virtual double getPresentValue() const
+            {
+                return _presentValue;
+            };
+
+            virtual double getDiscountFactor() const
+            {
+                return _discountFactor;
+            };
 
              /**
 			* @fn	bool Cashflow::isExpired(const QCDate& refDate)
@@ -85,10 +104,12 @@ namespace QCode
 			*
 			* @return	True if expired, false if not.
 			*/
-             virtual bool isExpired(const QCDate& refDate)
+			virtual bool isExpired(const QCDate& refDate)
 			{
 				return refDate > date();
 			}
+
+            virtual std::string getType() const = 0;
 
 			/**
 			 * @fn	virtual Cashflow::~Cashflow()
@@ -99,6 +120,12 @@ namespace QCode
 			 * @date	04/10/2017
 			 */
 			virtual ~Cashflow() = default;
+
+        protected:
+
+            double _presentValue = 0.0;
+
+            double _discountFactor = 0.0;
 		};
 
 		/**
@@ -115,6 +142,7 @@ namespace QCode
 			///< An enum constant representing the pay option
 			Pay
 		};
+
 	}
 }
 
