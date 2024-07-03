@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.11.1, build: 2024-06-19 05:15"; });
+                []() { return "version: 0.12.0, build: 2024-07-03 12:18"; });
 
 
         // QCDate
