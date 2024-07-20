@@ -270,6 +270,10 @@ namespace QCode
 
             double getSpread() const;
 
+            void setGearing(double gearing);
+
+            double getGearing() const;
+
 			/**
 			 * @fn	double IborCashflow::accruedInterest(const QCDate& valueDate);
 			 *

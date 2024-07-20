@@ -56,7 +56,7 @@ namespace QCode {
                     _settlementCurrency,
                     _fxRateIndex,
                     _fxRateIndexValue,
-                    amount());
+                    settlementAmount());
 
             return std::make_shared<SimpleMultiCurrencyCashflowWrapper>(tup);
         }

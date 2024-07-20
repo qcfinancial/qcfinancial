@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.12.0, build: 2024-07-03 12:18"; });
+                []() { return "version: 0.12.1, build: 2024-07-20 15:45"; });
 
 
         // QCDate
@@ -640,6 +640,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_interest_rate_value", &qf::IborCashflow::getInterestRateValue)
                         .def("set_spread", &qf::IborCashflow::setSpread)
                         .def("get_spread", &qf::IborCashflow::getSpread)
+                        .def("set_gearing", &qf::IborCashflow::setGearing)
+                        .def("get_gearing", &qf::IborCashflow::getGearing)
                         .def("set_nominal", &qf::IborCashflow::setNominal)
                         .def("get_nominal", &qf::IborCashflow::getNominal)
                         .def("set_amortization", &qf::IborCashflow::setAmortization)
