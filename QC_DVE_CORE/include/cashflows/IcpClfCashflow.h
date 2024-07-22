@@ -9,6 +9,7 @@
 #include "asset_classes/QCInterestRate.h"
 #include "asset_classes/QCAct360.h"
 #include "asset_classes/QCLinearWf.h"
+#include "TypeAliases.h"
 
 namespace QCode
 {
@@ -231,6 +232,8 @@ namespace QCode
 			* @return	A shared_ptr&lt;IcpClfCashflowWrapper&gt;
 			*/
 			shared_ptr<IcpClfCashflowWrapper> wrap();
+
+            Record record();
 
 			/**
 			* @fn	IcpClpCashflow::~IcpClfCashflow();

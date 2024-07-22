@@ -378,6 +378,7 @@ public:
     }
 };
 
+
 // Show Functions
 py::tuple show(const std::shared_ptr<qf::SimpleCashflow>& simpleCashflow) {
     if (simpleCashflow->getType() == "SimpleCashflow") {

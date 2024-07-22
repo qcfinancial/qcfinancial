@@ -296,6 +296,8 @@ namespace QCode
 			 */
 			shared_ptr<IborCashflowWrapper> wrap();
 
+            virtual Record record();
+
             void setForwardRateWfDerivatives(const std::vector<double>& der);
 
             [[nodiscard]] std::vector<double> getAmountDerivatives() const;

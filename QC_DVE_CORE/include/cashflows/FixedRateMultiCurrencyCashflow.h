@@ -207,6 +207,8 @@ namespace QCode
 
             [[nodiscard]] std::string getType() const override;
 
+            Record record() override;
+
 			/**
 			 * @fn	virtual FixedRateMultiCurrencyCashflow::~FixedRateMultiCurrencyCashflow();
 			 *

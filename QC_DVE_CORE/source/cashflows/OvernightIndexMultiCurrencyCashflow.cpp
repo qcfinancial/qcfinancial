@@ -208,6 +208,21 @@ namespace QCode::Financial {
         return std::make_shared<OvernightIndexMultiCurrencyCashflowWrapper>(std::tuple_cat(*tup1, tup2));
     }
 
+
+    Record OvernightIndexMultiCurrencyCashflow::record() {
+        QCCurrencyConverter ccyConverter;
+        auto result = OvernightIndexCashflow::record();
+        result["type_of_cashflow"] = "overnight_index_multi_currency";
+        result["fx_fixing_date"] = _fxRateIndexFixingDate.description(true);
+        result["settlement_currency"] = _settlementCurrency->getIsoCode();
+        result["fx_rate_index"] = _fxRateIndex->getCode();
+        result["fx_rate_index_value"] = _fxRateIndexValue;
+        result["amort_sett_currency"] = settlementCurrencyAmortization();
+        result["interest_sett_currency"] = settlementCurrencyInterest();
+
+        return result;
+    }
+
     QCDate OvernightIndexMultiCurrencyCashflow::getFXRateIndexFixingDate() const {
         return _fxRateIndexFixingDate;
     }

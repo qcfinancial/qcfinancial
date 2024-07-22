@@ -201,6 +201,28 @@ namespace QCode
             return std::make_shared<IborCashflowWrapper>(tup);
         }
 
+        Record IborCashflow::record() {
+            auto result = Record();
+            result["type_of_cashflow"] = "ibor";
+            result["start_date"] = _startDate.description(false);
+            result["end_date"] = _endDate.description(false);
+            result["fixing_date"] = _fixingDate.description(false);
+            result["settlement_date"] = _settlementDate.description(false);
+            result["notional"] = _nominal;
+            result["amortization"] = _amortization;
+            result["interest"] = _interest;
+            result["amort_is_cashflow"] = _doesAmortize;
+            result["cashflow"] = _doesAmortize ? _interest + _amortization : _interest;
+            result["notional_currency"] = _currency->getIsoCode();
+            result["interest_rate_index"] = _index->getCode();
+            result["rate_value"] = _index->getRate().getValue();
+            result["spread"] = _spread;
+            result["gearing"] = _gearing;
+            result["type_of_rate"] = _index->getRate().description();
+
+            return result;
+        }
+
 
         void IborCashflow::_calculateInterest()
         {

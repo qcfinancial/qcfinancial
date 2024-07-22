@@ -191,5 +191,27 @@ namespace QCode
 
             return _settlementCurrency->amount(cashflow);
         }
+
+        Record FixedRateMultiCurrencyCashflow::record() {
+            QCCurrencyConverter ccyConverter;
+            auto result = FixedRateCashflow::record();
+            result["type_of_cashflow"] = "fixed_rate_multi_currency";
+            result["fx_fixing_date"] = _fxRateIndexFixingDate.description(true);
+            result["settlement_currency"] = _settlementCurrency->getIsoCode();
+            result["fx_rate_index"] = _fxRateIndex->getCode();
+            result["fx_rate_index_value"] = _fxRateIndexValue;
+            result["amort_sett_currency"] = ccyConverter.convert(
+                    _amortization,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+            result["interest_sett_currency"] = ccyConverter.convert(
+                    _interest,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+
+            return result;
+        }
     }
 }

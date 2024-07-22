@@ -1,4 +1,5 @@
 #include "cashflows/IcpClfCashflow.h"
+#include "TypeAliases.h"
 
 namespace QCode
 {
@@ -197,8 +198,32 @@ namespace QCode
                     settlementAmount());
 
 			return std::make_shared<IcpClfCashflowWrapper>(tup);
-
 		}
+
+        Record IcpClfCashflow::record() {
+            auto result = Record();
+            result["type_of_cashflow"] = "icpclf";
+            result["start_date"] = _startDate.description(false);
+            result["end_date"] = _endDate.description(false);
+            result["settlement_date"] = _settlementDate.description(false);
+            result["notional"] = _nominal;
+            result["amortization"] = _amortization;
+            result["interest"] = _interest;
+            result["amort_is_cashflow"] = _doesAmortize;
+            result["cashflow"] = _doesAmortize ? _nominal + _interest : _interest;
+            result["notional_currency"] = "CLF";
+            result["interest_rate_index"] = "ICPLCP";
+            result["start_date_index"] = _startDateICP;
+            result["end_date_index"] = _endDateICP;
+            result["start_date_uf"] = _startDateUF;
+            result["end_date_uf"] = _endDateUF;
+            result["rate_value"] = _rate.getValue();
+            result["spread"] = _spread;
+            result["gearing"] = _gearing;
+            result["type_of_rate"] = getTypeOfRate();
+
+            return result;
+        }
 
         void IcpClfCashflow::setStartDateICPDerivatives(std::vector<double> der)
         {

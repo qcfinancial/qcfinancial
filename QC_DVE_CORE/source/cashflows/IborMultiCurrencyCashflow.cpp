@@ -130,6 +130,29 @@ namespace QCode
 		}
 
 
+        Record IborMultiCurrencyCashflow::record() {
+            QCCurrencyConverter ccyConverter;
+            auto result = IborCashflow::record();
+            result["type_of_cashflow"] = "ibor_multi_currency";
+            result["fx_fixing_date"] = _fxRateIndexFixingDate.description(true);
+            result["settlement_currency"] = _settlementCurrency->getIsoCode();
+            result["fx_rate_index"] = _fxRateIndex->getCode();
+            result["fx_rate_index_value"] = _fxRateIndexValue;
+            result["amort_sett_currency"] = ccyConverter.convert(
+                    _amortization,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+            result["interest_sett_currency"] = ccyConverter.convert(
+                    _interest,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+
+            return result;
+        }
+
+
 		bool IborMultiCurrencyCashflow::_validate()
 		{
 			bool result = true;

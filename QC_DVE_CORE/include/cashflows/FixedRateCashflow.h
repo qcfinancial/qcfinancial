@@ -198,7 +198,10 @@ namespace QCode
 			double accruedInterest(const QCDate& valueDate);
 
 
-            std::string getType() const override;
+            [[nodiscard]] std::string getType() const override;
+
+
+            virtual Record record();
 
 			/**
 			* @fn	virtual FixedRateCashflow::~FixedRateCashflow();

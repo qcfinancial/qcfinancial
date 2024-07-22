@@ -324,6 +324,27 @@
         }
 
 
+        Record CompoundedOvernightRateCashflow2::record() {
+            auto result = Record();
+            result["type_of_cashflow"] = "overnight_index";
+            result["start_date"] = _startDate.description(false);
+            result["end_date"] = _endDate.description(false);
+            result["settlement_date"] = _settlementDate.description(false);
+            result["notional"] = _notional;
+            result["amortization"] = _amortization;
+            result["interest"] = _interest;
+            result["amort_is_cashflow"] = _doesAmortize;
+            result ["cashflow"] = amount();
+            result["notional_currency"] = _notionalCurrency->getIsoCode();
+            result["interest_rate_index"] = _index->getCode();
+            result["rate_value"] = _getRateValue();
+            result["spread"] = _spread;
+            result["gearing"] = _gearing;
+            result["type_of_rate"] = getTypeOfRate();
+
+            return result;
+        }
+
         double CompoundedOvernightRateCashflow2::_getRateValue() const {
             auto wf = _endDateWf / _initialDateWf;
             if (wf == 1.0)

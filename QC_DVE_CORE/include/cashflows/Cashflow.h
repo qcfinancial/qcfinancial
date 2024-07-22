@@ -109,7 +109,7 @@ namespace QCode
 				return refDate > date();
 			}
 
-            virtual std::string getType() const = 0;
+            [[nodiscard]] virtual std::string getType() const = 0;
 
 			/**
 			 * @fn	virtual Cashflow::~Cashflow()
