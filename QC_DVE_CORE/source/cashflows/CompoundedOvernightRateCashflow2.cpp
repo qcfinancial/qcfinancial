@@ -55,8 +55,8 @@
 
         double CompoundedOvernightRateCashflow2::amount() {
             auto rate = _index->getRate().getRateFromWf(_endDateWf / _initialDateWf, _startDate, _endDate);
-            auto interest = _calculateInterest(rate, _endDate);
-            return (_doesAmortize) ? interest + _amortization : interest;
+            _interest = _calculateInterest(rate, _endDate);
+            return (_doesAmortize) ? _interest + _amortization : _interest;
         }
 
 
@@ -118,7 +118,7 @@
 
 
         double CompoundedOvernightRateCashflow2::_calculateInterest(double rateValue, QCDate& fecha) {
-            _index->setRateValue(rateValue + _spread);
+            _index->setRateValue(rateValue * _gearing + _spread);
             auto wf = _index->getRate().wf(_startDate, fecha);
             return _notional * (wf - 1.0);
         }
@@ -304,6 +304,7 @@
 
         std::shared_ptr<CompoundedOvernightRateCashflow2::CompoundedOvernightRateCashflow2Wrapper> CompoundedOvernightRateCashflow2::wrap() {
             auto type_of_rate = _index->getRate().getWealthFactor()->description() + _index->getRate().getYearFraction()->description();
+            auto _amount = amount();
             CompoundedOvernightRateCashflow2::CompoundedOvernightRateCashflow2Wrapper tup = std::make_tuple(
                     _startDate.description(false),
                     _endDate.description(false),
@@ -312,7 +313,7 @@
                     _amortization,
                     _interest,
                     _doesAmortize,
-                    amount(),
+                    _amount,
                     _notionalCurrency->getIsoCode(),
                     _index->getCode(),
                     type_of_rate,

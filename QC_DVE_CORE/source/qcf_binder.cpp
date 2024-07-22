@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.12.1, build: 2024-07-20 15:45"; });
+                []() { return "version: 0.12.1, build: 2024-07-21 13:10"; });
 
 
         // QCDate
@@ -476,8 +476,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("amount", &qf::Cashflow::amount)
                         .def("ccy", &qf::Cashflow::ccy)
                         .def("date", &qf::Cashflow::date)
-                .def("get_pv", &qf::Cashflow::getPresentValue)
-                .def("get_df", &qf::Cashflow::getDiscountFactor);
+                        .def("is_expired", &qf::Cashflow::isExpired)
+                        .def("get_pv", &qf::Cashflow::getPresentValue)
+                        .def("get_df", &qf::Cashflow::getDiscountFactor);
 
         // SimpleCashflow
         py::class_<qf::SimpleCashflow, qf::Cashflow, std::shared_ptr<qf::SimpleCashflow>>(m, "SimpleCashflow")
