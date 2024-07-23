@@ -95,6 +95,7 @@ namespace QCode::Financial {
          */
         void resize(size_t newSize);
 
+
         /**
          * @fn	virtual Leg::~Leg();
          *

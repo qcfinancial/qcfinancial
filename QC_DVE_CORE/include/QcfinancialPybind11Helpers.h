@@ -33,6 +33,13 @@ public:
                 amount);          /* Name of function in C++ (must match Python name) */
     }
 
+    bool isExpired(const QCDate& refDate) override {
+        PYBIND11_OVERRIDE_PURE(
+                bool,           /* Return type */
+                qf::Cashflow,     /* Parent class */
+                isExpired);          /* Name of function in C++ (must match Python name) */
+    }
+
     std::string getType() const override {
         PYBIND11_OVERRIDE_PURE(
                 std::string,      /* Return type */
@@ -377,6 +384,7 @@ public:
                 index);
     }
 };
+
 
 // Show Functions
 py::tuple show(const std::shared_ptr<qf::SimpleCashflow>& simpleCashflow) {

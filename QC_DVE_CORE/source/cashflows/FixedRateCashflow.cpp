@@ -163,5 +163,23 @@ namespace QCode
             return ccy();
         }
 
+        Record FixedRateCashflow::record() {
+            auto result = Record();
+            result["type_of_cashflow"] = "fixed_rate";
+            result["start_date"] = _startDate.description(false);
+            result["end_date"] = _endDate.description(false);
+            result["settlement_date"] = _settlementDate.description(false);
+            result["notional"] = _nominal;
+            result["amortization"] = _amortization;
+            result["interest"] = _interest;
+            result["amort_is_cashflow"] = _doesAmortize;
+            auto cashflow = _doesAmortize ? _interest + _amortization : _interest;
+            result["cashflow"] = cashflow;
+            result["notional_currency"] = _currency->getIsoCode();
+            result["rate_value"] = _rate.getValue();
+            result["type_of_rate"] = _rate.description();
+
+            return result;
+        }
     }
 }

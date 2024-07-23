@@ -82,6 +82,10 @@ namespace QCode::Financial {
 
         std::shared_ptr<CompoundedOvernightRateMultiCurrencyCashflow2Wrapper> mccyWrap();
 
+        Record record() override;
+
+
+
     protected:
         QCDate _fxRateIndexFixingDate;
         std::shared_ptr<QCCurrency> _settlementCurrency;

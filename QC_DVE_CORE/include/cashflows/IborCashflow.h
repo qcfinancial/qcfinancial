@@ -270,6 +270,10 @@ namespace QCode
 
             double getSpread() const;
 
+            void setGearing(double gearing);
+
+            double getGearing() const;
+
 			/**
 			 * @fn	double IborCashflow::accruedInterest(const QCDate& valueDate);
 			 *
@@ -295,6 +299,8 @@ namespace QCode
 			 * @return	A shared_ptr&lt;IborCashflowWrapper&gt;
 			 */
 			shared_ptr<IborCashflowWrapper> wrap();
+
+            virtual Record record();
 
             void setForwardRateWfDerivatives(const std::vector<double>& der);
 

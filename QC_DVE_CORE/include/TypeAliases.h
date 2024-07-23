@@ -65,6 +65,8 @@ namespace QCode
 			bool,
 			shared_ptr<QCCurrency>,
 			QCInterestRate> FixedRateCashflowWrapper;
+
+        typedef std::map<std::string, std::variant<int, double, std::string, bool>> Record;
 	}
 }
 

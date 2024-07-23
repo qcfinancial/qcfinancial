@@ -82,6 +82,9 @@ namespace QCode::Financial {
         std::shared_ptr<OvernightIndexMultiCurrencyCashflowWrapper> mccyWrap();
 
 
+        Record record() override;
+
+
         [[nodiscard]] std::string getType() const override;
 
 

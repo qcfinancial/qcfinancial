@@ -94,6 +94,21 @@ namespace QCode::Financial {
 
     };
 
+    Record CompoundedOvernightRateMultiCurrencyCashflow2::record() {
+        auto result = CompoundedOvernightRateCashflow2::record();
+        result["type_of_cashflow"] = "compounded_overnight_rate_multi_currency";
+        result["type_of_cashflow"] = "overnight_index_multi_currency";
+        result["fx_fixing_date"] = _fxRateIndexFixingDate.description(true);
+        result["settlement_currency"] = _settlementCurrency->getIsoCode();
+        result["fx_rate_index"] = _fxRateIndex->getCode();
+        result["fx_rate_index_value"] = _fxRateIndexValue;
+        result["amort_sett_currency"] = toSettlementCurrency(_amortization);
+        result["interest_sett_currency"] = toSettlementCurrency(_interest);
+
+        return result;
+
+    }
+
     [[nodiscard]] std::string CompoundedOvernightRateMultiCurrencyCashflow2::getType() const {
         return "CompoundedOvernightRateMultiCurrencyCashflow2";
     };

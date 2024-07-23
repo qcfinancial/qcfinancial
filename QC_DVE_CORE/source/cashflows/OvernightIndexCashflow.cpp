@@ -268,6 +268,42 @@ namespace QCode::Financial {
     };
 
 
+    Record OvernightIndexCashflow::record() {
+        auto result = Record();
+        auto interes = _calculateInterest(_endDate, _endDateIndex);
+        auto flujo = interes;
+        if (_doesAmortize)
+            flujo += _amortization;
+        double rate = 0.0;
+        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
+            rate = getEqRate(_endDate, _endDateIndex);
+        } else {
+            rate = getEqRate(_indexEndDate, _endDateIndex);
+        }
+        result["type_of_cashflow"] = "overnight_index";
+        result["start_date"] = _startDate.description(false);
+        result["end_date"] = _endDate.description(false);
+        result["index_start_date"] = _indexStartDate.description(false);
+        result["index_end_date"] = _indexEndDate.description(false);
+        result["settlement_date"] = _settlementDate.description(false);
+        result["notional"] = _notional;
+        result["amortization"] = _amortization;
+        result["interest"] = interes;
+        result["amort_is_cashflow"] = _doesAmortize;
+        result["cashflow"] = flujo;
+        result["notional_currency"] = _notionalCurrency->getIsoCode();
+        result["interest_rate_index"] = _indexName;
+        result["start_date_index"] = _startDateIndex;
+        result["end_date_index"] = _endDateIndex;
+        result["rate_value"] = rate;
+        result["spread"] = _spread;
+        result["gearing"] = _gearing;
+        result["type_of_rate"] = getTypeOfRate();
+
+        return result;
+    }
+
+
     double OvernightIndexCashflow::getRateValue() {
         if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
             return getEqRate(_endDate, _endDateIndex);

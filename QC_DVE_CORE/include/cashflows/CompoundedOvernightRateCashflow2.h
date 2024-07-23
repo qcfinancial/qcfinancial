@@ -9,6 +9,7 @@
 #include <asset_classes/InterestRateIndex.h>
 #include <asset_classes/QCAct360.h>
 #include <asset_classes/QCLinearWf.h>
+#include <TypeAliases.h>
 
 
 namespace QCode::Financial {
@@ -121,7 +122,13 @@ namespace QCode::Financial {
 
         std::shared_ptr<CompoundedOvernightRateCashflow2Wrapper> wrap();
 
+        virtual Record record();
+
         ~CompoundedOvernightRateCashflow2() override = default;
+
+        std::map<QCDate, QCDate> getIndexEndDates() {
+            return _indexEndDates;
+        }
 
     protected:
         /** @brief	The interest rate index. It is always Lin ACT360. */

@@ -112,6 +112,7 @@ namespace QCode
 			 */
 			void setFxRateIndexValue(double fxRateIndexValue);
 
+
             double getFxRateIndexValue() const;
 
 			[[nodiscard]] std::string getFXRateIndexCode() const;
@@ -161,6 +162,9 @@ namespace QCode
 			 * @returns	A std::shared_ptr<IborMultiCurrencyCashflowWrapper>;
 			 */
 			std::shared_ptr<IborMultiCurrencyCashflowWrapper> wrap();
+
+
+            Record record() override;
 
             QCDate getFXFixingDate() const;
 
