@@ -476,8 +476,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("amount", &qf::Cashflow::amount)
                         .def("ccy", &qf::Cashflow::ccy)
                         .def("date", &qf::Cashflow::date)
-                .def("get_pv", &qf::Cashflow::getPresentValue)
-                .def("get_df", &qf::Cashflow::getDiscountFactor);
+                        .def("is_expired", &qf::Cashflow::isExpired)
+                        .def("get_pv", &qf::Cashflow::getPresentValue)
+                        .def("get_df", &qf::Cashflow::getDiscountFactor);
 
         // SimpleCashflow
         py::class_<qf::SimpleCashflow, qf::Cashflow, std::shared_ptr<qf::SimpleCashflow>>(m, "SimpleCashflow")
@@ -972,8 +973,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 unsigned int,
                                 unsigned int>())
                         .def("amount", &qf::CompoundedOvernightRateCashflow2::amount)
-                        .def("record", &qf::CompoundedOvernightRateCashflow2::record)
-                        .def("get_index_end_dates", &qf::CompoundedOvernightRateCashflow2::getIndexEndDates)
                         .def("settlement_amount", &qf::CompoundedOvernightRateCashflow2::settlementAmount)
                         .def("settlement_currency", &qf::CompoundedOvernightRateCashflow2::settlementCurrency)
                         .def("ccy", &qf::CompoundedOvernightRateCashflow2::ccy)
@@ -1050,7 +1049,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_rate_index_fixing_date",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexFixingDate)
                         .def("get_fx_rate_index", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndex)
-                        .def("record", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::record)
                         .def<double(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double)>(
                                 "to_settlement_currency",
                                 &qf::CompoundedOvernightRateMultiCurrencyCashflow2::toSettlementCurrency)

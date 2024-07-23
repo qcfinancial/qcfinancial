@@ -32,9 +32,7 @@ namespace QCode
 			* @author	Alvaro D�az V.
 			* @date	26/09/2017
 			*/
-			Cashflow()
-			{
-			}
+			Cashflow() = default;
 
 			/**
 			* @fn	virtual double Cashflow::amount();
@@ -82,12 +80,12 @@ namespace QCode
                 _discountFactor = discountFactor;
             };
 
-            virtual double getPresentValue() const
+            [[nodiscard]] virtual double getPresentValue() const
             {
                 return _presentValue;
             };
 
-            virtual double getDiscountFactor() const
+            [[nodiscard]] virtual double getDiscountFactor() const
             {
                 return _discountFactor;
             };

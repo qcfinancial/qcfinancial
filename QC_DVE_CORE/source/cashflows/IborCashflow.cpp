@@ -163,6 +163,14 @@ namespace QCode
             return _spread;
         }
 
+        void IborCashflow::setGearing(double gearing) {
+            _gearing = gearing;
+        }
+
+        double IborCashflow::getGearing() const {
+            return _gearing;
+        }
+
 
         double IborCashflow::accruedInterest(const QCDate& valueDate)
         {
