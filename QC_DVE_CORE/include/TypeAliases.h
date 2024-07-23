@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <tuple>
+#include <variant>
 
 #include "time/QCDate.h"
 #include "asset_classes/QCInterestRate.h"
