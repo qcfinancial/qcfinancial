@@ -58,6 +58,8 @@ using namespace pybind11::literals;
 
 #include <present_value/PresentValue.h>
 #include <present_value/ForwardRates.h>
+#include <present_value/ForwardFXRates.h>
+#include <present_value/FXRateEstimator.h>
 
 #include <Leg.h>
 #include <LegFactory.h>
@@ -100,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.13.0, build: 2024-07-22 20:00"; });
+                []() { return "version: 0.14.0, build: 2024-07-23 15:40"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1669,6 +1671,18 @@ PYBIND11_MODULE(qcfinancial, m) {
         m.def("get_column_names", getColumnNames, "Muestra on objeto Leg como pandas.DataFrame",
               py::arg("type_of_cashflow"),
               py::arg("type_of_subcashflow")="");
+
+        // FXForwardRates
+        py::class_<qf::ForwardFXRates>(m, "ForwardFXRates")
+                .def(py::init<>())
+                .def("set_fx_rate", &qf::ForwardFXRates::setFXRate)
+                .def("set_fx_rate_for_leg", &qf::ForwardFXRates::setFXRateForLeg);
+
+        // ForwardFXEstimator
+        py::class_<qf::FXRateEstimator>(m, "FXRateEstimator")
+            .def(py::init<const qf::TimeSeries &, double>())
+            .def("get_value_for_date", &qf::FXRateEstimator::getValueForDate);
+
 
         // ForwardRates
         py::class_<qf::ForwardRates>(m, "ForwardRates")

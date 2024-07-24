@@ -207,7 +207,7 @@ namespace QCode::Financial {
             QCDate thisEndDate = get<QCInterestRateLeg::intRtPrdElmntEndDate>(period);
             QCDate settlementDate = get<QCInterestRateLeg::intRtPrdElmntSettlmntDate>(period);
             // QCDate fxRateIndexFixingDate = fxRateIndex->getCalendar().shift(settlementDate, -fxRateIndexFixingLag);
-            QCDate fxRateIndexFixingDate =settlementCalendar.shift(settlementDate, -fxRateIndexFixingLag);
+            QCDate fxRateIndexFixingDate =settlementCalendar.shift(settlementDate, -int(fxRateIndexFixingLag));
             // For the correct calculation of present values using market yields according
             // to the usual conventions in fixed income markets.
             if (forBonds) settlementDate = thisEndDate;
