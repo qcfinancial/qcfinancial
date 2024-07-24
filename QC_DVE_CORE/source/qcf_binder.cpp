@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-43 12:40"; });
+                []() { return "version: 0.14.0, build: 2024-07-43 12:50"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -376,7 +376,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("value_date", &qf::FXRateIndex::valueDate)
                         .def("convert", &qf::FXRateIndex::convert)
                         .def("get_calendar", &qf::FXRateIndex::getCalendar)
-                        .def("get_fx_rate", &qf::FXRateIndex::getFxRate);
+                        .def("get_fx_rate", &qf::FXRateIndex::getFxRate)
+                        .def("get_code", &qf::FXRateIndex::getCode);
 
         // QCCurrencyConverter
         py::class_<QCCurrencyConverter>(m, "QCCurrencyConverter")

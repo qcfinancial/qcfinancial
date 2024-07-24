@@ -32,6 +32,9 @@ namespace QCode
 			}
 
 
+            [[nodiscard]] std::string getCode() const {
+                return _code;
+            }
 
 			[[nodiscard]] std::shared_ptr<FXRate> getFxRate() const
 			{
