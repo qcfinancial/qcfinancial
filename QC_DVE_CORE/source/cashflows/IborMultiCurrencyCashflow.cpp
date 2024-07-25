@@ -188,5 +188,25 @@ namespace QCode
         std::shared_ptr<FXRateIndex> IborMultiCurrencyCashflow::getFXRateIndex() {
             return _fxRateIndex;
         }
+
+        double IborMultiCurrencyCashflow::settlementCurrencyAmount() {
+            QCCurrencyConverter ccyConverter;
+            auto amount = ccyConverter.convert(
+                    _interest,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex
+                    );
+            if (_doesAmortize) {
+                amount += ccyConverter.convert(
+                        _amortization,
+                        _currency,
+                        _fxRateIndexValue,
+                        *_fxRateIndex
+                        );
+            }
+
+            return amount;
+        }
     }
 }

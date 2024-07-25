@@ -88,6 +88,8 @@ namespace QCode
 
             double settlementAmount() override;
 
+            double settlementCurrencyAmount();
+
 			/**
 			 * @fn	shared_ptr<QCCurrency> IborMultiCurrencyCashflow::settlementCcy();
 			 *
