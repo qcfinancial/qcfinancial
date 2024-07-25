@@ -139,4 +139,8 @@ namespace QCode::Financial {
     double CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount() {
         return _settlementCurrency->amount(toSettlementCurrency(CompoundedOvernightRateCashflow2::amount()));
     }
+
+    double CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrencyAmount() {
+        return toSettlementCurrency(CompoundedOvernightRateCashflow2::amount());
+    }
 }

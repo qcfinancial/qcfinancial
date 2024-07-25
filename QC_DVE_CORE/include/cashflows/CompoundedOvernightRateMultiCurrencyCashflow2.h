@@ -80,6 +80,8 @@ namespace QCode::Financial {
 
         [[nodiscard]] double toSettlementCurrency(double amount, const TimeSeries& fxRateIndexValues);
 
+        double settlementCurrencyAmount();
+
         std::shared_ptr<CompoundedOvernightRateMultiCurrencyCashflow2Wrapper> mccyWrap();
 
         Record record() override;

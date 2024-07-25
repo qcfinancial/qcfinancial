@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-25 18:21"; });
+                []() { return "version: 0.14.0, build: 2024-07-25 18:50"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1109,6 +1109,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexValue)
                         .def("get_fx_rate_index_fixing_date",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexFixingDate)
+                        .def("settlement_currency_amount",
+                                  &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrencyAmount)
                         .def("get_fx_rate_index", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndex)
                         .def<double(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(double)>(
                                 "to_settlement_currency",
