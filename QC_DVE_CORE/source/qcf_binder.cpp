@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-25 10:40"; });
+                []() { return "version: 0.14.0, build: 2024-07-25 18:08"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -526,6 +526,27 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         // TimeSeries
         py::bind_map<std::map<QCDate, double>>(m, "time_series");
+                /*.def(py::pickle(
+                        [](const std::map<QCDate, double> &p) { // __getstate__
+                            *//* Return a tuple that fully encodes the state of the object *//*
+                            std::vector<std::pair<QCDate, double>> items;
+                            for (const auto& element : p) {
+                                items.emplace_back(element);
+                            }
+                            return py::make_tuple(items);
+                        },
+                        [](py::tuple t) { // __setstate__
+                            if (t.size() != 1)
+                                throw std::runtime_error("Invalid state!");
+
+                            std::map<QCDate, double> result;
+                            for(const std::pair<QCDate, double>& p:t[0]) {
+                                result[p.first].push_back(p.second);
+                            }
+
+                            return result;
+                        }
+                ));*/
 
         // DateList
         py::bind_vector<std::vector<QCDate>>(m, "DateList");
@@ -751,6 +772,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 double>())
                         .def("settlement_currency", &qf::IborMultiCurrencyCashflow::settlementCurrency)
                         .def("settlement_amount", &qf::IborMultiCurrencyCashflow::settlementAmount)
+                        .def("get_fx_rate_index", &qf::IborMultiCurrencyCashflow::getFXRateIndex)
                         .def("get_fx_fixing_date", &qf::IborMultiCurrencyCashflow::getFXFixingDate)
                         .def("set_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::setFxRateIndexValue)
                         .def("get_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::getFxRateIndexValue)
@@ -878,7 +900,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 "settlement_ccy_amount",
                                 &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount)
                         .def<double(qf::OvernightIndexMultiCurrencyCashflow::*)()>(
-                                "settlement_ccy_amount",
+                                "settlement_currency_amount",
                                 &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount);
 
 

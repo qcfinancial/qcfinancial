@@ -184,5 +184,9 @@ namespace QCode
 		std::string IborMultiCurrencyCashflow::getFXRateIndexCode() const {
 	        return _fxRateIndex->getCode();
         }
+
+        std::shared_ptr<FXRateIndex> IborMultiCurrencyCashflow::getFXRateIndex() {
+            return _fxRateIndex;
+        }
     }
 }

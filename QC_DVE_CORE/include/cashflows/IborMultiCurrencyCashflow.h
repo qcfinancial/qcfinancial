@@ -117,6 +117,9 @@ namespace QCode
 
 			[[nodiscard]] std::string getFXRateIndexCode() const;
 
+            std::shared_ptr<FXRateIndex> getFXRateIndex();
+
+
 			/**
 			 * @fn	double IborMultiCurrencyCashflow::accruedInterest(const QCDate& valueDate,
 			 * 		const QCDate& fxRateIndexDate, const TimeSeries& fxRateIndexValues);
