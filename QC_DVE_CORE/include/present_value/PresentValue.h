@@ -306,6 +306,7 @@ namespace QCode
 				return result;
 			}
 
+
             /**
             * @fn	    double PresentValue::pv(QCDate& valuationDate,
             *                                   Leg& leg,

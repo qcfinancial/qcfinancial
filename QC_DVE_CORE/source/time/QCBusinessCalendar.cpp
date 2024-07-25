@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <utility>
 #include "time/QCBusinessCalendar.h"
 
 QCBusinessCalendar::QCBusinessCalendar(
@@ -125,6 +126,22 @@ std::vector<QCDate> QCBusinessCalendar::getHolidays()
 {
     std::vector<QCDate> _vecHolidays(_holidays.begin(), _holidays.end());
 	return _vecHolidays;
+}
+
+void QCBusinessCalendar::setHolidays(std::set<QCDate> holidays) {
+    _holidays = std::move(holidays);
+}
+
+QCDate QCBusinessCalendar::getStartDate() const {
+    return _startDate;
+}
+
+int QCBusinessCalendar::getLength() const {
+    return _length;
+}
+
+std::set<QCDate> QCBusinessCalendar::getHolidaysAsSet() const {
+    return _holidays;
 }
 
 

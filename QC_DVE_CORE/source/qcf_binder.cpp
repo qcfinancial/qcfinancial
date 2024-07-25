@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-43 12:50"; });
+                []() { return "version: 0.14.0, build: 2024-07-25 10:40"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -136,7 +136,21 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("__str__", &QCDate::description, py::arg("es_iso") = false)
                         .def("__repr__", &QCDate::description, py::arg("es_iso") = false)
                         .def<QCDate(QCDate::*)(std::vector<QCDate>&, QCDate::QCBusDayAdjRules) const>(
-                                "business_day", &QCDate::businessDay);
+                                "business_day", &QCDate::businessDay)
+                        .def(py::pickle(
+                            [](const QCDate &d) { // __getstate__
+                            /* Return a tuple that fully encodes the state of the object */
+                            return py::make_tuple(d.day(), d.month(), d.year());
+                        },
+                        [](py::tuple t) { // __setstate__
+                                if (t.size() != 3)
+                                    throw std::runtime_error("Invalid state!");
+
+                            /* Create a new C++ instance */
+                            QCDate d(t[0].cast<int>(), t[1].cast<int>(), t[2].cast<int>());
+
+                            return d;
+                        }));
 
 
         m.def("build_qcdate_from_string", [](std::string& strDate) {
@@ -160,7 +174,26 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("mod_next_busy_day", &QCBusinessCalendar::modNextBusinessDay)
                         .def("prev_busy_day", &QCBusinessCalendar::previousBusinessDay)
                         .def("shift", &QCBusinessCalendar::shift)
-                        .def("get_holidays", &QCBusinessCalendar::getHolidays);
+                        .def("get_holidays", &QCBusinessCalendar::getHolidays)
+                        .def(py::pickle(
+                            [](const QCBusinessCalendar &bc) { // __getstate__
+                            /* Return a tuple that fully encodes the state of the object */
+                            return py::make_tuple(bc.getStartDate(), bc.getLength(), bc.getHolidaysAsSet());
+                        },
+                            [](py::tuple t) { // __setstate__
+                            if (t.size() != 3)
+                                throw std::runtime_error("Invalid state!");
+
+                            /* Create a new C++ instance */
+                            QCBusinessCalendar bc(t[0].cast<QCDate>(), t[1].cast<int>());
+
+                            /* Assign any additional state */
+                            bc.setHolidays(t[2].cast<std::set<QCDate>>());
+
+                            return bc;
+                        }
+                ))
+                        ;
 
         // QCCurrency
         py::class_<QCCurrency, std::shared_ptr<QCCurrency>>(m, "QCCurrency")
@@ -558,6 +591,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_rate_index_code", &qf::FixedRateMultiCurrencyCashflow::getFXRateIndexCode)
                         .def("get_type", &qf::FixedRateMultiCurrencyCashflow::getType)
                         .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount)
+                        .def("settlement_currency_amount", &qf::FixedRateMultiCurrencyCashflow::settlementCurrencyAmount)
                         .def("record", &qf::FixedRateMultiCurrencyCashflow::record);
 
         // LinearInterestRateCashflow

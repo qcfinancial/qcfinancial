@@ -93,6 +93,8 @@ namespace QCode
 
             double settlementAmount() override;
 
+            double settlementCurrencyAmount();
+
             QCDate getFXPublishDate() const;
 
 			/**

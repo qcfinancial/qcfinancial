@@ -213,5 +213,16 @@ namespace QCode
 
             return result;
         }
+
+        double FixedRateMultiCurrencyCashflow::settlementCurrencyAmount() {
+            QCCurrencyConverter ccyConverter;
+            auto cashflow = amount();
+
+            return ccyConverter.convert(
+                    cashflow,
+                    _currency,
+                    _fxRateIndexValue,
+                    *_fxRateIndex);
+        }
     }
 }

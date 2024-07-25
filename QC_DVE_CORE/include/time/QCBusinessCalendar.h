@@ -79,6 +79,14 @@ class QCBusinessCalendar
 		 */
 		std::vector<QCDate> getHolidays();
 
+        QCDate getStartDate() const;
+
+        int getLength() const;
+
+        void setHolidays(std::set<QCDate> holidays);
+
+        std::set<QCDate> getHolidaysAsSet() const;
+
     private:
         QCDate _startDate;
         int _length;
