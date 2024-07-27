@@ -1095,6 +1095,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 std::shared_ptr<qf::FXRateIndex>>())
                         .def("settlement_currency",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrency)
+                        .def("record",
+                                &qf::CompoundedOvernightRateMultiCurrencyCashflow2::record)
                         .def("get_type", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getType)
                         .def("settlement_amount", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementAmount)
                         .def<void(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)(const qf::TimeSeries&)>(
