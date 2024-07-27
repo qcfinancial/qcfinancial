@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-25 18:50"; });
+                []() { return "version: 0.14.0, build: 2024-07-27 07:32"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1064,6 +1064,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("settlement_amount", &qf::CompoundedOvernightRateCashflow2::settlementAmount)
                         .def("set_amortization", &qf::CompoundedOvernightRateCashflow2::setAmortization)
                         .def("is_expired", &qf::CompoundedOvernightRateCashflow2::isExpired)
+                        .def("record", &qf::CompoundedOvernightRateCashflow2::record)
                         .def("get_eq_rate_decimal_places",
                              &qf::CompoundedOvernightRateCashflow2::getEqRateDecimalPlaces)
                         .def("get_amount_derivatives", &qf::CompoundedOvernightRateCashflow2::getAmountDerivatives);
