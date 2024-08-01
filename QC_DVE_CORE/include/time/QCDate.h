@@ -22,6 +22,22 @@ using namespace std;
 class QCDate
 {
     public:
+       /*!
+        * Identifica las 2 formas de comportamiento del FX fixing lag.
+        * 1) El lag (que por ser lag se interpreta como número negativo) es desde settlement date.
+        * 2) El lag es desde endDate.
+        */
+        enum QCFxFixingLagPivot
+        {
+            qcSettlementDate,
+            qcEndDate,
+        };
+
+       /*!
+        * Identifica las 2 formas de comportamiento del settlement lag cuando endDate es inhábil.
+        * 1) Primero se desplaza al día hábil siguiente y luego aplica el lag.
+        * 2) Aplica el lag desde endDate sin ir al día hábil siguiente.
+        */
         enum QCSettlementLagBehaviour
         {
             qcMoveToWorkingDay,

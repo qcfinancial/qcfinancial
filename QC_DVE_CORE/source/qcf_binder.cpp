@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-07-27 07:32"; });
+                []() { return "version: 0.14.0, build: 2024-07-30 12:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -571,8 +571,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_type", &qf::SimpleMultiCurrencyCashflow::getType);
 
         // FixedRateCashflow
-        py::class_<qf::FixedRateCashflow, qf::Cashflow, std::shared_ptr<qf::FixedRateCashflow>>(
-                                m, "FixedRateCashflow")
+        py::class_<qf::FixedRateCashflow, qf::Cashflow, std::shared_ptr<qf::FixedRateCashflow>>(m, "FixedRateCashflow")
                         .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, const QCInterestRate &,
                                 shared_ptr<QCCurrency>>())
                         .def("amount", &qf::FixedRateCashflow::amount)
