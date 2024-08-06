@@ -143,7 +143,8 @@ namespace QCode
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency,
 				bool forBonds = false,
-                QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove
+                );
 
             /**
  * @fn	static Leg LegFactory::buildCustomAmortFixedRateLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, bool doesAmortize, QCInterestRate rate, std::shared_ptr<QCCurrency> currency);
@@ -231,7 +232,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     bool forBonds = false,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
                     RecPay recPay,
@@ -250,7 +252,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     bool forBonds = false,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             /**
  * @fn	static Leg LegFactory::buildBulletIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
@@ -407,7 +410,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             static Leg buildCustomAmortIborMultiCurrencyLeg(
                     RecPay recPay,
@@ -431,7 +435,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             static Leg buildBulletOvernightIndexLeg(
                     RecPay recPay,
@@ -500,7 +505,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
 
             static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
@@ -526,7 +532,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             static Leg buildBulletCompoundedOvernightRateLeg2(
                     RecPay recPay,
@@ -595,7 +602,8 @@ namespace QCode
                     unsigned int &fxRateIndexFixingLag,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             static Leg buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2(
                     RecPay recPay,
@@ -620,7 +628,8 @@ namespace QCode
                     unsigned int &fxRateIndexFixingLag,
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
 
             /**
  * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
