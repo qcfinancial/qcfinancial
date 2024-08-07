@@ -1,8 +1,5 @@
 #include "asset_classes/QCLinearWf.h"
 
-QCLinearWf::QCLinearWf()
-{
-}
 
 double QCLinearWf::wf(double rate, double yf)
 {
@@ -13,7 +10,9 @@ double QCLinearWf::wf(double rate, double yf)
 
 double QCLinearWf::rate(double wf, double yf)
 {
-	return (wf - 1) * 1 / yf;
+    auto result = (wf - 1) * 1 / yf;
+    _drate = wf / yf;
+	return result;
 }
 
 std::string QCLinearWf::description()

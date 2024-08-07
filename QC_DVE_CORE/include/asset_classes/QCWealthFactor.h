@@ -52,6 +52,8 @@ public:
 	*/
 	double d2wf();
 
+    double drate();
+
 
 	/**
 	 * @fn	virtual std::string QCWealthFactor::description();
@@ -77,6 +79,7 @@ protected:
 	*/
 	double _dwf;
 	double _d2wf;
+    double _drate;
 };
 
 #endif //QWEALTHFACTOR_H

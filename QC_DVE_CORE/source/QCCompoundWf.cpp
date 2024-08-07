@@ -14,7 +14,9 @@ double QCCompoundWf::wf(double rate, double yf)
 
 double QCCompoundWf::rate(double wf, double yf)
 {
-	return pow(wf, 1 / yf) - 1;
+    auto result = pow(wf, 1 / yf) - 1;
+    _drate = 1 / yf * pow(wf, 1 / yf - 1);
+	return result;
 }
 
 std::string QCCompoundWf::description()

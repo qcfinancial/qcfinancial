@@ -33,3 +33,7 @@ std::string QCWealthFactor::description()
 QCWealthFactor::~QCWealthFactor()
 {
 }
+
+double QCWealthFactor::drate() {
+    return _drate;
+}

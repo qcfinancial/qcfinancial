@@ -14,7 +14,9 @@ double QCContinousWf::wf(double rate, double yf)
 
 double QCContinousWf::rate(double wf, double yf)
 {
-	return log(wf) / yf;
+    auto result = log(wf) / yf;
+    _drate = 1 / (wf * yf);
+	return result;
 }
 
 std::string QCContinousWf::description()

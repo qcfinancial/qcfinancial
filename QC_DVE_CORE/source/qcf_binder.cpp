@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-08-01 18:20"; });
+                []() { return "version: 0.14.0, build: 2024-08-07 15:32"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -318,18 +318,24 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def(py::init<>())
                         .def("wf", &QCLinearWf::wf)
                         .def("rate", &QCLinearWf::rate)
+                        .def("dwf", &QCLinearWf::dwf)
+                        .def("drate", &QCLinearWf::drate)
                         .def("__str__", &QCLinearWf::description);
 
         py::class_<QCCompoundWf, shared_ptr<QCCompoundWf>, QCWealthFactor>(m, "QCCompoundWf")
                         .def(py::init<>())
                         .def("wf", &QCCompoundWf::wf)
                         .def("rate", &QCCompoundWf::rate)
+                        .def("dwf", &QCCompoundWf::dwf)
+                        .def("drate", &QCCompoundWf::drate)
                         .def("__str__", &QCCompoundWf::description);
 
         py::class_<QCContinousWf, shared_ptr<QCContinousWf>, QCWealthFactor>(m, "QCContinousWf")
                         .def(py::init<>())
                         .def("wf", &QCContinousWf::wf)
                         .def("rate", &QCContinousWf::rate)
+                        .def("dwf", &QCContinousWf::dwf)
+                        .def("drate", &QCContinousWf::drate)
                         .def("__str__", &QCContinousWf::description);
 
         // QCInterestRate
@@ -525,28 +531,28 @@ PYBIND11_MODULE(qcfinancial, m) {
         m.def("show", py::overload_cast<const std::shared_ptr<qf::SimpleCashflow> &>(&show));
 
         // TimeSeries
-        py::bind_map<std::map<QCDate, double>>(m, "time_series");
-                /*.def(py::pickle(
-                        [](const std::map<QCDate, double> &p) { // __getstate__
-                            *//* Return a tuple that fully encodes the state of the object *//*
-                            std::vector<std::pair<QCDate, double>> items;
-                            for (const auto& element : p) {
-                                items.emplace_back(element);
-                            }
-                            return py::make_tuple(items);
-                        },
-                        [](py::tuple t) { // __setstate__
-                            if (t.size() != 1)
-                                throw std::runtime_error("Invalid state!");
+        py::bind_map<std::map<QCDate, double>>(m, "time_series")
+        .def(py::pickle(
+            [](std::map<QCDate, double> &self) { // __getstate__
+                std::vector<py::tuple> items;
+                for (auto& element : self) {
+                    items.emplace_back(py::cast(element));
+                }
+                return py::make_tuple(items);
+            },
+            [](py::tuple t) { // __setstate__
+                if (t.size() != 1)
+                    throw std::runtime_error("Invalid state!");
 
-                            std::map<QCDate, double> result;
-                            for(const std::pair<QCDate, double>& p:t[0]) {
-                                result[p.first].push_back(p.second);
-                            }
+                std::map<QCDate, double> result;
+                for(auto tuple_item : t[0]) {
+                    auto p = tuple_item.cast<std::pair<QCDate, double>>();
+                    result[p.first] = p.second;
+                }
 
-                            return result;
-                        }
-                ));*/
+                return result;
+            }
+    ));
 
         // DateList
         py::bind_vector<std::vector<QCDate>>(m, "DateList");
