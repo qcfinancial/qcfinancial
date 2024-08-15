@@ -304,6 +304,8 @@ namespace QCode
 
             void setForwardRateWfDerivatives(const std::vector<double>& der);
 
+            void setForwardRateDerivatives(const std::vector<double>& der);
+
             [[nodiscard]] std::vector<double> getAmountDerivatives() const;
 
             [[nodiscard]] std::shared_ptr<InterestRateIndex> getInterestRateIndex() const;
@@ -391,6 +393,11 @@ namespace QCode
              * coupon curve.
            */
             std::vector<double> _forwardRateWfDerivatives;
+
+            /** @brief	Stores de derivatives of forward rate with respect to rates belonging to zero
+             * coupon curve.
+           */
+            std::vector<double> _forwardRateDerivatives;
 
             /** @brief	Stores de derivatives of amount() with respect to rates belonging to zero
             * coupon curve.

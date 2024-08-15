@@ -46,12 +46,18 @@ public:
 	double dwf();
 
 	/*!
-	* La función dwf es un getter que devuelve el valor de la derivada segunda del último factor de capitalización
+	* La función d2wf es un getter que devuelve el valor de la derivada segunda del último factor de capitalización
 	* calculado, respecto a la tasa. El cálculo de las derivadas se realiza al invocar el método wf.
 	* @return (double) valor de la derivada respecto a la tasa
 	*/
 	double d2wf();
 
+    /*!
+	* La función drate es un getter que devuelve el valor de la derivada de la última tasa de interés
+	* calculada a partir de un factor de capitalización y una fracción de año, respecto al factor de capitalización.
+    * El cálculo de la derivada se realiza al invocar el método rate.
+	* @return (double) valor de la derivada respecto al factor de capitalización
+	*/
     double drate();
 
 

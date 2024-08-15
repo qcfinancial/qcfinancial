@@ -43,14 +43,20 @@ namespace QCode
         double IborCashflow::amount()
         {
             double amort{0.0};
-            _amountDerivatives.resize(_forwardRateWfDerivatives.size());
-            for (size_t i = 0; i < _forwardRateWfDerivatives.size(); ++i) {
-                _amountDerivatives.at(i) = _nominal * _forwardRateWfDerivatives.at(i);
+            _amountDerivatives.resize(_forwardRateDerivatives.size());
+
+            auto rate = _index->getRate();
+            rate.setValue(_rateValue * _gearing + _spread);
+            auto interest = _nominal * (rate.wf(_startDate, _endDate) - 1.0);
+            auto dInterest = _nominal * rate.dwf(_startDate, _endDate);
+            _index->setRateValue(_rateValue);
+            for (size_t i = 0; i < _forwardRateDerivatives.size(); ++i) {
+                _amountDerivatives.at(i) = _forwardRateDerivatives.at(i) * dInterest;
             }
             if (_doesAmortize) {
                 amort = _amortization;
             }
-            return amort + _interest;
+            return amort + interest;
         }
 
 
@@ -135,6 +141,13 @@ namespace QCode
             _forwardRateWfDerivatives.resize(der.size());
             for (size_t i = 0; i < der.size(); ++i) {
                 _forwardRateWfDerivatives.at(i) = der.at(i);
+            }
+        }
+
+        void QCode::Financial::IborCashflow::setForwardRateDerivatives(const std::vector<double>& der) {
+            _forwardRateDerivatives.resize(der.size());
+            for (size_t i = 0; i < der.size(); ++i) {
+                _forwardRateDerivatives.at(i) = der.at(i);
             }
         }
 

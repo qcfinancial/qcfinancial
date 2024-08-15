@@ -56,16 +56,17 @@
                     Cashflow &iborCashflow,
                     ZeroCouponCurve &curve) {
                 auto iborCashflow_ = dynamic_cast<IborCashflow &>(iborCashflow);
-                std::vector<double> derivatives;
-                derivatives.resize(curve.getLength());
-                for (size_t i = 0; i < curve.getLength(); ++i) {
-                    derivatives.at(i) = 0.0;
-                }
-                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+
+                std::vector<double> fwdWfDerivatives(curve.getLength(), 0.0);
+                std::vector<double> fwdRateDerivatives(curve.getLength(), 0.0);
+
+                iborCashflow_.setForwardRateWfDerivatives(fwdWfDerivatives);
+                iborCashflow_.setForwardRateDerivatives(fwdRateDerivatives);
                 auto fixingDate = iborCashflow_.getFixingDate();
                 if (valuationDate > fixingDate) {
                     return std::make_shared<IborCashflow>(iborCashflow_);
                 }
+
                 QCDate fecha1 = iborCashflow_.getIndexStartDate();
                 QCDate fecha2 = iborCashflow_.getIndexEndDate();
                 long t1 = valuationDate.dayDiff(fecha1);
@@ -73,11 +74,13 @@
                 auto iborRate = iborCashflow_.getInterestRateIndex()->getRate();
                 auto tasaForward = curve.getForwardRateWithRate(iborRate, t1, t2);
                 for (size_t i = 0; i < curve.getLength(); ++i) {
-                    derivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                    fwdWfDerivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                    fwdRateDerivatives.at(i) = curve.fwdRateDerivativeAt(i);
                 }
                 iborCashflow_.setInterestRateValue(tasaForward);
-                iborCashflow_.setForwardRateWfDerivatives(derivatives);
-                auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
+                iborCashflow_.setForwardRateWfDerivatives(fwdWfDerivatives);
+                iborCashflow_.setForwardRateDerivatives(fwdRateDerivatives);
+                // auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
                 return std::make_shared<IborCashflow>(iborCashflow_);
             }
 
@@ -87,16 +90,17 @@
                     Cashflow &iborCashflow,
                     ZeroCouponCurve &curve) {
                 auto iborCashflow_ = dynamic_cast<IborMultiCurrencyCashflow &>(iborCashflow);
-                std::vector<double> derivatives;
-                derivatives.resize(curve.getLength());
-                for (size_t i = 0; i < curve.getLength(); ++i) {
-                    derivatives.at(i) = 0.0;
-                }
-                iborCashflow_.setForwardRateWfDerivatives(derivatives);
+
+                std::vector<double> fwdWfDerivatives(curve.getLength(), 0.0);
+                std::vector<double> fwdRateDerivatives(curve.getLength(), 0.0);
+
+                iborCashflow_.setForwardRateWfDerivatives(fwdWfDerivatives);
+                iborCashflow_.setForwardRateDerivatives(fwdRateDerivatives);
                 auto fixingDate = iborCashflow_.getFixingDate();
                 if (valuationDate > fixingDate) {
                     return std::make_shared<IborMultiCurrencyCashflow>(iborCashflow_);
                 }
+
                 QCDate fecha1 = iborCashflow_.getIndexStartDate();
                 QCDate fecha2 = iborCashflow_.getIndexEndDate();
                 long t1 = valuationDate.dayDiff(fecha1);
@@ -104,11 +108,13 @@
                 auto iborRate = iborCashflow_.getInterestRateIndex()->getRate();
                 auto tasaForward = curve.getForwardRateWithRate(iborRate, t1, t2);
                 for (size_t i = 0; i < curve.getLength(); ++i) {
-                    derivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                    fwdWfDerivatives.at(i) = curve.fwdWfDerivativeAt(i);
+                    fwdRateDerivatives.at(i) = curve.fwdRateDerivativeAt(i);
                 }
                 iborCashflow_.setInterestRateValue(tasaForward);
-                iborCashflow_.setForwardRateWfDerivatives(derivatives);
-                auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
+                iborCashflow_.setForwardRateWfDerivatives(fwdWfDerivatives);
+                iborCashflow_.setForwardRateDerivatives(fwdRateDerivatives);
+                // auto plazo = valuationDate.dayDiff(iborCashflow_.getSettlementDate());
                 return std::make_shared<IborMultiCurrencyCashflow>(iborCashflow_);
             }
 

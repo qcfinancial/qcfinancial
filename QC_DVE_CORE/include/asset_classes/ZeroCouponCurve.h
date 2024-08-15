@@ -21,10 +21,12 @@ namespace QCode
 			double dfDerivativeAt(unsigned int index) override;
             double wfDerivativeAt(unsigned int index) override;
 			double fwdWfDerivativeAt(unsigned int index) override;
-			virtual ~ZeroCouponCurve();
+            double fwdRateDerivativeAt(unsigned int index);
+			~ZeroCouponCurve() override;
 
         protected:
 		    std::vector<double> _wfDerivatives;
+            std::vector<double> _fwdRateDerivatives;
 
 		};
 	}

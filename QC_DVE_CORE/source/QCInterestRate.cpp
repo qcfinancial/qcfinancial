@@ -8,7 +8,8 @@ QCInterestRate::QCInterestRate(double value,
 							   _yf(yearFraction),
 							   _wf(wealthFactor),
 							   _dwf(0.0),
-							   _d2wf(0.0)
+							   _d2wf(0.0),
+                               _drate(0.0)
 {
 }
 
@@ -66,13 +67,17 @@ double QCInterestRate::d2wf(long days)
 double QCInterestRate::getRateFromWf(double wf, QCDate& startDate, QCDate& endDate)
 {
 	double yf = _yf->yf(startDate, endDate);
-	return _wf->rate(wf, yf);
+	auto result = _wf->rate(wf, yf);
+    _drate = _wf->drate();
+    return result;
 }
 
 double QCInterestRate::getRateFromWf(double wf, long days)
 {
 	double yf = _yf->yf(days);
-	return _wf->rate(wf, yf);
+    auto result = _wf->rate(wf, yf);
+    _drate = _wf->drate();
+    return result;
 }
 
 shared_ptr<QCWealthFactor> QCInterestRate::getWealthFactor()
@@ -92,3 +97,7 @@ std::string QCInterestRate::description()
 
 QCInterestRate::~QCInterestRate()
 {}
+
+double QCInterestRate::drate() {
+    return _drate;
+}

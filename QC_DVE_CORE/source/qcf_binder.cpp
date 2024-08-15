@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 0.14.0, build: 2024-08-07 15:32"; });
+                []() { return "version: 0.14.0, build: 2024-08-13 19:16"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -352,6 +352,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_rate_from_wf",
                              py::overload_cast<double, QCDate &, QCDate &>(&QCInterestRate::getRateFromWf))
                         .def("get_rate_from_wf", py::overload_cast<double, long>(&QCInterestRate::getRateFromWf))
+                        .def("drate", &QCInterestRate::drate)
                         .def("yf", &QCInterestRate::yf)
                         .def("get_year_fraction", &QCInterestRate::getYearFraction)
                         .def("get_wealth_factor", &QCInterestRate::getWealthFactor)
@@ -1710,7 +1711,8 @@ PYBIND11_MODULE(qcfinancial, m) {
         // ZeroCouponCurve
         py::class_<qf::ZeroCouponCurve, std::shared_ptr<qf::ZeroCouponCurve>, qf::InterestRateCurve>(
                                 m, "ZeroCouponCurve")
-                        .def(py::init<shared_ptr<QCInterpolator>, QCInterestRate>());
+                        .def(py::init<shared_ptr<QCInterpolator>, QCInterestRate>())
+                        .def("fwd_rate_derivative_at", &qf::ZeroCouponCurve::fwdRateDerivativeAt);
 
         // PresentValue
         py::class_<qf::PresentValue>(m, "PresentValue")

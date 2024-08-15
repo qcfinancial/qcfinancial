@@ -205,6 +205,9 @@ public:
      *
      * @return	A double.
      */
+
+    double drate();
+
     double yf(QCDate &startDate, QCDate &endDate);
 
     /**
@@ -269,6 +272,8 @@ private:
 
     /** @brief	The 2nd derivative of wf wrt rate */
     double _d2wf;
+
+    double _drate;
 };
 
 #endif //QCINTERESTRATE_H

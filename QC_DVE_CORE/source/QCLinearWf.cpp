@@ -11,7 +11,7 @@ double QCLinearWf::wf(double rate, double yf)
 double QCLinearWf::rate(double wf, double yf)
 {
     auto result = (wf - 1) * 1 / yf;
-    _drate = wf / yf;
+    _drate = 1 / yf;
 	return result;
 }
 

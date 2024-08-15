@@ -12,6 +12,7 @@ namespace QCode
 		{
             _wfDerivatives.resize(_curve->getLength());
             _fwdWfDerivatives.resize(_curve->getLength());
+            _fwdRateDerivatives.resize(_curve->getLength());
 		}
 
 		double ZeroCouponCurve::getRateAt(long d)
@@ -120,13 +121,23 @@ namespace QCode
 		double ZeroCouponCurve::getForwardRateWithRate(QCInterestRate& intRate, long d1, long d2)
 		{
 			double wf = this->getForwardWf(d1, d2);
-			return intRate.getRateFromWf(wf, d2 - d1);
+			double fwdRate = intRate.getRateFromWf(wf, d2 - d1);
+            auto dFwdRate = intRate.drate();
+            for (size_t i = 0; i < _curve->getLength(); ++i) {
+                _fwdRateDerivatives.at(i) = dFwdRate * _fwdWfDerivatives.at(i);
+            }
+            return fwdRate;
 		}
 
 		double ZeroCouponCurve::getForwardRate(long d1, long d2)
 		{
 			double wf = this->getForwardWf(d1, d2);
-			return _intRate.getRateFromWf(wf, d2 - d1);
+            double fwdRate = _intRate.getRateFromWf(wf, d2 - d1);
+            auto dFwdRate = _intRate.drate();
+            for (size_t i = 0; i < _curve->getLength(); ++i) {
+                _fwdRateDerivatives.at(i) = dFwdRate * _fwdWfDerivatives.at(i);
+            }
+            return fwdRate;
 		}
 
 		double ZeroCouponCurve::getDiscountFactorAt(long d)
@@ -149,6 +160,10 @@ namespace QCode
 			return _dfDerivatives.at(index);
 		}
 
+        double ZeroCouponCurve::fwdRateDerivativeAt(unsigned int index) {
+            return _fwdRateDerivatives.at(index);
+        }
+
         double ZeroCouponCurve::wfDerivativeAt(unsigned int index)
         {
             return _wfDerivatives.at(index);
@@ -159,8 +174,6 @@ namespace QCode
 			return _fwdWfDerivatives.at(index);
 		}
 
-		ZeroCouponCurve::~ZeroCouponCurve()
-		{
-		}
+		ZeroCouponCurve::~ZeroCouponCurve() = default;
 	}
 }
