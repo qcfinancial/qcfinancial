@@ -118,6 +118,8 @@ namespace QCode::Financial {
 
         [[nodiscard]] std::string getFXRateIndexCode() const;
 
+        [[nodiscard]] QCDate getFXRateIndexFixingDate() const;
+
         /**
         * @fn	    tuple<QCDate, double, std::shared_ptr<QCCurrency>,
                           QCDate, std::string, std::string> SimpleMultiCurrencyCashflow::show();

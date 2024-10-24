@@ -92,5 +92,9 @@ namespace QCode {
             return _fxRateIndex->getCode();
         }
 
+        QCDate SimpleMultiCurrencyCashflow::getFXRateIndexFixingDate() const {
+            return _fxRateIndexFixingDate;
+        }
+
     }
 }
