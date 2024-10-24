@@ -64,7 +64,7 @@ namespace QCode::Financial {
                 std::shared_ptr<FXRateIndex> fxRateIndex,
                 double fxRateIndexValue = 1.0);
 
-        std::string getType() const override;
+        [[nodiscard]] std::string getType() const override;
 
         /**
         * @fn	    double SimpleMultiCurrencyCashflow::amount();
@@ -115,6 +115,8 @@ namespace QCode::Financial {
         * @param	fxRateIndexValue The value of the Fx Rate.
         */
         void setFxRateIndexValue(double fxRateIndexValue);
+
+        [[nodiscard]] std::string getFXRateIndexCode() const;
 
         /**
         * @fn	    tuple<QCDate, double, std::shared_ptr<QCCurrency>,

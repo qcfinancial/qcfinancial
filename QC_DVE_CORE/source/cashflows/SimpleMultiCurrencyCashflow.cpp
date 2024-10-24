@@ -82,11 +82,14 @@ namespace QCode {
             return result;
         }
 
-        SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow() {
-        }
+        SimpleMultiCurrencyCashflow::~SimpleMultiCurrencyCashflow() = default;
 
         std::string SimpleMultiCurrencyCashflow::getType() const {
             return "SimpleMultiCurrencyCashflow";
+        }
+
+        std::string SimpleMultiCurrencyCashflow::getFXRateIndexCode() const {
+            return _fxRateIndex->getCode();
         }
 
     }
