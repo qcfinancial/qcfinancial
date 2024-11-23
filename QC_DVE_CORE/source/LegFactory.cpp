@@ -82,7 +82,7 @@ namespace QCode::Financial {
 
         auto periods = pf.getPeriods();
 
-        // Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+        // Load the periods into the structure of FixedRateCashflow and construct the Leg.
         Leg fixedRateLeg;
         size_t numPeriods = periods.size();
         fixedRateLeg.resize(numPeriods);
@@ -1029,11 +1029,13 @@ namespace QCode::Financial {
                 fixingDates.emplace_back(fixingDate);
                 fixingDate = fixingCalendar.shift(fixingDate, 1);
             }
+
             /*auto fixingDate = fixingCalendar.shift(thisStartDate, -lookback);
             while (fixingDate < fixingCalendar.shift(thisEndDate, -lookback)) {
                 fixingDates.emplace_back(fixingDate);
                 fixingDate = fixingCalendar.shift(fixingDate, 1);
             }*/
+
             double amort = 0.0;
             if (i == numPeriods - 1) {
                 amort = sign * notional;
@@ -2106,7 +2108,7 @@ namespace QCode::Financial {
                 spread,
                 gearing);
 
-        std::cout << "custom amort icp clp leg: done bullet" << std::endl;
+        // std::cout << "custom amort icp clp leg: done bullet" << std::endl;
         customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);
         return icpClpLeg;
     }
@@ -2141,7 +2143,7 @@ namespace QCode::Financial {
                 gearing,
                 isAct360);
 
-        std::cout << "custom amort icp clp leg: done bullet" << std::endl;
+        // std::cout << "custom amort icp clp leg: done bullet" << std::endl;
         customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow2);
         return icpClpLeg;
 
