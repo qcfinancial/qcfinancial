@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from setuptools import Extension, setup, find_packages
+from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
@@ -133,7 +133,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="qcfinancial",
-    version="1.0.1",
+    version="1.1.0",
     author="Alvaro Diaz V.",
     author_email="alvaro@efaa.cl",
     description="A Library for Valuation of Linear Interest Rate and FX Derivatives",
@@ -142,7 +142,6 @@ setup(
     ext_modules=[CMakeExtension("qcfinancial")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-    packages=find_packages(),
     extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.8",
 )
