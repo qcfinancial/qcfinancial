@@ -38,7 +38,7 @@ public:
 		    string settlementPeriodicity,
 		    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 		    shared_ptr<std::vector<QCDate>> settlementCalendar,
-		    unsigned int settlementLag,
+		    int settlementLag,
 		    string fixingPeriodicity,
 		    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
 		    shared_ptr<std::vector<QCDate>> fixingCalendar,
@@ -79,7 +79,7 @@ private:
 	shared_ptr<std::vector<QCDate>> _settlementCalendar;
 
 	/*! días de valuta para determinar la fecha de pago */
-	unsigned int _settlementLag;
+	int _settlementLag;
 
 	/*! Periodicidad de fixing */
 	string _fixingPeriodicity;

@@ -7,7 +7,7 @@
 #include <sstream>
 #include <exception>
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 //
 //  QCDate.cpp
 //  QC-FXOptions
@@ -300,9 +300,6 @@ QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules ru
 		break;
 
 	case QCDate::qcPrev:
-		result = busCal.previousBusinessDay(result);
-		break;
-
 	case QCDate::qcModPrev:
 		result = busCal.previousBusinessDay(result);
 		break;
@@ -351,28 +348,50 @@ QCDate QCDate::shift(vector<QCDate>& calendar,
 }
 
 
-QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
-	QCDate::QCBusDayAdjRules direction, QCSettlementLagBehaviour settLagBehaviour) const
+QCDate QCDate::shift(
+	shared_ptr<vector<QCDate>> calendar,
+	int nDays,
+	QCDate::QCBusDayAdjRules direction,
+	QCSettlementLagBehaviour settLagBehaviour) const
 {
 	QCDate result{ _day, _month, _year };
-	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
+	if (nDays == 0)
+	{
+		if (settLagBehaviour == QCSettlementLagBehaviour::qcDontMove)
+			return result;
+		if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
+		{
+			result = result.businessDay(calendar, QCDate::qcFollow);
+		}
+		else
+		{
+			result = result.businessDay(calendar, QCDate::qcPrev);
+		}
+	}
+
+
+	if (nDays > 0)
 	{
         if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
             result = result.businessDay(calendar, QCDate::qcFollow);
+        	std::cout << "result: " << result << std::endl;
         }
-		for (unsigned int i = 1; i < nDays + 1; ++i)
+		for (unsigned int i = 0; i < nDays; ++i)
 		{
 			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
 		}
 	}
-	else
+	if (nDays < 0)
 	{
-        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
-            result = result.businessDay(calendar, QCDate::qcPrev);
-        }
-		for (unsigned int i = 1; i < nDays + 1; ++i)
+		std::cout << "nDays: " << nDays << std::endl;
+		if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
+			result = result.businessDay(calendar, QCDate::qcPrev);
+			std::cout << "result: " << result << std::endl;
+		}
+		for (int i = 0; i > nDays; --i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
+			std::cout << "result: " << result << std::endl;
 		}
 	}
 	return result;

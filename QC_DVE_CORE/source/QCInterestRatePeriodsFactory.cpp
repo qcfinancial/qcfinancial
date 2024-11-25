@@ -8,7 +8,7 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	string settlementPeriodicity,
 	QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
 	shared_ptr<std::vector<QCDate>> settlementCalendar,
-	unsigned int settlementLag,
+	int settlementLag,
 	string fixingPeriodicity,
 	QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
 	shared_ptr<std::vector<QCDate>> fixingCalendar,
@@ -38,7 +38,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::getPeriod
 	return _getPeriods2();
 }
 
-QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods1()
+/*QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods1()
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
 	
@@ -59,11 +59,18 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	for (unsigned int i = 0; i < _settlementBasicDates.size(); ++i)
 	{
 		//Calcula settlement date
-		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
-                        _settlementCalendar,
-                        _settlementLag,
-                        QCDate::qcFollow
-                        );
+		QCDate settlementDate;
+		if (_settlementLag >= 0) {
+			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+				_settlementCalendar,
+				_settlementLag,
+				QCDate::qcFollow);
+		} else {
+			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+				_settlementCalendar,
+				_settlementLag * -1,
+				QCDate::qcPrev);
+		}
 
         if (_endDateAdjustment == QCDate::QCBusDayAdjRules::qcNo && _settlementLag == 0) {
             settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
@@ -101,7 +108,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	}
 
 	return result;
-}
+}*/
 
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods2()
 {
@@ -126,12 +133,26 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	QCDate fixingDate;
 	for (unsigned int i = 0; i < _settlementBasicDates.size(); ++i)
 	{
+		QCDate settlementDate = get<1>(_settlementBasicDates.at(i));
 		// Calcula settlement date
-		QCDate settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
-                        _settlementCalendar,
-                        _settlementLag,
-                        QCDate::qcFollow,
-                        _settLagBehaviour);
+		if (_settlementLag > 0)
+		{
+			std::cout << "settlementLag: " << _settlementLag << std::endl;
+			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+				_settlementCalendar,
+				_settlementLag,
+				QCDate::qcFollow,
+				_settLagBehaviour);
+		}
+		if (_settlementLag < 0)
+		{
+			std::cout << "settlementLag: " << _settlementLag << std::endl;
+			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
+				_settlementCalendar,
+				_settlementLag,
+				QCDate::qcPrev,
+				_settLagBehaviour);
+		}
 
         if (_endDateAdjustment == QCDate::QCBusDayAdjRules::qcNo && _settlementLag == 0) {
             settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
@@ -154,12 +175,12 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		// Calcula la fecha de fixing con el fixing lag
 		fixingDate = fixingDate.shift(
                 _fixingCalendar,
-                _fixingLag,
+                static_cast<int>(_fixingLag),
                 QCDate::qcPrev,
                 QCDate::QCSettlementLagBehaviour::qcMoveToWorkingDay);
 
 		// Calcula la fecha de inicio del indice con start date rule
-		QCDate indexStartDate = fixingDate.shift(_fixingCalendar, _indexStartDateLag, QCDate::qcFollow);
+		QCDate indexStartDate = fixingDate.shift(_fixingCalendar, static_cast<int>(_indexStartDateLag), QCDate::qcFollow);
 
 		// Calcula la fecha final del indice con el tenor del indice
 		QCDate indexEndDate = indexStartDate.addMonths(QCHelperFunctions::tenor(_indexTenor)).
@@ -169,13 +190,15 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		result.at(i) = make_tuple(0, false, 0, true, 0, get<0>(_settlementBasicDates.at(i)),
 			get<1>(_settlementBasicDates.at(i)), settlementDate,
 			fixingDate, indexStartDate, indexEndDate);
+
+		std::cout << "settlementDate: " << settlementDate << std::endl;
 	}
 
 	return result;
 }
 
 //Con _getPeriods3() se va a cambiar la lógica de construcción de las fechas de fixing
-QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods3()
+/*QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPeriods3()
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
 
@@ -217,7 +240,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 	}
 
 	return result;
-}
+}*/
 
 void QCInterestRatePeriodsFactory::_setFixingFlags(size_t numPeriods)
 {
@@ -489,13 +512,15 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 	return periods;
 }
 
-vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(string periodicity,
-	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar)
+vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(
+	string periodicity,
+	QCInterestRateLeg::QCStubPeriod stubPeriod,
+	shared_ptr<std::vector<QCDate>> calendar)
 {
-	//Aqui se almacena el resultado
+	//Aquí se almacena el resultado
 	vector<tuple<QCDate, QCDate>> periods;
 
-	//La distancia en meses y dias entre startDate y endDate
+	//La distancia en meses y días entre startDate y endDate
 	tuple<unsigned long, int> distanceMonthsDays = _startDate.monthDiffDayRemainder(
 		_endDate, calendar, _endDateAdjustment);
 
@@ -510,7 +535,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 		stubPeriod = QCInterestRateLeg::qcShortFront;
 	}
 	bool easyCase = remainderInDays == 0 && remainderInMonths == 0;
-	// cout << "whole periods: " << numWholePeriods << " months: " << remainderInMonths << " days: " << remainderInDays << endl;
+	// std::cout << "whole periods: " << numWholePeriods << " months: " << remainderInMonths << " days: " << remainderInDays << std::endl;
 	if (easyCase)
 	{
 		bool easyStub = stubPeriod != QCInterestRateLeg::qcLongFront2 &&
@@ -531,10 +556,12 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(st
 			QCDate fechaInicioPeriodo = _startDate;
 			QCDate fechaFinalPeriodo;
 			periods.resize(numWholePeriods);
-			for (unsigned int i = 0; i < numWholePeriods; ++i)
+			for (size_t i = 0; i < numWholePeriods; ++i)
 			{
-				fechaFinalPeriodo = _startDate.addMonths(QCHelperFunctions::tenor(periodicity) * (i + 1)).businessDay(
-					calendar, _endDateAdjustment);
+				fechaFinalPeriodo = _startDate.addMonths(
+					static_cast<int>(QCHelperFunctions::tenor(periodicity) * (i + 1))).businessDay(
+						calendar,
+						_endDateAdjustment);
 				periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 				fechaInicioPeriodo = fechaFinalPeriodo;
 			}

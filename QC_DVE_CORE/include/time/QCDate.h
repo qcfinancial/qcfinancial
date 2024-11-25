@@ -306,7 +306,8 @@ class QCDate
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
+		[[nodiscard]] QCDate shift(shared_ptr<vector<QCDate>> calendar,
+			int nDays,
 			QCDate::QCBusDayAdjRules direction,
             QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
 
