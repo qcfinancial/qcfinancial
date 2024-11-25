@@ -137,7 +137,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		// Calcula settlement date
 		if (_settlementLag > 0)
 		{
-			std::cout << "settlementLag: " << _settlementLag << std::endl;
+			// std::cout << "settlementLag: " << _settlementLag << std::endl;
 			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
 				_settlementCalendar,
 				_settlementLag,
@@ -146,7 +146,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		}
 		if (_settlementLag < 0)
 		{
-			std::cout << "settlementLag: " << _settlementLag << std::endl;
+			// std::cout << "settlementLag: " << _settlementLag << std::endl;
 			settlementDate = get<1>(_settlementBasicDates.at(i)).shift(
 				_settlementCalendar,
 				_settlementLag,
@@ -191,7 +191,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 			get<1>(_settlementBasicDates.at(i)), settlementDate,
 			fixingDate, indexStartDate, indexEndDate);
 
-		std::cout << "settlementDate: " << settlementDate << std::endl;
+		// std::cout << "settlementDate: " << settlementDate << std::endl;
 	}
 
 	return result;

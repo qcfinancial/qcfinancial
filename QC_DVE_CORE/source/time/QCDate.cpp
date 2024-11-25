@@ -374,7 +374,7 @@ QCDate QCDate::shift(
 	{
         if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
             result = result.businessDay(calendar, QCDate::qcFollow);
-        	std::cout << "result: " << result << std::endl;
+        	// std::cout << "result: " << result << std::endl;
         }
 		for (unsigned int i = 0; i < nDays; ++i)
 		{
@@ -386,12 +386,12 @@ QCDate QCDate::shift(
 		std::cout << "nDays: " << nDays << std::endl;
 		if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
 			result = result.businessDay(calendar, QCDate::qcPrev);
-			std::cout << "result: " << result << std::endl;
+			// std::cout << "result: " << result << std::endl;
 		}
 		for (int i = 0; i > nDays; --i)
 		{
 			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
-			std::cout << "result: " << result << std::endl;
+			// std::cout << "result: " << result << std::endl;
 		}
 	}
 	return result;
