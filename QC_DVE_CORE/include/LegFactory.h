@@ -50,6 +50,11 @@ namespace QCode
 		class LegFactory
 		{
 		public:
+            enum EndDateCalculationMode
+            {
+                qcReturnToStartDay,
+                qcDontReturnToStartDay,
+            };
 
 			/**
 			 * @enum	TypeOfCashflow
@@ -99,6 +104,7 @@ namespace QCode
                 overnightIndexMultiCurrencyCashflow,
 			};
 
+
             static bool isPeriodicityZero(Tenor periodicity);
 
 			/**
@@ -143,7 +149,8 @@ namespace QCode
 				QCInterestRate rate,
 				std::shared_ptr<QCCurrency> currency,
 				bool forBonds = false,
-                QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove
+                QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                LegFactory::EndDateCalculationMode endDateCalculationMode = LegFactory::qcReturnToStartDay
                 );
 
             /**

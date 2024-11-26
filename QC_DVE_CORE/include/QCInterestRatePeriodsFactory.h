@@ -6,6 +6,7 @@
 #include <set>
 
 #include "QCInterestRateLeg.h"
+#include "LegFactory.h"
 #include "time/QCDate.h"
 
 using namespace std;
@@ -45,7 +46,8 @@ public:
 		    unsigned int fixingLag,
 		    unsigned int indexStartDateLag,
 		    string indexTenor,
-            QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove
+            QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+            QCode::Financial::LegFactory::EndDateCalculationMode endDateCalculationMode = QCode::Financial::LegFactory::EndDateCalculationMode::qcReturnToStartDay
 		);
 
 	/*!
@@ -58,6 +60,8 @@ public:
 	~QCInterestRatePeriodsFactory();
 
 private:
+    QCode::Financial::LegFactory::EndDateCalculationMode _endDateCalculationMode;
+
 	/*!
 	* Fecha de inicio
 	*/

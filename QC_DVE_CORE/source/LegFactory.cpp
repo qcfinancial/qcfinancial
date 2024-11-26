@@ -41,7 +41,8 @@ namespace QCode::Financial {
             QCInterestRate rate,
             std::shared_ptr<QCCurrency> currency,
             bool forBonds,
-            QCDate::QCSettlementLagBehaviour settLagBehaviour) {
+            QCDate::QCSettlementLagBehaviour settLagBehaviour,
+            LegFactory::EndDateCalculationMode endDateCalculationMode) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");

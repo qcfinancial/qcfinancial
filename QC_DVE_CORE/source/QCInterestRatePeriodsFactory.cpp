@@ -15,7 +15,8 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	unsigned int fixingLag,
 	unsigned int indexStartDateLag,
 	string indexTenor,
-    QCDate::QCSettlementLagBehaviour settLagBehaviour
+    QCDate::QCSettlementLagBehaviour settLagBehaviour,
+    QCode::Financial::LegFactory::EndDateCalculationMode endDateCalculationMode
 	) :
 	_startDate(startDate),
 	_endDate(endDate),
@@ -30,7 +31,8 @@ QCInterestRatePeriodsFactory::QCInterestRatePeriodsFactory(
 	_fixingLag(fixingLag),
 	_indexStartDateLag(indexStartDateLag),
 	_indexTenor(indexTenor),
-    _settLagBehaviour(settLagBehaviour)
+    _settLagBehaviour(settLagBehaviour),
+    _endDateCalculationMode(endDateCalculationMode)
 {}
 
 QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::getPeriods()
@@ -114,7 +116,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 {
 	QCInterestRateLeg::QCInterestRatePeriods result;
 
-	// Saca los basicperiods de settlement
+	// Saca los basic periods de settlement
 	_settlementBasicDates = _buildBasicDates2(
             _settlementPeriodicity,
             _settlementStubPeriod,
@@ -175,7 +177,7 @@ QCInterestRateLeg::QCInterestRatePeriods QCInterestRatePeriodsFactory::_getPerio
 		// Calcula la fecha de fixing con el fixing lag
 		fixingDate = fixingDate.shift(
                 _fixingCalendar,
-                static_cast<int>(_fixingLag),
+                static_cast<int>(-_fixingLag),  // Se le cambia el signo para que vaya para atrás
                 QCDate::qcPrev,
                 QCDate::QCSettlementLagBehaviour::qcMoveToWorkingDay);
 
@@ -326,7 +328,8 @@ void QCInterestRatePeriodsFactory::_setFixingFlags(size_t numPeriods)
 	}
 }
 
-vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(string periodicity,
+
+/*vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(string periodicity,
 	QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar)
 {
 	//Aqui se almacena el resultado
@@ -510,7 +513,7 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates(str
 	}
 
 	return periods;
-}
+}*/
 
 vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(
 	string periodicity,
@@ -556,12 +559,22 @@ vector<tuple<QCDate, QCDate>> QCInterestRatePeriodsFactory::_buildBasicDates2(
 			QCDate fechaInicioPeriodo = _startDate;
 			QCDate fechaFinalPeriodo;
 			periods.resize(numWholePeriods);
+            auto auxStartDate = _startDate;
 			for (size_t i = 0; i < numWholePeriods; ++i)
 			{
-				fechaFinalPeriodo = _startDate.addMonths(
-					static_cast<int>(QCHelperFunctions::tenor(periodicity) * (i + 1))).businessDay(
-						calendar,
-						_endDateAdjustment);
+                if (_endDateCalculationMode == QCode::Financial::LegFactory::EndDateCalculationMode::qcReturnToStartDay){
+                    fechaFinalPeriodo = _startDate.addMonths(
+                            static_cast<int>(QCHelperFunctions::tenor(periodicity) * (i + 1))).businessDay(
+                            calendar,
+                            _endDateAdjustment);
+                } else {
+                    fechaFinalPeriodo = auxStartDate.addMonths(
+                            static_cast<int>(QCHelperFunctions::tenor(periodicity))).businessDay(
+                            calendar,
+                            _endDateAdjustment);
+                    auxStartDate = fechaFinalPeriodo;
+                }
+
 				periods.at(i) = make_tuple(fechaInicioPeriodo, fechaFinalPeriodo);
 				fechaInicioPeriodo = fechaFinalPeriodo;
 			}

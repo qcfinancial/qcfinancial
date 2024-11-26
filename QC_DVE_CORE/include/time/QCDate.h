@@ -92,7 +92,7 @@ class QCDate
          * @param excelSerial (long) representación de Excel de una fecha
          * @return un objecto QCDate con la fecha indicada por excelSerial
          */
-        QCDate(long excelSerial);
+        explicit QCDate(long excelSerial);
 
         /*!
          * Constructor
@@ -109,7 +109,7 @@ class QCDate
 		* @param stringDate yyyy/mm/dd o yyyy-mm-dd
 		* @return un objeto QCDate con la fecha d/m/y
 		*/
-		QCDate(string& stringDate);
+		explicit QCDate(string& stringDate);
 
         /*!
          * Copy constructor
@@ -202,24 +202,24 @@ class QCDate
          * Getter
          * @return (int) el día de la fecha
          */
-        int day() const;
+        [[nodiscard]] int day() const;
 
         /*!
          * Getter
          * @return (int) el mes de la fecha
          */
-        int month() const;
+        [[nodiscard]] int month() const;
 
         /*!
          * Getter
          * @return (int) el año de la fecha
          */
-        int year() const;
+        [[nodiscard]] int year() const;
 
         /*!
          * @return (int) Retorna la fecha como su representación en Excel
          */
-        long excelSerial() const;
+        [[nodiscard]] long excelSerial() const;
 
         /*!
          * Calcula el número de días reales entre otherDate y si misma
@@ -227,7 +227,7 @@ class QCDate
          * @param otherDate
          * @return (long) número de días calculados
          */
-        long dayDiff(const QCDate& otherDate) const;
+        [[nodiscard]] long dayDiff(const QCDate& otherDate) const;
 
 		/*!
 		* Calcula el número de meses enteros entre otherDate y sí misma.

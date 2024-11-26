@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.2.0, build: 2024-11-25 14:30"; });
+                []() { return "version: 1.2.0, build: 2024-11-26 11:20"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1213,7 +1213,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("interest_rate"),
                                 py::arg("notional_currency"),
                                 py::arg("is_bond"),
-                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove,
+                                py::arg("end_date_calc_mode")=qf::LegFactory::EndDateCalculationMode::qcReturnToStartDay)
                         .def_static(
                                 "build_custom_amort_fixed_rate_leg",
                                 &qf::LegFactory::buildCustomAmortFixedRateLeg,
