@@ -310,7 +310,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> currency,
                     double spread,
                     double gearing,
-                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove);
+                    QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
+                    LegFactory::EndDateCalculationMode endDateCalculationMode = LegFactory::qcReturnToStartDay);
 
             /**
  * @fn	static Leg LegFactory::buildCustomAmortIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, CustomNotionalAmort notionalAndAmort, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);

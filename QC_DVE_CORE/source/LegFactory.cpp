@@ -79,7 +79,8 @@ namespace QCode::Financial {
             0,
             settlementPeriodicityString,
             // New Parameters (2024)
-            settLagBehaviour};
+            settLagBehaviour,
+            endDateCalculationMode};
 
         auto periods = pf.getPeriods();
 
@@ -316,7 +317,8 @@ namespace QCode::Financial {
             std::shared_ptr<QCCurrency> currency,
             double spread,
             double gearing,
-            QCDate::QCSettlementLagBehaviour settLagBehaviour) {
+            QCDate::QCSettlementLagBehaviour settLagBehaviour,
+            LegFactory::EndDateCalculationMode endDateCalculationMode) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -353,7 +355,8 @@ namespace QCode::Financial {
             fixingLag,
             index->getDaysOfStartLag(),
             index->getTenor().getString(),
-            settLagBehaviour};
+            settLagBehaviour,
+            endDateCalculationMode};
 
         //Se generan los periodos
         auto periods = factory.getPeriods();

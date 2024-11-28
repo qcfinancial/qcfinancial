@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.2.0, build: 2024-11-26 11:20"; });
+                []() { return "version: 1.2.0, build: 2024-11-26 12:25"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1195,6 +1195,10 @@ PYBIND11_MODULE(qcfinancial, m) {
             .value("END_DATE", QCDate::QCFxFixingLagPivot::qcEndDate);
 
         // LegFactory
+        py::enum_<qf::LegFactory::EndDateCalculationMode>(m, "EndDateCalculationMode")
+            .value("RETURN_TO_START_DAY", qf::LegFactory::EndDateCalculationMode::qcReturnToStartDay)
+            .value("DONT_RETURN_TO_START_DAY", qf::LegFactory::EndDateCalculationMode::qcDontReturnToStartDay);
+
         py::class_<qf::LegFactory>(m, "LegFactory")
                         .def_static(
                                 "build_bullet_fixed_rate_leg",
@@ -1298,7 +1302,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("notional_currency"),
                                 py::arg("spread"),
                                 py::arg("gearing"),
-                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove)
+                                py::arg("sett_lag_behaviour")=QCDate::QCSettlementLagBehaviour::qcDontMove,
+                                py::arg("end_date_calc_mode")=qf::LegFactory::EndDateCalculationMode::qcReturnToStartDay)
                         .def_static(
                                 "build_custom_amort_ibor_leg",
                                 &qf::LegFactory::buildCustomAmortIborLeg,
