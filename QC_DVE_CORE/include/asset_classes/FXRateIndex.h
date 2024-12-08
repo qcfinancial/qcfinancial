@@ -52,6 +52,17 @@ namespace QCode
 				return _calendar.shift(publishDate, -dias);
 			}
 
+            QCDate publishingDate(QCDate& fixingDate)
+            {
+                if (_calendar.nextBusinessDay(fixingDate) != fixingDate) {
+                    throw std::invalid_argument("Fixing date must not be a holiday.");
+                }
+
+                // Sólo se considera los días de _fixingRule.
+                auto dias = (int)_fixingRule.getDays();
+                return _calendar.shift(fixingDate, dias);
+            }
+
 			QCDate valueDate(QCDate& publishDate)
 			{
 				// S�lo se consideran los días de _valueDateRule.

@@ -167,7 +167,8 @@ namespace QCode::Financial {
             unsigned int fxRateIndexFixingLag,
             bool forBonds,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -222,6 +223,10 @@ namespace QCode::Financial {
                 fxRateIndexFixingDate =settlementCalendar.shift(settlementDate, -int(fxRateIndexFixingLag));
             } else {
                 fxRateIndexFixingDate =settlementCalendar.shift(thisEndDate, -int(fxRateIndexFixingLag));
+            }
+            if (fxFixingLagAppliesTo == QCDate::QCFxFixingLagAppliesTo::qcFixingDate) {
+                std::cout << "FX FIXING LAG APPLIES TO";
+                fxRateIndexFixingDate = fxRateIndex->publishingDate(fxRateIndexFixingDate);
             }
 
             // For the correct calculation of present values using market yields according

@@ -233,7 +233,8 @@ namespace QCode
                     unsigned int fxRateIndexFixingLag,
                     bool forBonds = false,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
                     RecPay recPay,

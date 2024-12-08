@@ -33,6 +33,15 @@ class QCDate
             qcEndDate,
         };
 
+        /*!
+        * Identifica si el FX fixing lag se aplica fixing date o a publishing date.
+        */
+        enum QCFxFixingLagAppliesTo
+        {
+            qcFixingDate,
+            qcPublishingDate,
+        };
+
        /*!
         * Identifica las 2 formas de comportamiento del settlement lag cuando endDate es inhábil.
         * 1) Primero se desplaza al día hábil siguiente y luego aplica el lag.
@@ -92,7 +101,7 @@ class QCDate
          * @param excelSerial (long) representación de Excel de una fecha
          * @return un objecto QCDate con la fecha indicada por excelSerial
          */
-        QCDate(long excelSerial);
+        explicit QCDate(long excelSerial);
 
         /*!
          * Constructor
@@ -109,7 +118,7 @@ class QCDate
 		* @param stringDate yyyy/mm/dd o yyyy-mm-dd
 		* @return un objeto QCDate con la fecha d/m/y
 		*/
-		QCDate(string& stringDate);
+		explicit QCDate(string& stringDate);
 
         /*!
          * Copy constructor
@@ -202,24 +211,24 @@ class QCDate
          * Getter
          * @return (int) el día de la fecha
          */
-        int day() const;
+        [[nodiscard]] int day() const;
 
         /*!
          * Getter
          * @return (int) el mes de la fecha
          */
-        int month() const;
+        [[nodiscard]] int month() const;
 
         /*!
          * Getter
          * @return (int) el año de la fecha
          */
-        int year() const;
+        [[nodiscard]] int year() const;
 
         /*!
          * @return (int) Retorna la fecha como su representación en Excel
          */
-        long excelSerial() const;
+        [[nodiscard]] long excelSerial() const;
 
         /*!
          * Calcula el número de días reales entre otherDate y si misma
@@ -227,7 +236,7 @@ class QCDate
          * @param otherDate
          * @return (long) número de días calculados
          */
-        long dayDiff(const QCDate& otherDate) const;
+        [[nodiscard]] long dayDiff(const QCDate& otherDate) const;
 
 		/*!
 		* Calcula el número de meses enteros entre otherDate y sí misma.
@@ -235,7 +244,10 @@ class QCDate
 		* @param otherDate
 		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
 		*/
-		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate, vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
+		tuple<unsigned long, int> monthDiffDayRemainder(
+                const QCDate& otherDate,
+                vector<QCDate>& calendar,
+                QCBusDayAdjRules rule) const;
 
 		/*!
 		* Calcula el número de meses enteros entre otherDate y sí misma.
@@ -243,13 +255,16 @@ class QCDate
 		* @param otherDate
 		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
 		*/
-		tuple<unsigned long, int> monthDiffDayRemainder(const QCDate& otherDate, shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+		tuple<unsigned long, int> monthDiffDayRemainder(
+                const QCDate& otherDate,
+                shared_ptr<vector<QCDate>> calendar,
+                QCDate::QCBusDayAdjRules rule) const;
         /*!
          * Calcula la fecha que resulta de sumar un número de días a si misma
          * @param nDays número de días a sumar
          * @return (QCDate) fecha resultante
          */
-        QCDate addDays(long nDays) const;
+        [[nodiscard]] QCDate addDays(long nDays) const;
 
 		/*!
 		* Desplaza la fecha lo que sea necesario en la direccion direction para que el día de la nueva
@@ -258,17 +273,17 @@ class QCDate
 		* @param direction dirección del movimiento
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate moveToDayOfMonth(unsigned int dayOfMonth, QCDirection direction,
+		[[nodiscard]] QCDate moveToDayOfMonth(unsigned int dayOfMonth, QCDirection direction,
 			bool stopAtEndOfMonth = false) const;
 
 		/*!
 		* Indica si la fecha corresponde al último día del mes.
 		* @return (bool) true si es el último día del mes, false en los otros casos.
 		*/
-		bool isEndOfMonth() const;
+		[[nodiscard]] bool isEndOfMonth() const;
 
 		/*!
-		* Calcula la siguiente fecha que es dia habil considerando el vector de
+		* Calcula la siguiente fecha que es dia hábil considerando el vector de
 		* fechas que son feriado y la regla (FOLLOW, MODFOLLOW). Si la fecha es habil
 		* entonces se retorna a si misma.
 		* @param calendar (vector<QCDate>&) vector con los feriados
@@ -278,19 +293,19 @@ class QCDate
 		QCDate businessDay(vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
 
 		/*!
-		* Calcula la siguiente fecha que es dia habil considerando el vector de
+		* Calcula la siguiente fecha que es dia hábil considerando el vector de
 		* fechas que son feriado y la regla (FOLLOW, MODFOLLOW). Si la fecha es habil
 		* entonces se retorna a si misma.
 		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
 		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+		[[nodiscard]] QCDate businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
 
 		/*!
-		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
+		* Suma nDays dias hábiles a la fecha considerando el calendario entregado.
 		* @param calendar (vector<QCDate>&) vector con los feriados
-		* @param nDays (unsigned int) numero de dias habiles
+		* @param nDays (unsigned int) numero de dias hábiles
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
@@ -300,13 +315,13 @@ class QCDate
                 QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
 
 		/*!
-		* Suma nDays dias habiles a la fecha considerando el calendario entregado.
+		* Suma nDays dias hábiles a la fecha considerando el calendario entregado.
 		* @param calendar (shared_ptr<vector<QCDate>>) vector con los feriados
 		* @param nDays (unsigned int) numero de dias hábiles
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
+		[[nodiscard]] QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
 			QCDate::QCBusDayAdjRules direction,
             QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
 
@@ -315,13 +330,13 @@ class QCDate
          * @param nMonths número de meses a sumar
          * @return (QCDate) fecha resultante
          */
-        QCDate addMonths(int nMonths) const;
+        [[nodiscard]] QCDate addMonths(int nMonths) const;
 
         /*!
          * Retorna el día de la semana
          * @return (QCWeekDay) día de la semana resultante
          */
-        QCWeekDay weekDay() const;
+        [[nodiscard]] QCWeekDay weekDay() const;
 
 		/*!
 		* Calcula la fecha que resulta de sumar un número de semanas a si misma
