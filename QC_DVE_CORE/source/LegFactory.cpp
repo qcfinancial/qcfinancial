@@ -82,7 +82,7 @@ namespace QCode::Financial {
 
         auto periods = pf.getPeriods();
 
-        // Load the periods into the structure of FixedRateCashflow and contruct the Leg.
+        // Load the periods into the structure of FixedRateCashflow and construct the Leg.
         Leg fixedRateLeg;
         size_t numPeriods = periods.size();
         fixedRateLeg.resize(numPeriods);
@@ -167,7 +167,8 @@ namespace QCode::Financial {
             unsigned int fxRateIndexFixingLag,
             bool forBonds,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -223,6 +224,9 @@ namespace QCode::Financial {
             } else {
                 fxRateIndexFixingDate =settlementCalendar.shift(thisEndDate, -int(fxRateIndexFixingLag));
             }
+            if (fxFixingLagAppliesTo == QCDate::QCFxFixingLagAppliesTo::qcFixingDate) {
+                fxRateIndexFixingDate = fxRateIndex->publishingDate(fxRateIndexFixingDate);
+            }
 
             // For the correct calculation of present values using market yields according
             // to the usual conventions in fixed income markets.
@@ -270,7 +274,8 @@ namespace QCode::Financial {
             unsigned int fxRateIndexFixingLag,
             bool forBonds,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
         Leg fixedRateMccyLeg = buildBulletFixedRateMultiCurrencyLeg(
                 recPay,
                 startDate,
@@ -289,7 +294,8 @@ namespace QCode::Financial {
                 fxRateIndexFixingLag,
                 forBonds,
                 settLagBehaviour,
-                fxFixingLagPivot);
+                fxFixingLagPivot,
+                fxFixingLagAppliesTo);
 
         customizeAmortization(recPay, fixedRateMccyLeg, notionalAndAmort,
                               LegFactory::fixedRateMultiCurrencyCashflow);
@@ -463,7 +469,8 @@ namespace QCode::Financial {
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -523,6 +530,9 @@ namespace QCode::Financial {
             } else {
                 fxRateIndexFixingDate =settlementCalendar.shift(thisEndDate, -int(fxRateIndexFixingLag));
             }
+            if (fxFixingLagAppliesTo == QCDate::QCFxFixingLagAppliesTo::qcFixingDate) {
+                fxRateIndexFixingDate = fxRateIndex->publishingDate(fxRateIndexFixingDate);
+            }
 
             double amort = 0.0;
             if (i == numPeriods - 1) {
@@ -576,7 +586,8 @@ namespace QCode::Financial {
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         // Se construye la pata bullet
         auto iborMccyLeg = buildBulletIborMultiCurrencyLeg(
@@ -602,7 +613,8 @@ namespace QCode::Financial {
                 fxRateIndex,
                 fxRateIndexFixingLag,
                 settLagBehaviour,
-                fxFixingLagPivot
+                fxFixingLagPivot,
+                fxFixingLagAppliesTo
         );
 
         // Se customiza la amortización
@@ -798,7 +810,8 @@ namespace QCode::Financial {
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -859,6 +872,9 @@ namespace QCode::Financial {
             } else {
                 fxRateIndexFixingDate =settlementCalendar.shift(accrualEndDate, -int(fxRateIndexFixingLag));
             }
+            if (fxFixingLagAppliesTo == QCDate::QCFxFixingLagAppliesTo::qcFixingDate) {
+                fxRateIndexFixingDate = fxRateIndex->publishingDate(fxRateIndexFixingDate);
+            }
             double amort = 0.0;
             if (i == numPeriods - 1) {
                 amort = sign * notional;
@@ -916,7 +932,8 @@ namespace QCode::Financial {
             std::shared_ptr<FXRateIndex> fxRateIndex,
             unsigned int fxRateIndexFixingLag,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         // Se construye la pata bullet
         auto leg = buildBulletOvernightIndexMultiCurrencyLeg(
@@ -943,7 +960,8 @@ namespace QCode::Financial {
                 fxRateIndex,
                 fxRateIndexFixingLag,
                 settLagBehaviour,
-                fxFixingLagPivot);
+                fxFixingLagPivot,
+                fxFixingLagAppliesTo);
 
         // Se customiza la amortización
         customizeAmortization(
@@ -1029,11 +1047,13 @@ namespace QCode::Financial {
                 fixingDates.emplace_back(fixingDate);
                 fixingDate = fixingCalendar.shift(fixingDate, 1);
             }
+
             /*auto fixingDate = fixingCalendar.shift(thisStartDate, -lookback);
             while (fixingDate < fixingCalendar.shift(thisEndDate, -lookback)) {
                 fixingDates.emplace_back(fixingDate);
                 fixingDate = fixingCalendar.shift(fixingDate, 1);
             }*/
+
             double amort = 0.0;
             if (i == numPeriods - 1) {
                 amort = sign * notional;
@@ -1143,7 +1163,8 @@ namespace QCode::Financial {
             std::shared_ptr<QCCurrency> settlementCurrency,
             std::shared_ptr<FXRateIndex> fxRateIndex,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         if (isPeriodicityZero(settlementPeriodicity)) {
             throw std::invalid_argument("Settlement periodicity must be different from 0 in at least one dimension");
@@ -1196,6 +1217,9 @@ namespace QCode::Financial {
                 fxRateIndexFixingDate =settlementCalendar.shift(settlementDate, -int(fxRateIndexFixingLag));
             } else {
                 fxRateIndexFixingDate =settlementCalendar.shift(thisEndDate, -int(fxRateIndexFixingLag));
+            }
+            if (fxFixingLagAppliesTo == QCDate::QCFxFixingLagAppliesTo::qcFixingDate) {
+                fxRateIndexFixingDate = fxRateIndex->publishingDate(fxRateIndexFixingDate);
             }
             std::vector<QCDate> fixingDates;
             auto fixingDate = thisStartDate;
@@ -1260,7 +1284,8 @@ namespace QCode::Financial {
             std::shared_ptr<QCCurrency> settlementCurrency,
             std::shared_ptr<FXRateIndex> fxRateIndex,
             QCDate::QCSettlementLagBehaviour settLagBehaviour,
-            QCDate::QCFxFixingLagPivot fxFixingLagPivot) {
+            QCDate::QCFxFixingLagPivot fxFixingLagPivot,
+            QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo) {
 
         // Se construye la pata bullet
         auto leg = buildBulletCompoundedOvernightRateMultiCurrencyLeg2(
@@ -1287,7 +1312,8 @@ namespace QCode::Financial {
                 settlementCurrency,
                 fxRateIndex,
                 settLagBehaviour,
-                fxFixingLagPivot);
+                fxFixingLagPivot,
+                fxFixingLagAppliesTo);
 
         // Se customiza la amortización
         customizeAmortization(
@@ -2106,7 +2132,7 @@ namespace QCode::Financial {
                 spread,
                 gearing);
 
-        std::cout << "custom amort icp clp leg: done bullet" << std::endl;
+        // std::cout << "custom amort icp clp leg: done bullet" << std::endl;
         customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow);
         return icpClpLeg;
     }
@@ -2141,7 +2167,7 @@ namespace QCode::Financial {
                 gearing,
                 isAct360);
 
-        std::cout << "custom amort icp clp leg: done bullet" << std::endl;
+        // std::cout << "custom amort icp clp leg: done bullet" << std::endl;
         customizeAmortization(recPay, icpClpLeg, notionalAndAmort, LegFactory::icpClpCashflow2);
         return icpClpLeg;
 

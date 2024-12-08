@@ -233,7 +233,8 @@ namespace QCode
                     unsigned int fxRateIndexFixingLag,
                     bool forBonds = false,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildCustomAmortFixedRateMultiCurrencyLeg(
                     RecPay recPay,
@@ -253,7 +254,8 @@ namespace QCode
                     unsigned int fxRateIndexFixingLag,
                     bool forBonds = false,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             /**
  * @fn	static Leg LegFactory::buildBulletIborLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, Tenor fixingPeriodicity, QCInterestRateLeg::QCStubPeriod fixingStubPeriod, QCBusinessCalendar fixingCalendar, unsigned int fixingLag, std::shared_ptr<InterestRateIndex> index, double notional, bool doesAmortize, std::shared_ptr<QCCurrency> currency, double spread, double gearing);
@@ -411,7 +413,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildCustomAmortIborMultiCurrencyLeg(
                     RecPay recPay,
@@ -436,7 +439,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildBulletOvernightIndexLeg(
                     RecPay recPay,
@@ -506,7 +510,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
 
             static Leg buildCustomAmortOvernightIndexMultiCurrencyLeg(
@@ -533,7 +538,8 @@ namespace QCode
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     unsigned int fxRateIndexFixingLag,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildBulletCompoundedOvernightRateLeg2(
                     RecPay recPay,
@@ -603,7 +609,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             static Leg buildCustomAmortCompoundedOvernightRateMultiCurrencyLeg2(
                     RecPay recPay,
@@ -629,7 +636,8 @@ namespace QCode
                     std::shared_ptr<QCCurrency> settlementCurrency,
                     std::shared_ptr<FXRateIndex> fxRateIndex,
                     QCDate::QCSettlementLagBehaviour settLagBehaviour = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    QCDate::QCFxFixingLagPivot fxFixingLagPivot = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    QCDate::QCFxFixingLagAppliesTo fxFixingLagAppliesTo = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
             /**
  * @fn	static Leg LegFactory::buildBulletIcpClfLeg( RecPay recPay, QCDate startDate, QCDate endDate, QCDate::QCBusDayAdjRules endDateAdjustment, Tenor settlementPeriodicity, QCInterestRateLeg::QCStubPeriod settlementStubPeriod, QCBusinessCalendar settlementCalendar, unsigned int settlementLag, double notional, bool doesAmortize, double spread, double gearing);
