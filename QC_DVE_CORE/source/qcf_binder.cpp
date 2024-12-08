@@ -102,7 +102,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
     m.def(
             "id",
-            []() { return "version: 1.2.0, build: 2024-12-08 10:11"; });
+            []() { return "version: 1.2.0, build: 2024-12-08 11:20"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1307,7 +1307,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("fx_rate_index_fixing_lag"),
                     py::arg("is_bond"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static(
                     "build_bullet_ibor_leg",
                     &qf::LegFactory::buildBulletIborLeg,
@@ -1380,7 +1381,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("fx_rate_index"),
                     py::arg("fx_rate_index_fixing_lag"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static(
                     "build_custom_amort_ibor_mccy_leg",
                     &qf::LegFactory::buildCustomAmortIborMultiCurrencyLeg,
@@ -1407,7 +1409,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("fx_rate_index"),
                     py::arg("fx_rate_index_fixing_lag"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static(
                     "build_bullet_overnight_index_leg",
                     &qf::LegFactory::buildBulletOvernightIndexLeg,
@@ -1459,7 +1462,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("fx_rate_index"),
                     py::arg("fx_rate_index_fixing_lag"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static(
                     "build_custom_amort_overnight_index_leg",
                     &qf::LegFactory::buildCustomAmortOvernightIndexLeg,
@@ -1511,7 +1515,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("fx_rate_index"),
                     py::arg("fx_rate_index_fixing_lag"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static(
                     "build_bullet_icp_clp_leg",
                     &qf::LegFactory::buildBulletIcpClpLeg,
@@ -1640,7 +1645,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("settlement_currency"),
                     py::arg("fx_rate_index"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate)
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
             .def_static("build_custom_amort_compounded_overnight_rate_leg",
                         &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg)
             .def_static(
@@ -1694,7 +1700,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                     py::arg("settlement_currency"),
                     py::arg("fx_rate_index"),
                     py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
-                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate);
+                    py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
+                    py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate);
 
     // long_vec
     py::bind_vector<std::vector<long>>(m, "long_vec");
