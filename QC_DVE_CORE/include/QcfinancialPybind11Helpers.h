@@ -756,7 +756,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "interes";
         result[6] = "amort_es_flujo";
@@ -770,7 +770,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "interes";
         result[6] = "amort_es_flujo";
@@ -787,8 +787,8 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         return result;
     } else if (cashflowType == "OvernightIndexCashflow" ) {
         auto result = py::tuple(18);
-        result[0] = "fecha_inicial_devengo";
-        result[1] = "fecha_final_devengo";
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
         result[2] = "fecha_inicial_indice";
         result[3] = "fecha_final_indice";
         result[4] = "fecha_pago";
@@ -799,7 +799,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[9] = "nombre_indice";
         result[10] = "valor_indice_inicial";
         result[11] = "valor_indice_final";
-        result[12] = "valor_tasa_equivalente";
+        result[12] = "valor_tasa";
         result[13] = "tipo_tasa";
         result[14] = "interes";
         result[15] = "flujo";
@@ -808,8 +808,8 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         return result;
     } else if (cashflowType == "OvernightIndexMultiCurrencyCashflow" ) {
         auto result = py::tuple(25);
-        result[0] = "fecha_inicial_devengo";
-        result[1] = "fecha_final_devengo";
+        result[0] = "fecha_inicial";
+        result[1] = "fecha_final";
         result[2] = "fecha_inicial_indice";
         result[3] = "fecha_final_indice";
         result[4] = "fecha_pago";
@@ -820,7 +820,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[9] = "nombre_indice";
         result[10] = "valor_indice_inicial";
         result[11] = "valor_indice_final";
-        result[12] = "valor_tasa_equivalente";
+        result[12] = "valor_tasa";
         result[13] = "tipo_tasa";
         result[14] = "interes";
         result[15] = "flujo";
@@ -828,7 +828,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[17] = "gearing";
         result[18] = "moneda_pago";
         result[19] = "indice_fx";
-        result[20] = "fecha_fijacion_indice_fx";
+        result[20] = "fecha_fixing_fx";
         result[21] = "valor_indice_fx";
         result[22] = "interes_moneda_pago";
         result[23] = "amortizacion_moneda_pago";
@@ -840,7 +840,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[1] = "fecha_final";
         result[2] = "fecha_fixing";
         result[3] = "fecha_pago";
-        result[4] = "nominal";
+        result[4] = "nocional";
         result[5] = "amortizacion";
         result[6] = "interes";
         result[7] = "amort_es_flujo";
@@ -881,7 +881,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "amort_es_flujo";
         result[6] = "flujo";
@@ -900,7 +900,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
             result[0] = "fecha_inicial";
             result[1] = "fecha_final";
             result[2] = "fecha_pago";
-            result[3] = "nominal";
+            result[3] = "nocional";
             result[4] = "amortizacion";
             result[5] = "interes";
             result[6] = "amort_es_flujo";
@@ -920,7 +920,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
             result[1] = "fecha_final";
             result[2] = "fecha_fixing";
             result[3] = "fecha_pago";
-            result[4] = "nominal";
+            result[4] = "nocional";
             result[5] = "amortizacion";
             result[6] = "interes";
             result[7] = "amort_es_flujo";
@@ -951,7 +951,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_pago";
         result[1] = "monto_nominal";
         result[2] = "moneda_nominal";
-        result[3] = "fecha_fixing";
+        result[3] = "fecha_fixing_fx";
         result[4] = "moneda_pago";
         result[5] = "codigo_indice_fx";
         result[6] = "valor_indice_fx";
@@ -962,7 +962,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "amort_es_flujo";
         result[6] = "flujo";
@@ -983,7 +983,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "interes";
         result[6] = "amort_es_flujo";
@@ -1000,7 +1000,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_pago";
-        result[3] = "nominal";
+        result[3] = "nocional";
         result[4] = "amortizacion";
         result[5] = "interes";
         result[6] = "amort_es_flujo";
