@@ -52,6 +52,11 @@ namespace QCode
 			return _settlementDate;
 		}
 
+		QCDate FixedRateCashflow::endDate()
+		{
+			return _endDate;
+		}
+
 		QCDate FixedRateCashflow::getStartDate() const
 		{
 			return _startDate;

@@ -74,6 +74,13 @@ public:
                 qf::Cashflow,
                 date);
     }
+
+    QCDate endDate() override {
+        PYBIND11_OVERRIDE_PURE(
+                QCDate,
+                qf::Cashflow,
+                endDate);
+    }
 };
 
 class PyLinearInterestRateCashflow : qf::LinearInterestRateCashflow {

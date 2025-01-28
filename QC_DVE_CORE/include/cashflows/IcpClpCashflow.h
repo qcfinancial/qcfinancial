@@ -196,6 +196,8 @@ namespace QCode
 			*/
 			QCDate date() override;
 
+			QCDate endDate() override;
+
 			/**
 			* @fn	    void IcpClpCashflow::setNominal(double nominal);
 			*

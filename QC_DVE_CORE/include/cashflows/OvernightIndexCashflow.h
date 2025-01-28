@@ -72,6 +72,8 @@ namespace QCode
 
             QCDate date() override;
 
+            QCDate endDate() override;
+
 
             [[nodiscard]] std::string getType() const override;
 

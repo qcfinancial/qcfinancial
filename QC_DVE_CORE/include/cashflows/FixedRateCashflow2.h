@@ -80,8 +80,9 @@ namespace QCode
 			*/
 			QCDate date() override;
 
+			QCDate endDate() override;
 
-            std::string getType() const override;
+            [[nodiscard]] std::string getType() const override;
 
             /**
             * @fn	virtual const QCDate& LinearInterestRateCashflow::getStartDate() const = 0;

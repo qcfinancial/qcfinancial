@@ -61,7 +61,7 @@ namespace QCode
 			/**
 			* @fn	virtual QCDate Cashflow::date();
 			*
-			* @brief	Gets the date of the cashflow.
+			* @brief	Gets the payment date of the cashflow.
 			*
 			* @author	Alvaro Díaz V.
 			* @date	26/09/2017
@@ -69,6 +69,8 @@ namespace QCode
 			* @return	A QCDate.
 			*/
 			virtual QCDate date() = 0;
+
+			virtual QCDate endDate() = 0;
 
             void savePresentValue(double presentValue)
             {

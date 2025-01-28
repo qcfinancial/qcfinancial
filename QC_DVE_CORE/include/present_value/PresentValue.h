@@ -95,7 +95,7 @@ namespace QCode
                       const std::shared_ptr<Cashflow>& cashflow,
                       QCInterestRate& intRate)
 			{
-				auto days = valuationDate.dayDiff(cashflow->date());
+				auto days = valuationDate.dayDiff(cashflow->endDate());
 				if (days <= 0)
 				{
 					_derivative = 0.0;
@@ -144,7 +144,7 @@ namespace QCode
 			{
 				_resetDerivatives(curve->getLength());
 
-				const auto days = valuationDate.dayDiff(cashflow->date());
+				const auto days = valuationDate.dayDiff(cashflow->endDate());
 				if (days <= 0)
 				{
 					std::fill(_derivatives.begin(), _derivatives.end(), 0);
@@ -215,7 +215,7 @@ namespace QCode
             {
                 _resetDerivatives(curve->getLength());
 
-                const auto days = valuationDate.dayDiff(cashflow->date());
+                const auto days = valuationDate.dayDiff(cashflow->endDate());
                 if (days <= 0)
                 {
                     std::fill(_derivatives.begin(), _derivatives.end(), 0);
@@ -469,7 +469,6 @@ namespace QCode
 
                 _derivatives2.clear();
 				_derivatives2.resize(newSize);
-				return;
 			}
 
 			/**

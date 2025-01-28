@@ -121,6 +121,8 @@ namespace QCode
  */
             QCDate date() override;
 
+			QCDate endDate() override;
+
 
             virtual double settlementAmount();
 

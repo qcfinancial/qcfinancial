@@ -105,6 +105,12 @@ namespace QCode
             return _settlementDate;
         }
 
+
+        QCDate IcpClpCashflow2::endDate()
+        {
+            return _endDate;
+        }
+
         // Overriding methods in LinearInterestRateCashflow
         std::string IcpClpCashflow2::getType() const
         {

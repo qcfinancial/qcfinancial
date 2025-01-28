@@ -69,6 +69,10 @@
             return _settlementDate;
         }
 
+        QCDate CompoundedOvernightRateCashflow2::endDate() {
+            return _settlementDate;
+        }
+
 
         std::string CompoundedOvernightRateCashflow2::getType() const {
             return "CompoundedOvernightRateCashflow2";

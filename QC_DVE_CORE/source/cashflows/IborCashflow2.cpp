@@ -86,6 +86,11 @@ QCDate QCode::Financial::IborCashflow2::date() {
 }
 
 
+QCDate QCode::Financial::IborCashflow2::endDate() {
+    return _endDate;
+}
+
+
 string QCode::Financial::IborCashflow2::getType() const {
     return "IBOR";
 }

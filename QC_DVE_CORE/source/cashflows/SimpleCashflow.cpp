@@ -28,6 +28,11 @@ namespace QCode
 			return _endDate;
 		}
 
+		QCDate SimpleCashflow::endDate()
+		{
+			return _endDate;
+		}
+
 		void SimpleCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;

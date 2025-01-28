@@ -67,6 +67,10 @@ namespace QCode {
             return _settlementDate;
         }
 
+        QCDate CompoundedOvernightRateCashflow::endDate() {
+            return _endDate;
+        }
+
 
         std::string CompoundedOvernightRateCashflow::getType() const {
             return "CompoundedOvernightRateCashflow";

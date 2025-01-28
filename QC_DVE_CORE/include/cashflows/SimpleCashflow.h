@@ -78,7 +78,9 @@ namespace QCode
 			*
 			* @return	A QCDate.
 			*/
-			QCDate date();
+			QCDate date() override;
+
+			QCDate endDate() override;
 
 			/**
 			* @fn	void FixedRateCashflow::setNominal(double nominal);

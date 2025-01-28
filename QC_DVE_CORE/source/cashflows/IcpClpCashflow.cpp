@@ -71,11 +71,9 @@ namespace QCode
 			{
 				return tna;
 			}
-			else
-			{
-				long double factor = std::pow(10, _tnaDecimalPlaces);
-				return round(tna * factor) / factor;
-			}
+
+			long double factor = std::pow(10, _tnaDecimalPlaces);
+			return round(tna * factor) / factor;
 		}
 
 		double IcpClpCashflow::accruedInterest(QCDate& accrualDate, double icpValue)
@@ -113,6 +111,11 @@ namespace QCode
 		QCDate IcpClpCashflow::date()
 		{
 			return _settlementDate;
+		}
+
+		QCDate IcpClpCashflow::endDate()
+		{
+			return _endDate;
 		}
 
 		void IcpClpCashflow::setNominal(double nominal)
