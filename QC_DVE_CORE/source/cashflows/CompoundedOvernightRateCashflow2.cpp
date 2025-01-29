@@ -70,7 +70,7 @@
         }
 
         QCDate CompoundedOvernightRateCashflow2::endDate() {
-            return _settlementDate;
+            return _endDate;
         }
 
 
