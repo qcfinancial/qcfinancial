@@ -861,7 +861,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[14] = "tipo_tasa";
         return result;
     } else if (cashflowType == "IborMultiCurrencyCashflow") {
-        auto result = py::tuple(21);
+        auto result = py::tuple(22);
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_fixing";
