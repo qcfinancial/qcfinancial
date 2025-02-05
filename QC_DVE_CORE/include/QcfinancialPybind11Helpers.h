@@ -509,7 +509,7 @@ py::tuple show(const std::shared_ptr<qf::IborCashflow>& iborCashflow) {
         return tuple;
     } else {
         auto iborMCCashflow = std::dynamic_pointer_cast<qf::IborMultiCurrencyCashflow>(iborCashflow);
-        auto tuple = py::tuple(21);
+        auto tuple = py::tuple(22);
         auto cashflow = iborMCCashflow->wrap();
         tuple[0] = std::get<0>(*cashflow).description(false); // startDate
         tuple[1] = std::get<1>(*cashflow).description(false); // endDate
@@ -534,6 +534,7 @@ py::tuple show(const std::shared_ptr<qf::IborCashflow>& iborCashflow) {
         tuple[18] = std::get<18>(*cashflow); // fxRateIndexValue
         tuple[19] = std::get<19>(*cashflow); // settlementCcyAmortization
         tuple[20] = std::get<20>(*cashflow); // settlementCcyInterest
+        tuple[21] = tuple[19] + tuple[20];
         return tuple;
 
     }
@@ -860,7 +861,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[14] = "tipo_tasa";
         return result;
     } else if (cashflowType == "IborMultiCurrencyCashflow") {
-        auto result = py::tuple(21);
+        auto result = py::tuple(22);
         result[0] = "fecha_inicial";
         result[1] = "fecha_final";
         result[2] = "fecha_fixing";
@@ -882,6 +883,7 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
         result[18] = "valor_indice_fx";
         result[19] = "amortizacion_moneda_pago";
         result[20] = "interes_moneda_pago";
+        result[21] = "flujo_moneda_pago";
         return result;
     } else if (cashflowType == "IcpClpCashflow" || cashflowType == "IcpClpCashflow2") {
         auto result = py::tuple(15);
