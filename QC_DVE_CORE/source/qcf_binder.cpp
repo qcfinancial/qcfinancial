@@ -2,6 +2,7 @@
 // Created by Alvaro Diaz on 18-06-23.
 //
 
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl_bind.h>
 #include <pybind11/stl.h>
@@ -102,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
     m.def(
             "id",
-            []() { return "version: 1.5.1, build: 2025-01-30 12:10"; });
+            []() { return "version: 1.6.0, build: 2025-03-05 13:10"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -179,6 +180,7 @@ PYBIND11_MODULE(qcfinancial, m) {
             .def("prev_busy_day", &QCBusinessCalendar::previousBusinessDay)
             .def("shift", &QCBusinessCalendar::shift)
             .def("get_holidays", &QCBusinessCalendar::getHolidays)
+            .def("__add__", &QCBusinessCalendar::operator+)
             .def(py::pickle(
                     [](const QCBusinessCalendar &bc) { // __getstate__
                         /* Return a tuple that fully encodes the state of the object */
