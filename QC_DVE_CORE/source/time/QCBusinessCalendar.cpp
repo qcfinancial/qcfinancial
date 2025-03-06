@@ -28,10 +28,30 @@ void QCBusinessCalendar::addHoliday(const QCDate& holiday)
     // sortHolidays();
 }
 
-/*void QCBusinessCalendar::sortHolidays()
+QCBusinessCalendar QCBusinessCalendar::operator+(QCBusinessCalendar const& cal)
 {
-    sort(_holidays.begin(), _holidays.end());
-}*/
+    auto min_date = _startDate;
+    if (cal.getStartDate() < _startDate) {
+        min_date = _startDate;
+    }
+
+    auto max_length = _length;
+    if (cal.getLength() > max_length) {
+        max_length = cal.getLength();
+    }
+
+    auto result = QCBusinessCalendar(min_date, max_length);
+
+    for (const auto& fecha: _holidays) {
+        result.addHoliday(fecha);
+    }
+
+    for (const auto& fecha: cal.getHolidaysAsSet()) {
+        result.addHoliday(fecha);
+    }
+
+    return result;
+}
 
 QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
 {
