@@ -7,6 +7,9 @@
 #include <pybind11/stl_bind.h>
 #include <pybind11/stl.h>
 
+#include <time/QCDate.h>
+PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)
+
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
@@ -68,7 +71,6 @@ using namespace pybind11::literals;
 #include <curves/QCCurve.h>
 #include <curves/QCLinearInterpolator.h>
 
-#include <time/QCDate.h>
 #include <time/QCBusinessCalendar.h>
 
 #include <QcfinancialPybind11Helpers.h>
@@ -103,7 +105,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
     m.def(
             "id",
-            []() { return "version: 1.6.0, build: 2025-03-05 13:10"; });
+            []() { return "version: 1.6.1, build: 2025-06-06 07:50"; });
 
     // QCDate
     py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -727,6 +729,8 @@ PYBIND11_MODULE(qcfinancial, m) {
             .def("get_nominal", &qf::IborCashflow::getNominal)
             .def("set_amortization", &qf::IborCashflow::setAmortization)
             .def("get_amortization", &qf::IborCashflow::getAmortization)
+            .def("set_gearing", &qf::IborCashflow::setGearing)
+            .def("get_gearing", &qf::IborCashflow::getGearing)
             .def("get_type", &qf::IborCashflow::getType)
             .def("settlement_amount", &qf::IborCashflow::settlementAmount)
             .def("settlement_currency", &qf::IborCashflow::settlementCurrency)
