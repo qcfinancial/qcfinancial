@@ -96,7 +96,7 @@ namespace QCode::Financial {
         }
         else
         {
-            _startDateIndex = overnightIndexValues.at(_indexStartDate);
+            _startDateIndexValue = overnightIndexValues.at(_indexStartDate);
         }
 
         if (!QCode::Helpers::isDateInTimeSeries(_indexEndDate, overnightIndexValues))
@@ -107,12 +107,12 @@ namespace QCode::Financial {
         }
         else
         {
-            _endDateIndex = overnightIndexValues.at(_indexEndDate);
+            _endDateIndexValue = overnightIndexValues.at(_indexEndDate);
         }
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyInterest() {
-        auto interest = ccy()->amount(_calculateInterest(_endDate, _endDateIndex));
+        auto interest = ccy()->amount(_calculateInterest(_endDate, _endDateIndexValue));
         QCCurrencyConverter ccyConverter;
         return _settlementCurrency->amount(
                 ccyConverter.convert(
@@ -190,7 +190,7 @@ namespace QCode::Financial {
          Interest in settlement currency
          Amortization in settlement currency
          Cashflow in settlement currency */
-        auto interes = _calculateInterest(_endDate, _endDateIndex);
+        auto interes = _calculateInterest(_endDate, _endDateIndexValue);
         auto flujo = interes;
         if (_doesAmortize)
             flujo += _amortization;

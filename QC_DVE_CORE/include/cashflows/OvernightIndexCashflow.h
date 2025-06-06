@@ -187,10 +187,10 @@ namespace QCode
             double _calculateInterest(QCDate &date, double indexValue);
 
             /** @brief	ICP at start date */
-            double _startDateIndex;
+            double _startDateIndexValue;
 
             /** @brief	ICP at end date */
-            double _endDateIndex;
+            double _endDateIndexValue;
 
             /** @brief	The start date */
             QCDate _startDate;
