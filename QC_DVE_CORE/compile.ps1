@@ -1,6 +1,3 @@
-pyenv global 3.8.10
-python setup.py bdist_wheel
-
 pyenv global 3.9.13
 python setup.py bdist_wheel
 
