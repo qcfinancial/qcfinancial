@@ -31,6 +31,9 @@ public:
 	*/
 	QCInterpolator(shared_ptr<QCCurve<long>> curve);
 
+	[[nodiscard]] shared_ptr<QCCurve<long>> getCurve() const;
+
+
 	/*!
 	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tama�o de los
 	* vectores de abscisa y ordenadas.

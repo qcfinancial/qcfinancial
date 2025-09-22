@@ -58,7 +58,7 @@ public:
      *
      * @return	The value.
      */
-    double getValue();
+    double getValue() const;
 
     /**
      * @fn	void QCInterestRate::setValue(double value);
@@ -220,7 +220,7 @@ public:
      *
      * @return	The wealth factor.
      */
-    shared_ptr<QCWealthFactor> getWealthFactor();
+    shared_ptr<QCWealthFactor> getWealthFactor() const;
 
     /**
      * @fn	shared_ptr<QCYearFraction> QCInterestRate::getYearFraction();
@@ -232,7 +232,7 @@ public:
      *
      * @return	The year fraction.
      */
-    shared_ptr<QCYearFraction> getYearFraction();
+    shared_ptr<QCYearFraction> getYearFraction() const;
 
     /**
      * @fn	std::string QCInterestRate::description();

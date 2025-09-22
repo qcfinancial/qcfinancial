@@ -15,6 +15,14 @@ namespace QCode
             _fwdRateDerivatives.resize(_curve->getLength());
 		}
 
+		shared_ptr<QCInterpolator> ZeroCouponCurve::getInterpolator() const {
+			return _curve;
+		}
+
+		QCInterestRate ZeroCouponCurve::getInterestRate() const {
+			return _intRate;
+		}
+
 		double ZeroCouponCurve::getRateAt(long d)
 		{
 			return _curve->interpolateAt(d);

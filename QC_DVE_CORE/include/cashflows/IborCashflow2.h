@@ -56,6 +56,8 @@ namespace QCode
 
             QCDate endDate() override;
 
+            QCDate startDate() override;
+
             [[nodiscard]] shared_ptr<QCCurrency> getInitialCcy() const override;
 
             void setRateValue(double rateValue);

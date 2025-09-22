@@ -28,6 +28,10 @@ public:
 	*/
 	QCCurve(vector<T>& abscissa, vector<double>& ordinate);
 
+	std::vector<T> getAbscissa(void) const;
+
+	std::vector<double> getOrdinate(void) const;
+
 	/*!
 	* Este método borra abscisas y ordenadas de la curva y vuelve a definir el tamaño de los
 	* vectores de abscisa y ordenadas.
@@ -126,6 +130,26 @@ template<class T> QCCurve<T>::QCCurve(vector<T>& abscissa, vector<double>& ordin
 
 	//Ordenar las abscissa respetando el mapeo con la ordenada
 	sort(_values.begin(), _values.end());
+}
+
+template<class T>
+vector<T> QCCurve<T>::getAbscissa() const {
+	vector<T> abscissa;
+	abscissa.reserve(_values.size());
+	for (size_t i = 0; i < _values.size(); ++i) {
+		abscissa.push_back(_values[i].first);
+	}
+	return abscissa;
+}
+
+template<class T>
+vector<double> QCCurve<T>::getOrdinate() const {
+	vector<double> ordinate;
+	ordinate.reserve(_values.size());
+	for (size_t i = 0; i < _values.size(); ++i) {
+		ordinate.push_back(_values[i].second);
+	}
+	return ordinate;
 }
 
 template<class T> QCCurve<T>::~QCCurve(void)

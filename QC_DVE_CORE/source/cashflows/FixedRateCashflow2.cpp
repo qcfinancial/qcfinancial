@@ -72,8 +72,12 @@ namespace QCode
 			return _endDate;
 		}
 
+		QCDate FixedRateCashflow2::startDate() {
+			return _startDate;
+		}
 
-        std::string FixedRateCashflow2::getType() const
+
+		std::string FixedRateCashflow2::getType() const
         {
             return "FixedRateCashflow2";
         }
