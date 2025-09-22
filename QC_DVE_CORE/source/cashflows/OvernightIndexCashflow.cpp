@@ -57,6 +57,10 @@ namespace QCode::Financial {
         return _endDate;
     }
 
+    QCDate OvernightIndexCashflow::startDate() {
+        return _startDate;
+    }
+
     double OvernightIndexCashflow::amount() {
         auto tempDecimalPlaces = _eqRateDecimalPlaces;
         _eqRateDecimalPlaces = 20;

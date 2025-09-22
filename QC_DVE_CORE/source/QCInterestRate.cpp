@@ -13,7 +13,7 @@ QCInterestRate::QCInterestRate(double value,
 {
 }
 
-double QCInterestRate::getValue()
+double QCInterestRate::getValue() const
 {
 	return _value;
 }
@@ -80,12 +80,12 @@ double QCInterestRate::getRateFromWf(double wf, long days)
     return result;
 }
 
-shared_ptr<QCWealthFactor> QCInterestRate::getWealthFactor()
+shared_ptr<QCWealthFactor> QCInterestRate::getWealthFactor() const
 {
 	return _wf;
 }
 
-shared_ptr<QCYearFraction> QCInterestRate::getYearFraction()
+shared_ptr<QCYearFraction> QCInterestRate::getYearFraction() const
 {
 	return _yf;
 }

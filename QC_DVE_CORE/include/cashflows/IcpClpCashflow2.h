@@ -53,6 +53,8 @@ namespace QCode
 
             QCDate endDate() override;
 
+            QCDate startDate() override;
+
             // Overriding methods in LinearInterestRateCashflow
             std::string getType() const override;
 

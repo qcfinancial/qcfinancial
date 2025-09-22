@@ -72,6 +72,8 @@ namespace QCode
 
 			virtual QCDate endDate() = 0;
 
+			virtual QCDate startDate() = 0;
+
             void savePresentValue(double presentValue)
             {
                 _presentValue = presentValue;
