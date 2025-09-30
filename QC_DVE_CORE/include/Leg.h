@@ -108,6 +108,8 @@ namespace QCode::Financial {
 
         [[nodiscard]] std::vector<shared_ptr<Cashflow>> getCashflows() const;
 
+        int getCurrentCashflowIndex(QCDate date);
+
 
     private:
         /** @brief	The cashflows */

@@ -118,6 +118,10 @@ namespace QCode
 			return _endDate;
 		}
 
+		QCDate IcpClpCashflow::startDate() {
+			return _startDate;
+		}
+
 		void IcpClpCashflow::setNominal(double nominal)
 		{
 			_nominal = nominal;

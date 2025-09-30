@@ -61,6 +61,8 @@ namespace QCode::Financial {
 
         QCDate endDate() override;
 
+        QCDate startDate() override;
+
         // Methods specific to this class
         [[nodiscard]] std::string getType() const override;
 

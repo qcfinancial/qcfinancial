@@ -22,6 +22,8 @@ namespace QCode
             double wfDerivativeAt(unsigned int index) override;
 			double fwdWfDerivativeAt(unsigned int index) override;
             double fwdRateDerivativeAt(unsigned int index);
+			shared_ptr<QCInterpolator> getInterpolator() const;
+			QCInterestRate getInterestRate() const;
 			~ZeroCouponCurve() override;
 
         protected:

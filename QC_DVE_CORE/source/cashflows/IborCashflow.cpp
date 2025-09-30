@@ -76,6 +76,10 @@ namespace QCode
             return _endDate;
         }
 
+        QCDate IborCashflow::startDate() {
+            return _startDate;
+        }
+
 
         QCDate IborCashflow::getStartDate() const
         {
