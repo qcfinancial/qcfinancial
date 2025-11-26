@@ -105,7 +105,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.7.0, build: 2025-09-22 18:41"; });
+                []() { return "version: 1.7.3, build: 2025-10-16 11:52"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1311,6 +1311,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("append_cashflow", &qf::Leg::appendCashflow)
                         .def("size", &qf::Leg::size)
                         .def("resize", &qf::Leg::resize)
+                        .def("get_cashflows", &qf::Leg::getCashflows)
                         .def("get_current_cashflow_index", &qf::Leg::getCurrentCashflowIndex);
 
         // BusyAdjRules
@@ -2121,7 +2122,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+        m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
         m.attr("__version__") = "dev";
 #endif

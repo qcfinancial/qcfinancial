@@ -107,6 +107,19 @@ class CMakeBuild(build_ext):
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
+            # Ensure a valid macOS SDK is used if available
+            try:
+                sdk_path = subprocess.check_output([
+                    "xcrun",
+                    "--sdk",
+                    "macosx",
+                    "--show-sdk-path",
+                ], text=True).strip()
+                if sdk_path and os.path.isdir(sdk_path):
+                    cmake_args += [f"-DCMAKE_OSX_SYSROOT={sdk_path}"]
+            except Exception:
+                # Fall back to default SDK discovery
+                pass
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
@@ -133,7 +146,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="qcfinancial",
-    version="1.6.1",
+    version="1.7.3",
     author="Alvaro Diaz V.",
     author_email="alvaro@efaa.cl",
     description="A Library for Valuation of Linear Interest Rate and FX Derivatives",
