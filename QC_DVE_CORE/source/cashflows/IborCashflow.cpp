@@ -76,6 +76,10 @@ namespace QCode
             return _endDate;
         }
 
+        QCDate IborCashflow::startDate() {
+            return _startDate;
+        }
+
 
         QCDate IborCashflow::getStartDate() const
         {
@@ -197,10 +201,11 @@ namespace QCode
                 return 0.0;
             }
             QCDate temp = valueDate;
-            double indexValue = _index->getRate().getValue();
-            _index->setRateValue(indexValue * _gearing + _spread);
+            // double indexValue = _index->getRate().getValue();
+            _index->setRateValue(_rateValue * _gearing + _spread);
+
             double result = _nominal * (_index->getRate().wf(_startDate, temp) - 1.0);
-            _index->setRateValue(indexValue);
+            _index->setRateValue(_rateValue);
             return result;
         }
 

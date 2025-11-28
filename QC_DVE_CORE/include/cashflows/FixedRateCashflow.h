@@ -95,6 +95,8 @@ namespace QCode
 
 			QCDate endDate() override;
 
+			QCDate startDate() override;
+
 			/**
 			* @fn	QCDate FixedRateCashflow::getStartDate();
 			*

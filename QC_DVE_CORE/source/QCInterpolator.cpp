@@ -15,6 +15,9 @@ void QCInterpolator::reset(unsigned long newSize)
 	_derivatives.resize(newSize);
 }
 
+shared_ptr<QCCurve<long>> QCInterpolator::getCurve() const {
+	return _curve;
+};
 
 void QCInterpolator::setPair(long x, double y)
 {

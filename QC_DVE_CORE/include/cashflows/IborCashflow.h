@@ -123,6 +123,8 @@ namespace QCode
 
 			QCDate endDate() override;
 
+			QCDate startDate() override;
+
 
             virtual double settlementAmount();
 
