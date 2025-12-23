@@ -124,6 +124,14 @@ namespace QCode::Financial {
         return _calculateInterest(accrualDate, indexValue);
     }
 
+
+    double OvernightIndexCashflow::accruedInterest(QCDate &accrualDate, QCDate &indexDate, double indexValue) {
+        double eqRate = getEqRate(indexDate, indexValue);
+        _rate.setValue(eqRate * _gearing + _spread);
+        return _notional * (_rate.wf(_startDate, accrualDate) - 1);
+    }
+
+
     double OvernightIndexCashflow::getEqRate(QCDate &date, double indexValue) {
         // Calcula la tasa equivalente a una fecha posterior a la fecha de inicio
         // de devengo del cupón y para un valor del índice.
@@ -376,6 +384,7 @@ namespace QCode::Financial {
         auto fechaOk = fecha;
         return _calculateInterest(fechaOk, indexValue);
     }
+
 
     std::string OvernightIndexCashflow::getIndexCode() const {
         return _indexName;
