@@ -391,14 +391,13 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexCashflow::settlementAmount() {
-        auto interest = _calculateInterest(_endDate, _endDateIndexValue);
-        double settAmount = 0.0;
+        // auto interest = _calculateInterest(_endDate, _endDateIndexValue);
+        double eqRate = getEqRate(_indexEndDate, _endDateIndexValue);
+        _rate.setValue(eqRate * _gearing + _spread);
+        auto settAmount = _notional * (_rate.wf(_startDate, _endDate) - 1);
         if (_doesAmortize) {
-            settAmount = _amortization + interest;
-        } else {
-            settAmount = interest;
+            settAmount += _amortization;
         }
-        // }
         return _notionalCurrency->amount(settAmount);
     }
 
