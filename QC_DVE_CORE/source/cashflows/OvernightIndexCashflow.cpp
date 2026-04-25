@@ -128,6 +128,9 @@ namespace QCode::Financial {
         // Calcula la tasa equivalente a una fecha posterior a la fecha de inicio
         // de devengo del cupón y para un valor del índice.
 
+        if (date <= _startDate)
+            return 0.0;
+
         double yf = 0.0;
         // Este if decide qué fecha inicial (la de devengo o la del índice)
         // usar para el cálculo de la fracción de año.

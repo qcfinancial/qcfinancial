@@ -41,7 +41,7 @@ namespace QCode
 
         int Leg::getCurrentCashflowIndex(QCDate date) {
         	if (date < _cashflows.at(0) -> startDate() ||
-        		date > _cashflows.at(_cashflows.size() - 1) -> startDate())  {
+        		date > _cashflows.at(_cashflows.size() - 1) -> endDate())  {
         		return -1;
         	}
         	return static_cast<int>(std::distance(_cashflows.begin(), std::find_if(

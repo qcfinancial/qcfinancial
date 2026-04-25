@@ -2,7 +2,8 @@ QC_DVE_CORE/build
 QC_DVE_CORE/dist
 QC_DVE_CORE/qcfinancial.egg-info
 .DS_Store
-QC_DVE_CORE/.DS_Store
+QC_DVE_CORE/.DS_Stor
+COMMIT_MESSAGE.md
 .idea/
 QC_DVE.sdf
 QC_DVE.sln
