@@ -105,7 +105,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.7.0, build: 2025-09-22 18:41"; });
+                []() { return "version: 1.9.0, build: 2025-12-24 12:53"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1006,9 +1006,24 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_eq_rate", &qf::OvernightIndexCashflow::getEqRate)
                         .def<double(qf::OvernightIndexCashflow::*)
                                 (QCDate &, double)>(
-                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
+                                "as accrual and index date",
+                               py::arg("accrual_and_index_date"),
+                               py::arg("index_value"))
+                        .def<double(qf::OvernightIndexCashflow::*)
+                                (QCDate &, QCDate &, double)>(
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow",
+                               py::arg("accrual_date"),
+                               py::arg("index_date"),
+                               py::arg("index_value"))
                         .def<double(qf::OvernightIndexCashflow::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
+                                "as accrual and index date",
+                                py::arg("accrual_and_index_date"),
+                                py::arg("index_time_series"))
                         .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
                         .def("get_eq_rate_decimal_places", &qf::OvernightIndexCashflow::getEqRateDecimalPlaces)
                         .def("get_type", &qf::OvernightIndexCashflow::getType)
@@ -1311,6 +1326,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("append_cashflow", &qf::Leg::appendCashflow)
                         .def("size", &qf::Leg::size)
                         .def("resize", &qf::Leg::resize)
+                        .def("get_cashflows", &qf::Leg::getCashflows)
                         .def("get_current_cashflow_index", &qf::Leg::getCurrentCashflowIndex);
 
         // BusyAdjRules
@@ -2121,7 +2137,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
 
 #ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+        m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
 #else
         m.attr("__version__") = "dev";
 #endif
