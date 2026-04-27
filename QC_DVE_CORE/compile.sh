@@ -9,7 +9,25 @@
 set -euo pipefail
 
 PYENV_ROOT="${HOME}/.pyenv"
-AVAILABLE_VERSIONS=("3.10.13" "3.11.5" "3.12.1" "3.13.1")
+
+# Auto-detect the latest installed patch version for each minor
+detect_latest_versions() {
+    local minors=("3.10" "3.11" "3.12" "3.13")
+    local found=()
+    for minor in "${minors[@]}"; do
+        local latest
+        latest=$(ls -1 "${PYENV_ROOT}/versions/" 2>/dev/null \
+            | grep -E "^${minor}\.[0-9]+$" \
+            | sort -t. -k3 -n \
+            | tail -1)
+        if [[ -n "$latest" ]]; then
+            found+=("$latest")
+        fi
+    done
+    echo "${found[@]}"
+}
+
+read -ra AVAILABLE_VERSIONS <<< "$(detect_latest_versions)"
 
 build_for_version() {
     local version="$1"
