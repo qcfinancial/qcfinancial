@@ -66,6 +66,8 @@ namespace QCode::Financial {
 
         [[nodiscard]] std::string getType() const override;
 
+        Record record() override;
+
         /**
         * @fn	    double SimpleMultiCurrencyCashflow::amount();
         *

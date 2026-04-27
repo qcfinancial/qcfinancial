@@ -56,5 +56,18 @@ namespace QCode
         std::string SimpleCashflow::getType() const {
             return "SimpleCashflow";
         }
+
+		Record SimpleCashflow::record() {
+			auto result = Record();
+			result["type_of_cashflow"] = "simple";
+			result["end_date"] = _endDate.description(false);
+			result["notional"] = _nominal;
+			result["amortization"] = _nominal;
+			result["amort_is_cashflow"] = true;
+			result["cashflow"] = amount();
+			result["notional_currency"] = ccy()->getIsoCode();
+
+			return result;
+		}
     }
 }
