@@ -66,6 +66,8 @@ namespace QCode
 			result["amort_is_cashflow"] = true;
 			result["cashflow"] = amount();
 			result["notional_currency"] = ccy()->getIsoCode();
+			result["present_value"] = getPresentValue();
+			result["discount_factor"] = getDiscountFactor();
 
 			return result;
 		}

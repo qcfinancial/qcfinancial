@@ -324,6 +324,8 @@ namespace QCode::Financial {
         result["spread"] = _spread;
         result["gearing"] = _gearing;
         result["type_of_rate"] = getTypeOfRate();
+        result["present_value"] = getPresentValue();
+        result["discount_factor"] = getDiscountFactor();
 
         return result;
     }

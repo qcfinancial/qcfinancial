@@ -187,6 +187,8 @@ namespace QCode
             result["notional_currency"] = _currency->getIsoCode();
             result["rate_value"] = _rate.getValue();
             result["type_of_rate"] = _rate.description();
+        	result["present_value"] = getPresentValue();
+        	result["discount_factor"] = getDiscountFactor();
 
             return result;
         }

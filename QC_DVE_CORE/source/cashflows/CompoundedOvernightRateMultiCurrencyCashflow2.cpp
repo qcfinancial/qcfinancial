@@ -104,6 +104,8 @@ namespace QCode::Financial {
         result["fx_rate_index_value"] = _fxRateIndexValue;
         result["amort_sett_currency"] = toSettlementCurrency(_amortization);
         result["interest_sett_currency"] = toSettlementCurrency(_interest);
+        result["present_value"] = getPresentValue();
+        result["discount_factor"] = getDiscountFactor();
 
         return result;
 

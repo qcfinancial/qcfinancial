@@ -109,6 +109,8 @@ namespace QCode {
             result["settlement_currency"] = _settlementCurrency->getIsoCode();
             result["fx_rate_index"] = _fxRateIndex->getCode();
             result["fx_rate_index_value"] = _fxRateIndexValue;
+            result["present_value"] = getPresentValue();
+            result["discount_factor"] = getDiscountFactor();
 
             return result;
         }

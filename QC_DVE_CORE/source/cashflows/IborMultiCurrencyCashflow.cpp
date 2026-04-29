@@ -148,6 +148,8 @@ namespace QCode
                     _currency,
                     _fxRateIndexValue,
                     *_fxRateIndex);
+			result["present_value"] = getPresentValue();
+			result["discount_factor"] = getDiscountFactor();
 
             return result;
         }
