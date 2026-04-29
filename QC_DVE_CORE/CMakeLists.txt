@@ -36,4 +36,10 @@ add_subdirectory(source)
 add_subdirectory(Tests)
 add_subdirectory(ManualTests)
 
+add_custom_target(build_wheel
+        COMMAND python3.11 ${CMAKE_SOURCE_DIR}/setup.py bdist_wheel --plat-name manylinux_2_34_x86_64 --dist-dir ${CMAKE_SOURCE_DIR}/dist
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Building Linux Python wheel"
+)
+
 # target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

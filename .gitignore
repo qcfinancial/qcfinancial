@@ -5,7 +5,7 @@ QC_DVE_CORE/qcfinancial.egg-info
 QC_DVE_CORE/Dockerfile.cpp-env-redhat93-python311-amd64
 QC_DVE_CORE/.DS_Store
 QC_DVE_CORE/.DS_Stor
-COMMIT_MESSAGE.md
+QC_DVE_CORE/commit_message.md
 .idea/
 QC_DVE.sdf
 QC_DVE.sln

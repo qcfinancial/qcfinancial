@@ -1,0 +1,31 @@
+# CLion remote docker environment (How to build docker container, run and stop it)
+#
+# Build and run:
+#   docker build -t clion/redhat93-python311/cpp-env:1.0 -f Dockerfile.cpp-env-redhat93-python311-amd64 .
+#   docker run -it --name redhat93 -v /Users/nbacquet/Documents/Docker/Volumenes/RedHat9Py39:/home/test_user/MyVolume --entrypoint /bin/bash clion/redhat93-python311/cpp-env:1.0
+
+
+FROM --platform=linux/amd64 redhat/ubi9-init
+
+RUN yum -y update && yum -y install yum-utils
+RUN yum -y install dnf
+RUN dnf update -y
+RUN yum -y install openssh-server
+RUN yum -y install make
+RUN yum -y install autoconf
+RUN yum -y install automake
+RUN yum -y install gcc
+RUN yum -y install gcc-c++
+RUN yum -y install gdb
+RUN yum -y install clang
+RUN yum -y install cmake
+RUN yum -y install rsync
+RUN yum -y install tar
+RUN yum -y install git
+RUN dnf -y install python3.11-devel
+RUN python3.11 -m ensurepip
+RUN python3.11 -m pip install twine
+RUN python3.11 -m pip install wheel
+RUN yum clean all
+RUN useradd -m test_user
+USER test_user
