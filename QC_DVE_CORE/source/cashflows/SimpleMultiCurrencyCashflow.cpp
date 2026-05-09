@@ -96,5 +96,24 @@ namespace QCode {
             return _fxRateIndexFixingDate;
         }
 
+        Record SimpleMultiCurrencyCashflow::record() {
+            auto result = Record();
+            result["type_of_cashflow"] = "simple_multi_currency";
+            result["end_date"] = _endDate.description(false);
+            result["notional"] = _nominal;
+            result["amortization"] = _nominal;
+            result["amort_is_cashflow"] = true;
+            result["cashflow"] = amount();
+            result["notional_currency"] = ccy()->getIsoCode();
+            result["fx_fixing_date"] = _fxRateIndexFixingDate.description(true);
+            result["settlement_currency"] = _settlementCurrency->getIsoCode();
+            result["fx_rate_index"] = _fxRateIndex->getCode();
+            result["fx_rate_index_value"] = _fxRateIndexValue;
+            result["present_value"] = getPresentValue();
+            result["discount_factor"] = getDiscountFactor();
+
+            return result;
+        }
+
     }
 }

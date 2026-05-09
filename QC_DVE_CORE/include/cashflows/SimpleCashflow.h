@@ -1,6 +1,7 @@
 #ifndef SIMPLECASHFLOW_H
 #define SIMPLECASHFLOW_H
 
+#include "TypeAliases.h"
 #include "cashflows/Cashflow.h"
 
 namespace QCode
@@ -42,7 +43,7 @@ namespace QCode
 						   double nominal,
 						   std::shared_ptr<QCCurrency> currency);
 
-            virtual std::string getType() const;
+            [[nodiscard]] virtual std::string getType() const;
 
 			/**
 			* @fn	double SimpleCashflow::amount();
@@ -54,7 +55,7 @@ namespace QCode
 			*
 			* @return	A double.
 			*/
-			double amount();
+			double amount() override;
 
 			/**
 			* @fn	    QCCurrency SimpleCashflow::ccy();
@@ -66,7 +67,7 @@ namespace QCode
 			*
 			* @return	A QCCurrency.
 			*/
-			shared_ptr<QCCurrency> ccy();
+			shared_ptr<QCCurrency> ccy() override;
 
 			/**
 			* @fn	    QCDate SimpleCashflow::date();
@@ -108,6 +109,8 @@ namespace QCode
 			*/
 			shared_ptr<SimpleCashflowWrapper> wrap();
 
+			virtual Record record();
+
 			/**
 			* @fn	virtual FixedRateCashflow::~FixedRateCashflow();
 			*
@@ -116,7 +119,7 @@ namespace QCode
 			* @author	Alvaro D�az V.
 			* @date	15/11/2017
 			*/
-			virtual ~SimpleCashflow();
+			~SimpleCashflow() override;
 
 		protected:
 

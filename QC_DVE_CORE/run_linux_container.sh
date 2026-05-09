@@ -1,0 +1,1 @@
+docker run -it --rm -v /Users/adiazv/qcf_repos/qcfinancial/QC_DVE_CORE:/home/test_user/project --entrypoint /bin/bash clion/redhat93-python311/cpp-env:1.0

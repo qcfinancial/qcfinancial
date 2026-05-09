@@ -105,7 +105,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.7.4, build: 2025-11-26 15:00"; });
+                []() { return "version: 1.10.1, build: 2026-04-29 15:20"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -663,7 +663,8 @@ PYBIND11_MODULE(qcfinancial, m) {
         // SimpleCashflow
         py::class_<qf::SimpleCashflow, qf::Cashflow, std::shared_ptr<qf::SimpleCashflow> >(m, "SimpleCashflow")
                         .def(py::init<const QCDate &, double, std::shared_ptr<QCCurrency> >())
-                        .def("get_type", &qf::SimpleCashflow::getType);
+                        .def("get_type", &qf::SimpleCashflow::getType)
+                        .def("record", &qf::SimpleCashflow::record);
 
         m.def("show", py::overload_cast<const std::shared_ptr<qf::SimpleCashflow> &>(&show));
 
@@ -715,7 +716,8 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_rate_index_code", &qf::SimpleMultiCurrencyCashflow::getFXRateIndexCode)
                         .def("get_fx_fixing_date", &qf::SimpleMultiCurrencyCashflow::getFXRateIndexFixingDate)
                         .def("date", &qf::SimpleMultiCurrencyCashflow::date)
-                        .def("get_type", &qf::SimpleMultiCurrencyCashflow::getType);
+                        .def("get_type", &qf::SimpleMultiCurrencyCashflow::getType)
+                        .def("record", &qf::SimpleMultiCurrencyCashflow::record);
 
         // FixedRateCashflow
         py::class_<qf::FixedRateCashflow, qf::Cashflow, std::shared_ptr<qf::FixedRateCashflow> >(m, "FixedRateCashflow")
@@ -1006,9 +1008,24 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_eq_rate", &qf::OvernightIndexCashflow::getEqRate)
                         .def<double(qf::OvernightIndexCashflow::*)
                                 (QCDate &, double)>(
-                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
+                                "as accrual and index date",
+                               py::arg("accrual_and_index_date"),
+                               py::arg("index_value"))
+                        .def<double(qf::OvernightIndexCashflow::*)
+                                (QCDate &, QCDate &, double)>(
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow",
+                               py::arg("accrual_date"),
+                               py::arg("index_date"),
+                               py::arg("index_value"))
                         .def<double(qf::OvernightIndexCashflow::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest)
+                                "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
+                                "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
+                                "as accrual and index date",
+                                py::arg("accrual_and_index_date"),
+                                py::arg("index_time_series"))
                         .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
                         .def("get_eq_rate_decimal_places", &qf::OvernightIndexCashflow::getEqRateDecimalPlaces)
                         .def("get_type", &qf::OvernightIndexCashflow::getType)

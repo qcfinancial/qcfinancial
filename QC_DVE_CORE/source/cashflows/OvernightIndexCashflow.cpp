@@ -124,6 +124,14 @@ namespace QCode::Financial {
         return _calculateInterest(accrualDate, indexValue);
     }
 
+
+    double OvernightIndexCashflow::accruedInterest(QCDate &accrualDate, QCDate &indexDate, double indexValue) {
+        double eqRate = getEqRate(indexDate, indexValue);
+        _rate.setValue(eqRate * _gearing + _spread);
+        return _notional * (_rate.wf(_startDate, accrualDate) - 1);
+    }
+
+
     double OvernightIndexCashflow::getEqRate(QCDate &date, double indexValue) {
         // Calcula la tasa equivalente a una fecha posterior a la fecha de inicio
         // de devengo del cupón y para un valor del índice.
@@ -316,6 +324,8 @@ namespace QCode::Financial {
         result["spread"] = _spread;
         result["gearing"] = _gearing;
         result["type_of_rate"] = getTypeOfRate();
+        result["present_value"] = getPresentValue();
+        result["discount_factor"] = getDiscountFactor();
 
         return result;
     }
@@ -377,19 +387,19 @@ namespace QCode::Financial {
         return _calculateInterest(fechaOk, indexValue);
     }
 
+
     std::string OvernightIndexCashflow::getIndexCode() const {
         return _indexName;
     }
 
     double OvernightIndexCashflow::settlementAmount() {
-        auto interest = _calculateInterest(_endDate, _endDateIndexValue);
-        double settAmount = 0.0;
+        // auto interest = _calculateInterest(_endDate, _endDateIndexValue);
+        double eqRate = getEqRate(_indexEndDate, _endDateIndexValue);
+        _rate.setValue(eqRate * _gearing + _spread);
+        auto settAmount = _notional * (_rate.wf(_startDate, _endDate) - 1);
         if (_doesAmortize) {
-            settAmount = _amortization + interest;
-        } else {
-            settAmount = interest;
+            settAmount += _amortization;
         }
-        // }
         return _notionalCurrency->amount(settAmount);
     }
 

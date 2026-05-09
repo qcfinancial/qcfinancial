@@ -72,7 +72,9 @@ namespace QCode
 
             QCDate date() override;
 
+
             QCDate endDate() override;
+
 
             QCDate startDate() override;
 
@@ -143,6 +145,9 @@ namespace QCode
             double accruedInterest(QCDate& accrualDate, double indexValue);
 
 
+            double accruedInterest(QCDate &accrualDate, QCDate &indexDate, double indexValue);
+
+
             double accruedInterest(const QCDate& fecha, const TimeSeries& fixings);
 
 
@@ -158,7 +163,7 @@ namespace QCode
             virtual Record record();
 
 
-            DatesForEquivalentRate getDatesForEqRate() const;
+            [[nodiscard]] DatesForEquivalentRate getDatesForEqRate() const;
 
 
             void setDatesForEqRate(DatesForEquivalentRate datesForEqRate);

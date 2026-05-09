@@ -1,5 +1,6 @@
 #include "Leg.h"
 
+#include <algorithm>
 #include <utility>
 
 namespace QCode
