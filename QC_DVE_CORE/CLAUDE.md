@@ -6,7 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.10.0** (set in `setup.py`).
+Current version: **1.10.1** (set in `setup.py`).
+
+## Branch Strategy
+
+- **`master`** — stable releases only; merges come from `develop` via PR.
+- **`develop`** — active development branch; new features and fixes land here first.
+
+Always work on `develop` (or a feature branch off `develop`) and merge to `master` when ready to release.
 
 ## Build Commands
 
@@ -43,7 +50,7 @@ The CMake build produces:
 
 ### macOS SDK note
 
-On macOS, CMakeLists.txt automatically detects the SDK path via `xcrun --show-sdk-path` to handle Xcode CLT changes that moved C++ stdlib headers.
+On macOS, `CMakeLists.txt` automatically detects the SDK path via `xcrun --show-sdk-path` to handle Xcode CLT changes that moved C++ stdlib headers.
 
 ## C++ Tests
 
@@ -55,12 +62,12 @@ Test files are in `Tests/` (e.g., `QCDateTests.cpp`, `LegFactoryTests.cpp`). Eac
 
 The library is organized in layers; each layer depends only on layers below it.
 
-### Layer 1 — Time (`include/time/`)
+### Layer 1 — Time (`include/time/`, `source/time/`)
 
 - `QCDate` — date representation and arithmetic (day count, business day adjustment)
 - `QCBusinessCalendar` — holiday calendars and business day conventions
 
-### Layer 2 — Asset Classes (`include/asset_classes/`)
+### Layer 2 — Asset Classes (`include/asset_classes/`, `source/asset_classes/`)
 
 Foundational financial primitives:
 
@@ -80,22 +87,28 @@ Curve implementations with interpolation:
 - Interpolators: `QCLinearInterpolator`, `QCLogLinearInterpolator`, `QCClampedSpline`
 - `QCZeroCouponDiscountFactorCurve`, `QCZeroCouponInterestRateCurve`, `QCProjectingInterestRateCurve`
 
-### Layer 4 — Cashflows (`include/cashflows/`)
+### Layer 4 — Cashflows (`include/cashflows/`, `source/cashflows/`)
 
 All cashflow types share the abstract `Cashflow` interface (`amount()`, `ccy()`, `date()`).
 
 | Class | Description |
 |---|---|
 | `SimpleCashflow` | Single deterministic payment |
-| `FixedRateCashflow` / `FixedRateCashflow2` | Fixed rate interest (v1/v2 differ in constructor signature and record support) |
-| `IborCashflow` / `IborCashflow2` | Floating IBOR-style |
-| `IcpClpCashflow` / `IcpClpCashflow2` | Chilean overnight index (ICP) in CLP |
+| `SimpleMultiCurrencyCashflow` | Simple payment with FX conversion |
+| `FixedRateCashflow` | Fixed rate interest |
+| `FixedRateMultiCurrencyCashflow` | Fixed rate with FX conversion |
+| `IborCashflow` | Floating IBOR-style |
+| `IborMultiCurrencyCashflow` | IBOR with FX conversion |
+| `IcpClpCashflow` | Chilean overnight index (ICP) in CLP |
 | `IcpClfCashflow` | Chilean overnight index in CLF (UF) |
-| `CompoundedOvernightRateCashflow` / `2` | Generic compounded overnight rate |
+| `CompoundedOvernightRateCashflow2` | Generic compounded overnight rate with curve sensitivity support |
+| `CompoundedOvernightRateMultiCurrencyCashflow2` | Compounded overnight with FX conversion |
 | `OvernightIndexCashflow` | Overnight index (SOFR, SONIA, etc.) with settlement flexibility |
-| `*MultiCurrencyCashflow` | Cross-currency variants of the above |
+| `OvernightIndexMultiCurrencyCashflow` | Overnight index with FX conversion |
 
-`v2` cashflow types generally add: derivative vectors for curve sensitivities, and `record()` method returning a `std::tuple` of all cashflow fields (used by the Python bindings for DataFrame construction).
+All active cashflow types support a `record()` method returning a `std::tuple` of all cashflow fields (used by the Python bindings for DataFrame construction). The `record()` tuple always includes `present_value` and `discount_factor` as its final two fields.
+
+> **Deprecated (moved to `deprecated/`):** `LinearInterestRateCashflow`, `FixedRateCashflow2`, `IborCashflow2`, `IcpClpCashflow2`, `CompoundedOvernightRateCashflow` (without `2`), `QuantoLinearInterestRateCashflow`. Do not use these types in new code.
 
 ### Layer 5 — Legs and Factory (`include/Leg.h`, `include/LegFactory.h`)
 
@@ -104,21 +117,19 @@ All cashflow types share the abstract `Cashflow` interface (`amount()`, `ccy()`,
 
 ### Layer 6 — Present Value / Pricing (`include/present_value/`)
 
-- `PresentValue` — discounts a `Leg` against a `ZeroCouponCurve`; also computes first-order derivatives (DV01) w.r.t. curve nodes
-- `ForwardRates` — sets forward rates on floating cashflows using projection curves
-- `ForwardFXRates` — FX forward estimation from two discount curves
-- `FXRateEstimator` — spot FX + basis point adjustments
+- `PresentValue` — discounts a `Leg` against a `ZeroCouponCurve`; computes first-order derivatives (DV01) w.r.t. curve nodes
+- `ForwardRates` — sets forward rates on `IborCashflow`, `IcpClfCashflow`, `CompoundedOvernightRateCashflow2`, `OvernightIndexCashflow`, and their multi-currency variants using projection curves
+- `ForwardFXRates` — FX forward estimation from two discount curves (`ForwardFXRates.cpp`)
+- `FXRateEstimator` — spot FX + basis point adjustments (`FXRateEstimator.cpp`)
 
 ### Python Bindings
 
-Two binding entry points exist (legacy split):
-
-- `source/qcf_binder.cpp` — main pybind11 module (`PYBIND11_MODULE(qcfinancial, m)`)
-- `qcfinancial/qcfinancial_core.cpp` — older binding file included by the above
+- `source/qcf_binder.cpp` — the sole active pybind11 module (`PYBIND11_MODULE(qcfinancial, m)`)
+- `qcfinancial/qcfinancial_core.cpp` — legacy binder compiled as a separate module by `setup.py`; do not add new bindings here
 
 The `QcfinancialPybind11Helpers.h` header contains helper registration functions called from the binder (one function per class). When adding a new C++ class, add its `.cpp` to `source/CMakeLists.txt` under `target_sources(QC_DVE_CORE ...)`, expose it in `source/qcf_binder.cpp`, and register it via a helper in `QcfinancialPybind11Helpers.h`.
 
-Opaque STL bindings (`PYBIND11_MAKE_OPAQUE`) are declared at the top of `qcf_binder.cpp` before any includes that use those types.
+Opaque STL bindings (`PYBIND11_MAKE_OPAQUE`) are declared at the top of `qcf_binder.cpp` before any includes that use those types. Common shared type aliases live in `include/TypeAliases.h`; opaque type declarations in `include/PybindOpaqueTypes.h`.
 
 ### Submodule Dependencies
 
@@ -126,6 +137,20 @@ Opaque STL bindings (`PYBIND11_MAKE_OPAQUE`) are declared at the top of `qcf_bin
 - `eigen/` — linear algebra (used in curve bootstrapping)
 - `autodiff/` — automatic differentiation (used for sensitivity calculations)
 
+## Adding a New Feature (Checklist)
+
+Use this checklist when adding a new cashflow type or other significant feature:
+
+1. **Header** — add `include/cashflows/MyNewCashflow.h` (or the appropriate layer).
+2. **Implementation** — add `source/cashflows/MyNewCashflow.cpp`.
+3. **Register in build** — add the `.cpp` path to `source/CMakeLists.txt` under `target_sources(QC_DVE_CORE ...)`.
+4. **Python binding helper** — add a `registerMyNewCashflow(py::module& m)` function in `QcfinancialPybind11Helpers.h`.
+5. **Expose in binder** — call the helper from `source/qcf_binder.cpp`.
+6. **`record()` tuple** — if the type supports `record()`, ensure the final two fields are `present_value` and `discount_factor` (convention established in v1.10.1).
+7. **Test** — add or update a test file in `Tests/`.
+8. **Version bump** — update `version=` in `setup.py`.
+9. **Commit message** — follow the pattern `# Update to Version X.Y.Z: <description>`.
+
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.0"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in `setup.py` (`version="1.10.1"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.

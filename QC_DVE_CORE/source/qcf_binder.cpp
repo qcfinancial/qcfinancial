@@ -42,16 +42,11 @@ using namespace pybind11::literals;
 #include <cashflows/SimpleCashflow.h>
 #include <cashflows/SimpleMultiCurrencyCashflow.h>
 #include <cashflows/FixedRateCashflow.h>
-#include <cashflows/FixedRateCashflow2.h>
 #include <cashflows/FixedRateMultiCurrencyCashflow.h>
-#include <cashflows/LinearInterestRateCashflow.h>
 #include <cashflows/IborCashflow.h>
-#include <cashflows/IborCashflow2.h>
 #include <cashflows/IborMultiCurrencyCashflow.h>
 #include <cashflows/IcpClpCashflow.h>
-#include <cashflows/IcpClpCashflow2.h>
 #include <cashflows/IcpClfCashflow.h>
-#include <cashflows/CompoundedOvernightRateCashflow.h>
 #include <cashflows/CompoundedOvernightRateCashflow2.h>
 #include <cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h>
 #include <cashflows/OvernightIndexCashflow.h>
@@ -766,81 +761,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                              &qf::FixedRateMultiCurrencyCashflow::settlementCurrencyAmount)
                         .def("record", &qf::FixedRateMultiCurrencyCashflow::record);
 
-        // LinearInterestRateCashflow
-        py::class_<qf::LinearInterestRateCashflow, std::shared_ptr<qf::LinearInterestRateCashflow>,
-                                PyLinearInterestRateCashflow>(
-                                m, "LinearInterestRateCashflow")
-                        .def("get_type", &qf::LinearInterestRateCashflow::getType)
-                        .def("get_initial_currency", &qf::LinearInterestRateCashflow::getInitialCcy)
-                        .def("does_amortize", &qf::LinearInterestRateCashflow::doesAmortize)
-                        .def("get_start_date", &qf::LinearInterestRateCashflow::getStartDate)
-                        .def("get_end_date", &qf::LinearInterestRateCashflow::getEndDate)
-                        .def("get_settlement_date", &qf::LinearInterestRateCashflow::getSettlementDate)
-                        .def("get_fixing_dates", &qf::LinearInterestRateCashflow::getFixingDates)
-                        .def("get_nominal", &qf::LinearInterestRateCashflow::getNominal)
-                        .def("nominal", &qf::LinearInterestRateCashflow::nominal)
-                        .def("get_amortization", &qf::LinearInterestRateCashflow::getAmortization)
-                        .def("interest", py::overload_cast<>(&qf::LinearInterestRateCashflow::interest))
-                        .def("interest",
-                             py::overload_cast<const qf::TimeSeries &>(&qf::LinearInterestRateCashflow::interest))
-                        .def("fixing", py::overload_cast<>(&qf::LinearInterestRateCashflow::fixing))
-                        .def("fixing", py::overload_cast<const qf::TimeSeries &>(
-                                     &qf::LinearInterestRateCashflow::fixing))
-                        .def("accrued_interest",
-                             py::overload_cast<const QCDate &>(&qf::LinearInterestRateCashflow::accruedInterest))
-                        .def("accrued_interest",
-                             py::overload_cast<const QCDate &, const qf::TimeSeries &>(
-                                     &qf::LinearInterestRateCashflow::accruedInterest))
-                        .def("accrued_fixing",
-                             py::overload_cast<const QCDate &>(&qf::LinearInterestRateCashflow::accruedFixing))
-                        .def("accrued_fixing",
-                             py::overload_cast<const QCDate &, const qf::TimeSeries &>(
-                                     &qf::LinearInterestRateCashflow::accruedFixing));
-
-        // FixedRateCashflow2
-        py::class_<qf::FixedRateCashflow2, qf::LinearInterestRateCashflow, std::shared_ptr<qf::FixedRateCashflow2> >(
-                                m, "FixedRateCashflow2")
-                        .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, const QCInterestRate &,
-                                shared_ptr<QCCurrency> >())
-                        .def("amount", &qf::FixedRateCashflow2::amount)
-                        .def("ccy", &qf::FixedRateCashflow2::ccy)
-                        .def("date", &qf::FixedRateCashflow2::date)
-                        .def("get_type", &qf::FixedRateCashflow2::getType)
-                        .def("get_start_date", &qf::FixedRateCashflow2::getStartDate)
-                        .def("get_end_date", &qf::FixedRateCashflow2::getEndDate)
-                        .def("get_settlement_date", &qf::FixedRateCashflow2::getSettlementDate)
-                        .def("get_fixing_dates", &qf::FixedRateCashflow2::getFixingDates)
-                        .def("get_nominal", &qf::FixedRateCashflow2::getNominal)
-                        .def("nominal", &qf::FixedRateCashflow2::nominal)
-                        .def("get_amortization", &qf::FixedRateCashflow2::getAmortization)
-                        .def("amortization", &qf::FixedRateCashflow2::amortization)
-                        .def("get_interest_rate_value", &qf::FixedRateCashflow2::getInterestRateValue)
-                        .def("get_interest_rate_type", &qf::FixedRateCashflow2::getInterestRateType)
-                        .def<double(qf::FixedRateCashflow2::*)
-                                ()>("interest", &qf::FixedRateCashflow2::interest)
-                        .def<double(qf::FixedRateCashflow2::*)(const qf::TimeSeries &)>(
-                                "interest", &qf::FixedRateCashflow2::interest)
-                        .def<
-                                double(qf::FixedRateCashflow2::*)
-                                ()>("fixing", &qf::FixedRateCashflow2::fixing)
-                        .def<double(qf::FixedRateCashflow2::*)(const qf::TimeSeries &)>(
-                                "fixing", &qf::FixedRateCashflow2::fixing)
-                        .def<
-                                double(qf::FixedRateCashflow2::*)(const QCDate &)>
-                        (
-                                "accrued_interest", &qf::FixedRateCashflow2::accruedInterest)
-                        .def<double(qf::FixedRateCashflow2::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_interest", &qf::FixedRateCashflow2::accruedInterest)
-                        .def<
-                                double(qf::FixedRateCashflow2::*)(const QCDate &)>
-                        (
-                                "accrued_fixing", &qf::FixedRateCashflow2::accruedFixing)
-                        .def<double(qf::FixedRateCashflow2::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_fixing", &qf::FixedRateCashflow2::accruedFixing)
-                        .def("does_amortize", &qf::FixedRateCashflow2::doesAmortize);
-
-        m.def("show", py::overload_cast<const std::shared_ptr<qf::FixedRateCashflow2> &>(&show));
-
         // IborCashflow
         py::class_<qf::IborCashflow, qf::Cashflow, std::shared_ptr<qf::IborCashflow> >(
                                 m, "IborCashflow")
@@ -873,56 +793,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("record", &qf::IborCashflow::record);
 
         m.def("show", py::overload_cast<const std::shared_ptr<qf::IborCashflow> &>(&show));
-
-        // IborCashflow2
-        py::class_<qf::IborCashflow2, std::shared_ptr<qf::IborCashflow2>, qf::LinearInterestRateCashflow>(
-                                m, "IborCashflow2")
-                        .def(py::init<std::shared_ptr<qf::InterestRateIndex>,
-                                QCDate &, QCDate &, QCDate &, QCDate &,
-                                double, double, bool,
-                                shared_ptr<QCCurrency>,
-                                double, double>())
-                        .def("amount", &qf::IborCashflow2::amount)
-                        .def("ccy", &qf::IborCashflow2::ccy)
-                        .def("date", &qf::IborCashflow2::date)
-                        .def("get_type", &qf::IborCashflow2::getType)
-                        .def("get_interest_rate_index", &qf::IborCashflow2::getInterestRateIndex)
-                        .def("get_start_date", &qf::IborCashflow2::getStartDate)
-                        .def("get_end_date", &qf::IborCashflow2::getEndDate)
-                        .def("get_settlement_date", &qf::IborCashflow2::getSettlementDate)
-                        .def("get_fixing_dates", &qf::IborCashflow2::getFixingDates)
-                        .def("get_nominal", &qf::IborCashflow2::getNominal)
-                        .def("nominal", &qf::IborCashflow2::nominal)
-                        .def("get_amortization", &qf::IborCashflow2::getAmortization)
-                        .def("amortization", &qf::IborCashflow2::amortization)
-                        .def("get_spread", &qf::IborCashflow2::getSpread)
-                        .def("get_gearing", &qf::IborCashflow2::getGearing)
-                        .def("set_nominal", &qf::IborCashflow2::setNominal)
-                        .def("set_amortization", &qf::IborCashflow2::setAmortization)
-                        .def("set_rate_value", &qf::IborCashflow2::setRateValue)
-                        .def("get_amount_derivatives", &qf::IborCashflow2::getAmountDerivatives)
-                        .def<double(qf::IborCashflow2::*)
-                                ()>("interest", &qf::IborCashflow2::interest)
-                        .def<double(qf::IborCashflow2::*)(const qf::TimeSeries &)>(
-                                "interest", &qf::IborCashflow2::interest)
-                        .def<double(qf::IborCashflow2::*)
-                                ()>("fixing", &qf::IborCashflow2::fixing)
-                        .def<double(qf::IborCashflow2::*)(const qf::TimeSeries &)>("fixing", &qf::IborCashflow2::fixing)
-                        .def<
-                                double(qf::IborCashflow2::*)(const QCDate &)>(
-                                "accrued_interest", &qf::IborCashflow2::accruedInterest)
-                        .def<
-                                double(qf::IborCashflow2::*)(const QCDate &, const qf::TimeSeries &)>
-                        (
-                                "accrued_interest", &qf::IborCashflow2::accruedInterest)
-                        .def<double(qf::IborCashflow2::*)(const QCDate &)>(
-                                "accrued_fixing", &qf::IborCashflow2::accruedFixing)
-                        .def<
-                                double(qf::IborCashflow2::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_fixing", &qf::IborCashflow2::accruedFixing)
-                        .def("does_amortize", &qf::IborCashflow2::doesAmortize);
-
-        m.def("show", py::overload_cast<const std::shared_ptr<qf::IborCashflow2> &>(&show));
 
         // IbrMultiCurrencyCashflow
         py::class_<qf::IborMultiCurrencyCashflow, std::shared_ptr<qf::IborMultiCurrencyCashflow>, qf::IborCashflow>(
@@ -1090,62 +960,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 &qf::OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount);
 
 
-        // IcpClpCashflow2
-        py::class_<qf::IcpClpCashflow2, std::shared_ptr<qf::IcpClpCashflow2>, qf::LinearInterestRateCashflow>(
-                                m, "IcpClpCashflow2")
-                        .def(py::init<QCDate &, QCDate &, QCDate &, double, double, bool, double, double, bool, double,
-                                double>())
-                        .def("amount", &qf::IcpClpCashflow2::amount)
-                        .def("ccy", &qf::IcpClpCashflow2::ccy)
-                        .def("date", &qf::IcpClpCashflow2::date)
-                        .def("get_type", &qf::IcpClpCashflow2::getType)
-                        .def("get_start_date", &qf::IcpClpCashflow2::getStartDate)
-                        .def("get_end_date", &qf::IcpClpCashflow2::getEndDate)
-                        .def("get_settlement_date", &qf::IcpClpCashflow2::getSettlementDate)
-                        .def("get_fixing_dates", &qf::IcpClpCashflow2::getFixingDates)
-                        .def("get_nominal", &qf::IcpClpCashflow2::getNominal)
-                        .def("nominal", &qf::IcpClpCashflow2::nominal)
-                        .def("get_amortization", &qf::IcpClpCashflow2::getAmortization)
-                        .def("amortization", &qf::IcpClpCashflow2::amortization)
-                        .def<double(qf::IcpClpCashflow2::*)
-                                ()>("interest", &qf::IcpClpCashflow2::interest)
-                        .def<double(qf::IcpClpCashflow2::*)(const qf::TimeSeries &)>(
-                                "interest", &qf::IcpClpCashflow2::interest)
-                        .def<double(qf::IcpClpCashflow2::*)
-                                ()>("fixing", &qf::IcpClpCashflow2::fixing)
-                        .def<double(qf::IcpClpCashflow2::*)(const qf::TimeSeries &)>(
-                                "fixing", &qf::IcpClpCashflow2::fixing)
-                        .def<
-                                double(qf::IcpClpCashflow2::*)(const QCDate &)>(
-                                "accrued_interest", &qf::IcpClpCashflow2::accruedInterest)
-                        .def<
-                                double(qf::IcpClpCashflow2::*)(const QCDate &, const qf::TimeSeries &)>
-                        (
-                                "accrued_interest", &qf::IcpClpCashflow2::accruedInterest)
-                        .def<double(qf::IcpClpCashflow2::*)(const QCDate &)>(
-                                "accrued_fixing", &qf::IcpClpCashflow2::accruedFixing)
-                        .def<
-                                double(qf::IcpClpCashflow2::*)(const QCDate &, const qf::TimeSeries &)>(
-                                "accrued_fixing", &qf::IcpClpCashflow2::accruedFixing)
-                        .def("does_amortize", &qf::IcpClpCashflow2::doesAmortize)
-                        .def("get_start_date_icp", &qf::IcpClpCashflow2::getStartDateICP)
-                        .def("get_end_date_icp", &qf::IcpClpCashflow2::getEndDateICP)
-                        .def("get_rate_value", &qf::IcpClpCashflow2::getRateValue)
-                        .def("get_type_of_rate", &qf::IcpClpCashflow2::getTypeOfRate)
-                        .def("set_tna_decimal_places", &qf::IcpClpCashflow2::setTnaDecimalPlaces)
-                        .def("set_nominal", &qf::IcpClpCashflow2::setNominal)
-                        .def("set_amortization", &qf::IcpClpCashflow2::setAmortization)
-                        .def("set_start_date_icp", &qf::IcpClpCashflow2::setStartDateICP)
-                        .def("set_end_date_icp", &qf::IcpClpCashflow2::setEndDateICP)
-                        .def("get_tna", &qf::IcpClpCashflow2::getTna)
-                        .def("get_spread", &qf::IcpClpCashflow2::getSpread)
-                        .def("get_gearing", &qf::IcpClpCashflow2::getGearing)
-                        .def("get_start_date_icp_derivatives", &qf::IcpClpCashflow2::getStartDateICPDerivatives)
-                        .def("get_amount_derivatives", &qf::IcpClpCashflow2::getAmountDerivatives)
-                        .def("get_end_date_icp_derivatives", &qf::IcpClpCashflow2::getEndDateICPDerivatives);
-
-        m.def("show", py::overload_cast<const std::shared_ptr<qf::IcpClpCashflow2> &>(&show));
-
         // IcpClfCashflow
         py::class_<qf::IcpClfCashflow, std::shared_ptr<qf::IcpClfCashflow>, qf::IcpClpCashflow>(
                                 m, "IcpClfCashflow")
@@ -1168,42 +982,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_amount_icp_derivatives", &qf::IcpClfCashflow::getAmountICPDerivatives)
                         .def("get_amount_ufclp_derivatives", &qf::IcpClfCashflow::getAmountUFCLPDerivatives)
                         .def("get_amount_ufclf_derivatives", &qf::IcpClfCashflow::getAmountUFCLFDerivatives);
-
-        // CompoundedOvernightRateCashflow
-        py::class_<qf::CompoundedOvernightRateCashflow, std::shared_ptr<qf::CompoundedOvernightRateCashflow>,
-                                qf::LinearInterestRateCashflow>(
-                                m, "CompoundedOvernightRateCashflow")
-                        .def(py::init<std::shared_ptr<qf::InterestRateIndex>,
-                                const QCDate &,
-                                const QCDate &,
-                                const QCDate &,
-                                const std::vector<QCDate> &,
-                                double,
-                                double,
-                                bool,
-                                shared_ptr<QCCurrency>,
-                                double,
-                                double,
-                                bool,
-                                unsigned int,
-                                unsigned int,
-                                unsigned int>())
-                        .def("amount", &qf::CompoundedOvernightRateCashflow::amount)
-                        .def("ccy", &qf::CompoundedOvernightRateCashflow::ccy)
-                        .def("date", &qf::CompoundedOvernightRateCashflow::date)
-                        .def("get_type", &qf::CompoundedOvernightRateCashflow::getType)
-                        .def("get_spread", &qf::CompoundedOvernightRateCashflow::getSpread)
-                        .def("get_gearing", &qf::CompoundedOvernightRateCashflow::getGearing)
-                        .def("get_nominal", &qf::CompoundedOvernightRateCashflow::getNominal)
-                        .def("set_nominal", &qf::CompoundedOvernightRateCashflow::setNominal)
-                        .def("set_amortization", &qf::CompoundedOvernightRateCashflow::setAmortization)
-                        .def("is_expired", &qf::CompoundedOvernightRateCashflow::isExpired)
-                        .def("get_eq_rate_decimal_places", &qf::CompoundedOvernightRateCashflow::getEqRateDecimalPlaces)
-                        .def("get_amount_derivatives", &qf::CompoundedOvernightRateCashflow::getAmountDerivatives)
-                        .def("get_interest_rate_index_code",
-                             &qf::CompoundedOvernightRateCashflow::getInterestRateIndexCode);
-
-        m.def("show", py::overload_cast<const std::shared_ptr<qf::CompoundedOvernightRateCashflow> &>(&show));
 
         // CompoundedOvernightRateCashflow2
         py::class_<qf::CompoundedOvernightRateCashflow2, std::shared_ptr<qf::CompoundedOvernightRateCashflow2>,
@@ -1738,19 +1516,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("amort_is_cashflow"),
                                 py::arg("spread"),
                                 py::arg("gearing"))
-                        .def_static("build_bullet_fixed_rate_leg_2", &qf::LegFactory::buildBulletFixedRateLeg2)
-                        .def_static("build_french_fixed_rate_leg_2", &qf::LegFactory::buildFrenchFixedRateLeg2)
-                        .def_static("build_custom_amort_fixed_rate_leg_2",
-                                    &qf::LegFactory::buildCustomAmortFixedRateLeg2)
-                        .def_static("build_bullet_ibor2_leg", &qf::LegFactory::buildBulletIbor2Leg)
-                        .def_static("build_custom_amort_ibor2_leg", &qf::LegFactory::buildCustomAmortIbor2Leg)
-                        .def_static("build_bullet_icp_clp2_leg", &qf::LegFactory::buildBulletIcpClp2Leg)
-                        .def_static("build_custom_amort_icp_clp2_leg", &qf::LegFactory::buildCustomAmortIcpClp2Leg)
                         .def_static("build_bullet_icp_clf_leg", &qf::LegFactory::buildBulletIcpClfLeg)
                         .def_static("build_custom_amort_icp_clf_leg", &qf::LegFactory::buildCustomAmortIcpClfLeg)
                         .def_static("customize_amortization", &qf::LegFactory::customizeAmortization)
-                        .def_static("build_bullet_compounded_overnight_rate_leg",
-                                    &qf::LegFactory::buildBulletCompoundedOvernightLeg)
                         .def_static(
                                 "build_bullet_compounded_overnight_rate_leg_2",
                                 &qf::LegFactory::buildBulletCompoundedOvernightRateLeg2,
@@ -1804,8 +1572,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 py::arg("sett_lag_behaviour") = QCDate::QCSettlementLagBehaviour::qcDontMove,
                                 py::arg("fx_fixing_lag_pivot") = QCDate::QCFxFixingLagPivot::qcSettlementDate,
                                 py::arg("fx_fixing_lag_applies_to") = QCDate::QCFxFixingLagAppliesTo::qcPublishingDate)
-                        .def_static("build_custom_amort_compounded_overnight_rate_leg",
-                                    &qf::LegFactory::buildCustomAmortCompoundedOvernightLeg)
                         .def_static(
                                 "build_custom_amort_compounded_overnight_rate_leg_2",
                                 &qf::LegFactory::buildCustomAmortCompoundedOvernightRateLeg2,
@@ -2028,8 +1794,6 @@ PYBIND11_MODULE(qcfinancial, m) {
                                      &qf::PresentValue::pv))
                         .def("pv", py::overload_cast<QCDate &, const std::shared_ptr<qf::Cashflow> &, const
                                      std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValue::pv))
-                        .def("pv", py::overload_cast<QCDate &, const std::shared_ptr<qf::LinearInterestRateCashflow> &,
-                                     const std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValue::pv))
                         .def("pv", py::overload_cast<QCDate &, qf::Leg &, QCInterestRate &>(&qf::PresentValue::pv))
                         .def("pv", py::overload_cast<QCDate &, qf::Leg &, const std::shared_ptr<qf::InterestRateCurve>
                                      &>(&qf::PresentValue::pv))
@@ -2093,30 +1857,21 @@ PYBIND11_MODULE(qcfinancial, m) {
         // ForwardRates
         py::class_<qf::ForwardRates>(m, "ForwardRates")
                         .def(py::init<>())
-                        .def("set_rate_ibor_cashflow", &qf::ForwardRates::setRateIborCashflow)
                         .def("set_rate_ibor_cashflow1", &qf::ForwardRates::setRateIborCashflow1)
                         .def("set_rate_ibor_mccy_cashflow1", &qf::ForwardRates::setRateIborMccyCashflow1)
-                        .def("set_rate_icp_clp_cashflow", &qf::ForwardRates::setRateIcpClpCashflow)
-                        .def("set_rate_icp_clp_cashflow2", &qf::ForwardRates::setRateIcpClpCashflow2)
                         .def("set_rate_overnight_index_cashflow", &qf::ForwardRates::setRateOvernightIndexCashflow)
                         .def("set_rate_overnight_index_mccy_cashflow",
                              &qf::ForwardRates::setRateOvernightIndexMccyCashflow)
-                        .def("set_rates_icp_clp_leg", &qf::ForwardRates::setRatesIcpClpLeg)
-                        .def("set_rates_icp_clp_leg2", &qf::ForwardRates::setRatesIcpClpLeg2)
                         .def("set_rates_overnight_index_leg", &qf::ForwardRates::setRatesOvernightIndexLeg)
                         .def("set_rates_overnight_index_mccy_leg", &qf::ForwardRates::setRatesOvernightIndexMccyLeg)
-                        .def("set_rates_ibor_leg", &qf::ForwardRates::setRatesIborLeg)
                         .def("set_rates_ibor_leg1", &qf::ForwardRates::setRatesIborLeg1)
                         .def("set_rates_ibor_mccy_leg1", &qf::ForwardRates::setRatesIborMccyLeg1)
                         .def("set_rate_icp_clf_cashflow", &qf::ForwardRates::setRateIcpClfCashflow)
                         .def("set_rates_icp_clf_leg", &qf::ForwardRates::setRatesIcpClfLeg)
-                        .def("set_rate_compounded_overnight_cashflow",
-                             &qf::ForwardRates::setRateCompoundedOvernightCashflow)
                         .def("set_rate_compounded_overnight_cashflow2",
                              &qf::ForwardRates::setRateCompoundedOvernightCashflow2)
                         .def("set_rate_compounded_overnight_mccy_cashflow2",
                              &qf::ForwardRates::setRateCompoundedOvernightMccyCashflow2)
-                        .def("set_rates_compounded_overnight_leg", &qf::ForwardRates::setRatesCompoundedOvernightLeg)
                         .def("set_rates_compounded_overnight_leg2", &qf::ForwardRates::setRatesCompoundedOvernightLeg2)
                         .def("set_rates_compounded_overnight_mccy_leg2",
                              &qf::ForwardRates::setRatesCompoundedOvernightMccyLeg2)
