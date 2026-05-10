@@ -14,7 +14,7 @@ namespace QCode::Financial {
     /**
      * @class	Leg
      *
-     * @brief	Wrapper class that provides the basis for an arbitrary leg of a financial product .
+     * @brief	Wrapper class that provides the basis for an arbitrary leg of a financial product.
      *
      * @author	Alvaro Díaz V.
      * @date	07/07/2018

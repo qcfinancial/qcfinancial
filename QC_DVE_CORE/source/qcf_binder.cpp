@@ -2,20 +2,11 @@
 // Created by Alvaro Diaz on 18-06-23.
 //
 
-#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl_bind.h>
 #include <pybind11/stl.h>
 
 #include <time/QCDate.h>
-PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)
-
-#define STRINGIFY(x) #x
-#define MACRO_STRINGIFY(x) STRINGIFY(x)
-
-namespace py = pybind11;
-using namespace pybind11::literals;
-
 #include <asset_classes/QCCurrency.h>
 #include <asset_classes/QCYearFraction.h>
 #include <asset_classes/QCAct360.h>
@@ -70,7 +61,15 @@ using namespace pybind11::literals;
 
 #include <QcfinancialPybind11Helpers.h>
 
-// PYBIND11_MAKE_OPAQUE(std::vector<QCDate>);
+PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)
+
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
+namespace py = pybind11;
+using namespace pybind11::literals;
+
+
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
 PYBIND11_MAKE_OPAQUE(std::vector<long>);
