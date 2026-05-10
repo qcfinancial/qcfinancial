@@ -1,0 +1,22 @@
+# Python virtual environment
+.venv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# CMake build directories
+cmake-build-debug/
+cmake-build-release/
+
+# MkDocs build output
+site/
+
+# Doxygen XML (generated during docs build)
+docs/doxygen/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo

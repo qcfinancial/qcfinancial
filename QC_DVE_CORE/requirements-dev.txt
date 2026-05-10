@@ -1,0 +1,8 @@
+# Documentation toolchain
+mkdocs==1.6.1
+mkdocs-material==9.7.6
+mkdoxy==1.2.8
+pymdown-extensions==10.21.2
+
+# Testing
+pytest>=6.0
