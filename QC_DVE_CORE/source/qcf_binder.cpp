@@ -59,15 +59,15 @@
 
 #include <time/QCBusinessCalendar.h>
 
+namespace py = pybind11;
+using namespace pybind11::literals;
+
 #include <QcfinancialPybind11Helpers.h>
 
 PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
-
-namespace py = pybind11;
-using namespace pybind11::literals;
 
 
 PYBIND11_MAKE_OPAQUE(std::vector<double>);

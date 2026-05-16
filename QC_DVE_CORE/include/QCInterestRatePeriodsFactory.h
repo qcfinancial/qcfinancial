@@ -54,6 +54,7 @@ public:
 	*/
 	QCInterestRateLeg::QCInterestRatePeriods getPeriods();
 
+
 	/*! Destructor de la clase */
 	~QCInterestRatePeriodsFactory();
 
