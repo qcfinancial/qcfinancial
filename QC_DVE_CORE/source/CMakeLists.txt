@@ -14,16 +14,12 @@ target_sources(QC_DVE_CORE
         cashflows/SimpleCashflow.cpp
         cashflows/SimpleMultiCurrencyCashflow.cpp
         cashflows/FixedRateCashflow.cpp
-        cashflows/FixedRateCashflow2.cpp
         cashflows/FixedRateMultiCurrencyCashflow.cpp
         cashflows/IborCashflow.cpp
-        cashflows/IborCashflow2.cpp
         cashflows/IcpClfCashflow.cpp
         cashflows/IcpClpCashflow.cpp
-        cashflows/IcpClpCashflow2.cpp
         cashflows/OvernightIndexCashflow.cpp
         cashflows/OvernightIndexMultiCurrencyCashflow.cpp
-        cashflows/CompoundedOvernightRateCashflow.cpp
         cashflows/CompoundedOvernightRateCashflow2.cpp
         cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.cpp
         cashflows/IborMultiCurrencyCashflow.cpp
