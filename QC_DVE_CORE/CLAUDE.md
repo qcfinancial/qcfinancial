@@ -153,4 +153,6 @@ Use this checklist when adding a new cashflow type or other significant feature:
 
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.1"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in `setup.py` (`version="1.10.2"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+
+**Never** add a `Co-Authored-By: Claude ...` trailer to commit messages.
