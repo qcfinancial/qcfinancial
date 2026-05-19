@@ -25,6 +25,7 @@ set_target_properties(QC_DVE_CORE PROPERTIES POSITION_INDEPENDENT_CODE ON)
 # set(Python_ROOT_DIR $ENV{HOME}/.pyenv/versions/3.13.1)
 set(Python_FIND_STRATEGY LOCATION)
 set(PYBIND11_FINDPYTHON ON)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 add_subdirectory(pybind11)
 pybind11_add_module(qcfinancial source/qcf_binder.cpp)
 target_link_libraries(qcfinancial PRIVATE QC_DVE_CORE)
@@ -40,6 +41,24 @@ add_custom_target(build_wheel
         COMMAND python3.11 ${CMAKE_SOURCE_DIR}/setup.py bdist_wheel --plat-name manylinux_2_34_x86_64 --dist-dir ${CMAKE_SOURCE_DIR}/dist
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         COMMENT "Building Linux Python wheel"
+)
+
+set(PY312 "$ENV{HOME}/.pyenv/versions/3.12.8/bin/python3")
+execute_process(
+        COMMAND ${PY312} -c "import sysconfig; print(sysconfig.get_path('include'))"
+        OUTPUT_VARIABLE PY312_INCLUDE_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(
+        COMMAND ${PY312} -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX'))"
+        OUTPUT_VARIABLE PY312_EXT_SUFFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
+add_library(qcfinancial_py312 MODULE source/qcf_binder.cpp)
+target_link_libraries(qcfinancial_py312 PRIVATE QC_DVE_CORE pybind11::headers)
+target_include_directories(qcfinancial_py312 PRIVATE include ${PY312_INCLUDE_DIR})
+target_link_options(qcfinancial_py312 PRIVATE -undefined dynamic_lookup)
+set_target_properties(qcfinancial_py312 PROPERTIES
+        PREFIX ""
+        SUFFIX "${PY312_EXT_SUFFIX}"
+        OUTPUT_NAME "qcfinancial"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/py312"
 )
 
 # target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

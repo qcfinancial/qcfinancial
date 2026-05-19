@@ -59,15 +59,15 @@
 
 #include <time/QCBusinessCalendar.h>
 
+namespace py = pybind11;
+using namespace pybind11::literals;
+
 #include <QcfinancialPybind11Helpers.h>
 
 PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
-
-namespace py = pybind11;
-using namespace pybind11::literals;
 
 
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
@@ -99,7 +99,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.10.1, build: 2026-04-29 15:20"; });
+                []() { return "version: 1.10.3, build: 2026-05-19 11:55"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
