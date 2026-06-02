@@ -392,9 +392,17 @@ namespace QCode::Financial {
         return _indexName;
     }
 
+
     double OvernightIndexCashflow::settlementAmount() {
         // auto interest = _calculateInterest(_endDate, _endDateIndexValue);
-        double eqRate = getEqRate(_indexEndDate, _endDateIndexValue);
+        // double eqRate = getEqRate(_indexEndDate, _endDateIndexValue);
+        double yf = _rate.yf(_startDate, _endDate);
+        if (_datesForEquivalentRate == DatesForEquivalentRate::qcIndex) {
+            yf = _rate.yf(_indexStartDate, _indexEndDate);
+        }
+        auto factor = pow(10, _eqRateDecimalPlaces);
+        double eqRate = round(((_endDateIndexValue / _startDateIndexValue - 1) / yf) * factor);
+        eqRate /= factor;
         _rate.setValue(eqRate * _gearing + _spread);
         auto settAmount = _notional * (_rate.wf(_startDate, _endDate) - 1);
         if (_doesAmortize) {
