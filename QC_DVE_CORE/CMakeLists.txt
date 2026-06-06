@@ -43,6 +43,7 @@ add_custom_target(build_wheel
         COMMENT "Building Linux Python wheel"
 )
 
+if(APPLE)
 set(PY312 "$ENV{HOME}/.pyenv/versions/3.12.8/bin/python3")
 execute_process(
         COMMAND ${PY312} -c "import sysconfig; print(sysconfig.get_path('include'))"
@@ -60,5 +61,6 @@ set_target_properties(qcfinancial_py312 PROPERTIES
         OUTPUT_NAME "qcfinancial"
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/py312"
 )
+endif()
 
 # target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)
