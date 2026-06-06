@@ -202,17 +202,18 @@ namespace QCode
 
         Record IcpClfCashflow::record() {
             auto result = Record();
+            auto interest = accruedInterest(_endDate, _endDateICP, _endDateUF);
             result["type_of_cashflow"] = "icpclf";
             result["start_date"] = _startDate.description(false);
             result["end_date"] = _endDate.description(false);
             result["settlement_date"] = _settlementDate.description(false);
             result["notional"] = _nominal;
             result["amortization"] = _amortization;
-            result["interest"] = _interest;
+            result["interest"] = interest;
             result["amort_is_cashflow"] = _doesAmortize;
-            result["cashflow"] = _doesAmortize ? _nominal + _interest : _interest;
+            result["cashflow"] = _doesAmortize ? _amortization + interest : interest;
             result["notional_currency"] = "CLF";
-            result["interest_rate_index"] = "ICPLCP";
+            result["interest_rate_index"] = "ICPCLF";
             result["start_date_index"] = _startDateICP;
             result["end_date_index"] = _endDateICP;
             result["start_date_uf"] = _startDateUF;
@@ -221,6 +222,8 @@ namespace QCode
             result["spread"] = _spread;
             result["gearing"] = _gearing;
             result["type_of_rate"] = getTypeOfRate();
+            result["present_value"] = getPresentValue();
+            result["discount_factor"] = getDiscountFactor();
 
             return result;
         }
