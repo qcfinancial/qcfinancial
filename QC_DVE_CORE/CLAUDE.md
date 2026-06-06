@@ -32,6 +32,10 @@ python setup.py bdist_wheel
 
 Wheels land in `dist/`. The build uses CMake + Ninja under the hood via `setup.py`'s `CMakeBuild` extension.
 
+**Build prerequisites per pyenv version:** each target interpreter needs `setuptools`, `wheel`, and `ninja` installed (`<python> -m pip install setuptools wheel ninja`). Python **3.12+** no longer bundles `setuptools`, so a freshly installed pyenv 3.12/3.13/3.14 will fail with `ModuleNotFoundError: No module named 'setuptools'` until these are installed. (Python 3.11 still bundles setuptools.)
+
+> **Note:** the `qcfinancial_py312` CMake target is a dev/CLion-only convenience (marked `EXCLUDE_FROM_ALL`, so it is *not* part of the wheel/`cmake --build .` flow) and hard-codes a specific pyenv path (currently `3.12.13`). Update that path in `CMakeLists.txt` when the installed 3.12 patch changes.
+
 ### CMake directly (for IDE / debug builds)
 
 CLion-style build directories exist: `cmake-build-debug/` and `cmake-build-release/`.
