@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.10.1** (set in `setup.py`).
+Current version: **1.10.4** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -24,9 +24,9 @@ Always work on `develop` (or a feature branch off `develop`) and merge to `maste
 python setup.py bdist_wheel
 
 # Build for a specific pyenv version
-./compile.sh 3.12.1
+./compile.sh 3.12.13
 
-# Build for all supported versions (3.10.13, 3.11.5, 3.12.1, 3.13.1)
+# Build for all supported versions (3.11.15, 3.12.13, 3.13.13, 3.14.5)
 ./compile.sh
 ```
 
@@ -153,6 +153,6 @@ Use this checklist when adding a new cashflow type or other significant feature:
 
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.2"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in `setup.py` (`version="1.10.4"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 **Never** add a `Co-Authored-By: Claude ...` trailer to commit messages.
