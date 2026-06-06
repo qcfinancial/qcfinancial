@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.10.1** (set in `setup.py`).
+Current version: **1.10.5** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -14,6 +14,34 @@ Current version: **1.10.1** (set in `setup.py`).
 - **`develop`** — active development branch; new features and fixes land here first.
 
 Always work on `develop` (or a feature branch off `develop`) and merge to `master` when ready to release.
+
+## Development Machines
+
+This project is developed on two machines with different architectures:
+
+| Machine | CPU | Architecture |
+|---|---|---|
+| Mac (primary) | Apple M2 | `arm64` |
+| Mac (secondary) | Intel | `x86_64` |
+
+Wheels built on each machine are architecture-specific (e.g. `macosx_26_0_arm64` vs `macosx_XX_0_x86_64`). The pyenv setup below refers to the **Apple Silicon (M2) machine**. The Intel machine may have a different set of installed versions.
+
+### pyenv setup (Apple Silicon / M2)
+
+Active pyenv versions as of June 2026:
+
+| Version | Role |
+|---|---|
+| `3.11.15` | Supported build target |
+| `3.12.13` | Supported build target; **global default** |
+| `3.13.13` | Supported build target |
+| `3.14.5` | Supported build target |
+
+All four versions have `setuptools`, `wheel`, and `ninja` installed. To set up a freshly installed version:
+
+```bash
+PYENV_VERSION=3.x.y pyenv exec python -m pip install setuptools wheel ninja
+```
 
 ## Build Commands
 
@@ -24,13 +52,17 @@ Always work on `develop` (or a feature branch off `develop`) and merge to `maste
 python setup.py bdist_wheel
 
 # Build for a specific pyenv version
-./compile.sh 3.12.1
+./compile.sh 3.12.13
 
-# Build for all supported versions (3.10.13, 3.11.5, 3.12.1, 3.13.1)
+# Build for all supported versions (3.11.15, 3.12.13, 3.13.13, 3.14.5)
 ./compile.sh
 ```
 
 Wheels land in `dist/`. The build uses CMake + Ninja under the hood via `setup.py`'s `CMakeBuild` extension.
+
+**Build prerequisites per pyenv version:** each target interpreter needs `setuptools`, `wheel`, and `ninja` installed (`<python> -m pip install setuptools wheel ninja`). Python **3.12+** no longer bundles `setuptools`, so a freshly installed pyenv 3.12/3.13/3.14 will fail with `ModuleNotFoundError: No module named 'setuptools'` until these are installed. (Python 3.11 still bundles setuptools.)
+
+> **Note:** the `qcfinancial_py312` CMake target is a dev/CLion-only convenience (marked `EXCLUDE_FROM_ALL`, so it is *not* part of the wheel/`cmake --build .` flow) and hard-codes a specific pyenv path (currently `3.12.13`). Update that path in `CMakeLists.txt` when the installed 3.12 patch changes.
 
 ### CMake directly (for IDE / debug builds)
 
@@ -153,6 +185,6 @@ Use this checklist when adding a new cashflow type or other significant feature:
 
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.2"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in `setup.py` (`version="1.10.5"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 **Never** add a `Co-Authored-By: Claude ...` trailer to commit messages.
