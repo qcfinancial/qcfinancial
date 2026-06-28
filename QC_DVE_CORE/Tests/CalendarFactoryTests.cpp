@@ -138,6 +138,33 @@ TEST_CASE("CalendarFactory merges calendars via union") {
     REQUIRE(contains(merged, QCDate(4, 7, 2025)));  // USNY Independence Day
 }
 
+TEST_CASE("CLSA models Ley 20.215 Monday shift (San Pedro / Dos Mundos)") {
+    auto h = CalendarFactory::build(QCDate(1, 1, 2023), 1, {BusinessCalendarId::CLSA}).getHolidays();
+    // 2023: Jun 29 = Thu -> Mon Jun 26; Oct 12 = Thu -> Mon Oct 9
+    REQUIRE(contains(h, QCDate(26, 6, 2023)));
+    REQUIRE_FALSE(contains(h, QCDate(29, 6, 2023)));
+    REQUIRE(contains(h, QCDate(9, 10, 2023)));
+    REQUIRE_FALSE(contains(h, QCDate(12, 10, 2023)));
+}
+
+TEST_CASE("CLSA models Ley 20.299 Reformation-day Friday shift") {
+    // 2023: Oct 31 = Tue -> Friday of previous week (Oct 27)
+    auto h2023 = CalendarFactory::build(QCDate(1, 1, 2023), 1, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2023, QCDate(27, 10, 2023)));
+    REQUIRE_FALSE(contains(h2023, QCDate(31, 10, 2023)));
+    // 2022: Oct 31 = Mon -> stays
+    auto h2022 = CalendarFactory::build(QCDate(1, 1, 2022), 1, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2022, QCDate(31, 10, 2022)));
+}
+
+TEST_CASE("CLSA includes solstice-based and one-off national holidays") {
+    auto h = CalendarFactory::build(QCDate(1, 1, 2021), 4, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h, QCDate(21, 6, 2021)));  // Día de los Pueblos Indígenas (solstice)
+    REQUIRE(contains(h, QCDate(20, 6, 2024)));  // solstice shifts to Jun 20
+    REQUIRE(contains(h, QCDate(17, 9, 2021)));  // Fiestas Patrias bridge
+    REQUIRE(contains(h, QCDate(16, 9, 2022)));  // plebiscito one-off
+}
+
 TEST_CASE("Empty calendar list yields no holidays") {
     auto cal = CalendarFactory::build(QCDate(1, 1, 2025), 5, {});
     REQUIRE(cal.getHolidays().empty());

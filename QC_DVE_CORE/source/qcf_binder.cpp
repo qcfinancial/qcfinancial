@@ -64,6 +64,8 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
+// NOTE: this include MUST stay below the `py` alias above — the helper header
+// uses `py::` at namespace scope. Do not let an include-sorter hoist it up.
 #include <QcfinancialPybind11Helpers.h>
 
 PYBIND11_MAKE_OPAQUE(std::vector<QCDate>)

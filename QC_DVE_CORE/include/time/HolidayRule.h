@@ -21,7 +21,14 @@ enum class Observance
     none,             //!< no se traslada
     satToFriSunToMon, //!< sábado -> viernes, domingo -> lunes (US)
     sunToMon,         //!< solo domingo -> lunes
-    nearest           //!< día hábil más cercano (sábado -> viernes, domingo -> lunes)
+    nearest,          //!< día hábil más cercano (sábado -> viernes, domingo -> lunes)
+
+    // Traslados de feriados chilenos (leyes 20.215 y 20.299).
+    chileMondayShift,     //!< Ley 20.215 (San Pedro y San Pablo, Encuentro de Dos Mundos):
+                          //!< martes/miércoles/jueves -> lunes de la misma semana;
+                          //!< viernes -> lunes de la semana siguiente.
+    chileReformationShift //!< Ley 20.299 (Día de las Iglesias Evangélicas, 31-oct):
+                          //!< martes -> viernes de la semana anterior; miércoles -> viernes siguiente.
 };
 
 /*!

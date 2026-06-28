@@ -64,6 +64,32 @@ The factory SHALL support `BusinessCalendarId` values `CLSA`, `USNY`, `USGS`, an
 - **WHEN** building EUTA for 2025
 - **THEN** the calendar includes New Year's Day (Jan 1), Good Friday, Easter Monday, Labour Day (May 1), Christmas Day (Dec 25), and Boxing Day (Dec 26)
 
+### Requirement: CLSA models Chilean movable-holiday laws
+The CLSA calendar SHALL apply the Chilean movable-holiday statutes. Under Ley 20.215, *San Pedro y San Pablo* (Jun 29) and *Encuentro de Dos Mundos* (Oct 12) SHALL move to the Monday of the same week when they fall on Tuesday, Wednesday, or Thursday, and to the Monday of the following week when they fall on Friday. Under Ley 20.299, *Día de las Iglesias Evangélicas* (Oct 31) SHALL move to the Friday of the previous week when it falls on a Tuesday, and to the immediately following Friday when it falls on a Wednesday.
+
+#### Scenario: San Pedro y San Pablo shifts to Monday
+- **WHEN** building CLSA for 2023, where Jun 29 falls on a Thursday
+- **THEN** the holiday is observed on Monday Jun 26 (and not on Jun 29)
+
+#### Scenario: Encuentro de Dos Mundos on a Friday shifts to next Monday
+- **WHEN** a year has Oct 12 falling on a Friday
+- **THEN** the holiday is observed on the Monday of the following week
+
+#### Scenario: Iglesias Evangélicas shifts to a Friday
+- **WHEN** building CLSA for 2023, where Oct 31 falls on a Tuesday
+- **THEN** the holiday is observed on Friday Oct 27 (the Friday of the previous week)
+
+### Requirement: CLSA includes solstice-based and one-off national holidays
+The CLSA calendar SHALL include the *Día Nacional de los Pueblos Indígenas* (Ley 21.357, from 2021), whose date tracks the June solstice, and the ad-hoc one-off national holidays declared by special laws (Fiestas Patrias bridge days, plebiscite days, New-Year bridge days, the 2017 census day). Because these are not expressible as simple recurring rules, they MAY be represented as a maintained date table; the table SHALL match the reference `holidays` Python library over its covered horizon.
+
+#### Scenario: Indigenous Peoples' Day present with solstice date
+- **WHEN** building CLSA covering 2021 and 2024
+- **THEN** the calendar includes Jun 21 2021 and Jun 20 2024 for Día Nacional de los Pueblos Indígenas
+
+#### Scenario: One-off national holiday present
+- **WHEN** building CLSA covering 2022
+- **THEN** the calendar includes the Sep 16 2022 one-off national holiday
+
 ### Requirement: QCDate date primitives
 `QCDate` SHALL provide `easterSunday(int year)` returning the Gregorian-computus Easter Sunday for the year, `nthWeekdayOfMonth(int n, QCWeekDay weekday, int month, int year)` returning the n-th occurrence (n < 0 counts from month end), and `lastWeekdayOfMonth(QCWeekDay weekday, int month, int year)` returning the last occurrence in the month.
 

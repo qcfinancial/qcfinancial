@@ -57,6 +57,13 @@ Add `QCDate::easterSunday(int year)` implementing the Anonymous Gregorian (compu
 
 *Why:* FpML business-center codes are the financial-industry standard (trade data and config speak them), the docstrings keep the terse codes self-documenting in Python `help()`, and `fromFpmlCode` lets callers pass strings from config/data without a C++ symbol.
 
+### D8. Chilean movable-holiday laws and one-off / solstice holidays
+CLSA models the Chilean movable-holiday statutes via two new observance policies on the affected fixed dates: `chileMondayShift` (Ley 20.215 — Jun 29 / Oct 12 slide to Monday) and `chileReformationShift` (Ley 20.299 — Oct 31 slides to a Friday). The solstice-based *Día Nacional de los Pueblos Indígenas* (Ley 21.357) and the ad-hoc one-off national holidays (Fiestas Patrias bridges, plebiscites, New-Year bridges, the 2017 census) are represented as a hardcoded `SpecialOneOff` date table sourced from the `holidays` Python library (v0.99), covering 2010–2050.
+
+*Why:* the movable laws fit the existing observance abstraction (nominal date → observed date) with no taxonomy change. The solstice/ad-hoc dates are not expressible as recurring rules — the indigenous holiday tracks the astronomical June solstice and the rest are declared year-by-year — so a maintained table (matching the reference library) is the honest representation. The full CLSA output was cross-validated against `holidays` 0.99 with **zero discrepancies in both directions over 2018–2030**.
+*Trade-off:* the one-off/solstice table needs extension beyond 2050 (same finite-horizon limitation as the reference library); flagged in a code comment.
+*Note:* this refines the earlier "movable law out of scope" v1 simplification — it is now in scope. The hardcoded table is consistent with the "no external data files" non-goal (it is compiled-in C++, not loaded at runtime).
+
 ### D7. New code placement
 New headers/sources under `include/time/` + `source/time/` for the enum/helpers, rule engine, and `CalendarFactory`. `QCDate` primitives added to the existing `QCDate.{h,cpp}`. Build/bindings wired per the CLAUDE.md Adding-a-New-Feature checklist: register `.cpp`s in `source/CMakeLists.txt`, add a pybind helper in `QcfinancialPybind11Helpers.h`, call it from `source/qcf_binder.cpp`, bump `setup.py` version.
 

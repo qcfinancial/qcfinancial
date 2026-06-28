@@ -38,11 +38,20 @@
 ## 6. Build wiring and Python bindings
 
 - [x] 6.1 Register new `.cpp` files in `source/CMakeLists.txt` under `target_sources(QC_DVE_CORE ...)`
-- [x] 6.2 Add a `registerCalendarFactory(py::module& m)` (and enum/round-trip) helper in `QcfinancialPybind11Helpers.h`; expose the enum via `.value(name, val, "description")` per-value docstrings and bind `fpmlCode`/`description`/`fromFpmlCode` and `CalendarFactory::build`
-- [x] 6.3 Call the helper from `source/qcf_binder.cpp`
+- [x] 6.2 Bind the enum, factory, round-trip functions and the new `QCDate` static methods inline in `source/qcf_binder.cpp`, next to the existing `BusinessCalendar`/`QCDate` bindings (the time layer is bound inline there, not via `QcfinancialPybind11Helpers.h`); expose the enum via `.value(name, val, "description")` per-value docstrings and bind `fpmlCode`/`description`/`fromFpmlCode` and `CalendarFactory::build`
+- [x] 6.3 (folded into 6.2 — bindings are inline in `qcf_binder.cpp`, no separate helper call)
 - [x] 6.4 Build the wheel (`python setup.py bdist_wheel`) and smoke-test from Python: build a CLSA+USNY calendar, check a known holiday and an observed-shift date, and read an enum value `__doc__`
 
 ## 7. Version bump and commit
 
 - [x] 7.1 Bump `version=` in `setup.py`
 - [x] 7.2 Commit with message `# Update to Version X.Y.Z: add CalendarFactory and BusinessCalendarId (CLSA/USNY/USGS/EUTA)`
+
+## 8. Chilean movable-holiday laws (full python-holidays parity)
+
+- [x] 8.1 Add `Observance::chileMondayShift` (Ley 20.215) and `Observance::chileReformationShift` (Ley 20.299) to the `Observance` enum and implement them in `applyObservance`
+- [x] 8.2 Wire the policies into the CLSA ruleset: Jun 29 and Oct 12 → `chileMondayShift`; Oct 31 → `chileReformationShift`
+- [x] 8.3 Add a `SpecialOneOff` table (Día de los Pueblos Indígenas solstice dates + ad-hoc one-offs) sourced from the `holidays` Python library (v0.99), covering 2010–2050
+- [x] 8.4 Cross-validate the full CLSA calendar against `holidays` 0.99 (achieved 0 discrepancies both directions over 2018–2030)
+- [x] 8.5 Add C++ tests for the movable laws and the solstice/one-off holidays
+- [x] 8.6 Update spec.md (Chilean movable-holiday + solstice/one-off requirements) and design.md (decision D8)

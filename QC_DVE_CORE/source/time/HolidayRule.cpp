@@ -71,6 +71,22 @@ QCDate applyObservance(const QCDate& date, Observance observance)
         case Observance::sunToMon:
             if (wd == QCDate::qcSunday) return date.addDays(1);
             return date;
+
+        case Observance::chileMondayShift:
+            // Ley 20.215: martes/miércoles/jueves -> lunes de la misma semana;
+            // viernes -> lunes de la semana siguiente. Lunes/sábado/domingo sin cambio.
+            if (wd == QCDate::qcTuesday)   return date.addDays(-1);
+            if (wd == QCDate::qcWednesday) return date.addDays(-2);
+            if (wd == QCDate::qcThursday)  return date.addDays(-3);
+            if (wd == QCDate::qcFriday)    return date.addDays(3);
+            return date;
+
+        case Observance::chileReformationShift:
+            // Ley 20.299: martes -> viernes de la semana anterior (-4);
+            // miércoles -> viernes inmediatamente siguiente (+2). Resto sin cambio.
+            if (wd == QCDate::qcTuesday)   return date.addDays(-4);
+            if (wd == QCDate::qcWednesday) return date.addDays(2);
+            return date;
     }
     return date;
 }
