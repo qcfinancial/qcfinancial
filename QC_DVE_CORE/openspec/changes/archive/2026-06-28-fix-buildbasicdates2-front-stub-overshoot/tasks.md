@@ -37,4 +37,4 @@
 ## 7. Version bump and commit
 
 - [x] 7.1 Bump `version=` in `setup.py` from `1.10.1` to `1.10.2`
-- [ ] 7.2 Commit with message: `# Update to Version 1.10.2: fix front-stub pseudoStartDate overshoot in _buildBasicDates2`
+- [x] 7.2 Commit with message: `# Update to Version 1.10.2: fix front-stub pseudoStartDate overshoot in _buildBasicDates2`
