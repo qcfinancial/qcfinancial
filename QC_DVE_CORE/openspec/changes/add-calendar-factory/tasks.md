@@ -55,3 +55,11 @@
 - [x] 8.4 Cross-validate the full CLSA calendar against `holidays` 0.99 (achieved 0 discrepancies both directions over 2018–2030)
 - [x] 8.5 Add C++ tests for the movable laws and the solstice/one-off holidays
 - [x] 8.6 Update spec.md (Chilean movable-holiday + solstice/one-off requirements) and design.md (decision D8)
+
+## 9. CLBA — Chile banking calendar
+
+- [x] 9.1 Add `CLBA` to the `BusinessCalendarId` enum and its `fpmlCode`/`description`/`fromFpmlCode` cases
+- [x] 9.2 Add `chileBankingRules()` = CLSA ruleset + non-movable Dec 31 (Feriado bancario); wire into `ruleSet`/`defaultObservance`
+- [x] 9.3 Bind `CLBA` in pybind with a per-value docstring
+- [x] 9.4 Add a C++ test (CLBA = CLSA ∪ {Dec 31})
+- [x] 9.5 Update proposal.md, design.md and spec.md to include CLBA

@@ -50,7 +50,7 @@ The rule engine SHALL support exactly these rule kinds: fixed date `(month, day)
 - **THEN** the holiday is generated for 2021 and later but NOT for 2020 or earlier
 
 ### Requirement: Supported calendars and rule composition
-The factory SHALL support `BusinessCalendarId` values `CLSA`, `USNY`, `USGS`, and `EUTA`. `USNY` and `USGS` SHALL share a common US-base ruleset; `USGS` SHALL additionally include Columbus Day (2nd Monday of October) and Veterans Day (November 11).
+The factory SHALL support `BusinessCalendarId` values `CLSA`, `CLBA`, `USNY`, `USGS`, and `EUTA`. `USNY` and `USGS` SHALL share a common US-base ruleset; `USGS` SHALL additionally include Columbus Day (2nd Monday of October) and Veterans Day (November 11). `CLBA` (Chile banking) SHALL reuse the full `CLSA` ruleset plus a fixed, non-movable December 31 (Feriado bancario).
 
 #### Scenario: US base holidays present in both US calendars
 - **WHEN** building either USNY or USGS for 2025
@@ -63,6 +63,10 @@ The factory SHALL support `BusinessCalendarId` values `CLSA`, `USNY`, `USGS`, an
 #### Scenario: EUTA holidays
 - **WHEN** building EUTA for 2025
 - **THEN** the calendar includes New Year's Day (Jan 1), Good Friday, Easter Monday, Labour Day (May 1), Christmas Day (Dec 25), and Boxing Day (Dec 26)
+
+#### Scenario: CLBA is CLSA plus December 31
+- **WHEN** building CLBA for 2025
+- **THEN** the calendar includes every CLSA holiday for 2025 AND December 31 2025, and December 31 is not date-shifted
 
 ### Requirement: CLSA models Chilean movable-holiday laws
 The CLSA calendar SHALL apply the Chilean movable-holiday statutes. Under Ley 20.215, *San Pedro y San Pablo* (Jun 29) and *Encuentro de Dos Mundos* (Oct 12) SHALL move to the Monday of the same week when they fall on Tuesday, Wednesday, or Thursday, and to the Monday of the following week when they fall on Friday. Under Ley 20.299, *Día de las Iglesias Evangélicas* (Oct 31) SHALL move to the Friday of the previous week when it falls on a Tuesday, and to the immediately following Friday when it falls on a Wednesday.
@@ -106,7 +110,7 @@ The CLSA calendar SHALL include the *Día Nacional de los Pueblos Indígenas* (L
 - **THEN** it returns 2025-05-26 (last Monday of May)
 
 ### Requirement: BusinessCalendarId FpML codes and string round-trip
-The `BusinessCalendarId` enum symbols SHALL be the FpML business-center codes `CLSA`, `USNY`, `USGS`, `EUTA`. The system SHALL provide `fpmlCode(BusinessCalendarId)` returning the code string, `description(BusinessCalendarId)` returning a human-readable description, and `fromFpmlCode(const std::string&)` returning the matching enum value. `fromFpmlCode` SHALL be the inverse of `fpmlCode`.
+The `BusinessCalendarId` enum symbols SHALL be the FpML business-center codes `CLSA`, `USNY`, `USGS`, `EUTA`, plus the house code `CLBA` (Chile banking; FpML has no canonical Chile-banking center). The system SHALL provide `fpmlCode(BusinessCalendarId)` returning the code string, `description(BusinessCalendarId)` returning a human-readable description, and `fromFpmlCode(const std::string&)` returning the matching enum value. `fromFpmlCode` SHALL be the inverse of `fpmlCode`.
 
 #### Scenario: Code to enum and back
 - **WHEN** `fromFpmlCode("CLSA")` is called

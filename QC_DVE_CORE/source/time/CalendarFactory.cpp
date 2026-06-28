@@ -16,6 +16,7 @@ namespace {
             case BusinessCalendarId::USGS:
                 return Observance::satToFriSunToMon;
             case BusinessCalendarId::CLSA:
+            case BusinessCalendarId::CLBA:
             case BusinessCalendarId::EUTA:
             default:
                 return Observance::none;
@@ -165,11 +166,22 @@ namespace {
         };
     }
 
+    // Chile banking calendar: the Santiago (public) holidays plus the bank
+    // holiday on December 31 (Feriado bancario). Dec 31 is a fixed, non-movable
+    // date.
+    std::vector<HolidayRule> chileBankingRules()
+    {
+        auto rules = santiagoRules();
+        rules.push_back(HolidayRule::fixed(12, 31)); // Feriado bancario
+        return rules;
+    }
+
     std::vector<HolidayRule> ruleSet(BusinessCalendarId id)
     {
         switch (id)
         {
             case BusinessCalendarId::CLSA: return santiagoRules();
+            case BusinessCalendarId::CLBA: return chileBankingRules();
             case BusinessCalendarId::USNY: return usBaseRules();
             case BusinessCalendarId::USGS: return usGovSecuritiesRules();
             case BusinessCalendarId::EUTA: return targetRules();

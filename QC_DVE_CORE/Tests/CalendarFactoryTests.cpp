@@ -165,6 +165,19 @@ TEST_CASE("CLSA includes solstice-based and one-off national holidays") {
     REQUIRE(contains(h, QCDate(16, 9, 2022)));  // plebiscito one-off
 }
 
+TEST_CASE("CLBA is CLSA plus December 31") {
+    auto clsa = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLSA}).getHolidays();
+    auto clba = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLBA}).getHolidays();
+    // CLBA has every CLSA holiday...
+    for (const auto& d : clsa) {
+        REQUIRE(contains(clba, d));
+    }
+    // ...plus a non-movable Dec 31, which CLSA does not have.
+    REQUIRE(contains(clba, QCDate(31, 12, 2025)));
+    REQUIRE_FALSE(contains(clsa, QCDate(31, 12, 2025)));
+    REQUIRE(fromFpmlCode("CLBA") == BusinessCalendarId::CLBA);
+}
+
 TEST_CASE("Empty calendar list yields no holidays") {
     auto cal = CalendarFactory::build(QCDate(1, 1, 2025), 5, {});
     REQUIRE(cal.getHolidays().empty());

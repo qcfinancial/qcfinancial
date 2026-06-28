@@ -14,7 +14,8 @@
  * @brief Identificadores de calendarios de mercado, usando los códigos de centro
  * de negocios de FpML.
  *
- * - CLSA: Santiago, Chile (feriados bancarios)
+ * - CLSA: Santiago, Chile (feriados públicos)
+ * - CLBA: Chile, calendario bancario (CLSA + 31 de diciembre, feriado bancario)
  * - USNY: Estados Unidos, banca de Nueva York (settlement SIFMA)
  * - USGS: Estados Unidos, government securities (mercado de bonos SIFMA)
  * - EUTA: Eurozona, sistema de pagos TARGET
@@ -22,6 +23,7 @@
 enum class BusinessCalendarId
 {
     CLSA,
+    CLBA,
     USNY,
     USGS,
     EUTA

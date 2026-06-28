@@ -216,7 +216,9 @@ PYBIND11_MODULE(qcfinancial, m) {
         // BusinessCalendarId (FpML business-center codes) + CalendarFactory
         py::enum_<BusinessCalendarId>(m, "BusinessCalendarId",
                                       "Identificadores de calendarios de mercado (códigos FpML).")
-                        .value("CLSA", BusinessCalendarId::CLSA, "Santiago, Chile - bank holidays")
+                        .value("CLSA", BusinessCalendarId::CLSA, "Santiago, Chile - public holidays")
+                        .value("CLBA", BusinessCalendarId::CLBA,
+                               "Chile - banking calendar (CLSA + December 31)")
                         .value("USNY", BusinessCalendarId::USNY,
                                "United States - New York banking (SIFMA settlement)")
                         .value("USGS", BusinessCalendarId::USGS,

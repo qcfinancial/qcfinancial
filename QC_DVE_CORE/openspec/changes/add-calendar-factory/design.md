@@ -12,7 +12,7 @@ Two mature references inform the design:
 
 **Goals:**
 - One-call construction of a single **merged** `QCBusinessCalendar` from `(startDate, nYears, {BusinessCalendarId...})`.
-- A small, readable, declarative rule taxonomy that covers CLSA, USNY, USGS, EUTA.
+- A small, readable, declarative rule taxonomy that covers CLSA, CLBA, USNY, USGS, EUTA.
 - Correct per-calendar observance (notably US Sat→Fri / Sun→Mon), applied **before** merging.
 - Reusable, independently testable `QCDate` date primitives (`easterSunday`, `nthWeekdayOfMonth`, `lastWeekdayOfMonth`).
 - FpML-coded enum with string round-trip and self-documenting pybind11 docstrings.
@@ -20,7 +20,7 @@ Two mature references inform the design:
 
 **Non-Goals:**
 - Non-Sat/Sun weekends (Fri/Sat Middle-East calendars) — punted.
-- Any calendar beyond the four listed.
+- Any calendar beyond the five listed.
 - Lazy / infinite-horizon evaluation (QuantLib style) — the materialized-set model is kept.
 - Data-driven rules loaded from external files — rules are hardcoded C++ tables in v1.
 
@@ -53,7 +53,7 @@ Add `QCDate::easterSunday(int year)` implementing the Anonymous Gregorian (compu
 *Why:* exact, unbounded year range, no maintenance — superior to QuantLib's fixed lookup table for an arbitrary `nYears` horizon. Lives on `QCDate` so it is reusable and unit-testable independent of the factory.
 
 ### D6. FpML enum codes with string round-trip and docstrings
-`enum class BusinessCalendarId { CLSA, USNY, USGS, EUTA }`. Free functions `fpmlCode(id) -> string`, `description(id) -> string`, `fromFpmlCode(const string&) -> BusinessCalendarId`. In pybind11, expose via `.value("CLSA", BusinessCalendarId::CLSA, "Santiago, Chile — bank holidays")` etc. (third arg is a per-value docstring), plus the round-trip functions.
+`enum class BusinessCalendarId { CLSA, CLBA, USNY, USGS, EUTA }`. Free functions `fpmlCode(id) -> string`, `description(id) -> string`, `fromFpmlCode(const string&) -> BusinessCalendarId`. In pybind11, expose via `.value("CLSA", BusinessCalendarId::CLSA, "Santiago, Chile — public holidays")` etc. (third arg is a per-value docstring), plus the round-trip functions. `CLBA` (Chile banking) is a house code — FpML defines no canonical Chile-banking center; it reuses the CLSA ruleset plus a non-movable Dec 31 (Feriado bancario).
 
 *Why:* FpML business-center codes are the financial-industry standard (trade data and config speak them), the docstrings keep the terse codes self-documenting in Python `help()`, and `fromFpmlCode` lets callers pass strings from config/data without a C++ symbol.
 
