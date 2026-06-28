@@ -350,6 +350,35 @@ class QCDate
 			QCDate::QCBusDayAdjRules direction) const;
 
         /*!
+         * Retorna el domingo de Pascua de Resurrección (Easter Sunday) del año indicado,
+         * usando el algoritmo de cómputo gregoriano (Anonymous Gregorian / Meeus).
+         * @param year (int) año
+         * @return (QCDate) fecha del domingo de Pascua
+         */
+        [[nodiscard]] static QCDate easterSunday(int year);
+
+        /*!
+         * Retorna la n-ésima ocurrencia de un día de la semana en un mes y año dados.
+         * Si n < 0 se cuenta desde el final del mes (la última ocurrencia es n = -1).
+         * @param n (int) número de ocurrencia (n < 0 cuenta desde el final del mes)
+         * @param weekday (QCWeekDay) día de la semana buscado
+         * @param month (int) mes (1-12)
+         * @param year (int) año
+         * @return (QCDate) fecha resultante
+         */
+        [[nodiscard]] static QCDate nthWeekdayOfMonth(int n, QCWeekDay weekday, int month, int year);
+
+        /*!
+         * Retorna la última ocurrencia de un día de la semana en un mes y año dados.
+         * Equivale a nthWeekdayOfMonth(-1, weekday, month, year).
+         * @param weekday (QCWeekDay) día de la semana buscado
+         * @param month (int) mes (1-12)
+         * @param year (int) año
+         * @return (QCDate) fecha resultante
+         */
+        [[nodiscard]] static QCDate lastWeekdayOfMonth(QCWeekDay weekday, int month, int year);
+
+        /*!
          * Retorna a si misma como string legible y printer friendly
 		 * @param dmy si es true retorna formato 'dd-mm-yyyy' si es false el formato
 		 * es 'yyyy-mm-dd'.

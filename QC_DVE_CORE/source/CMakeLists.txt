@@ -33,6 +33,9 @@ target_sources(QC_DVE_CORE
         asset_classes/QCActAct.cpp
         asset_classes/QC3030.cpp
         time/QCBusinessCalendar.cpp
+        time/BusinessCalendarId.cpp
+        time/HolidayRule.cpp
+        time/CalendarFactory.cpp
         QCClampedSpline.cpp
         QCCompoundWf.cpp
         QCContinousWf.cpp

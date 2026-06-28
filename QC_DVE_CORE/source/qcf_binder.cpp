@@ -58,6 +58,8 @@
 #include <curves/QCLinearInterpolator.h>
 
 #include <time/QCBusinessCalendar.h>
+#include <time/BusinessCalendarId.h>
+#include <time/CalendarFactory.h>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -99,7 +101,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.10.5, build: 2026-06-06 09:50"; });
+                []() { return "version: 1.11.0, build: 2026-06-28 11:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -122,6 +124,15 @@ PYBIND11_MODULE(qcfinancial, m) {
                              py::arg("es_iso") = false)
                         .def("add_months", &QCDate::addMonths)
                         .def("add_days", &QCDate::addDays)
+                        .def_static("easter_sunday", &QCDate::easterSunday,
+                                    "Domingo de Pascua (Easter Sunday) del año dado (cómputo gregoriano).",
+                                    py::arg("year"))
+                        .def_static("nth_weekday_of_month", &QCDate::nthWeekdayOfMonth,
+                                    "n-ésima ocurrencia de un día de la semana en un mes (n < 0 cuenta desde el final).",
+                                    py::arg("n"), py::arg("weekday"), py::arg("month"), py::arg("year"))
+                        .def_static("last_weekday_of_month", &QCDate::lastWeekdayOfMonth,
+                                    "Última ocurrencia de un día de la semana en un mes.",
+                                    py::arg("weekday"), py::arg("month"), py::arg("year"))
                         .def("day_diff", &QCDate::dayDiff)
                         .def("__lt__", &QCDate::operator<)
                         .def("__le__", &QCDate::operator<=)
@@ -199,6 +210,31 @@ PYBIND11_MODULE(qcfinancial, m) {
                                         return bc;
                                 }
                         ));
+
+        // BusinessCalendarId (FpML business-center codes) + CalendarFactory
+        py::enum_<BusinessCalendarId>(m, "BusinessCalendarId",
+                                      "Identificadores de calendarios de mercado (códigos FpML).")
+                        .value("CLSA", BusinessCalendarId::CLSA, "Santiago, Chile - bank holidays")
+                        .value("USNY", BusinessCalendarId::USNY,
+                               "United States - New York banking (SIFMA settlement)")
+                        .value("USGS", BusinessCalendarId::USGS,
+                               "United States - government securities (SIFMA bond market)")
+                        .value("EUTA", BusinessCalendarId::EUTA, "Eurozone - TARGET payment system");
+
+        m.def("fpml_code", &fpmlCode,
+              "Código FpML de un BusinessCalendarId (ej. 'CLSA').", py::arg("id"));
+        m.def("calendar_description", &description,
+              "Descripción legible de un BusinessCalendarId.", py::arg("id"));
+        m.def("calendar_from_fpml_code", &fromFpmlCode,
+              "Retorna el BusinessCalendarId asociado a un código FpML.", py::arg("code"));
+
+        py::class_<CalendarFactory>(m, "CalendarFactory",
+                                    "Construye calendarios de feriados a partir de reglas declarativas.")
+                        .def_static("build", &CalendarFactory::build,
+                                    "Construye un único BusinessCalendar combinando (unión) los feriados "
+                                    "de todos los calendarios solicitados, sobre [start_date, start_date + "
+                                    "n_years años]. La observancia se aplica por calendario antes de la unión.",
+                                    py::arg("start_date"), py::arg("n_years"), py::arg("ids"));
 
         // QCCurrency
         py::class_<QCCurrency, std::shared_ptr<QCCurrency> >(m, "QCCurrency")
