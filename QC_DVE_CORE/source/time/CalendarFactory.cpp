@@ -89,33 +89,22 @@ namespace {
             HolidayRule::oneOff(QCDate(20, 6, 2049)),
             HolidayRule::oneOff(QCDate(20, 6, 2050)),
 
-            // Ad-hoc one-off national holidays (special laws)
-            HolidayRule::oneOff(QCDate(17, 9, 2010)),  // Feriado nacional (Bicentenario)
-            HolidayRule::oneOff(QCDate(20, 9, 2010)),  // Feriado nacional (Bicentenario)
-            HolidayRule::oneOff(QCDate(17, 9, 2012)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2013)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(2, 1, 2017)),   // New-Year bridge
+            // Genuine historical one-off national holidays (year <= 2025) declared
+            // by single-year special laws and NOT covered by a permanent rule.
+            // The permanent Ley 20.983 bridges (Sep 17 when Friday, Jan 2 when
+            // Monday, from 2017) are handled by fixedOnWeekday rules in
+            // santiagoRules(), so their dates are intentionally NOT listed here.
+            // Future, not-yet-enacted Sep-17-Monday / Sep-20-Friday bridges are
+            // deliberately not projected.
+            HolidayRule::oneOff(QCDate(17, 9, 2010)),  // Bicentenario
+            HolidayRule::oneOff(QCDate(20, 9, 2010)),  // Bicentenario
+            HolidayRule::oneOff(QCDate(17, 9, 2012)),  // Fiestas Patrias bridge (one-time law)
+            HolidayRule::oneOff(QCDate(20, 9, 2013)),  // Fiestas Patrias bridge (one-time law)
             HolidayRule::oneOff(QCDate(19, 4, 2017)),  // Censo Nacional
-            HolidayRule::oneOff(QCDate(17, 9, 2018)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2019)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2021)),  // Fiestas Patrias bridge
+            HolidayRule::oneOff(QCDate(17, 9, 2018)),  // Fiestas Patrias bridge (one-time law)
+            HolidayRule::oneOff(QCDate(20, 9, 2019)),  // Fiestas Patrias bridge (one-time law)
             HolidayRule::oneOff(QCDate(16, 9, 2022)),  // Feriado nacional (plebiscito)
-            HolidayRule::oneOff(QCDate(2, 1, 2023)),   // New-Year bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2024)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2027)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2029)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2030)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2032)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(2, 1, 2034)),   // New-Year bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2035)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2038)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(2, 1, 2040)),   // New-Year bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2040)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2041)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(2, 1, 2045)),   // New-Year bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2046)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(20, 9, 2047)),  // Fiestas Patrias bridge
-            HolidayRule::oneOff(QCDate(17, 9, 2049)),  // Fiestas Patrias bridge
+            HolidayRule::oneOff(QCDate(20, 9, 2024)),  // Fiestas Patrias bridge (one-time law)
         };
     }
 
@@ -147,6 +136,11 @@ namespace {
             HolidayRule::fixed(11, 1),   // Día de Todos los Santos
             HolidayRule::fixed(12, 8),   // Inmaculada Concepción
             HolidayRule::fixed(12, 25),  // Navidad
+            // Ley 20.983 (efectiva desde 2017): Sep 17 es feriado cuando el 18 y 19
+            // caen sábado y domingo (i.e. cuando el 17 es viernes); y el 2 de enero
+            // es feriado cuando el 1 de enero es domingo (i.e. cuando el 2 es lunes).
+            HolidayRule::fixedOnWeekday(9, 17, QCDate::qcFriday, 2017), // Fiestas Patrias (puente)
+            HolidayRule::fixedOnWeekday(1, 2, QCDate::qcMonday, 2017),  // Año Nuevo (puente)
         };
         auto oneOffs = chileOneOffHolidays();
         rules.insert(rules.end(), oneOffs.begin(), oneOffs.end());

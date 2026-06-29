@@ -165,6 +165,36 @@ TEST_CASE("CLSA includes solstice-based and one-off national holidays") {
     REQUIRE(contains(h, QCDate(16, 9, 2022)));  // plebiscito one-off
 }
 
+TEST_CASE("HolidayRule::fixedOnWeekday fires only on the target weekday") {
+    auto sep17 = HolidayRule::fixedOnWeekday(9, 17, QCDate::qcFriday, 2017);
+    // 2021: Sep 17 is a Friday -> fires
+    REQUIRE(sep17.resolve(2021, Observance::none).value() == QCDate(17, 9, 2021));
+    // 2025: Sep 17 is a Wednesday -> no holiday
+    REQUIRE_FALSE(sep17.resolve(2025, Observance::none).has_value());
+    // fromYear gate: not active before 2017 even when Sep 17 is a Friday (e.g. 2010)
+    REQUIRE_FALSE(sep17.resolve(2010, Observance::none).has_value());
+}
+
+TEST_CASE("CLSA models Ley 20.983 bridges (Sep 17 / Jan 2)") {
+    auto h2021 = CalendarFactory::build(QCDate(1, 1, 2021), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2021, QCDate(17, 9, 2021)));   // Sep 18/19 = Sat/Sun -> Sep 17 Fri
+    auto h2023 = CalendarFactory::build(QCDate(1, 1, 2023), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2023, QCDate(2, 1, 2023)));    // Jan 1 = Sun -> Jan 2 Mon
+    // Conditions not met: 2025 Sep 17 is not a Friday; 2024 Jan 1 is not a Sunday
+    auto h2025 = CalendarFactory::build(QCDate(1, 1, 2025), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE_FALSE(contains(h2025, QCDate(17, 9, 2025)));
+    auto h2024 = CalendarFactory::build(QCDate(1, 1, 2024), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE_FALSE(contains(h2024, QCDate(2, 1, 2024)));
+}
+
+TEST_CASE("CLBA inherits the Ley 20.983 bridges") {
+    auto h2021 = CalendarFactory::build(QCDate(1, 1, 2021), 0, {BusinessCalendarId::CLBA}).getHolidays();
+    REQUIRE(contains(h2021, QCDate(17, 9, 2021)));
+    REQUIRE(contains(h2021, QCDate(31, 12, 2021)));  // plus the banking Dec 31
+    auto h2023 = CalendarFactory::build(QCDate(1, 1, 2023), 0, {BusinessCalendarId::CLBA}).getHolidays();
+    REQUIRE(contains(h2023, QCDate(2, 1, 2023)));
+}
+
 TEST_CASE("CLBA is CLSA plus December 31") {
     auto clsa = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLSA}).getHolidays();
     auto clba = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLBA}).getHolidays();

@@ -19,6 +19,20 @@ HolidayRule HolidayRule::fixed(int month, int day,
     return r;
 }
 
+HolidayRule HolidayRule::fixedOnWeekday(int month, int day, QCDate::QCWeekDay weekday,
+                                        std::optional<int> fromYear,
+                                        std::optional<int> toYear)
+{
+    HolidayRule r;
+    r.kind = RuleKind::fixedOnWeekday;
+    r.month = month;
+    r.day = day;
+    r.weekday = weekday;
+    r.fromYear = fromYear;
+    r.toYear = toYear;
+    return r;
+}
+
 HolidayRule HolidayRule::nthWeekday(int n, QCDate::QCWeekDay weekday, int month,
                                     std::optional<int> fromYear,
                                     std::optional<int> toYear,
@@ -102,6 +116,16 @@ std::optional<QCDate> HolidayRule::resolve(int year, Observance calendarDefault)
         case RuleKind::fixedDate:
             nominal = QCDate{day, month, year};
             break;
+        case RuleKind::fixedOnWeekday:
+        {
+            // Emit (month, day) only if it falls on the required weekday; never
+            // shifted. Used for Ley 20.983: Sep 17 is a holiday when Sep 18/19 are
+            // Sat/Sun (i.e. when Sep 17 is a Friday), and Jan 2 is a holiday when
+            // Jan 1 is a Sunday (i.e. when Jan 2 is a Monday).
+            QCDate candidate{day, month, year};
+            if (candidate.weekDay() != weekday) return std::nullopt;
+            return candidate;
+        }
         case RuleKind::nthWeekdayOfMonth:
             nominal = QCDate::nthWeekdayOfMonth(n, weekday, month, year);
             break;

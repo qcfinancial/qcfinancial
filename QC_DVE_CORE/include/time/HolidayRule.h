@@ -37,6 +37,7 @@ enum class Observance
 enum class RuleKind
 {
     fixedDate,         //!< fecha fija (mes, día)
+    fixedOnWeekday,    //!< fecha fija (mes, día) que solo aplica si cae en un día de la semana dado
     nthWeekdayOfMonth, //!< n-ésimo día de la semana del mes (n < 0 cuenta desde el final)
     easterRelative,    //!< desplazamiento en días respecto al domingo de Pascua
     specialOneOff      //!< fecha única (no se repite cada año)
@@ -78,6 +79,11 @@ struct HolidayRule
                              std::optional<int> fromYear = std::nullopt,
                              std::optional<int> toYear = std::nullopt,
                              std::optional<Observance> observance = std::nullopt);
+
+    //! Emite (month, day) solo si esa fecha cae en `weekday`; no aplica observancia.
+    static HolidayRule fixedOnWeekday(int month, int day, QCDate::QCWeekDay weekday,
+                                      std::optional<int> fromYear = std::nullopt,
+                                      std::optional<int> toYear = std::nullopt);
 
     static HolidayRule nthWeekday(int n, QCDate::QCWeekDay weekday, int month,
                                   std::optional<int> fromYear = std::nullopt,
