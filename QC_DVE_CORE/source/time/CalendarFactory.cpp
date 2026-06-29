@@ -89,22 +89,15 @@ namespace {
             HolidayRule::oneOff(QCDate(20, 6, 2049)),
             HolidayRule::oneOff(QCDate(20, 6, 2050)),
 
-            // Genuine historical one-off national holidays (year <= 2025) declared
-            // by single-year special laws and NOT covered by a permanent rule.
-            // The permanent Ley 20.983 bridges (Sep 17 when Friday, Jan 2 when
-            // Monday, from 2017) are handled by fixedOnWeekday rules in
-            // santiagoRules(), so their dates are intentionally NOT listed here.
-            // Future, not-yet-enacted Sep-17-Monday / Sep-20-Friday bridges are
-            // deliberately not projected.
-            HolidayRule::oneOff(QCDate(17, 9, 2010)),  // Bicentenario
+            // Genuine one-off national holidays NOT covered by any permanent rule.
+            // The Ley 20.983 bridges (Sep 17 when Friday, Jan 2 when Monday) and the
+            // Ley 20.215 Art. 35 ter bridges (Sep 17 when Monday, Sep 20 when Friday)
+            // are handled by fixedOnWeekday rules in santiagoRules(), so their dates
+            // are intentionally NOT listed here.
+            HolidayRule::oneOff(QCDate(17, 9, 2010)),  // Bicentenario (Sep 18 2010 = sábado)
             HolidayRule::oneOff(QCDate(20, 9, 2010)),  // Bicentenario
-            HolidayRule::oneOff(QCDate(17, 9, 2012)),  // Fiestas Patrias bridge (one-time law)
-            HolidayRule::oneOff(QCDate(20, 9, 2013)),  // Fiestas Patrias bridge (one-time law)
             HolidayRule::oneOff(QCDate(19, 4, 2017)),  // Censo Nacional
-            HolidayRule::oneOff(QCDate(17, 9, 2018)),  // Fiestas Patrias bridge (one-time law)
-            HolidayRule::oneOff(QCDate(20, 9, 2019)),  // Fiestas Patrias bridge (one-time law)
             HolidayRule::oneOff(QCDate(16, 9, 2022)),  // Feriado nacional (plebiscito)
-            HolidayRule::oneOff(QCDate(20, 9, 2024)),  // Fiestas Patrias bridge (one-time law)
         };
     }
 
@@ -132,7 +125,7 @@ namespace {
             HolidayRule::fixed(9, 18),   // Independencia Nacional
             HolidayRule::fixed(9, 19),   // Día de las Glorias del Ejército
             HolidayRule::fixed(10, 12, std::nullopt, std::nullopt, O::chileMondayShift),    // Encuentro de Dos Mundos
-            HolidayRule::fixed(10, 31, std::nullopt, std::nullopt, O::chileReformationShift), // Iglesias Evangélicas
+            HolidayRule::fixed(10, 31, 2008, std::nullopt, O::chileReformationShift), // Iglesias Evangélicas (Ley 20.299, desde 2008)
             HolidayRule::fixed(11, 1),   // Día de Todos los Santos
             HolidayRule::fixed(12, 8),   // Inmaculada Concepción
             HolidayRule::fixed(12, 25),  // Navidad
@@ -141,6 +134,11 @@ namespace {
             // es feriado cuando el 1 de enero es domingo (i.e. cuando el 2 es lunes).
             HolidayRule::fixedOnWeekday(9, 17, QCDate::qcFriday, 2017), // Fiestas Patrias (puente)
             HolidayRule::fixedOnWeekday(1, 2, QCDate::qcMonday, 2017),  // Año Nuevo (puente)
+            // Ley 20.215 Art. 35 ter (efectiva desde 2007): si el 18 y 19 caen martes
+            // y miércoles, el lunes 17 es feriado (i.e. cuando el 17 es lunes); si caen
+            // miércoles y jueves, el viernes 20 es feriado (i.e. cuando el 20 es viernes).
+            HolidayRule::fixedOnWeekday(9, 17, QCDate::qcMonday, 2007), // Fiestas Patrias (sándwich)
+            HolidayRule::fixedOnWeekday(9, 20, QCDate::qcFriday, 2007), // Fiestas Patrias (sándwich)
         };
         auto oneOffs = chileOneOffHolidays();
         rules.insert(rules.end(), oneOffs.begin(), oneOffs.end());

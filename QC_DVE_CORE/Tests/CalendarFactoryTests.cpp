@@ -195,6 +195,28 @@ TEST_CASE("CLBA inherits the Ley 20.983 bridges") {
     REQUIRE(contains(h2023, QCDate(2, 1, 2023)));
 }
 
+TEST_CASE("CLSA models Ley 20.215 Art 35 ter sandwich bridges") {
+    // 2029: Sep 18 = Tue, Sep 19 = Wed -> Sep 17 (Mon) is a holiday
+    auto h2029 = CalendarFactory::build(QCDate(1, 1, 2029), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2029, QCDate(17, 9, 2029)));
+    // 2030: Sep 18 = Wed, Sep 19 = Thu -> Sep 20 (Fri) is a holiday
+    auto h2030 = CalendarFactory::build(QCDate(1, 1, 2030), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE(contains(h2030, QCDate(20, 9, 2030)));
+    // 2025: neither condition holds
+    auto h2025 = CalendarFactory::build(QCDate(1, 1, 2025), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE_FALSE(contains(h2025, QCDate(17, 9, 2025)));
+    REQUIRE_FALSE(contains(h2025, QCDate(20, 9, 2025)));
+    // 2001: Sep 17 is a Monday but the law was not yet in force (fromYear 2007)
+    auto h2001 = CalendarFactory::build(QCDate(1, 1, 2001), 0, {BusinessCalendarId::CLSA}).getHolidays();
+    REQUIRE_FALSE(contains(h2001, QCDate(17, 9, 2001)));
+}
+
+TEST_CASE("CLBA inherits the Art 35 ter bridges") {
+    auto h2029 = CalendarFactory::build(QCDate(1, 1, 2029), 0, {BusinessCalendarId::CLBA}).getHolidays();
+    REQUIRE(contains(h2029, QCDate(17, 9, 2029)));
+    REQUIRE(contains(h2029, QCDate(31, 12, 2029)));
+}
+
 TEST_CASE("CLBA is CLSA plus December 31") {
     auto clsa = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLSA}).getHolidays();
     auto clba = CalendarFactory::build(QCDate(1, 1, 2025), 1, {BusinessCalendarId::CLBA}).getHolidays();
