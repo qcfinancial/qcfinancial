@@ -257,6 +257,56 @@ QCDate::QCWeekDay QCDate::weekDay() const
 }
 
 
+QCDate QCDate::easterSunday(int year)
+{
+    // Anonymous Gregorian algorithm (a.k.a. Meeus/Jones/Butcher computus).
+    int a = year % 19;
+    int b = year / 100;
+    int c = year % 100;
+    int d = b / 4;
+    int e = b % 4;
+    int f = (b + 8) / 25;
+    int g = (b - f + 1) / 3;
+    int h = (19 * a + b - d - g + 15) % 30;
+    int i = c / 4;
+    int k = c % 4;
+    int l = (32 + 2 * e + 2 * i - h - k) % 7;
+    int m = (a + 11 * h + 22 * l) / 451;
+    int month = (h + l - 7 * m + 114) / 31;
+    int day = ((h + l - 7 * m + 114) % 31) + 1;
+    return QCDate{day, month, year};
+}
+
+
+QCDate QCDate::nthWeekdayOfMonth(int n, QCDate::QCWeekDay weekday, int month, int year)
+{
+    if (n > 0)
+    {
+        // First occurrence of `weekday` in the month, then advance (n - 1) weeks.
+        QCDate firstOfMonth{1, month, year};
+        int offset = ((int)weekday - (int)firstOfMonth.weekDay() + 7) % 7;
+        QCDate firstOccurrence = firstOfMonth.addDays(offset);
+        return firstOccurrence.addDays(7 * (n - 1));
+    }
+
+    // n < 0: count from the end of the month. The last day of the month is the day
+    // before the first day of the following month.
+    int nextMonth = (month == 12) ? 1 : month + 1;
+    int nextYear = (month == 12) ? year + 1 : year;
+    QCDate lastOfMonth = QCDate{1, nextMonth, nextYear}.addDays(-1);
+    int offset = ((int)lastOfMonth.weekDay() - (int)weekday + 7) % 7;
+    QCDate lastOccurrence = lastOfMonth.addDays(-offset);
+    // n == -1 is the last occurrence; each step back is one week.
+    return lastOccurrence.addDays(7 * (n + 1));
+}
+
+
+QCDate QCDate::lastWeekdayOfMonth(QCDate::QCWeekDay weekday, int month, int year)
+{
+    return nthWeekdayOfMonth(-1, weekday, month, year);
+}
+
+
 std::string QCDate::description(bool dmy) const
 {
     std::stringstream ss;

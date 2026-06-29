@@ -3,8 +3,8 @@
 #
 # Usage:
 #   ./compile.sh                        # build all versions
-#   ./compile.sh 3.12.1                 # build one version (positional arg)
-#   PYTHON_VERSION=3.12.1 ./compile.sh  # build one version (env var)
+#   ./compile.sh 3.12.13                # build one version (positional arg)
+#   PYTHON_VERSION=3.12.13 ./compile.sh # build one version (env var)
 
 set -euo pipefail
 
@@ -12,7 +12,7 @@ PYENV_ROOT="${HOME}/.pyenv"
 
 # Auto-detect the latest installed patch version for each minor
 detect_latest_versions() {
-    local minors=("3.10" "3.11" "3.12" "3.13")
+    local minors=("3.11" "3.12" "3.13" "3.14")
     local found=()
     for minor in "${minors[@]}"; do
         local latest

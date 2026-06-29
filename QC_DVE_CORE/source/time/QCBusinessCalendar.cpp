@@ -30,17 +30,19 @@ void QCBusinessCalendar::addHoliday(const QCDate& holiday)
 
 QCBusinessCalendar QCBusinessCalendar::operator+(QCBusinessCalendar const& cal)
 {
+    // Merged calendar spans the union of both: earliest start date, and a length
+    // (in years) reaching at least the later of the two end years.
     auto min_date = _startDate;
     if (cal.getStartDate() < _startDate) {
-        min_date = _startDate;
+        min_date = cal.getStartDate();
     }
 
-    auto max_length = _length;
-    if (cal.getLength() > max_length) {
-        max_length = cal.getLength();
-    }
+    int end_year_this = _startDate.year() + _length;
+    int end_year_cal = cal.getStartDate().year() + cal.getLength();
+    int max_end_year = (end_year_cal > end_year_this) ? end_year_cal : end_year_this;
+    int span_length = max_end_year - min_date.year();
 
-    auto result = QCBusinessCalendar(min_date, max_length);
+    auto result = QCBusinessCalendar(min_date, span_length);
 
     for (const auto& fecha: _holidays) {
         result.addHoliday(fecha);
@@ -69,7 +71,7 @@ QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
     }
 
     QCDate fechaOut{serial};
-    while (binary_search(_holidays.begin(), _holidays.end(), fechaOut))
+    while (_holidays.find(fechaOut) != _holidays.end())
     {
         fechaOut.setDateFromExcelSerial(++serial);
         if (fechaOut.weekDay() == _firstDayOfWeekend)
@@ -95,7 +97,7 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     }
 
     QCDate fechaOut{serial};
-    while (binary_search(_holidays.begin(), _holidays.end(), fechaOut))
+    while (_holidays.find(fechaOut) != _holidays.end())
     {
         fechaOut.setDateFromExcelSerial(--serial);
         if (fechaOut.weekDay() == _secondDayOfWeekEnd)

@@ -2,10 +2,10 @@
 #
 # Build and run:
 #   docker build -t clion/redhat93-python311/cpp-env:1.0 -f Dockerfile.cpp-env-redhat93-python311-amd64 .
-#   docker run -it --name redhat93 -v /Users/nbacquet/Documents/Docker/Volumenes/RedHat9Py39:/home/test_user/MyVolume --entrypoint /bin/bash clion/redhat93-python311/cpp-env:1.0
+#   docker run -d --name redhat93-py311 clion/redhat93-python311/cpp-env:1.0 tail -f /dev/null
 
 
-FROM --platform=linux/amd64 redhat/ubi9-init
+FROM redhat/ubi9-init
 
 RUN yum -y update && yum -y install yum-utils
 RUN yum -y install dnf
@@ -19,6 +19,7 @@ RUN yum -y install gcc-c++
 RUN yum -y install gdb
 RUN yum -y install clang
 RUN yum -y install cmake
+RUN yum -y install ninja-build
 RUN yum -y install rsync
 RUN yum -y install tar
 RUN yum -y install git
