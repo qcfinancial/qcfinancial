@@ -2,6 +2,8 @@
 // Created by ADiazV on 21-12-2021.
 //
 
+#include <algorithm>
+
 #include "catch/catch-2.hpp"
 #include "time/QCBusinessCalendar.h"
 
@@ -135,4 +137,49 @@ TEST_CASE("QCBusinessCalendar: shift") {
     result = cal.shift(testDate, 6);
     expectedDate = QCDate(10, 2, 1969);
     REQUIRE(result == expectedDate);
+}
+TEST_CASE("QCBusinessCalendar: nextBusinessDay skips a weekday holiday") {
+    auto cal = QCBusinessCalendar(QCDate(1, 1, 2025), 1);
+    cal.addHoliday(QCDate(8, 1, 2025)); // Wednesday
+    // 2025-01-08 is a Wednesday holiday -> next business day is Thursday the 9th
+    REQUIRE(cal.nextBusinessDay(QCDate(8, 1, 2025)) == QCDate(9, 1, 2025));
+}
+
+TEST_CASE("QCBusinessCalendar: Friday holiday rolls forward to Monday") {
+    auto cal = QCBusinessCalendar(QCDate(1, 1, 2025), 1);
+    cal.addHoliday(QCDate(10, 1, 2025)); // Friday
+    REQUIRE(cal.nextBusinessDay(QCDate(10, 1, 2025)) == QCDate(13, 1, 2025)); // Monday
+}
+
+TEST_CASE("QCBusinessCalendar: Monday holiday rolls back to Friday") {
+    auto cal = QCBusinessCalendar(QCDate(1, 1, 2025), 1);
+    cal.addHoliday(QCDate(13, 1, 2025)); // Monday
+    REQUIRE(cal.previousBusinessDay(QCDate(13, 1, 2025)) == QCDate(10, 1, 2025)); // Friday
+}
+
+TEST_CASE("QCBusinessCalendar: consecutive holidays across a weekend are skipped") {
+    auto cal = QCBusinessCalendar(QCDate(1, 1, 2025), 1);
+    cal.addHoliday(QCDate(10, 1, 2025)); // Friday
+    cal.addHoliday(QCDate(13, 1, 2025)); // Monday (after the weekend)
+    // From Friday holiday: skip Fri, Sat, Sun, Mon(holiday) -> Tuesday 14th
+    REQUIRE(cal.nextBusinessDay(QCDate(10, 1, 2025)) == QCDate(14, 1, 2025));
+}
+
+TEST_CASE("QCBusinessCalendar: operator+ uses the earlier start date") {
+    auto a = QCBusinessCalendar(QCDate(1, 1, 2023), 5); // through 2028
+    auto b = QCBusinessCalendar(QCDate(1, 1, 2020), 3); // through 2023
+    a.addHoliday(QCDate(15, 5, 2024));
+    b.addHoliday(QCDate(20, 8, 2021));
+
+    auto merged = a + b;
+    REQUIRE(merged.getStartDate() == QCDate(1, 1, 2020)); // earlier of the two
+    // length must reach at least the later end year (2028)
+    REQUIRE(merged.getStartDate().year() + merged.getLength() >= 2028);
+
+    auto h = merged.getHolidays();
+    auto has = [&](const QCDate& d) {
+        return std::find(h.begin(), h.end(), d) != h.end();
+    };
+    REQUIRE(has(QCDate(15, 5, 2024)));
+    REQUIRE(has(QCDate(20, 8, 2021)));
 }
