@@ -62,11 +62,10 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexCashflow::amount() {
-        auto tempDecimalPlaces = _eqRateDecimalPlaces;
-        _eqRateDecimalPlaces = 20;
-        auto endDate = (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) ? _endDate : _indexEndDate;
-        auto rate = getEqRate(endDate, _endDateIndexValue);
-        _rate.setValue(_spread + rate);
+        auto endDate = _endDateForEqRate();
+        // PV usa la tasa equivalente sin redondear.
+        auto rate = _eqRateAt(endDate, _endDateIndexValue, LIMIT_EQ_RATE_DECIMAL_PLACES + 1);
+        _rate.setValue(rate * _gearing + _spread);
         auto interest = _notional * (_rate.wf(_startDate, _endDate) - 1.0);
 
         // Falta probar las derivadas
@@ -90,12 +89,10 @@ namespace QCode::Financial {
 
         if (_doesAmortize)
         {
-            _eqRateDecimalPlaces = tempDecimalPlaces;
             return _amortization + interest;
         }
         else
         {
-            _eqRateDecimalPlaces = tempDecimalPlaces;
             return interest;
         }
     }
@@ -133,6 +130,11 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::getEqRate(QCDate &date, double indexValue) {
+        return _eqRateAt(date, indexValue, _eqRateDecimalPlaces);
+    }
+
+
+    double OvernightIndexCashflow::_eqRateAt(QCDate &date, double indexValue, unsigned int decimalPlaces) {
         // Calcula la tasa equivalente a una fecha posterior a la fecha de inicio
         // de devengo del cupón y para un valor del índice.
 
@@ -153,12 +155,16 @@ namespace QCode::Financial {
             return 0.0;
         }
         const double eqRate = (indexValue / _startDateIndexValue - 1) / yf;
-        if (constexpr unsigned int LIMIT_EQ_RATE_DECIMAL_PLACES = 12;
-            _eqRateDecimalPlaces > LIMIT_EQ_RATE_DECIMAL_PLACES) {
+        if (decimalPlaces > LIMIT_EQ_RATE_DECIMAL_PLACES) {
             return eqRate;
         }
-        const auto factor = std::pow(10, _eqRateDecimalPlaces);
+        const auto factor = std::pow(10, decimalPlaces);
         return round(eqRate * factor) / factor;
+    }
+
+
+    QCDate OvernightIndexCashflow::_endDateForEqRate() const {
+        return (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) ? _endDate : _indexEndDate;
     }
 
 
@@ -260,15 +266,8 @@ namespace QCode::Financial {
         auto interes = flujo;
         if (_doesAmortize)
             interes -= _amortization;
-        double rate = 0.0;
-
-        // Este if decide qué fecha final (la de devengo o la del índice)
-        // usar para el cálculo de la fracción de año.
-        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
-            rate = getEqRate(_endDate, _endDateIndexValue);
-        } else {
-            rate = getEqRate(_indexEndDate, _endDateIndexValue);
-        }
+        auto eqRateDate = _endDateForEqRate();
+        double rate = getEqRate(eqRateDate, _endDateIndexValue);
         OvernightIndexCashflowWrapper tup = std::make_tuple(
                 _startDate.description(false),
                 _endDate.description(false),
@@ -299,12 +298,8 @@ namespace QCode::Financial {
         auto flujo = interes;
         if (_doesAmortize)
             flujo += _amortization;
-        double rate = 0.0;
-        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
-            rate = getEqRate(_endDate, _endDateIndexValue);
-        } else {
-            rate = getEqRate(_indexEndDate, _endDateIndexValue);
-        }
+        auto eqRateDate = _endDateForEqRate();
+        double rate = getEqRate(eqRateDate, _endDateIndexValue);
         result["type_of_cashflow"] = "overnight_index";
         result["start_date"] = _startDate.description(false);
         result["end_date"] = _endDate.description(false);
@@ -332,11 +327,8 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::getRateValue() {
-        if (_datesForEquivalentRate == DatesForEquivalentRate::qcAccrual) {
-            return getEqRate(_endDate, _endDateIndexValue);
-        } else {
-            return getEqRate(_indexEndDate, _endDateIndexValue);
-        }
+        auto eqRateDate = _endDateForEqRate();
+        return getEqRate(eqRateDate, _endDateIndexValue);
     };
 
 
@@ -365,7 +357,11 @@ namespace QCode::Financial {
     };
 
     double OvernightIndexCashflow::_calculateInterest(QCDate &date, double indexValue) {
-        double eqRate = getEqRate(date, indexValue);
+        // En o después del fin de devengo, la tasa equivalente se evalúa en la fecha
+        // final que corresponde según _datesForEquivalentRate (fin de devengo o fin
+        // de índice). Antes del fin de devengo se usa la fecha entregada.
+        auto eqRateDate = (date >= _endDate) ? _endDateForEqRate() : date;
+        double eqRate = _eqRateAt(eqRateDate, indexValue, _eqRateDecimalPlaces);
         _rate.setValue(eqRate * _gearing + _spread);
         return _notional * (_rate.wf(_startDate, date) - 1);
     }
@@ -375,13 +371,16 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexCashflow::accruedInterest(const QCDate &fecha, const TimeSeries &fixings) {
+        // El fixing se busca en la fecha en que se evalúa la tasa equivalente
+        // (ver _calculateInterest).
+        auto lookupDate = (fecha >= _endDate) ? _endDateForEqRate() : fecha;
         auto indexValue = 0.0;
         try {
-            indexValue = fixings.at(fecha);
+            indexValue = fixings.at(lookupDate);
         }
         catch (const exception &e) {
             throw invalid_argument("Index value not found for date " +
-                                   fecha.description(false) + ".");
+                                   lookupDate.description(false) + ".");
         }
         auto fechaOk = fecha;
         return _calculateInterest(fechaOk, indexValue);
@@ -394,17 +393,7 @@ namespace QCode::Financial {
 
 
     double OvernightIndexCashflow::settlementAmount() {
-        // auto interest = _calculateInterest(_endDate, _endDateIndexValue);
-        // double eqRate = getEqRate(_indexEndDate, _endDateIndexValue);
-        double yf = _rate.yf(_startDate, _endDate);
-        if (_datesForEquivalentRate == DatesForEquivalentRate::qcIndex) {
-            yf = _rate.yf(_indexStartDate, _indexEndDate);
-        }
-        auto factor = pow(10, _eqRateDecimalPlaces);
-        double eqRate = round(((_endDateIndexValue / _startDateIndexValue - 1) / yf) * factor);
-        eqRate /= factor;
-        _rate.setValue(eqRate * _gearing + _spread);
-        auto settAmount = _notional * (_rate.wf(_startDate, _endDate) - 1);
+        auto settAmount = _calculateInterest(_endDate, _endDateIndexValue);
         if (_doesAmortize) {
             settAmount += _amortization;
         }

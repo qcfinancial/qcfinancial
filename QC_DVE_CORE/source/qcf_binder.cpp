@@ -919,7 +919,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 (QCDate &, double)>(
                                 "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
                                 "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
-                                "as accrual and index date",
+                                "as accrual and index date. At or after the accrual end date, the equivalent rate is "
+                                "evaluated at the index end date when dates_for_eq_rate is qcIndex, so the result "
+                                "agrees with record() and settlement_amount()",
                                py::arg("accrual_and_index_date"),
                                py::arg("index_value"))
                         .def<double(qf::OvernightIndexCashflow::*)
@@ -932,7 +934,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def<double(qf::OvernightIndexCashflow::*)(const QCDate &, const qf::TimeSeries &)>(
                                 "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
                                 "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
-                                "as accrual and index date",
+                                "as accrual and index date. At or after the accrual end date, the equivalent rate is "
+                                "evaluated (and the fixing looked up) at the index end date when dates_for_eq_rate "
+                                "is qcIndex, so the result agrees with record() and settlement_amount()",
                                 py::arg("accrual_and_index_date"),
                                 py::arg("index_time_series"))
                         .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
