@@ -222,7 +222,7 @@ namespace QCode
 			 *
 			 * @return	The nominal.
 			 */
-			double getNominal() const;
+			double getNominal() const override;
 
 			/**
 			* @fn	    void IcpClpCashflow::setAmortization(double amortization);

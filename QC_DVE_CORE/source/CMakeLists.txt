@@ -23,6 +23,7 @@ target_sources(QC_DVE_CORE
         cashflows/CompoundedOvernightRateCashflow2.cpp
         cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.cpp
         cashflows/IborMultiCurrencyCashflow.cpp
+        portfolio/Portfolio.cpp
         asset_classes/InterestRateIndex.cpp
         Leg.cpp
         LegFactory.cpp
