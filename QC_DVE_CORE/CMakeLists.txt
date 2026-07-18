@@ -37,10 +37,16 @@ add_subdirectory(source)
 add_subdirectory(Tests)
 add_subdirectory(ManualTests)
 
-add_custom_target(build_wheel
+add_custom_target(build_wheel_rhel9
         COMMAND python3.11 ${CMAKE_SOURCE_DIR}/setup.py bdist_wheel --plat-name manylinux_2_34_x86_64 --dist-dir ${CMAKE_SOURCE_DIR}/dist
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        COMMENT "Building Linux Python wheel"
+        COMMENT "Building Linux Python wheel (RHEL 9 / glibc 2.34)"
+)
+
+add_custom_target(build_wheel_rhel8
+        COMMAND python3.11 ${CMAKE_SOURCE_DIR}/setup.py bdist_wheel --plat-name manylinux_2_28_x86_64 --dist-dir ${CMAKE_SOURCE_DIR}/dist
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Building Linux Python wheel (RHEL 8 / glibc 2.28)"
 )
 
 if(APPLE)
