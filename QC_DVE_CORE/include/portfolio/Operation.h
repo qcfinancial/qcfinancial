@@ -18,28 +18,21 @@ namespace QCode
 		 *
 		 * @brief	Immutable container of one or more legs identified by a caller-supplied
 		 * 			opaque key. qcfinancial attaches no meaning to the key. Legs are numbered
-		 * 			from 1 in construction order and carry a RecPay direction as metadata
-		 * 			(amounts keep the signs baked in by LegFactory).
+		 * 			from 1 in construction order. Receive/pay direction is not stored: it is
+		 * 			already expressed by the signs LegFactory bakes into the amounts.
 		 */
 		class Operation
 		{
 		public:
-			Operation(long long key, std::vector<Leg> legs, std::vector<RecPay> recPay) :
+			Operation(long long key, std::vector<Leg> legs) :
 				_key(key),
 				_legs(std::move(legs)),
-				_recPay(std::move(recPay)),
 				_maxSettlementSerial(0)
 			{
 				if (_legs.empty())
 				{
 					throw std::invalid_argument(
 						"Operation " + std::to_string(_key) + ": at least one leg is required.");
-				}
-				if (_legs.size() != _recPay.size())
-				{
-					throw std::invalid_argument(
-						"Operation " + std::to_string(_key) +
-						": legs and rec_pay must have the same length.");
 				}
 				for (auto& leg : _legs)
 				{
@@ -76,11 +69,6 @@ namespace QCode
 				return _legs.at(i);
 			}
 
-			[[nodiscard]] RecPay getRecPay(size_t i) const
-			{
-				return _recPay.at(i);
-			}
-
 			/**
 			 * @brief	Largest settlement date (excel serial) across all cashflows.
 			 * 			Used by Portfolio to size per-query discount factor tables.
@@ -93,7 +81,6 @@ namespace QCode
 		private:
 			long long _key;
 			std::vector<Leg> _legs;
-			std::vector<RecPay> _recPay;
 			long _maxSettlementSerial;
 		};
 	}

@@ -32,9 +32,7 @@ def build_leg(notional=1_000_000.0, rate_value=0.05):
 
 
 def build_operation(key, notional=1_000_000.0, rate_value=0.05):
-    return qcf.Operation(
-        key=key, legs=[build_leg(notional, rate_value)], rec_pay=[qcf.RecPay.RECEIVE]
-    )
+    return qcf.Operation(key=key, legs=[build_leg(notional, rate_value)])
 
 
 def flat_clp_curve(rate_value=0.05):
@@ -106,7 +104,7 @@ def test_pv_matches_per_cashflow_discounting():
     curve = flat_clp_curve()
     leg = build_leg()
     port = qcf.Portfolio()
-    port.add(qcf.Operation(key=1, legs=[leg], rec_pay=[qcf.RecPay.RECEIVE]))
+    port.add(qcf.Operation(key=1, legs=[leg]))
     state = port.states_at(T, curves={"CLP": curve})
     expected = 0.0
     for i in range(leg.size()):
@@ -163,7 +161,7 @@ def test_incremental_mutation_and_errors():
     except ValueError:
         pass
     try:
-        qcf.Operation(key=1, legs=[], rec_pay=[])
+        qcf.Operation(key=1, legs=[])
         raise AssertionError("empty operation did not raise")
     except ValueError:
         pass
@@ -173,7 +171,7 @@ def test_operation_accessors():
     op = build_operation(7)
     assert op.get_key() == 7
     assert op.number_of_legs() == 1
-    assert op.get_rec_pay(0) == qcf.RecPay.RECEIVE
+    assert not hasattr(op, "get_rec_pay")
     assert op.get_leg(0).size() == build_leg().size()
 
 

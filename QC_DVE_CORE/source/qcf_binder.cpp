@@ -103,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.12.0a1, build: 2026-07-18 08:02"; });
+                []() { return "version: 1.12.0a2, build: 2026-07-18 09:32"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1154,16 +1154,16 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         // Operation
         py::class_<qf::Operation>(m, "Operation",
-                                  R"pbdoc(Contenedor inmutable de una o más patas identificado por una clave opaca del caller.)pbdoc")
-                        .def(py::init<long long, std::vector<qf::Leg>, std::vector<qf::RecPay>>(),
-                             py::arg("key"), py::arg("legs"), py::arg("rec_pay"))
+                                  R"pbdoc(Contenedor inmutable de una o más patas identificado por una clave opaca del caller.
+La dirección receive/pay no se almacena: ya está expresada en los signos de los montos que fija LegFactory.)pbdoc")
+                        .def(py::init<long long, std::vector<qf::Leg>>(),
+                             py::arg("key"), py::arg("legs"))
                         .def("get_key", &qf::Operation::getKey)
                         .def("number_of_legs", &qf::Operation::numberOfLegs)
                         .def("get_leg", &qf::Operation::getLeg,
                              py::return_value_policy::reference_internal,
                              "Pata en el índice dado (base 0; leg_number = índice + 1).",
-                             py::arg("index"))
-                        .def("get_rec_pay", &qf::Operation::getRecPay, py::arg("index"));
+                             py::arg("index"));
 
         // Portfolio
         py::class_<qf::Portfolio>(m, "Portfolio",

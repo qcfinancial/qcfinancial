@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.12.0a1** (set in `setup.py`).
+Current version: **1.12.0a2** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -153,6 +153,28 @@ All active cashflow types support a `record()` method returning a `std::tuple` o
 - `ForwardRates` — sets forward rates on `IborCashflow`, `IcpClfCashflow`, `CompoundedOvernightRateCashflow2`, `OvernightIndexCashflow`, and their multi-currency variants using projection curves
 - `ForwardFXRates` — FX forward estimation from two discount curves (`ForwardFXRates.cpp`)
 - `FXRateEstimator` — spot FX + basis point adjustments (`FXRateEstimator.cpp`)
+
+### Layer 7 — Portfolio / Batch State (`include/portfolio/`)
+
+Added in 1.12.0 for columnar batch state queries over large portfolios.
+
+- `Operation` — immutable container of one or more `Leg`s under a caller-supplied opaque key. qcfinancial attaches no meaning to the key. Legs are numbered from 1 in construction order.
+- `Portfolio` — container of `Operation`s keyed by that key, mutated incrementally via `add`/`remove`. Exposes two batch queries returning parallel numpy arrays (zero-copy via `vectorToNumpy`):
+  - `statesAt(t, curves, numThreads)` — per-leg accrual, outstanding notional, settling amounts, next flow date, optional present value
+  - `flowsBetween(t1, t2, numThreads)` — every contractual flow settling in `(t1, t2]`
+
+Both parallelize across operations with `std::thread` and are bitwise deterministic regardless of thread count. Curve objects are never touched from worker threads — the query chain (curve → interpolator → `QCInterestRate`) mutates internal state on every call, so discount factor tables are precomputed serially by day offset and the workers only index into them.
+
+#### Current scope: fixed-rate legs only
+
+The batch queries were built for phase F1, which covers **fixed-rate legs of simple commercial products only**. Two known limitations, both deliberate and both to be revisited:
+
+1. **No forward-rate projection.** `statesAt` never calls `ForwardRates`; it discounts `cf->amount()` as-is. A floating leg therefore yields a `present_value` reflecting whatever rate is currently stored in the cashflow — correct only if the caller ran `ForwardRates` beforehand, and **silently wrong otherwise**. Unlike a missing discount curve, which correctly yields `NaN`, nothing in the output flags this.
+2. **Discount curves are selected by currency ISO code.** Not a robust criterion: discounting follows the CSA, not the currency, so same-currency trades under different collateral agreements need different curves, and a cross-currency swap may discount each leg off a different curve.
+
+The likely direction (discussed, not designed): attach projection and discount curve **names** to each leg, resolved against a name → curve map at query time, so curve objects stay out of the leg and the whole mapping can be swapped per scenario. Per-leg rather than per-operation, since a cross-currency swap's legs discount differently. The projection name may be redundant — cashflows already carry their `InterestRateIndex`, so projection curves could be keyed by index code with no new field. If projection is added, the serial-precompute constraint above applies: derive forwards in the workers from a precomputed discount factor table via `(df[start]/df[end] - 1) / yf` rather than calling curve objects from threads.
+
+**Do not use `Portfolio` for floating-rate legs until limitation 1 is addressed.**
 
 ### Python Bindings
 

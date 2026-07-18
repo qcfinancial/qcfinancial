@@ -66,7 +66,7 @@ namespace
 
 	Operation makeOperation(long long key, Leg leg)
 	{
-		return Operation(key, {std::move(leg)}, {RecPay::Receive});
+		return Operation(key, {std::move(leg)});
 	}
 
 	std::shared_ptr<ZeroCouponCurve> makeFlatCurve(double rateValue = 0.05)
@@ -88,24 +88,26 @@ TEST_CASE("Operation construction and validation")
 		auto op = makeOperation(1001, makeBulletLeg());
 		REQUIRE(op.getKey() == 1001);
 		REQUIRE(op.numberOfLegs() == 1);
-		REQUIRE(op.getRecPay(0) == RecPay::Receive);
+	}
+
+	SECTION("two leg operation keeps direction in the amount signs")
+	{
+		// Direction is not stored: a receive leg and a pay leg are told apart
+		// only by the signs LegFactory (here, the sign of the nominal) applied.
+		Operation op(1001, {makeBulletLeg(1000000.0), makeBulletLeg(-1000000.0)});
+		REQUIRE(op.numberOfLegs() == 2);
+		REQUIRE(op.getLeg(0).getCashflowAt(0)->amount() > 0.0);
+		REQUIRE(op.getLeg(1).getCashflowAt(0)->amount() < 0.0);
 	}
 
 	SECTION("zero legs throws")
 	{
-		REQUIRE_THROWS_AS(Operation(1, {}, {}), std::invalid_argument);
-	}
-
-	SECTION("rec_pay length mismatch throws")
-	{
-		REQUIRE_THROWS_AS(
-			Operation(1, {makeBulletLeg()}, {RecPay::Receive, RecPay::Pay}),
-			std::invalid_argument);
+		REQUIRE_THROWS_AS(Operation(1, {}), std::invalid_argument);
 	}
 
 	SECTION("empty leg throws")
 	{
-		REQUIRE_THROWS_AS(Operation(1, {Leg()}, {RecPay::Receive}), std::invalid_argument);
+		REQUIRE_THROWS_AS(Operation(1, {Leg()}), std::invalid_argument);
 	}
 }
 
