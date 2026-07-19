@@ -1,3 +1,7 @@
+## Purpose
+
+Generation of payment schedules whose irregular period falls at the front. Covers how the schedule is anchored from the end date backwards for `SHORTFRONT`, `LONGFRONT`, and `LONGFRONTn` conventions, including the single-period degenerate case, and the requirement that business-day adjustment is applied to an anchor before that anchor is used to derive further dates.
+
 ## Requirements
 
 ### Requirement: Front-stub schedule anchored from end date

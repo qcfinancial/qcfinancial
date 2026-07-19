@@ -1,6 +1,10 @@
 # overnight-index-cashflow
 
-Equivalent-rate computation semantics for `OvernightIndexCashflow` and its multi-currency subclass (`OvernightIndexMultiCurrencyCashflow`). Established in change `fix-overnight-index-eq-rate-state` (v1.11.4).
+## Purpose
+
+Equivalent-rate computation semantics for `OvernightIndexCashflow` and its multi-currency subclass (`OvernightIndexMultiCurrencyCashflow`). Covers how the equivalent rate is derived and rounded, how gearing enters the interest calculation, how `DatesForEquivalentRate` selects the dates the rate spans, and the requirement that every valuation and reporting method reports interest from one shared computation path. Established in change `fix-overnight-index-eq-rate-state` (v1.11.4).
+
+## Requirements
 
 ### Requirement: Single equivalent-rate computation path
 `OvernightIndexCashflow` SHALL compute the equivalent rate in exactly one code path, parameterized by evaluation date, index value, and decimal places. All valuation and reporting methods (`amount()`, `settlementAmount()`, `record()`, `wrap()`, `getRateValue()`, `accruedInterest()`, `_calculateInterest()`) MUST route through it. The path SHALL apply these rules: return 0 when the evaluation date is on or before the eq-rate start date; return 0 when the year fraction is 0; skip rounding when decimal places exceed 12; otherwise round half away from zero to the given decimal places.

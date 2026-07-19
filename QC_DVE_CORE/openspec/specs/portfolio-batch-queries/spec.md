@@ -1,7 +1,8 @@
 # portfolio-batch-queries Specification
 
 ## Purpose
-TBD - created by archiving change add-operation-batch-state. Update Purpose after archive.
+
+The columnar batch query surface on `Portfolio`: `states_at(t, curves?)` for per-leg state at a date, and `flows_between(t1, t2)` for every flow settling in a window. Covers the output schema, row ordering, the one-boundary-crossing contract (numpy arrays, no per-row conversion), determinism regardless of thread count, and parallel execution semantics.
 ## Requirements
 ### Requirement: Columnar state query states_at
 `Portfolio.states_at(t, curves=None)` SHALL return, in one call, the state of every leg of every operation as parallel numpy arrays (dict of column name → array, all of length N = total live legs). Columns SHALL include: `op_key` (int64), `leg_number` (int32), currency identification, `accrued_interest`, `outstanding_notional`, `interest_settling`, `amortization_settling`, `total_settling`, `next_flow_date` (int64 excel serial, 0 if none), and `present_value` (double, NaN where not computed). No per-row Python object SHALL be created; the boundary cost SHALL be O(columns), not O(legs).

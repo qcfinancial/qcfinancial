@@ -1,7 +1,8 @@
 # operation-portfolio Specification
 
 ## Purpose
-TBD - created by archiving change add-operation-batch-state. Update Purpose after archive.
+
+The `Portfolio` container — many `Operation`s keyed by their opaque key, built once and mutated incrementally as trades originate and mature. Covers add/remove semantics, duplicate and missing key handling, target scale, and its role as the receiver of the columnar batch queries.
 ## Requirements
 ### Requirement: Portfolio holds operations with incremental mutation
 A `Portfolio` SHALL hold Operations keyed by their opaque key, support `add(operation)` and `remove(key)` at any time between queries, and never require rebuilding inside a projection. It SHALL handle the target scale of 10⁵–10⁶ operations.

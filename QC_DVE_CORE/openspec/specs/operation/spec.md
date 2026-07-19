@@ -1,7 +1,8 @@
 # operation Specification
 
 ## Purpose
-TBD - created by archiving change add-operation-batch-state. Update Purpose after archive.
+
+The `Operation` type — an immutable container of one or more `Leg` objects under a caller-supplied opaque integer key, which qcfinancial attaches no meaning to. Covers construction from existing `LegFactory` output, leg numbering, validation, and the decision that receive/pay direction is not stored because it is already carried in the signs of the cashflow amounts.
 ## Requirements
 ### Requirement: Operation wraps legs under an opaque key
 An `Operation` SHALL be constructible from one or more existing `Leg` objects (as produced by `LegFactory` builders) and a caller-supplied opaque `int64` key. qcfinancial SHALL attach no meaning to the key. Legs SHALL be identified within the operation by `leg_number` starting at 1 in construction order. An `Operation` SHALL NOT carry a per-leg direction: receive/pay is already expressed by the signs of the cashflow amounts, which `LegFactory` fixes at leg construction.
