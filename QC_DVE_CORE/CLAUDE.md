@@ -10,10 +10,14 @@ Current version: **1.12.0a3** (set in `setup.py`).
 
 ## Branch Strategy
 
+Intended:
+
 - **`master`** — stable releases only; merges come from `develop` via PR.
 - **`develop`** — active development branch; new features and fixes land here first.
 
-Always work on `develop` (or a feature branch off `develop`) and merge to `master` when ready to release.
+**Actual, as of 2026-07-19:** the `1.12.0` series is being developed on **`alm`**, which tracks `origin/alm` and is several commits ahead of `develop`. `develop` contains nothing `alm` lacks. Branch off `alm` and merge back to `alm` for anything in this series — branching off `develop` would miss `Operation`/`Portfolio` and produce a wrong version bump.
+
+Folding `alm` back into `develop` is pending. Once that happens, this section reverts to the intended strategy above. **Check `git log --oneline develop..alm` before starting work** rather than trusting either description.
 
 ## Development Machines
 
@@ -96,8 +100,12 @@ The library is organized in layers; each layer depends only on layers below it.
 
 ### Layer 1 — Time (`include/time/`, `source/time/`)
 
-- `QCDate` — date representation and arithmetic (day count, business day adjustment)
-- `QCBusinessCalendar` — holiday calendars and business day conventions
+- `QCDate` — date representation and arithmetic (day counts, month/day offsets, `shift`, `monthDiffDayRemainder`)
+- `QCBusinessCalendar` — holiday calendars, business-day conventions, **and business-day adjustment**: `businessDay(date, rule)`, `nextBusinessDay`, `previousBusinessDay`, `modNextBusinessDay`, `shift`
+
+Adjustment belongs on the calendar because it needs the holiday set. Until `1.12.0a3` it also existed as `QCDate::businessDay(vector<QCDate>&, rule)`, which rebuilt an entire `QCBusinessCalendar` on every call to answer one lookup — that cost 43 ms per leg on a realistic 420-holiday calendar versus 0.24 ms now (180x). **Do not add calendar-taking overloads to `QCDate`, and do not flatten a calendar to `vector<QCDate>` to pass it down.** `QCDate` methods that need a calendar take `const QCBusinessCalendar&`.
+
+`QCDate.business_day(holiday_list, rule)` survives in Python as a binder shim for compatibility and still rebuilds; prefer `BusinessCalendar.business_day(date, rule)`.
 
 ### Layer 2 — Asset Classes (`include/asset_classes/`, `source/asset_classes/`)
 
@@ -185,6 +193,20 @@ The `QcfinancialPybind11Helpers.h` header contains helper registration functions
 
 Opaque STL bindings (`PYBIND11_MAKE_OPAQUE`) are declared at the top of `qcf_binder.cpp` before any includes that use those types. Common shared type aliases live in `include/TypeAliases.h`; opaque type declarations in `include/PybindOpaqueTypes.h`.
 
+### Compiled-but-unreachable code
+
+Several files a `grep` will hit are not in any build target, or are built but reachable from nothing. Check before investigating or refactoring them:
+
+| File | Status |
+|---|---|
+| `source/QC_DVE_PYBIND.cpp` | in no target's source list |
+| `include/QCDvePyBindHelperFunctions.h` | included only by `QC_DVE_PYBIND.cpp` |
+| `source/QC_Financial.cpp` | listed in `QC_FINANCIAL_SOURCES` (`source/CMakeLists.txt:80`) — a variable **no target consumes** |
+
+`QCFactoryFunctions.cpp` and `QCDiscountBondPayoff.cpp` *are* built and are unreferenced by `qcf_binder.cpp`, but are **not** safe to delete: `QCFXForward.cpp` and `QCTimeDepositPayoff.cpp` (both live) include `QCDiscountBondPayoff.h` and hold `shared_ptr<QCDiscountBondPayoff>` members, and `QCDiscountBondPayoff.cpp` includes `QCFactoryFunctions.h`. Removing them means removing that whole subtree, curve bootstrapping included.
+
+The live source list is the `target_sources(QC_DVE_CORE ...)` block starting at `source/CMakeLists.txt:10`. "Not referenced by the binder" is not the same as "dead" — check every including file.
+
 ### Submodule Dependencies
 
 - `pybind11/` — Python/C++ binding library
@@ -202,11 +224,11 @@ Use this checklist when adding a new cashflow type or other significant feature:
 5. **Expose in binder** — call the helper from `source/qcf_binder.cpp`.
 6. **`record()` tuple** — if the type supports `record()`, ensure the final two fields are `present_value` and `discount_factor` (convention established in v1.10.1).
 7. **Test** — add or update a test file in `Tests/`.
-8. **Version bump** — update `version=` in `setup.py`.
+8. **Version bump** — update `version=` in `setup.py`, the version line in this file, **and the `id()` string in `source/qcf_binder.cpp`** (all three; the binder id is easy to miss).
 9. **Commit message** — follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.5"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in three places that must agree: `version=` in `setup.py`, the "Current version" line in this file, and the `id()` string in `source/qcf_binder.cpp`. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 **Never** add a `Co-Authored-By: Claude ...` trailer to commit messages.
