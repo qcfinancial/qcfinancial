@@ -10,14 +10,12 @@ Current version: **1.12.0a3** (set in `setup.py`).
 
 ## Branch Strategy
 
-Intended:
-
 - **`master`** — stable releases only; merges come from `develop` via PR.
 - **`develop`** — active development branch; new features and fixes land here first.
 
-**Actual, as of 2026-07-19:** the `1.12.0` series is being developed on **`alm`**, which tracks `origin/alm` and is several commits ahead of `develop`. `develop` contains nothing `alm` lacks. Branch off `alm` and merge back to `alm` for anything in this series — branching off `develop` would miss `Operation`/`Portfolio` and produce a wrong version bump.
+Always work on `develop` (or a feature branch off `develop`) and merge to `master` when ready to release.
 
-Folding `alm` back into `develop` is pending. Once that happens, this section reverts to the intended strategy above. **Check `git log --oneline develop..alm` before starting work** rather than trusting either description.
+The `1.12.0` series was developed on an `alm` branch through 2026-07-19; it was merged back into `develop` and retired. No branch other than the two above is active.
 
 ## Development Machines
 
