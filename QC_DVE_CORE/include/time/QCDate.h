@@ -13,6 +13,8 @@
 
 using namespace std;
 
+class QCBusinessCalendar;
+
 /*!
  * @brief QCDate es la implementación de QCode de una clase para manejar fechas
  * @author Alvaro Díaz (QCode)
@@ -246,7 +248,7 @@ class QCDate
 		*/
 		tuple<unsigned long, int> monthDiffDayRemainder(
                 const QCDate& otherDate,
-                vector<QCDate>& calendar,
+                const QCBusinessCalendar& calendar,
                 QCBusDayAdjRules rule) const;
 
 		/*!
@@ -255,10 +257,7 @@ class QCDate
 		* @param otherDate
 		* @return (tuple<unsigned long, unsigned int>) número de meses y resto en días.
 		*/
-		tuple<unsigned long, int> monthDiffDayRemainder(
-                const QCDate& otherDate,
-                shared_ptr<vector<QCDate>> calendar,
-                QCDate::QCBusDayAdjRules rule) const;
+
         /*!
          * Calcula la fecha que resulta de sumar un número de días a si misma
          * @param nDays número de días a sumar
@@ -290,7 +289,7 @@ class QCDate
 		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate businessDay(vector<QCDate>& calendar, QCBusDayAdjRules rule) const;
+
 
 		/*!
 		* Calcula la siguiente fecha que es dia hábil considerando el vector de
@@ -300,7 +299,7 @@ class QCDate
 		* @param rule (string) regla para el calculo (FOLLOW, MOD_FOLLOW, PREV, MOD_PREV)
 		* @return (QCDate) fecha resultante
 		*/
-		[[nodiscard]] QCDate businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const;
+
 
 		/*!
 		* Suma nDays dias hábiles a la fecha considerando el calendario entregado.
@@ -309,7 +308,7 @@ class QCDate
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate shift(vector<QCDate>& calendar,
+		QCDate shift(const QCBusinessCalendar& calendar,
                 unsigned int nDays,
                 QCDate::QCBusDayAdjRules direction,
                 QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
@@ -321,9 +320,7 @@ class QCDate
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		[[nodiscard]] QCDate shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
-			QCDate::QCBusDayAdjRules direction,
-            QCSettlementLagBehaviour settLagBehaviour = QCSettlementLagBehaviour::qcDontMove) const;
+
 
 		/*!
          * Calcula la fecha que resulta de sumar un número de meses a si misma
@@ -346,8 +343,7 @@ class QCDate
 		* @param direction (QCDate::QCBusDayAdjRules) indica si hay que avanzar o retroceder
 		* @return (QCDate) fecha resultante
 		*/
-		QCDate addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
-			QCDate::QCBusDayAdjRules direction) const;
+
 
         /*!
          * Retorna el domingo de Pascua de Resurrección (Easter Sunday) del año indicado,

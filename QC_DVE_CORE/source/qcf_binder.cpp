@@ -145,8 +145,14 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("__hash__", &QCDate::excelSerial)
                         .def("__str__", &QCDate::description, py::arg("es_iso") = false)
                         .def("__repr__", &QCDate::description, py::arg("es_iso") = false)
-                        .def<QCDate(QCDate::*)(std::vector<QCDate> &, QCDate::QCBusDayAdjRules) const>(
-                                "business_day", &QCDate::businessDay)
+                        .def("business_day", [](const QCDate &d, std::vector<QCDate> &holidays,
+                                                QCDate::QCBusDayAdjRules rule) {
+                                // Adjustment lives on QCBusinessCalendar now. Kept here so the
+                                // Python signature does not change; prefer BusinessCalendar.business_day.
+                                QCBusinessCalendar cal{d, 1};
+                                for (const auto &h: holidays) cal.addHoliday(h);
+                                return cal.businessDay(d, rule);
+                        })
                         .def(py::pickle(
                                 [](const QCDate &d) {
                                         // __getstate__
@@ -190,6 +196,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("mod_next_busy_day", &QCBusinessCalendar::modNextBusinessDay)
                         .def("prev_busy_day", &QCBusinessCalendar::previousBusinessDay)
                         .def("shift", &QCBusinessCalendar::shift)
+                        .def("business_day", &QCBusinessCalendar::businessDay)
                         .def("get_holidays", &QCBusinessCalendar::getHolidays)
                         .def("__add__", &QCBusinessCalendar::operator+)
                         .def(py::pickle(
