@@ -54,4 +54,4 @@
 
 - [x] 8.1 Bump `version=` in `setup.py`
 - [x] 8.2 Update the version line in `CLAUDE.md`
-- [ ] 8.3 Commit as `# Update to Version X.Y.Z: <description>`
+- [x] 8.3 Commit as `# Update to Version X.Y.Z: <description>` (`8b67db1`), plus `6d9f766` for the binder `id()` string missed in 8.1/8.2

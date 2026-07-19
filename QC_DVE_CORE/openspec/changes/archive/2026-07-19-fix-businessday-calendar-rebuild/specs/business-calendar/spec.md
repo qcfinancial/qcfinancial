@@ -3,7 +3,7 @@
 ## ADDED Requirements
 
 ### Requirement: Rule-dispatched business-day adjustment
-`QCBusinessCalendar` SHALL expose `businessDay(date, rule)` returning the date adjusted according to a `QCBusDayAdjRules` value: unchanged for `qcNo`, `nextBusinessDay` for `qcFollow`, `modNextBusinessDay` for `qcModFollow`, and `previousBusinessDay` for both `qcPrev` and `qcModPrev`. The results SHALL be identical to those previously produced by `QCDate::businessDay` for the same date, holiday set, and rule.
+Business-day adjustment SHALL be an operation of the calendar, not of a date. `QCBusinessCalendar` SHALL expose `businessDay(date, rule)` returning the date adjusted according to a `QCBusDayAdjRules` value: unchanged for `qcNo`, `nextBusinessDay` for `qcFollow`, `modNextBusinessDay` for `qcModFollow`, and `previousBusinessDay` for both `qcPrev` and `qcModPrev`. The results SHALL be identical to those previously produced by `QCDate::businessDay` for the same date, holiday set, and rule. The equivalent `QCDate` overloads SHALL NOT be part of the C++ surface; in Python, `QCDate.business_day(holiday_list, rule)` SHALL continue to work and agree with `BusinessCalendar.business_day(date, rule)`.
 
 #### Scenario: Following rule skips a holiday
 - **WHEN** `businessDay` is called with `qcFollow` on a date that is a holiday
@@ -31,10 +31,3 @@ Business-day adjustment SHALL operate on the calendar's existing holiday set. No
 #### Scenario: Schedule generation holds a calendar
 - **WHEN** `QCInterestRatePeriodsFactory` is constructed for a leg
 - **THEN** it receives and stores a `QCBusinessCalendar`, and no caller flattens a calendar to a holiday vector on its behalf
-
-## REMOVED Requirements
-
-### Requirement: Business-day adjustment as a date operation
-**Reason**: Adjustment requires a holiday set, so it belongs to the type that owns one. `QCDate`'s calendar-taking overloads rebuilt a `QCBusinessCalendar` on every call to answer a single query, which was the dominant cost of leg construction. `QCBusinessCalendar` already implemented every branch of the adjustment; only the rule dispatch was on `QCDate`, and it has moved.
-
-**Migration**: In C++, replace `date.businessDay(holidays, rule)` with `calendar.businessDay(date, rule)`, and `date.shift(holidays, n, …)` with the pre-existing `calendar.shift(date, n)`. `QCDate::addWeeks` had no live caller and no binding, and is removed without replacement; equivalent behavior is `calendar.businessDay(date.addDays(7 * n), rule)`. In Python, `QCDate.business_day(holiday_list, rule)` continues to work unchanged; `BusinessCalendar.business_day(date, rule)` is the preferred surface.
