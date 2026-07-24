@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.12.0a4** (set in `setup.py`).
+Current version: **1.13.0** (set in `setup.py`).
 
 ## Branch Strategy
 
