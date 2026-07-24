@@ -7,6 +7,7 @@
 
 #include "QCInterestRateLeg.h"
 #include "time/QCDate.h"
+#include "time/QCBusinessCalendar.h"
 
 using namespace std;
 /*!
@@ -37,11 +38,11 @@ public:
             QCDate::QCBusDayAdjRules endDateAdjustment,
 		    string settlementPeriodicity,
 		    QCInterestRateLeg::QCStubPeriod settlementStubPeriod,
-		    shared_ptr<std::vector<QCDate>> settlementCalendar,
+		    const QCBusinessCalendar& settlementCalendar,
 		    unsigned int settlementLag,
 		    string fixingPeriodicity,
 		    QCInterestRateLeg::QCStubPeriod fixingStubPeriod,
-		    shared_ptr<std::vector<QCDate>> fixingCalendar,
+		    const QCBusinessCalendar& fixingCalendar,
 		    unsigned int fixingLag,
 		    unsigned int indexStartDateLag,
 		    string indexTenor,
@@ -77,7 +78,7 @@ private:
 	QCInterestRateLeg::QCStubPeriod _settlementStubPeriod;
 
 	/*! Calendario para fechas de cálculo de intereses y pago */
-	shared_ptr<std::vector<QCDate>> _settlementCalendar;
+	QCBusinessCalendar _settlementCalendar;
 
 	/*! días de valuta para determinar la fecha de pago */
 	unsigned int _settlementLag;
@@ -89,7 +90,7 @@ private:
 	QCInterestRateLeg::QCStubPeriod _fixingStubPeriod;
 
 	/*! Calendario para fechas de fixing */
-	shared_ptr<std::vector<QCDate>> _fixingCalendar;
+	QCBusinessCalendar _fixingCalendar;
 
 	/*! Días de anticipo respecto a fecha inicio de período de pago de la fecha de fixing */
 	unsigned int _fixingLag;
@@ -116,7 +117,7 @@ private:
 	* @param calendar calendario a utilizar
 	*/
 	vector<tuple<QCDate, QCDate>> _buildBasicDates(string periodicity,
-		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar);
+		QCInterestRateLeg::QCStubPeriod stubPeriod, const QCBusinessCalendar& calendar);
 
 	/*! Método que calcula estructuras básicas de fechas de inicio y fin.
 	* @param periodicity valor de periodicidad (3M, 6M ...)
@@ -124,7 +125,7 @@ private:
 	* @param calendar calendario a utilizar
 	*/
 	vector<tuple<QCDate, QCDate>> _buildBasicDates2(string periodicity,
-		QCInterestRateLeg::QCStubPeriod stubPeriod, shared_ptr<std::vector<QCDate>> calendar);
+		QCInterestRateLeg::QCStubPeriod stubPeriod, const QCBusinessCalendar& calendar);
 	
 	/*! DEPRECATED. Método que construye la estructura de fechas que se quiere obtener.
 	* @return estructura de fechas buscada
@@ -160,7 +161,7 @@ private:
 	*/
 	void _auxWithLongFrontNEasyCase(unsigned int displacement,
 		unsigned int numWholePeriods, vector<tuple<QCDate, QCDate>>& periods,
-		string& periodicity, shared_ptr<vector<QCDate>>& calendar);
+		string& periodicity, const QCBusinessCalendar& calendar);
 
 	/*! Función auxiliar para operaciones LONGFRONTN con not easy case (período no cuadrado).
 	* Se utiliza en _buildBasicDates2.
@@ -175,7 +176,7 @@ private:
 	*/
 	void _auxWithLongFrontNNotEasyCase(unsigned int displacement,
 		unsigned int numWholePeriods, unsigned int remainderInMonths, unsigned int remainderInDays,
-		vector<tuple<QCDate, QCDate>>& periods, string& periodicity, shared_ptr<vector<QCDate>>& calendar);
+		vector<tuple<QCDate, QCDate>>& periods, string& periodicity, const QCBusinessCalendar& calendar);
 
 };
 

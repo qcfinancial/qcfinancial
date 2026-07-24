@@ -103,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.11.3, build: 2026-06-29 16:00"; });
+                []() { return "version: 1.13.0, build: 2026-07-24 10:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -145,8 +145,14 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("__hash__", &QCDate::excelSerial)
                         .def("__str__", &QCDate::description, py::arg("es_iso") = false)
                         .def("__repr__", &QCDate::description, py::arg("es_iso") = false)
-                        .def<QCDate(QCDate::*)(std::vector<QCDate> &, QCDate::QCBusDayAdjRules) const>(
-                                "business_day", &QCDate::businessDay)
+                        .def("business_day", [](const QCDate &d, std::vector<QCDate> &holidays,
+                                                QCDate::QCBusDayAdjRules rule) {
+                                // Adjustment lives on QCBusinessCalendar now. Kept here so the
+                                // Python signature does not change; prefer BusinessCalendar.business_day.
+                                QCBusinessCalendar cal{d, 1};
+                                for (const auto &h: holidays) cal.addHoliday(h);
+                                return cal.businessDay(d, rule);
+                        })
                         .def(py::pickle(
                                 [](const QCDate &d) {
                                         // __getstate__
@@ -190,6 +196,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("mod_next_busy_day", &QCBusinessCalendar::modNextBusinessDay)
                         .def("prev_busy_day", &QCBusinessCalendar::previousBusinessDay)
                         .def("shift", &QCBusinessCalendar::shift)
+                        .def("business_day", &QCBusinessCalendar::businessDay)
                         .def("get_holidays", &QCBusinessCalendar::getHolidays)
                         .def("__add__", &QCBusinessCalendar::operator+)
                         .def(py::pickle(
@@ -919,7 +926,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 (QCDate &, double)>(
                                 "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
                                 "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
-                                "as accrual and index date",
+                                "as accrual and index date. At or after the accrual end date, the equivalent rate is "
+                                "evaluated at the index end date when dates_for_eq_rate is qcIndex, so the result "
+                                "agrees with record() and settlement_amount()",
                                py::arg("accrual_and_index_date"),
                                py::arg("index_value"))
                         .def<double(qf::OvernightIndexCashflow::*)
@@ -932,7 +941,9 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def<double(qf::OvernightIndexCashflow::*)(const QCDate &, const qf::TimeSeries &)>(
                                 "accrued_interest", &qf::OvernightIndexCashflow::accruedInterest,
                                 "Calculates accrued interest for OvernightIndexCashflow. Date parameter will be used "
-                                "as accrual and index date",
+                                "as accrual and index date. At or after the accrual end date, the equivalent rate is "
+                                "evaluated (and the fixing looked up) at the index end date when dates_for_eq_rate "
+                                "is qcIndex, so the result agrees with record() and settlement_amount()",
                                 py::arg("accrual_and_index_date"),
                                 py::arg("index_time_series"))
                         .def("set_eq_rate_decimal_places", &qf::OvernightIndexCashflow::setEqRateDecimalPlaces)
@@ -1147,6 +1158,64 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("resize", &qf::Leg::resize)
                         .def("get_cashflows", &qf::Leg::getCashflows)
                         .def("get_current_cashflow_index", &qf::Leg::getCurrentCashflowIndex);
+
+        // Operation
+        py::class_<qf::Operation>(m, "Operation",
+                                  R"pbdoc(Contenedor inmutable de una o más patas identificado por una clave opaca del caller.
+La dirección receive/pay no se almacena: ya está expresada en los signos de los montos que fija LegFactory.)pbdoc")
+                        .def(py::init<long long, std::vector<qf::Leg>>(),
+                             py::arg("key"), py::arg("legs"))
+                        .def("get_key", &qf::Operation::getKey)
+                        .def("number_of_legs", &qf::Operation::numberOfLegs)
+                        .def("get_leg", &qf::Operation::getLeg,
+                             py::return_value_policy::reference_internal,
+                             "Pata en el índice dado (base 0; leg_number = índice + 1).",
+                             py::arg("index"));
+
+        // Portfolio
+        py::class_<qf::Portfolio>(m, "Portfolio",
+                                  R"pbdoc(Contenedor de Operations para consultas de estado en batch (salida columnar numpy).)pbdoc")
+                        .def(py::init<>())
+                        .def("add", &qf::Portfolio::add, py::arg("operation"))
+                        .def("remove", &qf::Portfolio::remove, py::arg("key"))
+                        .def("size", &qf::Portfolio::size)
+                        .def("states_at",
+                             [](qf::Portfolio& portfolio,
+                                const QCDate& t,
+                                const std::optional<qf::Portfolio::CurveMap>& curves,
+                                unsigned int numThreads) {
+                                     qf::StateColumns columns;
+                                     {
+                                             py::gil_scoped_release release;
+                                             columns = portfolio.statesAt(
+                                                     t,
+                                                     curves.has_value() ? *curves : qf::Portfolio::CurveMap(),
+                                                     numThreads);
+                                     }
+                                     return stateColumnsToDict(std::move(columns));
+                             },
+                             R"pbdoc(Estado de cada pata de cada operación a la fecha t, como dict de arrays numpy paralelos.
+Si se entrega `curves` (dict código ISO -> ZeroCouponCurve), calcula present_value por pata (NaN si falta la curva de la moneda).
+`num_threads` = 0 usa la concurrencia de hardware; el resultado no depende del número de threads.)pbdoc",
+                             py::arg("t"),
+                             py::arg("curves") = py::none(),
+                             py::arg("num_threads") = 0)
+                        .def("flows_between",
+                             [](qf::Portfolio& portfolio,
+                                const QCDate& t1,
+                                const QCDate& t2,
+                                unsigned int numThreads) {
+                                     qf::FlowColumns columns;
+                                     {
+                                             py::gil_scoped_release release;
+                                             columns = portfolio.flowsBetween(t1, t2, numThreads);
+                                     }
+                                     return flowColumnsToDict(std::move(columns));
+                             },
+                             R"pbdoc(Todos los flujos contractuales con settlement en (t1, t2], como dict de arrays numpy paralelos.)pbdoc",
+                             py::arg("t1"),
+                             py::arg("t2"),
+                             py::arg("num_threads") = 0);
 
         // BusyAdjRules
         py::enum_<QCDate::QCBusDayAdjRules>(m, "BusyAdjRules")

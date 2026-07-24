@@ -1,3 +1,7 @@
+## Purpose
+
+Construction of `QCBusinessCalendar` objects from named holiday rule sets. Covers how multiple jurisdictions' calendars combine into one (union of holidays), how weekend-observance shifting is applied per jurisdiction *before* merging rather than after, and the taxonomy of holiday rules the factory understands.
+
 ## Requirements
 
 ### Requirement: CalendarFactory builds a single merged calendar

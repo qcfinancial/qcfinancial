@@ -43,7 +43,7 @@ namespace QCode
 						   double nominal,
 						   std::shared_ptr<QCCurrency> currency);
 
-            [[nodiscard]] virtual std::string getType() const;
+            [[nodiscard]] std::string getType() const override;
 
 			/**
 			* @fn	double SimpleCashflow::amount();

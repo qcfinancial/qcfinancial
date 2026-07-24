@@ -40,7 +40,7 @@ class QCBusinessCalendar
          * @param fecha (QCDate) fecha que ingresa
          * @return (QCDate) el día hábil siguiente
          */
-        QCDate nextBusinessDay(const QCDate& fecha);
+        QCDate nextBusinessDay(const QCDate& fecha) const;
 
         /*!
          * Calcula el día hábil siguiente a la fecha ingresada en convención
@@ -50,14 +50,14 @@ class QCBusinessCalendar
          * @param fecha (QCDate) fecha ingresada
          * @return el día hábil siguiente
          */
-        QCDate modNextBusinessDay(const QCDate& fecha);
+        QCDate modNextBusinessDay(const QCDate& fecha) const;
 
         /*!
          * Calcula el día hábil anterior a la fecha ingresada
          * @param fecha (QCDate)
          * @return
          */
-        QCDate previousBusinessDay(const QCDate& fecha);
+        QCDate previousBusinessDay(const QCDate& fecha) const;
 
         /*!
          * Mueve una fecha un número nDays de días.
@@ -65,7 +65,18 @@ class QCBusinessCalendar
          * @param nDays (int) número de días a mover (pos o neg)
          * @return (QCDate) fecha movida
          */
-        QCDate shift(const QCDate& fecha, int nDays);
+        QCDate shift(const QCDate& fecha, int nDays) const;
+
+        /*!
+         * Ajusta una fecha según la regla de días hábiles indicada.
+         * Vive aquí, y no en QCDate, porque el ajuste requiere el conjunto de
+         * feriados que esta clase posee: la versión anterior en QCDate
+         * reconstruía un calendario completo en cada llamada.
+         * @param fecha (QCDate) fecha a ajustar
+         * @param rule (QCBusDayAdjRules) regla de ajuste
+         * @return (QCDate) fecha ajustada
+         */
+        [[nodiscard]] QCDate businessDay(const QCDate& fecha, QCDate::QCBusDayAdjRules rule) const;
 
 		/**
 		 * @fn	DateList QCBusinessCalendar::getHolidays();

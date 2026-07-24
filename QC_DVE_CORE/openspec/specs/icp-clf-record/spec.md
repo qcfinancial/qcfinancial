@@ -1,3 +1,7 @@
+## Purpose
+
+The `record()` output contract for `IcpClfCashflow` — the Chilean overnight index cashflow denominated in CLF/UF. Fixes the exact field set, order, types and value sources of the returned map, so consumers building DataFrames from it can rely on a stable schema.
+
 ## Record Output Contract
 
 `IcpClfCashflow::record()` SHALL return a map with exactly the following 21 fields, in this order:

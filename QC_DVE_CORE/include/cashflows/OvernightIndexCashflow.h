@@ -17,6 +17,7 @@ namespace QCode
     {
         const double DEFAULT_INDEX = 1.0;
         const unsigned int DEFAULT_EQ_RATE_DECIMAL_PLACES = 8;
+        const unsigned int LIMIT_EQ_RATE_DECIMAL_PLACES = 12;
 
         typedef std::tuple<
         std::string,                 /* Accrual Start Date */
@@ -251,6 +252,16 @@ namespace QCode
             * coupon curve.
             */
             std::vector<double> _endDateIndexDerivatives;
+
+        private:
+
+            /** @brief	Single source of truth for the equivalent rate. All guards live here:
+             * date <= start date -> 0, zero year fraction -> 0, decimalPlaces above
+             * LIMIT_EQ_RATE_DECIMAL_PLACES -> no rounding. */
+            double _eqRateAt(QCDate &date, double indexValue, unsigned int decimalPlaces);
+
+            /** @brief	End date at which the equivalent rate is evaluated, per _datesForEquivalentRate. */
+            [[nodiscard]] QCDate _endDateForEqRate() const;
         };
     }
 }

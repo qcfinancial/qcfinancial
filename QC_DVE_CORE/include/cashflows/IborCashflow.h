@@ -220,7 +220,7 @@ namespace QCode
 			 *
 			 * @return	The nominal.
 			 */
-			[[nodiscard]] double getNominal() const;
+			[[nodiscard]] double getNominal() const override;
 
 			/**
 			* @fn	void iborCashflow::setAmortization(double amortization);
@@ -290,7 +290,7 @@ namespace QCode
 			 *
 			 * @return	A double.
 			 */
-			double accruedInterest(const QCDate& valueDate);
+			double accruedInterest(const QCDate& valueDate) override;
 
 			/**
 			 * @fn	shared_ptr<IborCashflowWrapper> IborCashflow::wrap();

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.10.5** (set in `setup.py`).
+Current version: **1.12.0a4** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -14,6 +14,8 @@ Current version: **1.10.5** (set in `setup.py`).
 - **`develop`** — active development branch; new features and fixes land here first.
 
 Always work on `develop` (or a feature branch off `develop`) and merge to `master` when ready to release.
+
+The `1.12.0` series was developed on an `alm` branch through 2026-07-19; it was merged back into `develop` and retired. No branch other than the two above is active.
 
 ## Development Machines
 
@@ -96,8 +98,12 @@ The library is organized in layers; each layer depends only on layers below it.
 
 ### Layer 1 — Time (`include/time/`, `source/time/`)
 
-- `QCDate` — date representation and arithmetic (day count, business day adjustment)
-- `QCBusinessCalendar` — holiday calendars and business day conventions
+- `QCDate` — date representation and arithmetic (day counts, month/day offsets, `shift`, `monthDiffDayRemainder`)
+- `QCBusinessCalendar` — holiday calendars, business-day conventions, **and business-day adjustment**: `businessDay(date, rule)`, `nextBusinessDay`, `previousBusinessDay`, `modNextBusinessDay`, `shift`
+
+Adjustment belongs on the calendar because it needs the holiday set. Until `1.12.0a3` it also existed as `QCDate::businessDay(vector<QCDate>&, rule)`, which rebuilt an entire `QCBusinessCalendar` on every call to answer one lookup — that cost 43 ms per leg on a realistic 420-holiday calendar versus 0.24 ms now (180x). **Do not add calendar-taking overloads to `QCDate`, and do not flatten a calendar to `vector<QCDate>` to pass it down.** `QCDate` methods that need a calendar take `const QCBusinessCalendar&`.
+
+`QCDate.business_day(holiday_list, rule)` survives in Python as a binder shim for compatibility and still rebuilds; prefer `BusinessCalendar.business_day(date, rule)`.
 
 ### Layer 2 — Asset Classes (`include/asset_classes/`, `source/asset_classes/`)
 
@@ -154,6 +160,28 @@ All active cashflow types support a `record()` method returning a `std::tuple` o
 - `ForwardFXRates` — FX forward estimation from two discount curves (`ForwardFXRates.cpp`)
 - `FXRateEstimator` — spot FX + basis point adjustments (`FXRateEstimator.cpp`)
 
+### Layer 7 — Portfolio / Batch State (`include/portfolio/`)
+
+Added in 1.12.0 for columnar batch state queries over large portfolios.
+
+- `Operation` — immutable container of one or more `Leg`s under a caller-supplied opaque key. qcfinancial attaches no meaning to the key. Legs are numbered from 1 in construction order.
+- `Portfolio` — container of `Operation`s keyed by that key, mutated incrementally via `add`/`remove`. Exposes two batch queries returning parallel numpy arrays (zero-copy via `vectorToNumpy`):
+  - `statesAt(t, curves, numThreads)` — per-leg accrual, outstanding notional, settling amounts, next flow date, optional present value
+  - `flowsBetween(t1, t2, numThreads)` — every contractual flow settling in `(t1, t2]`
+
+Both parallelize across operations with `std::thread` and are bitwise deterministic regardless of thread count. Curve objects are never touched from worker threads — the query chain (curve → interpolator → `QCInterestRate`) mutates internal state on every call, so discount factor tables are precomputed serially by day offset and the workers only index into them.
+
+#### Current scope: fixed-rate legs only
+
+The batch queries were built for phase F1, which covers **fixed-rate legs of simple commercial products only**. Two known limitations, both deliberate and both to be revisited:
+
+1. **No forward-rate projection.** `statesAt` never calls `ForwardRates`; it discounts `cf->amount()` as-is. A floating leg therefore yields a `present_value` reflecting whatever rate is currently stored in the cashflow — correct only if the caller ran `ForwardRates` beforehand, and **silently wrong otherwise**. Unlike a missing discount curve, which correctly yields `NaN`, nothing in the output flags this.
+2. **Discount curves are selected by currency ISO code.** Not a robust criterion: discounting follows the CSA, not the currency, so same-currency trades under different collateral agreements need different curves, and a cross-currency swap may discount each leg off a different curve.
+
+The likely direction (discussed, not designed): attach projection and discount curve **names** to each leg, resolved against a name → curve map at query time, so curve objects stay out of the leg and the whole mapping can be swapped per scenario. Per-leg rather than per-operation, since a cross-currency swap's legs discount differently. The projection name may be redundant — cashflows already carry their `InterestRateIndex`, so projection curves could be keyed by index code with no new field. If projection is added, the serial-precompute constraint above applies: derive forwards in the workers from a precomputed discount factor table via `(df[start]/df[end] - 1) / yf` rather than calling curve objects from threads.
+
+**Do not use `Portfolio` for floating-rate legs until limitation 1 is addressed.**
+
 ### Python Bindings
 
 - `source/qcf_binder.cpp` — the sole active pybind11 module (`PYBIND11_MODULE(qcfinancial, m)`)
@@ -162,6 +190,20 @@ All active cashflow types support a `record()` method returning a `std::tuple` o
 The `QcfinancialPybind11Helpers.h` header contains helper registration functions called from the binder (one function per class). When adding a new C++ class, add its `.cpp` to `source/CMakeLists.txt` under `target_sources(QC_DVE_CORE ...)`, expose it in `source/qcf_binder.cpp`, and register it via a helper in `QcfinancialPybind11Helpers.h`.
 
 Opaque STL bindings (`PYBIND11_MAKE_OPAQUE`) are declared at the top of `qcf_binder.cpp` before any includes that use those types. Common shared type aliases live in `include/TypeAliases.h`; opaque type declarations in `include/PybindOpaqueTypes.h`.
+
+### Compiled-but-unreachable code
+
+Several files a `grep` will hit are not in any build target, or are built but reachable from nothing. Check before investigating or refactoring them:
+
+| File | Status |
+|---|---|
+| `source/QC_DVE_PYBIND.cpp` | in no target's source list |
+| `include/QCDvePyBindHelperFunctions.h` | included only by `QC_DVE_PYBIND.cpp` |
+| `source/QC_Financial.cpp` | listed in `QC_FINANCIAL_SOURCES` (`source/CMakeLists.txt:80`) — a variable **no target consumes** |
+
+`QCFactoryFunctions.cpp` and `QCDiscountBondPayoff.cpp` *are* built and are unreferenced by `qcf_binder.cpp`, but are **not** safe to delete: `QCFXForward.cpp` and `QCTimeDepositPayoff.cpp` (both live) include `QCDiscountBondPayoff.h` and hold `shared_ptr<QCDiscountBondPayoff>` members, and `QCDiscountBondPayoff.cpp` includes `QCFactoryFunctions.h`. Removing them means removing that whole subtree, curve bootstrapping included.
+
+The live source list is the `target_sources(QC_DVE_CORE ...)` block starting at `source/CMakeLists.txt:10`. "Not referenced by the binder" is not the same as "dead" — check every including file.
 
 ### Submodule Dependencies
 
@@ -180,11 +222,11 @@ Use this checklist when adding a new cashflow type or other significant feature:
 5. **Expose in binder** — call the helper from `source/qcf_binder.cpp`.
 6. **`record()` tuple** — if the type supports `record()`, ensure the final two fields are `present_value` and `discount_factor` (convention established in v1.10.1).
 7. **Test** — add or update a test file in `Tests/`.
-8. **Version bump** — update `version=` in `setup.py`.
+8. **Version bump** — update `version=` in `setup.py`, the version line in this file, **and the `id()` string in `source/qcf_binder.cpp`** (all three; the binder id is easy to miss).
 9. **Commit message** — follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 ## Versioning
 
-Version lives in `setup.py` (`version="1.10.5"`). Bump it there when releasing. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
+Version lives in three places that must agree: `version=` in `setup.py`, the "Current version" line in this file, and the `id()` string in `source/qcf_binder.cpp`. Commit messages follow the pattern `# Update to Version X.Y.Z: <description>`.
 
 **Never** add a `Co-Authored-By: Claude ...` trailer to commit messages.

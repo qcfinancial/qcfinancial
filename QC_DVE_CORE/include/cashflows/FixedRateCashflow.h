@@ -131,7 +131,7 @@ namespace QCode
 			*
 			* @return	The cashflow's nominal.
 			*/
-			double getNominal() const;
+			double getNominal() const override;
 
 			/**
 			 * @fn	void FixedRateCashflow::setNominal(double nominal);
@@ -199,7 +199,7 @@ namespace QCode
 			*
 			* @return	A double.
 			*/
-			double accruedInterest(const QCDate& valueDate);
+			double accruedInterest(const QCDate& valueDate) override;
 
 
             [[nodiscard]] std::string getType() const override;

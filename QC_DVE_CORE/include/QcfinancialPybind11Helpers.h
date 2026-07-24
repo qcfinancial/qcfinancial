@@ -6,8 +6,10 @@
 #define QCFINANCIALPYBIND11HELPERS_H
 
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
 
 #include <cashflows/Cashflow.h>
+#include <portfolio/Portfolio.h>
 #include <cashflows/SimpleMultiCurrencyCashflow.h>
 #include <cashflows/OvernightIndexCashflow.h>
 #include <curves/QCInterpolator.h>
@@ -712,6 +714,46 @@ inline py::tuple getColumnNames(const std::string &cashflowType, const std::stri
     }
 }
 
+
+// --- Batch state query helpers (Portfolio) ------------------------------------------------------
+
+// Wraps a std::vector into a 1-D numpy array without copying: the array takes
+// ownership of the moved vector through a capsule.
+template<typename T>
+py::array_t<T> vectorToNumpy(std::vector<T>&& data) {
+    auto* holder = new std::vector<T>(std::move(data));
+    py::capsule owner(holder, [](void* p) { delete static_cast<std::vector<T>*>(p); });
+    return py::array_t<T>({holder->size()}, {sizeof(T)}, holder->data(), owner);
+}
+
+inline py::dict stateColumnsToDict(qf::StateColumns&& columns) {
+    py::dict result;
+    result["op_key"] = vectorToNumpy(std::move(columns.opKey));
+    result["leg_number"] = vectorToNumpy(std::move(columns.legNumber));
+    result["currency"] = vectorToNumpy(std::move(columns.currency));
+    result["accrued_interest"] = vectorToNumpy(std::move(columns.accruedInterest));
+    result["outstanding_notional"] = vectorToNumpy(std::move(columns.outstandingNotional));
+    result["interest_settling"] = vectorToNumpy(std::move(columns.interestSettling));
+    result["amortization_settling"] = vectorToNumpy(std::move(columns.amortizationSettling));
+    result["total_settling"] = vectorToNumpy(std::move(columns.totalSettling));
+    result["next_flow_date"] = vectorToNumpy(std::move(columns.nextFlowDate));
+    result["present_value"] = vectorToNumpy(std::move(columns.presentValue));
+    result["currency_legend"] = columns.currencyLegend;
+    return result;
+}
+
+inline py::dict flowColumnsToDict(qf::FlowColumns&& columns) {
+    py::dict result;
+    result["op_key"] = vectorToNumpy(std::move(columns.opKey));
+    result["leg_number"] = vectorToNumpy(std::move(columns.legNumber));
+    result["settlement_date"] = vectorToNumpy(std::move(columns.settlementDate));
+    result["interest"] = vectorToNumpy(std::move(columns.interest));
+    result["amortization"] = vectorToNumpy(std::move(columns.amortization));
+    result["total"] = vectorToNumpy(std::move(columns.total));
+    result["currency"] = vectorToNumpy(std::move(columns.currency));
+    result["currency_legend"] = columns.currencyLegend;
+    return result;
+}
 
 
 #endif //QCFINANCIALPYBIND11HELPERS_H

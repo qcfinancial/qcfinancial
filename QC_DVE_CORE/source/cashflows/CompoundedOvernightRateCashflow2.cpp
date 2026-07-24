@@ -140,10 +140,19 @@
             for (auto& fix_date: _fixingDates) {
                 producto *= _getFixingWf(fix_date, fixings);
             }
-            _endDateWf = producto;
             auto eqRate = _index->getRate().getRateFromWf(producto, _startDate, _endDate);
             double factor = std::pow(10, _eqRateDecimalPlaces);
-            return std::round(eqRate * factor) / factor;
+            auto roundedEqRate = std::round(eqRate * factor) / factor;
+            // Store the wealth factor of the ROUNDED, BARE equivalent rate (no gearing/spread —
+            // amount()/_calculateInterest apply those when they re-invert _endDateWf). This keeps
+            // the invariant that amount()'s unrounded inversion of _endDateWf recovers the coupon
+            // rate for a realized coupon, matching the ForwardRates realized branch
+            // (ForwardRates.h:168-172), without amount() itself rounding (valuation stays
+            // differentiable). Previously _endDateWf held the raw compounded product, so amount()
+            // recovered the unrounded rate and disagreed with settlementAmount().
+            _index->setRateValue(roundedEqRate);
+            _endDateWf = _index->getRate().wf(_startDate, _endDate);
+            return roundedEqRate;
         }
 
         void CompoundedOvernightRateCashflow2::setFixings(const TimeSeries &fixings) {

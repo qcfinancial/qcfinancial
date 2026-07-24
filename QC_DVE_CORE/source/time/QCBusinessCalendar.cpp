@@ -55,7 +55,7 @@ QCBusinessCalendar QCBusinessCalendar::operator+(QCBusinessCalendar const& cal)
     return result;
 }
 
-QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
+QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha) const
 {
     QCDate::QCWeekDay d = fecha.weekDay();
     long serial = fecha.excelSerial();
@@ -81,7 +81,7 @@ QCDate QCBusinessCalendar::nextBusinessDay(const QCDate& fecha)
     return fechaOut;
 }
 
-QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
+QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha) const
 {
     QCDate::QCWeekDay d = fecha.weekDay();
     long serial = fecha.excelSerial();
@@ -107,7 +107,7 @@ QCDate QCBusinessCalendar::previousBusinessDay(const QCDate& fecha)
     return fechaOut;
 }
 
-QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays)
+QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays) const
 {
     if (nDays == 0) return fecha;
 	QCDate result = fecha;
@@ -130,7 +130,7 @@ QCDate QCBusinessCalendar::shift(const QCDate& fecha, int nDays)
     return result;
 }
 
-QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
+QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha) const
 {
     int m1 = fecha.month();
     QCDate result = this->nextBusinessDay(fecha);
@@ -142,6 +142,28 @@ QCDate QCBusinessCalendar::modNextBusinessDay(const QCDate &fecha)
     }
 
     return result;
+}
+
+QCDate QCBusinessCalendar::businessDay(const QCDate& fecha, QCDate::QCBusDayAdjRules rule) const
+{
+	// Falta implementar MOD_PREVIOUS: qcModPrev se comporta como qcPrev, igual
+	// que en la versión anterior de este switch (QCDate::businessDay).
+	switch (rule)
+	{
+	case QCDate::qcFollow:
+		return nextBusinessDay(fecha);
+
+	case QCDate::qcModFollow:
+		return modNextBusinessDay(fecha);
+
+	case QCDate::qcPrev:
+	case QCDate::qcModPrev:
+		return previousBusinessDay(fecha);
+
+	case QCDate::qcNo:
+	default:
+		return fecha;
+	}
 }
 
 std::vector<QCDate> QCBusinessCalendar::getHolidays()

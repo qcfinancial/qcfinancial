@@ -4,6 +4,7 @@
 
 #include "time/QCDate.h"
 #include "time/QCBusinessCalendar.h"
+#include "time/QCBusinessCalendar.h"
 #include <sstream>
 #include <exception>
 #include <algorithm>
@@ -326,52 +327,7 @@ std::string QCDate::description(bool dmy) const
 }
 
 
-QCDate QCDate::businessDay(vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
-{
-	// Falta implementar MOD_PREVIOUS
-
-	QCDate result{ _day, _month, _year };
-	QCBusinessCalendar busCal{ result, 1 };
-	for (const auto &fecha : calendar)
-	{
-        busCal.addHoliday(fecha);
-	}
-	switch (rule)
-	{
-	case QCDate::qcNo:
-		break;
-
-	case QCDate::qcFollow:
-		result = busCal.nextBusinessDay(result);
-		break;
-
-	case QCDate::qcModFollow:
-		result = busCal.modNextBusinessDay(result);
-		break;
-
-	case QCDate::qcPrev:
-		result = busCal.previousBusinessDay(result);
-		break;
-
-	case QCDate::qcModPrev:
-		result = busCal.previousBusinessDay(result);
-		break;
-
-	default:
-		break;
-	}
-	return result;
-}
-
-
-QCDate QCDate::businessDay(shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
-{
-	auto derefCal = *calendar;
-	return businessDay(derefCal, rule);
-}
-
-
-QCDate QCDate::shift(vector<QCDate>& calendar,
+QCDate QCDate::shift(const QCBusinessCalendar& calendar,
         unsigned int nDays,
         QCDate::QCBusDayAdjRules direction,
         QCSettlementLagBehaviour settLagBehaviour) const
@@ -380,49 +336,21 @@ QCDate QCDate::shift(vector<QCDate>& calendar,
 	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
 	{
         if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
-            result = result.businessDay(calendar, QCDate::qcFollow);
+            result = calendar.businessDay(result, QCDate::qcFollow);
         }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
-			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
+			result = calendar.businessDay(result.addDays(1), QCDate::qcFollow);
 		}
 	}
 	else
 	{
         if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
-            result = result.businessDay(calendar, QCDate::qcPrev);
+            result = calendar.businessDay(result, QCDate::qcPrev);
         }
 		for (unsigned int i = 1; i < nDays + 1; ++i)
 		{
-			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
-		}
-	}
-	return result;
-}
-
-
-QCDate QCDate::shift(shared_ptr<vector<QCDate>> calendar, unsigned int nDays,
-	QCDate::QCBusDayAdjRules direction, QCSettlementLagBehaviour settLagBehaviour) const
-{
-	QCDate result{ _day, _month, _year };
-	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
-	{
-        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
-            result = result.businessDay(calendar, QCDate::qcFollow);
-        }
-		for (unsigned int i = 1; i < nDays + 1; ++i)
-		{
-			result = result.addDays(1).businessDay(calendar, QCDate::qcFollow);
-		}
-	}
-	else
-	{
-        if (settLagBehaviour == QCSettlementLagBehaviour::qcMoveToWorkingDay) {
-            result = result.businessDay(calendar, QCDate::qcPrev);
-        }
-		for (unsigned int i = 1; i < nDays + 1; ++i)
-		{
-			result = result.addDays(-1).businessDay(calendar, QCDate::qcPrev);
+			result = calendar.businessDay(result.addDays(-1), QCDate::qcPrev);
 		}
 	}
 	return result;
@@ -497,42 +425,15 @@ long QCDate::dayDiff(const QCDate& otherDate) const
 
 
 tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
-	vector<QCDate>& calendar, QCDate::QCBusDayAdjRules rule) const
+	const QCBusinessCalendar& calendar, QCDate::QCBusDayAdjRules rule) const
 {
 	QCDate lastDate{ _day, _month, _year };
 	QCDate nextDate{ _day, _month, _year };
 	unsigned long counter{ 0 };
-	QCDate otherDateAdjusted = otherDate.businessDay(calendar, rule);
+	QCDate otherDateAdjusted = calendar.businessDay(otherDate, rule);
 	while (true)
 	{
-		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
-		if (nextDate <= otherDateAdjusted)
-		{
-			++counter;
-			lastDate = nextDate;
-		}
-		else
-		{
-			break;
-		}
-	}
-
-	return make_tuple(counter, (int)lastDate.dayDiff(otherDateAdjusted));
-
-}
-
-
-tuple<unsigned long, int> QCDate::monthDiffDayRemainder(const QCDate& otherDate,
-	shared_ptr<vector<QCDate>> calendar, QCDate::QCBusDayAdjRules rule) const
-{
-	QCDate lastDate{ _day, _month, _year };
-	QCDate nextDate{ _day, _month, _year };
-	unsigned long counter{ 0 };
-	QCDate otherDateAdjusted = otherDate.businessDay(calendar, rule);
-
-	while (true)
-	{
-		nextDate = this->addMonths(counter + 1).businessDay(calendar, rule);
+		nextDate = calendar.businessDay(this->addMonths(counter + 1), rule);
 		if (nextDate <= otherDateAdjusted)
 		{
 			++counter;
@@ -553,25 +454,6 @@ QCDate QCDate::addDays(long nDays) const
 {
     long newSerial = this->excelSerial() + nDays;
     return QCDate {newSerial};
-}
-
-
-QCDate QCDate::addWeeks(vector<QCDate>& calendar, unsigned int nWeeks,
-	QCDate::QCBusDayAdjRules direction) const
-{
-	//cout << "Enter addWeeks" << endl;
-	//cout << "nDays: " << nWeeks << endl;
-	QCDate result{ _day, _month, _year };
-	int multiplier = -1;
-	if (direction == QCDate::qcFollow || direction == QCDate::qcModFollow)
-	{
-		multiplier = 1;
-	}
-	result = result.businessDay(calendar, direction);
-	//cout << "result (primero): " << result.description() << endl;
-	result = result.addDays(multiplier * nWeeks * 7).businessDay(calendar, direction);
-	//cout << "result: " << result.description() << endl;
-	return result;
 }
 
 

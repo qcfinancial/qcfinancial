@@ -74,6 +74,24 @@ namespace QCode
 
 			virtual QCDate startDate() = 0;
 
+			/**
+			* @brief	Accrued interest at valueDate. Types that do not support batch state
+			* 			queries keep this inert default. Overridden by FixedRateCashflow.
+			*/
+			virtual double accruedInterest(const QCDate& valueDate)
+			{
+				return 0.0;
+			}
+
+			/**
+			* @brief	Outstanding nominal of the cashflow's period. Inert default for types
+			* 			that do not support batch state queries. Overridden by FixedRateCashflow.
+			*/
+			[[nodiscard]] virtual double getNominal() const
+			{
+				return 0.0;
+			}
+
             void savePresentValue(double presentValue)
             {
                 _presentValue = presentValue;
