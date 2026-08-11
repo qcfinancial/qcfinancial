@@ -103,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.14.0.post1, build: 2026-08-11 10:00"; });
+                []() { return "version: 1.14.0a1, build: 2026-08-11 19:39"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
