@@ -10,7 +10,7 @@
 #include "asset_classes/QCAct360.h"
 #include "asset_classes/QCLinearWf.h"
 #include "asset_classes/ZeroCouponCurve.h"
-#include "cashflows/CompoundedOvernightRateCashflow.h"
+#include "CompoundedOvernightRateCashflow.h"
 #include "curves/QCCurve.h"
 #include "curves/QCLinearInterpolator.h"
 #include "Leg.h"

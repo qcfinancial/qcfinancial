@@ -48,5 +48,78 @@
                 mccyLeg.setCashflowAt(cashflow, i);
             }
         }
+
+        template<typename T>
+        void ForwardFXRates::_projectFXRateCIP(
+                const QCDate &valuationDate,
+                double spotFxValue,
+                T &cashflow,
+                const QCDate &fxFixingDate,
+                const std::shared_ptr<InterestRateCurve> &notionalCurve,
+                const std::shared_ptr<InterestRateCurve> &settlementCurve) {
+            std::vector<double> notionalCurveDerivatives(notionalCurve->getLength(), 0.0);
+            std::vector<double> settlementCurveDerivatives(settlementCurve->getLength(), 0.0);
+            double spotDerivative = 0.0;
+
+            // Only project while still floating: not matured, and the FX rate has not fixed yet.
+            // Matured/already-fixed cashflows keep their stored fxRateIndexValue untouched and get
+            // all-zero derivatives (mirrors ForwardRates::setRateIborCashflow1's skip-if-fixed check).
+            if (valuationDate < cashflow.endDate() && valuationDate <= fxFixingDate) {
+                auto t = valuationDate.dayDiff(cashflow.endDate());
+                auto dfNotional = notionalCurve->getDiscountFactorAt(t);
+                auto dfSettlement = settlementCurve->getDiscountFactorAt(t);
+                auto forward = spotFxValue * dfNotional / dfSettlement;
+
+                for (size_t i = 0; i < notionalCurve->getLength(); ++i) {
+                    notionalCurveDerivatives.at(i) = spotFxValue * notionalCurve->dfDerivativeAt(i) / dfSettlement;
+                }
+                for (size_t j = 0; j < settlementCurve->getLength(); ++j) {
+                    settlementCurveDerivatives.at(j) = -spotFxValue * dfNotional /
+                            (dfSettlement * dfSettlement) * settlementCurve->dfDerivativeAt(j);
+                }
+                spotDerivative = dfNotional / dfSettlement;
+
+                cashflow.setFxRateIndexValue(forward);
+            }
+
+            cashflow.setFxRateNotionalCurveDerivatives(notionalCurveDerivatives);
+            cashflow.setFxRateSettlementCurveDerivatives(settlementCurveDerivatives);
+            cashflow.setFxRateSpotDerivative(spotDerivative);
+        }
+
+        std::shared_ptr<Cashflow> ForwardFXRates::setFXRateCIP(
+                const QCDate &valuationDate,
+                double spotFxValue,
+                Cashflow &mccyCashflow,
+                const std::shared_ptr<InterestRateCurve> &notionalCurve,
+                const std::shared_ptr<InterestRateCurve> &settlementCurve) {
+            auto typeOfCashflow = mccyCashflow.getType();
+            if (typeOfCashflow == "FixedRateMultiCurrencyCashflow") {
+                auto cf = dynamic_cast<FixedRateMultiCurrencyCashflow &>(mccyCashflow);
+                _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXPublishDate(),
+                                   notionalCurve, settlementCurve);
+                return std::make_shared<FixedRateMultiCurrencyCashflow>(cf);
+            }
+            if (typeOfCashflow == "IborMultiCurrencyCashflow") {
+                auto cf = dynamic_cast<IborMultiCurrencyCashflow &>(mccyCashflow);
+                _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXFixingDate(),
+                                   notionalCurve, settlementCurve);
+                return std::make_shared<IborMultiCurrencyCashflow>(cf);
+            }
+            throw std::invalid_argument("Type of cashflow " + typeOfCashflow + " not implemented.");
+        }
+
+        void ForwardFXRates::setFXRateForLegCIP(
+                const QCDate &valuationDate,
+                double spotFxValue,
+                Leg &mccyLeg,
+                const std::shared_ptr<InterestRateCurve> &notionalCurve,
+                const std::shared_ptr<InterestRateCurve> &settlementCurve) {
+            for (size_t i = 0; i < mccyLeg.size(); ++i) {
+                auto cashflow = setFXRateCIP(valuationDate, spotFxValue, *mccyLeg.getCashflowAt(i),
+                                              notionalCurve, settlementCurve);
+                mccyLeg.setCashflowAt(cashflow, i);
+            }
+        }
     } // Financial
 // QCode

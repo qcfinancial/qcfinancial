@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.13.0** (set in `setup.py`).
+Current version: **1.14.0** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -157,8 +157,9 @@ All active cashflow types support a `record()` method returning a `std::tuple` o
 
 - `PresentValue` — discounts a `Leg` against a `ZeroCouponCurve`; computes first-order derivatives (DV01) w.r.t. curve nodes
 - `ForwardRates` — sets forward rates on `IborCashflow`, `IcpClfCashflow`, `CompoundedOvernightRateCashflow2`, `OvernightIndexCashflow`, and their multi-currency variants using projection curves
-- `ForwardFXRates` — FX forward estimation from two discount curves (`ForwardFXRates.cpp`)
+- `ForwardFXRates` — sets the FX rate on a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` (or a `Leg` of them). `setFXRate`/`setFXRateForLeg` read a historical fixing (via `FXRateEstimator`); `setFXRateCIP`/`setFXRateForLegCIP` project a forward FX rate via covered interest parity from a notional-currency curve and a settlement-currency curve, and cache the forward's curve-vertex and spot derivatives on the cashflow for `PresentValueFX`
 - `FXRateEstimator` — spot FX + basis point adjustments (`FXRateEstimator.cpp`)
+- `PresentValueFX` — present-values a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` leg in its settlement currency, discounting the cashflow's cached, CIP-projected `settlementCurrencyAmount()`; exposes PV derivatives to both the notional and settlement curves plus an FX delta (PV sensitivity to spot)
 
 ### Layer 7 — Portfolio / Batch State (`include/portfolio/`)
 

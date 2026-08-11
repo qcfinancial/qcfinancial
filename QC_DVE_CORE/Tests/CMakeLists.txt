@@ -1,9 +1,11 @@
 set(QC_INCLUDE ../include)
+set(QC_DEPRECATED ../deprecated)
 
 #[[
 target_include_directories(QC_DVE_CORE_TESTS
         PRIVATE
         ${QC_INCLUDE}
+        ${QC_DEPRECATED}
         include
         )
 ]]
@@ -25,5 +27,6 @@ target_include_directories(QC_DVE_CORE_TESTS
         CompoundedOvernightRateCashflowTests.cpp
         ForwardRatesTests.cpp
         PresentValueTests.cpp
+        PresentValueFXTests.cpp
         LegFactoryTests.cpp
         )]]

@@ -151,9 +151,9 @@ TestHelpers::getConrLeg(
         const QCode::Financial::Tenor &periodicity,
         double spread,
         const QCBusinessCalendar &calendar) {
-    auto leg = QCode::Financial::LegFactory::buildBulletCompoundedOvernightLeg(
+    auto leg = QCode::Financial::LegFactory::buildBulletCompoundedOvernightRateLeg2(
             QCode::Financial::RecPay::Receive,
-            QCDate(3, 1, 2022),
+            startDate,
             endDate,
             QCDate::QCBusDayAdjRules::qcFollow,
             periodicity,
@@ -167,7 +167,7 @@ TestHelpers::getConrLeg(
             std::make_shared<QCCurrency>(QCUSD()),
             spread,
             1.0,
-            true,
+            TestHelpers::getLinAct360(),
             6,
             0,
             0);

@@ -7,7 +7,7 @@
 #define QC_DVE_CORE_COMPOUNDEDOVERNIGHTRATECASHFLOW_H
 
 #include <asset_classes/InterestRateIndex.h>
-#include <cashflows/LinearInterestRateCashflow.h>
+#include <LinearInterestRateCashflow.h>
 #include <asset_classes/QCAct360.h>
 #include <asset_classes/QCLinearWf.h>
 

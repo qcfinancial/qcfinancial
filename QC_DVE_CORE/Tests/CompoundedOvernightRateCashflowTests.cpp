@@ -5,7 +5,7 @@
 #include "catch/catch-2.hpp"
 #include "TestHelpers.h"
 
-#include "cashflows/CompoundedOvernightRateCashflow.h"
+#include "CompoundedOvernightRateCashflow.h"
 
 TEST_CASE("CompoundedOvernightRateCashflow: constructor") {
     auto sofr = TestHelpers::getSofr();

@@ -73,7 +73,8 @@ target_sources(QC_DVE_CORE
         QCZeroCurveBootstrappingFromRatesFwdsAndFloatingLegs.cpp
         asset_classes/Tenor.cpp
         ZeroCouponCurve.cpp
-        LegFactory.cpp)
+        LegFactory.cpp
+        present_value/PresentValueFX.cpp)
 
 # --- QC_Financial y QC_Financial_3 ---------------------------------------------------------------------
 

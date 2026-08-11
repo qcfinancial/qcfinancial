@@ -146,9 +146,9 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="qcfinancial",
-    version="1.13.0",
+    version="1.14.0",
     author="Alvaro Diaz V.",
-    author_email="alvaro@efaa.cl",
+    author_email="alvaro.diaz.v@qcode.cl",
     description="A Library for Valuation of Linear Interest Rate and FX Derivatives",
     long_description=long_description,
     long_description_content_type='text/markdown',

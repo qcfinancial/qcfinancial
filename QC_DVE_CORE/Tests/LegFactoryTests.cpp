@@ -26,7 +26,7 @@ TEST_CASE("LegFactory: build bullet CompoundedOvernightRateLeg #1") {
 
     auto cashflow = leg.getCashflowAt(0);
     auto cashflow_ = std::dynamic_pointer_cast<
-            QCode::Financial::CompoundedOvernightRateCashflow>(cashflow);
+            QCode::Financial::CompoundedOvernightRateCashflow2>(cashflow);
     REQUIRE(cashflow_->getStartDate() == QCDate(3, 1, 2022));
 
     auto tempDate = startDate.addMonths((int)periodicity.getTotalMonths());
@@ -35,7 +35,7 @@ TEST_CASE("LegFactory: build bullet CompoundedOvernightRateLeg #1") {
 
     cashflow = leg.getCashflowAt(3);
     cashflow_ = std::dynamic_pointer_cast<
-            QCode::Financial::CompoundedOvernightRateCashflow>(cashflow);
+            QCode::Financial::CompoundedOvernightRateCashflow2>(cashflow);
     REQUIRE(cashflow_->getEndDate() == calendar.nextBusinessDay(endDate));
 }
 

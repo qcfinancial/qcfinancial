@@ -2,7 +2,7 @@
 // Created by ADiazV on 20-12-2021.
 //
 
-#include "cashflows/CompoundedOvernightRateCashflow.h"
+#include "CompoundedOvernightRateCashflow.h"
 
 namespace QCode {
     namespace Financial {

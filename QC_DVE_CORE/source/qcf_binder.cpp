@@ -47,6 +47,7 @@
 #include "ChileanFixedRateBond.h"
 
 #include <present_value/PresentValue.h>
+#include <present_value/PresentValueFX.h>
 #include <present_value/ForwardRates.h>
 #include <present_value/ForwardFXRates.h>
 #include <present_value/FXRateEstimator.h>
@@ -100,10 +101,9 @@ PYBIND11_MODULE(qcfinancial, m) {
 
     )pbdoc";
 
-
         m.def(
                 "id",
-                []() { return "version: 1.13.0, build: 2026-07-24 10:00"; });
+                []() { return "version: 1.14.0.post1, build: 2026-08-11 10:00"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -805,6 +805,18 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("settlement_amount", &qf::FixedRateMultiCurrencyCashflow::settlementAmount)
                         .def("settlement_currency_amount",
                              &qf::FixedRateMultiCurrencyCashflow::settlementCurrencyAmount)
+                        .def("get_fx_rate_index_value", &qf::FixedRateMultiCurrencyCashflow::getFxRateIndexValue)
+                        .def("set_fx_rate_notional_curve_derivatives",
+                             &qf::FixedRateMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives)
+                        .def("set_fx_rate_settlement_curve_derivatives",
+                             &qf::FixedRateMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives)
+                        .def("set_fx_rate_spot_derivative",
+                             &qf::FixedRateMultiCurrencyCashflow::setFxRateSpotDerivative)
+                        .def("get_amount_notional_curve_derivatives",
+                             &qf::FixedRateMultiCurrencyCashflow::getAmountNotionalCurveDerivatives)
+                        .def("get_amount_settlement_curve_derivatives",
+                             &qf::FixedRateMultiCurrencyCashflow::getAmountSettlementCurveDerivatives)
+                        .def("get_amount_fx_delta", &qf::FixedRateMultiCurrencyCashflow::getAmountFxDelta)
                         .def("record", &qf::FixedRateMultiCurrencyCashflow::record);
 
         // IborCashflow
@@ -861,6 +873,17 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_rate_index_value", &qf::IborMultiCurrencyCashflow::getFxRateIndexValue)
                         .def("get_fx_rate_index_code", &qf::IborMultiCurrencyCashflow::getFXRateIndexCode)
                         .def("accrued_interest_in_sett_ccy", &qf::IborMultiCurrencyCashflow::accruedInterestInSettCcy)
+                        .def("set_fx_rate_notional_curve_derivatives",
+                             &qf::IborMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives)
+                        .def("set_fx_rate_settlement_curve_derivatives",
+                             &qf::IborMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives)
+                        .def("set_fx_rate_spot_derivative",
+                             &qf::IborMultiCurrencyCashflow::setFxRateSpotDerivative)
+                        .def("get_amount_notional_curve_derivatives",
+                             &qf::IborMultiCurrencyCashflow::getAmountNotionalCurveDerivatives)
+                        .def("get_amount_settlement_curve_derivatives",
+                             &qf::IborMultiCurrencyCashflow::getAmountSettlementCurveDerivatives)
+                        .def("get_amount_fx_delta", &qf::IborMultiCurrencyCashflow::getAmountFxDelta)
                         .def("record", &qf::IborMultiCurrencyCashflow::record);
 
         // IcpClpCashflow
@@ -1925,6 +1948,29 @@ Si se entrega `curves` (dict código ISO -> ZeroCouponCurve), calcula present_va
                                         return pv;
                                 }));;
 
+        // PresentValueFX
+        py::class_<qf::PresentValueFX>(m, "PresentValueFX")
+                        .def(py::init<>())
+                        .def("pv", py::overload_cast<const QCDate &, const std::shared_ptr<qf::Cashflow> &, const
+                                     std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValueFX::pv))
+                        .def("pv", py::overload_cast<const QCDate &, qf::Leg &, const
+                                     std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValueFX::pv))
+                        .def("get_notional_curve_derivatives", &qf::PresentValueFX::getNotionalCurveDerivatives)
+                        .def("get_settlement_curve_derivatives", &qf::PresentValueFX::getSettlementCurveDerivatives)
+                        .def("get_fx_delta", &qf::PresentValueFX::getFxDelta)
+                        .def(py::pickle(
+                                [](const qf::PresentValueFX &) {
+                                        // __getstate__
+                                        return py::make_tuple();
+                                },
+                                [](py::tuple t) {
+                                        // __setstate__
+                                        if (t.size() != 0)
+                                                throw std::runtime_error("Invalid state!");
+
+                                        return qf::PresentValueFX();
+                                }));
+
         // FixedRateBond
         py::class_<qf::FixedRateBond, std::shared_ptr<qf::FixedRateBond> >(m, "FixedRateBond")
                         .def(py::init<qf::Leg &>())
@@ -1954,7 +2000,9 @@ Si se entrega `curves` (dict código ISO -> ZeroCouponCurve), calcula present_va
         py::class_<qf::ForwardFXRates>(m, "ForwardFXRates")
                         .def(py::init<>())
                         .def("set_fx_rate", &qf::ForwardFXRates::setFXRate)
-                        .def("set_fx_rate_for_leg", &qf::ForwardFXRates::setFXRateForLeg);
+                        .def("set_fx_rate_for_leg", &qf::ForwardFXRates::setFXRateForLeg)
+                        .def("set_fx_rate_cip", &qf::ForwardFXRates::setFXRateCIP)
+                        .def("set_fx_rate_for_leg_cip", &qf::ForwardFXRates::setFXRateForLegCIP);
 
         // ForwardFXEstimator
         py::class_<qf::FXRateEstimator>(m, "FXRateEstimator")
