@@ -21,13 +21,17 @@
 #include "TestHelpers.h"
 
 namespace {
-    std::shared_ptr<QCode::Financial::InterestRateCurve> buildCurve(const std::vector<double>& rates) {
-        std::vector<long> plazos{1, 30, 90, 180, 365, 730};
+    std::shared_ptr<QCode::Financial::InterestRateCurve> buildCurveWithNodes(
+            const std::vector<long>& plazos, const std::vector<double>& rates) {
         std::vector<double> rateValues(rates);
         auto curva = std::make_shared<QCCurve<long>>(QCCurve<long>(plazos, rateValues));
         auto interp = std::make_shared<QCLinearInterpolator>(QCLinearInterpolator(curva));
         auto rate = TestHelpers::getLinAct360();
         return std::make_shared<QCode::Financial::ZeroCouponCurve>(interp, rate);
+    }
+
+    std::shared_ptr<QCode::Financial::InterestRateCurve> buildCurve(const std::vector<double>& rates) {
+        return buildCurveWithNodes({1, 30, 90, 180, 365, 730}, rates);
     }
 
     std::shared_ptr<QCode::Financial::FXRateIndex> buildUsdClpIndex() {
@@ -72,6 +76,20 @@ namespace {
         cf.setInterestRateValue(0.0);
         return cf;
     }
+
+    // Recovers the old combined settlement-curve derivative: only meaningful when the caller used
+    // the same curve object for both CIP projection and discounting, in which case the two vectors
+    // share a node set and this sum is the true single-curve PV derivative.
+    std::vector<double> sumSettlementDerivatives(const QCode::Financial::PresentValueFX& pvfx) {
+        auto cip = pvfx.getCipSettlementCurveDerivatives();
+        auto disc = pvfx.getDiscountCurveDerivatives();
+        REQUIRE(cip.size() == disc.size());
+        std::vector<double> total(cip.size());
+        for (size_t i = 0; i < cip.size(); ++i) {
+            total.at(i) = cip.at(i) + disc.at(i);
+        }
+        return total;
+    }
 }
 
 TEST_CASE("PresentValueFX: FixedRateMultiCurrencyCashflow, strong-side notional") {
@@ -99,11 +117,14 @@ TEST_CASE("PresentValueFX: FixedRateMultiCurrencyCashflow, strong-side notional"
     auto expected = 1000000.0 * spot * dfNotional;
     REQUIRE(result == Approx(expected).epsilon(1e-9));
 
-    // Strong-side: settlement curve's PV derivative is a real algebraic cancellation, not a shortcut.
-    auto settlementDerivatives = pvfx.getSettlementCurveDerivatives();
+    // Strong-side: summed settlement contributions are a real algebraic cancellation, not a shortcut.
+    // Each piece is generally non-zero on its own (checked below); only the sum cancels.
+    auto settlementDerivatives = sumSettlementDerivatives(pvfx);
     for (auto d : settlementDerivatives) {
         REQUIRE(d == Approx(0.0).margin(1e-6));
     }
+    REQUIRE(std::abs(pvfx.getCipSettlementCurveDerivatives().at(4)) > 1e-6);
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(4)) > 1e-6);
 
     // Notional curve derivative should be non-zero at the vertex bracketing t (index 4: 365 days).
     auto notionalDerivatives = pvfx.getNotionalCurveDerivatives();
@@ -143,8 +164,8 @@ TEST_CASE("PresentValueFX: FixedRateMultiCurrencyCashflow, weak-side notional") 
     auto result = pvfx.pv(valuationDate, projected, settlementCurve);
     REQUIRE(result > 0.0);
 
-    // Weak-side: nothing cancels, settlement curve's derivative is structurally non-zero.
-    auto settlementDerivatives = pvfx.getSettlementCurveDerivatives();
+    // Weak-side: nothing cancels, the summed settlement contribution is structurally non-zero.
+    auto settlementDerivatives = sumSettlementDerivatives(pvfx);
     REQUIRE(std::abs(settlementDerivatives.at(4)) > 1e-6);
 
     double bumpedSpot = spot * (1.0 + 1e-6);
@@ -188,8 +209,12 @@ TEST_CASE("PresentValueFX: already-fixed cashflow") {
     }
     REQUIRE(pvfx.getFxDelta() == Approx(0.0).margin(1e-12));
 
-    // Ordinary discounting of an already-fixed amount still has real settlement-curve risk.
-    REQUIRE(std::abs(pvfx.getSettlementCurveDerivatives().at(4)) > 1e-6);
+    // The FX rate is already fixed: no more CIP sensitivity to the projection curve...
+    for (auto d : pvfx.getCipSettlementCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    // ...but ordinary discounting of the (now-fixed) amount still has real discount-curve risk.
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(4)) > 1e-6);
 }
 
 TEST_CASE("PresentValueFX: Leg mixing a fixed and a floating cashflow") {
@@ -285,7 +310,45 @@ TEST_CASE("PresentValueFX: IborMultiCurrencyCashflow, strong and weak notional")
         auto pvfx = QCode::Financial::PresentValueFX();
         auto result = pvfx.pv(valuationDate, projected, settlementCurve);
 
-        REQUIRE(std::abs(pvfx.getSettlementCurveDerivatives().at(4)) > 1e-6);
+        REQUIRE(std::abs(sumSettlementDerivatives(pvfx).at(4)) > 1e-6);
         REQUIRE(pvfx.getFxDelta() == Approx(-result / spot).epsilon(1e-9));
     }
+}
+
+TEST_CASE("PresentValueFX: distinct CIP-projection and discount curves") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    // CIP-projection curve: same 6-node shape as other tests.
+    auto cipCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+    // Discount curve: a genuinely different curve object, with a different node count entirely.
+    auto discountCurve = buildCurveWithNodes({1, 180, 730}, {.018, .028, .038});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto cf = buildFixedMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, cipCurve);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, discountCurve);
+
+    auto t = valuationDate.dayDiff(endDate);
+    auto forward = spot * notionalCurve->getDiscountFactorAt(t) / cipCurve->getDiscountFactorAt(t);
+    auto expected = 1000000.0 * forward * discountCurve->getDiscountFactorAt(t);
+    REQUIRE(result == Approx(expected).epsilon(1e-9));
+
+    // Each vector is sized to (and only to) its own curve — no shared node-index assumption.
+    REQUIRE(pvfx.getCipSettlementCurveDerivatives().size() == cipCurve->getLength());
+    REQUIRE(pvfx.getDiscountCurveDerivatives().size() == discountCurve->getLength());
+    REQUIRE(pvfx.getNotionalCurveDerivatives().size() == notionalCurve->getLength());
+
+    // Both pieces are independently non-zero; they no longer cancel since the curves differ.
+    REQUIRE(std::abs(pvfx.getCipSettlementCurveDerivatives().at(4)) > 1e-6);
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(1)) > 1e-6);
 }

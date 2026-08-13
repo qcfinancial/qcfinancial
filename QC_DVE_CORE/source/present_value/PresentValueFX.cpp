@@ -8,7 +8,7 @@ namespace QCode::Financial {
     double PresentValueFX::pv(
             const QCDate &valuationDate,
             const std::shared_ptr<Cashflow> &cashflow,
-            const std::shared_ptr<InterestRateCurve> &settlementCurve) {
+            const std::shared_ptr<InterestRateCurve> &discountCurve) {
         auto typeOfCashflow = cashflow->getType();
 
         double settlementCurrencyAmount;
@@ -33,7 +33,8 @@ namespace QCode::Financial {
         }
 
         _notionalCurveDerivatives.assign(amountNotionalCurveDerivatives.size(), 0.0);
-        _settlementCurveDerivatives.assign(amountSettlementCurveDerivatives.size(), 0.0);
+        _cipSettlementCurveDerivatives.assign(amountSettlementCurveDerivatives.size(), 0.0);
+        _discountCurveDerivatives.assign(discountCurve->getLength(), 0.0);
         _fxDelta = 0.0;
 
         auto t = valuationDate.dayDiff(cashflow->endDate());
@@ -41,22 +42,28 @@ namespace QCode::Financial {
             return 0.0;
         }
 
-        auto dfSettlement = settlementCurve->getDiscountFactorAt(t);
-        auto result = settlementCurrencyAmount * dfSettlement;
+        auto dfDiscount = discountCurve->getDiscountFactorAt(t);
+        auto result = settlementCurrencyAmount * dfDiscount;
 
-        // Notional curve only reaches PV through the cached amount-derivative (settlementCurve's
+        // Notional curve only reaches PV through the cached amount-derivative (discountCurve's
         // discount factor does not depend on the notional curve).
         for (size_t i = 0; i < amountNotionalCurveDerivatives.size(); ++i) {
-            _notionalCurveDerivatives.at(i) = amountNotionalCurveDerivatives.at(i) * dfSettlement;
+            _notionalCurveDerivatives.at(i) = amountNotionalCurveDerivatives.at(i) * dfDiscount;
         }
-        // Settlement curve reaches PV through both the amount (via the FX forward) and the discount
-        // factor itself: plain product rule, no shortcut taken for either term.
+        // CIP-projection curve reaches PV only through the amount (via the FX forward); it has no
+        // bearing on discountCurve's own discount factor, so this is not a product-rule term.
         for (size_t j = 0; j < amountSettlementCurveDerivatives.size(); ++j) {
-            _settlementCurveDerivatives.at(j) = amountSettlementCurveDerivatives.at(j) * dfSettlement +
-                    settlementCurrencyAmount * settlementCurve->dfDerivativeAt(j);
+            _cipSettlementCurveDerivatives.at(j) = amountSettlementCurveDerivatives.at(j) * dfDiscount;
         }
-        // dfSettlement does not depend on spot, so this is a plain product, not a further chain rule.
-        _fxDelta = amountFxDelta * dfSettlement;
+        // Discount curve reaches PV only through the discount factor; it has no bearing on the
+        // amount (which was fixed by the CIP projection curve), so this too is not a product-rule
+        // term. The two vectors above are independent and are NOT summed here: they are only
+        // meaningful to sum when the caller used the same curve for CIP projection and discounting.
+        for (size_t k = 0; k < discountCurve->getLength(); ++k) {
+            _discountCurveDerivatives.at(k) = settlementCurrencyAmount * discountCurve->dfDerivativeAt(k);
+        }
+        // dfDiscount does not depend on spot, so this is a plain product, not a further chain rule.
+        _fxDelta = amountFxDelta * dfDiscount;
 
         return result;
     }
@@ -64,14 +71,15 @@ namespace QCode::Financial {
     double PresentValueFX::pv(
             const QCDate &valuationDate,
             Leg &leg,
-            const std::shared_ptr<InterestRateCurve> &settlementCurve) {
+            const std::shared_ptr<InterestRateCurve> &discountCurve) {
         std::vector<double> notionalCurveDerivatives;
-        std::vector<double> settlementCurveDerivatives(settlementCurve->getLength(), 0.0);
+        std::vector<double> cipSettlementCurveDerivatives;
+        std::vector<double> discountCurveDerivatives(discountCurve->getLength(), 0.0);
         double fxDelta = 0.0;
         double result = 0.0;
 
         for (size_t i = 0; i < leg.size(); ++i) {
-            result += pv(valuationDate, leg.getCashflowAt(i), settlementCurve);
+            result += pv(valuationDate, leg.getCashflowAt(i), discountCurve);
 
             if (notionalCurveDerivatives.size() != _notionalCurveDerivatives.size()) {
                 notionalCurveDerivatives.assign(_notionalCurveDerivatives.size(), 0.0);
@@ -79,14 +87,21 @@ namespace QCode::Financial {
             for (size_t k = 0; k < _notionalCurveDerivatives.size(); ++k) {
                 notionalCurveDerivatives.at(k) += _notionalCurveDerivatives.at(k);
             }
-            for (size_t k = 0; k < _settlementCurveDerivatives.size(); ++k) {
-                settlementCurveDerivatives.at(k) += _settlementCurveDerivatives.at(k);
+            if (cipSettlementCurveDerivatives.size() != _cipSettlementCurveDerivatives.size()) {
+                cipSettlementCurveDerivatives.assign(_cipSettlementCurveDerivatives.size(), 0.0);
+            }
+            for (size_t k = 0; k < _cipSettlementCurveDerivatives.size(); ++k) {
+                cipSettlementCurveDerivatives.at(k) += _cipSettlementCurveDerivatives.at(k);
+            }
+            for (size_t k = 0; k < _discountCurveDerivatives.size(); ++k) {
+                discountCurveDerivatives.at(k) += _discountCurveDerivatives.at(k);
             }
             fxDelta += _fxDelta;
         }
 
         _notionalCurveDerivatives = notionalCurveDerivatives;
-        _settlementCurveDerivatives = settlementCurveDerivatives;
+        _cipSettlementCurveDerivatives = cipSettlementCurveDerivatives;
+        _discountCurveDerivatives = discountCurveDerivatives;
         _fxDelta = fxDelta;
 
         return result;
@@ -96,8 +111,12 @@ namespace QCode::Financial {
         return _notionalCurveDerivatives;
     }
 
-    std::vector<double> PresentValueFX::getSettlementCurveDerivatives() const {
-        return _settlementCurveDerivatives;
+    std::vector<double> PresentValueFX::getCipSettlementCurveDerivatives() const {
+        return _cipSettlementCurveDerivatives;
+    }
+
+    std::vector<double> PresentValueFX::getDiscountCurveDerivatives() const {
+        return _discountCurveDerivatives;
     }
 
     double PresentValueFX::getFxDelta() const {

@@ -103,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.14.0a1, build: 2026-08-11 19:39"; });
+                []() { return "version: 1.14.0a2, build: 2026-08-13"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -1956,7 +1956,8 @@ Si se entrega `curves` (dict código ISO -> ZeroCouponCurve), calcula present_va
                         .def("pv", py::overload_cast<const QCDate &, qf::Leg &, const
                                      std::shared_ptr<qf::InterestRateCurve> &>(&qf::PresentValueFX::pv))
                         .def("get_notional_curve_derivatives", &qf::PresentValueFX::getNotionalCurveDerivatives)
-                        .def("get_settlement_curve_derivatives", &qf::PresentValueFX::getSettlementCurveDerivatives)
+                        .def("get_cip_settlement_curve_derivatives", &qf::PresentValueFX::getCipSettlementCurveDerivatives)
+                        .def("get_discount_curve_derivatives", &qf::PresentValueFX::getDiscountCurveDerivatives)
                         .def("get_fx_delta", &qf::PresentValueFX::getFxDelta)
                         .def(py::pickle(
                                 [](const qf::PresentValueFX &) {
