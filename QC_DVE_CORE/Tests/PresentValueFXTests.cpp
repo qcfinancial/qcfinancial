@@ -12,19 +12,24 @@
 #include "asset_classes/ZeroCouponCurve.h"
 #include "cashflows/FixedRateMultiCurrencyCashflow.h"
 #include "cashflows/IborMultiCurrencyCashflow.h"
+#include "cashflows/OvernightIndexMultiCurrencyCashflow.h"
+#include "cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h"
+#include "cashflows/SimpleMultiCurrencyCashflow.h"
 #include "cashflows/SimpleCashflow.h"
 #include "curves/QCCurve.h"
 #include "curves/QCLinearInterpolator.h"
 #include "present_value/ForwardFXRates.h"
 #include "present_value/PresentValueFX.h"
+#include "present_value/FXRateEstimator.h"
 #include "Leg.h"
 #include "TestHelpers.h"
 
 namespace {
     std::shared_ptr<QCode::Financial::InterestRateCurve> buildCurveWithNodes(
             const std::vector<long>& plazos, const std::vector<double>& rates) {
+        std::vector<long> plazosCopy(plazos);
         std::vector<double> rateValues(rates);
-        auto curva = std::make_shared<QCCurve<long>>(QCCurve<long>(plazos, rateValues));
+        auto curva = std::make_shared<QCCurve<long>>(QCCurve<long>(plazosCopy, rateValues));
         auto interp = std::make_shared<QCLinearInterpolator>(QCLinearInterpolator(curva));
         auto rate = TestHelpers::getLinAct360();
         return std::make_shared<QCode::Financial::ZeroCouponCurve>(interp, rate);
@@ -75,6 +80,50 @@ namespace {
         // here so amount() == nominal exactly, independent of what ran before this test.
         cf.setInterestRateValue(0.0);
         return cf;
+    }
+
+    // Zero-rate OvernightIndexMultiCurrencyCashflow: default start/end index values are both 1.0
+    // and spread is 0, so the equivalent rate is 0 and settlementCurrencyAmount() == amortization
+    // (== nominal), matching the interest-free construction used for Fixed/Ibor above.
+    QCode::Financial::OvernightIndexMultiCurrencyCashflow buildOvernightMccyCashflow(
+            std::shared_ptr<QCCurrency> notionalCcy,
+            std::shared_ptr<QCCurrency> settlementCcy,
+            std::shared_ptr<QCode::Financial::FXRateIndex> fxIndex,
+            const QCDate& endDate,
+            const QCDate& fxFixingDate) {
+        auto startDate = QCDate(2, 1, 2024);
+        double nominal = 1000000.0;
+        return {startDate, endDate, startDate, endDate, endDate, notionalCcy, nominal, nominal, true,
+                0.0, 1.0, TestHelpers::getLinAct360(), "SOFRINDEX", 8,
+                QCode::Financial::DatesForEquivalentRate::qcAccrual,
+                fxFixingDate, settlementCcy, fxIndex};
+    }
+
+    // Zero-rate CompoundedOvernightRateMultiCurrencyCashflow2: default initial/end wealth factors
+    // are both 1.0, so the compounded rate is 0 and settlementCurrencyAmount() == amortization
+    // (== nominal).
+    QCode::Financial::CompoundedOvernightRateMultiCurrencyCashflow2 buildCompoundedOvernightMccyCashflow(
+            std::shared_ptr<QCCurrency> notionalCcy,
+            std::shared_ptr<QCCurrency> settlementCcy,
+            std::shared_ptr<QCode::Financial::FXRateIndex> fxIndex,
+            const QCDate& endDate,
+            const QCDate& fxFixingDate) {
+        auto startDate = QCDate(2, 1, 2024);
+        double nominal = 1000000.0;
+        return {TestHelpers::getSofr(), startDate, endDate, endDate, {}, nominal, nominal, true,
+                notionalCcy, 0.0, 1.0, TestHelpers::getLinAct360(), 8, 0, 0,
+                fxFixingDate, settlementCcy, fxIndex};
+    }
+
+    // SimpleMultiCurrencyCashflow has no interest concept: amount() is the nominal directly.
+    QCode::Financial::SimpleMultiCurrencyCashflow buildSimpleMccyCashflow(
+            std::shared_ptr<QCCurrency> notionalCcy,
+            std::shared_ptr<QCCurrency> settlementCcy,
+            std::shared_ptr<QCode::Financial::FXRateIndex> fxIndex,
+            const QCDate& endDate,
+            const QCDate& fxFixingDate) {
+        double nominal = 1000000.0;
+        return {endDate, nominal, notionalCcy, fxFixingDate, settlementCcy, fxIndex};
     }
 
     // Recovers the old combined settlement-curve derivative: only meaningful when the caller used
@@ -351,4 +400,374 @@ TEST_CASE("PresentValueFX: distinct CIP-projection and discount curves") {
     // Both pieces are independently non-zero; they no longer cancel since the curves differ.
     REQUIRE(std::abs(pvfx.getCipSettlementCurveDerivatives().at(4)) > 1e-6);
     REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(1)) > 1e-6);
+}
+
+TEST_CASE("PresentValueFX: OvernightIndexMultiCurrencyCashflow, strong and weak notional") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+
+    SECTION("strong-side notional: cancellation identity holds") {
+        auto cf = buildOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        auto t = valuationDate.dayDiff(endDate);
+        auto expected = 1000000.0 * spot * notionalCurve->getDiscountFactorAt(t);
+        REQUIRE(result == Approx(expected).epsilon(1e-9));
+        REQUIRE(pvfx.getFxDelta() == Approx(result / spot).epsilon(1e-9));
+
+        auto settlementDerivatives = sumSettlementDerivatives(pvfx);
+        for (auto d : settlementDerivatives) {
+            REQUIRE(d == Approx(0.0).margin(1e-6));
+        }
+    }
+
+    SECTION("weak-side notional: settlement curve carries real risk") {
+        auto cf = buildOvernightMccyCashflow(clp, usd, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        REQUIRE(std::abs(sumSettlementDerivatives(pvfx).at(4)) > 1e-6);
+        REQUIRE(pvfx.getFxDelta() == Approx(-result / spot).epsilon(1e-9));
+    }
+}
+
+TEST_CASE("PresentValueFX: OvernightIndexMultiCurrencyCashflow, already-fixed cashflow") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(1, 7, 2024);
+    auto valuationDate = QCDate(3, 7, 2024);
+    double spot = 900.0;
+
+    auto cf = buildOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+    cf.setFxRateIndexValue(850.0);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+    auto &projectedFixed = dynamic_cast<QCode::Financial::OvernightIndexMultiCurrencyCashflow &>(*projected);
+    REQUIRE(projectedFixed.getFXRateIndexValue() == 850.0);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+    REQUIRE(result == Approx(1000000.0 * 850.0 *
+            settlementCurve->getDiscountFactorAt(valuationDate.dayDiff(endDate))).epsilon(1e-9));
+
+    for (auto d : pvfx.getNotionalCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(pvfx.getFxDelta() == Approx(0.0).margin(1e-12));
+    for (auto d : pvfx.getCipSettlementCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(4)) > 1e-6);
+}
+
+TEST_CASE("PresentValueFX: OvernightIndexMultiCurrencyCashflow, distinct CIP-projection and discount curves") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto cipCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+    auto discountCurve = buildCurveWithNodes({1, 180, 730}, {.018, .028, .038});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto cf = buildOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, cipCurve);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, discountCurve);
+
+    auto t = valuationDate.dayDiff(endDate);
+    auto forward = spot * notionalCurve->getDiscountFactorAt(t) / cipCurve->getDiscountFactorAt(t);
+    auto expected = 1000000.0 * forward * discountCurve->getDiscountFactorAt(t);
+    REQUIRE(result == Approx(expected).epsilon(1e-9));
+
+    REQUIRE(pvfx.getCipSettlementCurveDerivatives().size() == cipCurve->getLength());
+    REQUIRE(pvfx.getDiscountCurveDerivatives().size() == discountCurve->getLength());
+}
+
+TEST_CASE("PresentValueFX: CompoundedOvernightRateMultiCurrencyCashflow2, strong and weak notional") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+
+    SECTION("strong-side notional: cancellation identity holds") {
+        auto cf = buildCompoundedOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        auto t = valuationDate.dayDiff(endDate);
+        auto expected = 1000000.0 * spot * notionalCurve->getDiscountFactorAt(t);
+        REQUIRE(result == Approx(expected).epsilon(1e-9));
+        REQUIRE(pvfx.getFxDelta() == Approx(result / spot).epsilon(1e-9));
+
+        auto settlementDerivatives = sumSettlementDerivatives(pvfx);
+        for (auto d : settlementDerivatives) {
+            REQUIRE(d == Approx(0.0).margin(1e-6));
+        }
+    }
+
+    SECTION("weak-side notional: settlement curve carries real risk") {
+        auto cf = buildCompoundedOvernightMccyCashflow(clp, usd, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        REQUIRE(std::abs(sumSettlementDerivatives(pvfx).at(4)) > 1e-6);
+        REQUIRE(pvfx.getFxDelta() == Approx(-result / spot).epsilon(1e-9));
+    }
+}
+
+TEST_CASE("PresentValueFX: CompoundedOvernightRateMultiCurrencyCashflow2, already-fixed cashflow") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(1, 7, 2024);
+    auto valuationDate = QCDate(3, 7, 2024);
+    double spot = 900.0;
+
+    auto cf = buildCompoundedOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+    cf.setFxRateIndexValue(850.0);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+    auto &projectedFixed =
+            dynamic_cast<QCode::Financial::CompoundedOvernightRateMultiCurrencyCashflow2 &>(*projected);
+    REQUIRE(projectedFixed.getFXRateIndexValue() == 850.0);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+    REQUIRE(result == Approx(1000000.0 * 850.0 *
+            settlementCurve->getDiscountFactorAt(valuationDate.dayDiff(endDate))).epsilon(1e-9));
+
+    for (auto d : pvfx.getNotionalCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(pvfx.getFxDelta() == Approx(0.0).margin(1e-12));
+    for (auto d : pvfx.getCipSettlementCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(4)) > 1e-6);
+}
+
+TEST_CASE(
+        "PresentValueFX: CompoundedOvernightRateMultiCurrencyCashflow2, distinct CIP-projection and discount curves") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto cipCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+    auto discountCurve = buildCurveWithNodes({1, 180, 730}, {.018, .028, .038});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto cf = buildCompoundedOvernightMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, cipCurve);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, discountCurve);
+
+    auto t = valuationDate.dayDiff(endDate);
+    auto forward = spot * notionalCurve->getDiscountFactorAt(t) / cipCurve->getDiscountFactorAt(t);
+    auto expected = 1000000.0 * forward * discountCurve->getDiscountFactorAt(t);
+    REQUIRE(result == Approx(expected).epsilon(1e-9));
+
+    REQUIRE(pvfx.getCipSettlementCurveDerivatives().size() == cipCurve->getLength());
+    REQUIRE(pvfx.getDiscountCurveDerivatives().size() == discountCurve->getLength());
+}
+
+TEST_CASE("PresentValueFX: SimpleMultiCurrencyCashflow, strong and weak notional") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+
+    SECTION("strong-side notional: cancellation identity holds") {
+        auto cf = buildSimpleMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        auto t = valuationDate.dayDiff(endDate);
+        auto expected = 1000000.0 * spot * notionalCurve->getDiscountFactorAt(t);
+        REQUIRE(result == Approx(expected).epsilon(1e-9));
+        REQUIRE(pvfx.getFxDelta() == Approx(result / spot).epsilon(1e-9));
+
+        auto settlementDerivatives = sumSettlementDerivatives(pvfx);
+        for (auto d : settlementDerivatives) {
+            REQUIRE(d == Approx(0.0).margin(1e-6));
+        }
+    }
+
+    SECTION("weak-side notional: settlement curve carries real risk") {
+        auto cf = buildSimpleMccyCashflow(clp, usd, fxIndex, endDate, fxFixingDate);
+        auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+        auto pvfx = QCode::Financial::PresentValueFX();
+        auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+
+        REQUIRE(std::abs(sumSettlementDerivatives(pvfx).at(4)) > 1e-6);
+        REQUIRE(pvfx.getFxDelta() == Approx(-result / spot).epsilon(1e-9));
+    }
+}
+
+TEST_CASE("PresentValueFX: SimpleMultiCurrencyCashflow, already-fixed cashflow") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto settlementCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(1, 7, 2024);
+    auto valuationDate = QCDate(3, 7, 2024);
+    double spot = 900.0;
+
+    auto cf = buildSimpleMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+    cf.setFxRateIndexValue(850.0);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, settlementCurve);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, settlementCurve);
+    REQUIRE(result == Approx(1000000.0 * 850.0 *
+            settlementCurve->getDiscountFactorAt(valuationDate.dayDiff(endDate))).epsilon(1e-9));
+
+    for (auto d : pvfx.getNotionalCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(pvfx.getFxDelta() == Approx(0.0).margin(1e-12));
+    for (auto d : pvfx.getCipSettlementCurveDerivatives()) {
+        REQUIRE(d == Approx(0.0).margin(1e-12));
+    }
+    REQUIRE(std::abs(pvfx.getDiscountCurveDerivatives().at(4)) > 1e-6);
+}
+
+TEST_CASE("PresentValueFX: SimpleMultiCurrencyCashflow, distinct CIP-projection and discount curves") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto notionalCurve = buildCurve({.01, .015, .02, .025, .03, .035});
+    auto cipCurve = buildCurve({.02, .025, .03, .035, .04, .045});
+    auto discountCurve = buildCurveWithNodes({1, 180, 730}, {.018, .028, .038});
+
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(2, 1, 2024);
+    double spot = 900.0;
+
+    auto cf = buildSimpleMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto projected = fwd.setFXRateCIP(valuationDate, spot, cf, notionalCurve, cipCurve);
+
+    auto pvfx = QCode::Financial::PresentValueFX();
+    auto result = pvfx.pv(valuationDate, projected, discountCurve);
+
+    auto t = valuationDate.dayDiff(endDate);
+    auto forward = spot * notionalCurve->getDiscountFactorAt(t) / cipCurve->getDiscountFactorAt(t);
+    auto expected = 1000000.0 * forward * discountCurve->getDiscountFactorAt(t);
+    REQUIRE(result == Approx(expected).epsilon(1e-9));
+
+    REQUIRE(pvfx.getCipSettlementCurveDerivatives().size() == cipCurve->getLength());
+    REQUIRE(pvfx.getDiscountCurveDerivatives().size() == discountCurve->getLength());
+}
+
+TEST_CASE("ForwardFXRates: setFXRate applies historical fixing to SimpleMultiCurrencyCashflow") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    auto valuationDate = QCDate(3, 7, 2024);
+
+    QCode::Financial::TimeSeries ts;
+    ts[fxFixingDate] = 875.0;
+    QCode::Financial::FXRateEstimator estimator(ts, -1.0);
+
+    auto cf = buildSimpleMccyCashflow(usd, clp, fxIndex, endDate, fxFixingDate);
+
+    auto fwd = QCode::Financial::ForwardFXRates();
+    auto fixed = fwd.setFXRate(valuationDate, cf, estimator);
+    auto &fixedSimple = dynamic_cast<QCode::Financial::SimpleMultiCurrencyCashflow &>(*fixed);
+
+    REQUIRE(fixedSimple.settlementAmount() == Approx(1000000.0 * 875.0).epsilon(1e-9));
+}
+
+TEST_CASE("SimpleMultiCurrencyCashflow: settlementAmount() unchanged by settlementCurrencyAmount() refactor") {
+    auto fxIndex = buildUsdClpIndex();
+    auto usd = fxIndex->getFxRate()->getStrongCcy();
+    auto clp = fxIndex->getFxRate()->getWeakCcy();
+    auto endDate = QCDate(2, 1, 2025);
+    auto fxFixingDate = QCDate(2, 7, 2024);
+    double nominal = 1000000.0;
+    double fxRateValue = 812.34;
+
+    // Strong-side notional: pre-refactor formula was `_nominal * _fxRateIndexValue`.
+    QCode::Financial::SimpleMultiCurrencyCashflow strong(
+            endDate, nominal, usd, fxFixingDate, clp, fxIndex, fxRateValue);
+    REQUIRE(strong.settlementAmount() == Approx(nominal * fxRateValue).epsilon(1e-12));
+    REQUIRE(strong.settlementAmount() == Approx(strong.settlementCurrencyAmount()).epsilon(1e-12));
+
+    // Weak-side notional: pre-refactor formula was `_nominal / _fxRateIndexValue`.
+    QCode::Financial::SimpleMultiCurrencyCashflow weak(
+            endDate, nominal, clp, fxFixingDate, usd, fxIndex, fxRateValue);
+    REQUIRE(weak.settlementAmount() == Approx(nominal / fxRateValue).epsilon(1e-12));
+    REQUIRE(weak.settlementAmount() == Approx(weak.settlementCurrencyAmount()).epsilon(1e-12));
 }

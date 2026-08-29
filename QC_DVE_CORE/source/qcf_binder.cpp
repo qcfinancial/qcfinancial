@@ -103,7 +103,7 @@ PYBIND11_MODULE(qcfinancial, m) {
 
         m.def(
                 "id",
-                []() { return "version: 1.14.0a2, build: 2026-08-13"; });
+                []() { return "version: 1.14.0a3, build: 2026-08-29"; });
 
         // QCDate
         py::class_<QCDate>(m, "QCDate", R"pbdoc(Permite representar una fecha en calendario gregoriano.)pbdoc")
@@ -750,6 +750,7 @@ PYBIND11_MODULE(qcfinancial, m) {
                                 std::shared_ptr<qf::FXRateIndex>, double>())
                         .def("amount", &qf::SimpleMultiCurrencyCashflow::amount)
                         .def("settlement_amount", &qf::SimpleMultiCurrencyCashflow::settlementAmount)
+                        .def("settlement_currency_amount", &qf::SimpleMultiCurrencyCashflow::settlementCurrencyAmount)
                         .def("nominal", &qf::SimpleMultiCurrencyCashflow::nominal)
                         .def("ccy", &qf::SimpleMultiCurrencyCashflow::ccy)
                         .def("settlement_ccy", &qf::SimpleMultiCurrencyCashflow::settlementCcy)
@@ -758,6 +759,17 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_fixing_date", &qf::SimpleMultiCurrencyCashflow::getFXRateIndexFixingDate)
                         .def("date", &qf::SimpleMultiCurrencyCashflow::date)
                         .def("get_type", &qf::SimpleMultiCurrencyCashflow::getType)
+                        .def("set_fx_rate_notional_curve_derivatives",
+                             &qf::SimpleMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives)
+                        .def("set_fx_rate_settlement_curve_derivatives",
+                             &qf::SimpleMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives)
+                        .def("set_fx_rate_spot_derivative",
+                             &qf::SimpleMultiCurrencyCashflow::setFxRateSpotDerivative)
+                        .def("get_amount_notional_curve_derivatives",
+                             &qf::SimpleMultiCurrencyCashflow::getAmountNotionalCurveDerivatives)
+                        .def("get_amount_settlement_curve_derivatives",
+                             &qf::SimpleMultiCurrencyCashflow::getAmountSettlementCurveDerivatives)
+                        .def("get_amount_fx_delta", &qf::SimpleMultiCurrencyCashflow::getAmountFxDelta)
                         .def("record", &qf::SimpleMultiCurrencyCashflow::record);
 
         // FixedRateCashflow
@@ -1007,6 +1019,17 @@ PYBIND11_MODULE(qcfinancial, m) {
                         .def("get_fx_rate_index_fixing_date",
                              &qf::OvernightIndexMultiCurrencyCashflow::getFXRateIndexFixingDate)
                         .def("get_type", &qf::OvernightIndexMultiCurrencyCashflow::getType)
+                        .def("set_fx_rate_notional_curve_derivatives",
+                             &qf::OvernightIndexMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives)
+                        .def("set_fx_rate_settlement_curve_derivatives",
+                             &qf::OvernightIndexMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives)
+                        .def("set_fx_rate_spot_derivative",
+                             &qf::OvernightIndexMultiCurrencyCashflow::setFxRateSpotDerivative)
+                        .def("get_amount_notional_curve_derivatives",
+                             &qf::OvernightIndexMultiCurrencyCashflow::getAmountNotionalCurveDerivatives)
+                        .def("get_amount_settlement_curve_derivatives",
+                             &qf::OvernightIndexMultiCurrencyCashflow::getAmountSettlementCurveDerivatives)
+                        .def("get_amount_fx_delta", &qf::OvernightIndexMultiCurrencyCashflow::getAmountFxDelta)
                         .def<double(qf::OvernightIndexMultiCurrencyCashflow::*)(
                                 const qf::TimeSeries &, const qf::TimeSeries &)>(
                                 "settlement_ccy_interest",
@@ -1158,6 +1181,17 @@ PYBIND11_MODULE(qcfinancial, m) {
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndexFixingDate)
                         .def("settlement_currency_amount",
                              &qf::CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrencyAmount)
+                        .def("set_fx_rate_notional_curve_derivatives",
+                             &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateNotionalCurveDerivatives)
+                        .def("set_fx_rate_settlement_curve_derivatives",
+                             &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateSettlementCurveDerivatives)
+                        .def("set_fx_rate_spot_derivative",
+                             &qf::CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateSpotDerivative)
+                        .def("get_amount_notional_curve_derivatives",
+                             &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getAmountNotionalCurveDerivatives)
+                        .def("get_amount_settlement_curve_derivatives",
+                             &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getAmountSettlementCurveDerivatives)
+                        .def("get_amount_fx_delta", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getAmountFxDelta)
                         .def("get_fx_rate_index", &qf::CompoundedOvernightRateMultiCurrencyCashflow2::getFXRateIndex)
                         .def<double(qf::CompoundedOvernightRateMultiCurrencyCashflow2::*)
                                 (double)>(

@@ -28,12 +28,14 @@ add_subdirectory(pybind11)
 pybind11_add_module(qcfinancial source/qcf_binder.cpp)
 target_link_libraries(qcfinancial PRIVATE QC_DVE_CORE)
 target_include_directories(qcfinancial PRIVATE include)
-# add_executable(QC_DVE_CORE_TESTS Tests/IcpClpCashflow3Tests.cpp)
+add_executable(QC_DVE_CORE_TESTS)
 # add_executable(manual_tests include/QcfinancialPybind11Helpers.h)
 
 add_subdirectory(source)
 add_subdirectory(Tests)
 add_subdirectory(ManualTests)
+
+target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)
 
 add_custom_target(build_wheel_rhel9
         COMMAND python3.11 ${CMAKE_SOURCE_DIR}/setup.py bdist_wheel --plat-name manylinux_2_34_x86_64 --dist-dir ${CMAKE_SOURCE_DIR}/dist
@@ -66,5 +68,3 @@ set_target_properties(qcfinancial_py312 PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/py312"
 )
 endif()
-
-# target_link_libraries(QC_DVE_CORE_TESTS QC_DVE_CORE)

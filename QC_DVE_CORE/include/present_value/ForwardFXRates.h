@@ -12,6 +12,7 @@
 #include "cashflows/FixedRateMultiCurrencyCashflow.h"
 #include "cashflows/OvernightIndexMultiCurrencyCashflow.h"
 #include "cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h"
+#include "cashflows/SimpleMultiCurrencyCashflow.h"
 #include "present_value/FXRateEstimator.h"
 #include "asset_classes/InterestRateCurve.h"
 
@@ -36,8 +37,9 @@
 
             // Projects a forward FX rate via covered interest parity (CIP) from a notional-currency
             // curve and a settlement-currency curve, and caches the forward's curve-vertex and
-            // spot derivatives on the returned cashflow. Supports FixedRateMultiCurrencyCashflow and
-            // IborMultiCurrencyCashflow only.
+            // spot derivatives on the returned cashflow. Supports FixedRateMultiCurrencyCashflow,
+            // IborMultiCurrencyCashflow, OvernightIndexMultiCurrencyCashflow,
+            // CompoundedOvernightRateMultiCurrencyCashflow2, and SimpleMultiCurrencyCashflow.
             std::shared_ptr<Cashflow> setFXRateCIP(
                     const QCDate &valuationDate,
                     double spotFxValue,

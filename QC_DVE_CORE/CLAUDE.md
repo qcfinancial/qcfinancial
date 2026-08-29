@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 QC_DVE_CORE is a C++17 library for valuation of linear interest rate and FX derivatives, exposed to Python via pybind11 as the `qcfinancial` package. It includes Chilean market-specific instruments (ICP-CLP, ICP-CLF/UF).
 
-Current version: **1.14.0a2** (set in `setup.py`).
+Current version: **1.14.0a3** (set in `setup.py`).
 
 ## Branch Strategy
 
@@ -157,9 +157,9 @@ All active cashflow types support a `record()` method returning a `std::tuple` o
 
 - `PresentValue` — discounts a `Leg` against a `ZeroCouponCurve`; computes first-order derivatives (DV01) w.r.t. curve nodes
 - `ForwardRates` — sets forward rates on `IborCashflow`, `IcpClfCashflow`, `CompoundedOvernightRateCashflow2`, `OvernightIndexCashflow`, and their multi-currency variants using projection curves
-- `ForwardFXRates` — sets the FX rate on a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` (or a `Leg` of them). `setFXRate`/`setFXRateForLeg` read a historical fixing (via `FXRateEstimator`); `setFXRateCIP`/`setFXRateForLegCIP` project a forward FX rate via covered interest parity from a notional-currency curve and a settlement-currency curve, and cache the forward's curve-vertex and spot derivatives on the cashflow for `PresentValueFX`
+- `ForwardFXRates` — sets the FX rate on a `FixedRateMultiCurrencyCashflow`, `IborMultiCurrencyCashflow`, `OvernightIndexMultiCurrencyCashflow`, `CompoundedOvernightRateMultiCurrencyCashflow2`, or `SimpleMultiCurrencyCashflow` (or a `Leg` of them). `setFXRate`/`setFXRateForLeg` read a historical fixing (via `FXRateEstimator`); `setFXRateCIP`/`setFXRateForLegCIP` project a forward FX rate via covered interest parity from a notional-currency curve and a settlement-currency curve, and cache the forward's curve-vertex and spot derivatives on the cashflow for `PresentValueFX`
 - `FXRateEstimator` — spot FX + basis point adjustments (`FXRateEstimator.cpp`)
-- `PresentValueFX` — present-values a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` leg in its settlement currency, discounting the cashflow's cached, CIP-projected `settlementCurrencyAmount()` with a caller-supplied discount curve. Exposes PV derivatives w.r.t. three independent curves — the notional curve (`getNotionalCurveDerivatives`), the curve that produced the cached CIP forward (`getCipSettlementCurveDerivatives`), and the discount curve (`getDiscountCurveDerivatives`) — plus an FX delta. The CIP-projection curve and the discount curve need not be the same object; when a caller does pass the same curve to both `ForwardFXRates::setFXRateCIP` and `PresentValueFX::pv`, the true single-curve PV derivative is the sum of `getCipSettlementCurveDerivatives()` and `getDiscountCurveDerivatives()` — `PresentValueFX` does not sum them itself.
+- `PresentValueFX` — present-values a `FixedRateMultiCurrencyCashflow`, `IborMultiCurrencyCashflow`, `OvernightIndexMultiCurrencyCashflow`, `CompoundedOvernightRateMultiCurrencyCashflow2`, or `SimpleMultiCurrencyCashflow` leg in its settlement currency, discounting the cashflow's cached, CIP-projected `settlementCurrencyAmount()` with a caller-supplied discount curve. Exposes PV derivatives w.r.t. three independent curves — the notional curve (`getNotionalCurveDerivatives`), the curve that produced the cached CIP forward (`getCipSettlementCurveDerivatives`), and the discount curve (`getDiscountCurveDerivatives`) — plus an FX delta. The CIP-projection curve and the discount curve need not be the same object; when a caller does pass the same curve to both `ForwardFXRates::setFXRateCIP` and `PresentValueFX::pv`, the true single-curve PV derivative is the sum of `getCipSettlementCurveDerivatives()` and `getDiscountCurveDerivatives()` — `PresentValueFX` does not sum them itself.
 
 ### Layer 7 — Portfolio / Batch State (`include/portfolio/`)
 

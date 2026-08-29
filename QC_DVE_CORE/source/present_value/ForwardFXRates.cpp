@@ -36,6 +36,12 @@
                 compoundedOvernightRateMccyCashflow2_.setFxRateIndexValue(fxRateEstimator.getValueForDate(fxDate));
                 return std::make_shared<CompoundedOvernightRateMultiCurrencyCashflow2>(compoundedOvernightRateMccyCashflow2_);
             }
+            if (typeOfCashflow == "SimpleMultiCurrencyCashflow") {
+                auto simpleMccyCashflow_ = dynamic_cast<SimpleMultiCurrencyCashflow &>(mccyCashflow);
+                auto fxDate = simpleMccyCashflow_.getFXRateIndexFixingDate();
+                simpleMccyCashflow_.setFxRateIndexValue(fxRateEstimator.getValueForDate(fxDate));
+                return std::make_shared<SimpleMultiCurrencyCashflow>(simpleMccyCashflow_);
+            }
             throw std::invalid_argument("Type of cashflow " + typeOfCashflow + " not implemented.");
         }
 
@@ -105,6 +111,24 @@
                 _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXFixingDate(),
                                    notionalCurve, settlementCurve);
                 return std::make_shared<IborMultiCurrencyCashflow>(cf);
+            }
+            if (typeOfCashflow == "OvernightIndexMultiCurrencyCashflow") {
+                auto cf = dynamic_cast<OvernightIndexMultiCurrencyCashflow &>(mccyCashflow);
+                _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXRateIndexFixingDate(),
+                                   notionalCurve, settlementCurve);
+                return std::make_shared<OvernightIndexMultiCurrencyCashflow>(cf);
+            }
+            if (typeOfCashflow == "CompoundedOvernightRateMultiCurrencyCashflow2") {
+                auto cf = dynamic_cast<CompoundedOvernightRateMultiCurrencyCashflow2 &>(mccyCashflow);
+                _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXRateIndexFixingDate(),
+                                   notionalCurve, settlementCurve);
+                return std::make_shared<CompoundedOvernightRateMultiCurrencyCashflow2>(cf);
+            }
+            if (typeOfCashflow == "SimpleMultiCurrencyCashflow") {
+                auto cf = dynamic_cast<SimpleMultiCurrencyCashflow &>(mccyCashflow);
+                _projectFXRateCIP(valuationDate, spotFxValue, cf, cf.getFXRateIndexFixingDate(),
+                                   notionalCurve, settlementCurve);
+                return std::make_shared<SimpleMultiCurrencyCashflow>(cf);
             }
             throw std::invalid_argument("Type of cashflow " + typeOfCashflow + " not implemented.");
         }

@@ -60,10 +60,16 @@ of not committing wheels — see `.gitignore`'s `dist/`).
   CIP forward projection (floating and already-fixed), and settlement-currency
   PV with all derivative outputs. Each step's `expected` column is a closed-form
   value computed independently in the notebook itself.
-- `settlement_currency_review.xlsx` — one worksheet per type, replicating the
-  same math as live Excel formulas (`MATCH`/`INDEX` for curve interpolation,
-  then the CIP forward, chain-rule derivatives, and discounted PV), plus a
-  cross-check block comparing against the actual `qcfinancial` output.
+- `settlement_currency_review.xlsx` — one worksheet per type. Rows 2-11 show the
+  actual `qcfinancial` results as plain values (spot fixing, CIP forward PV
+  floating/already-fixed, FX delta, node-5 curve derivatives) — read this first.
+  Below that (from row 16) is the formula derivation: the same math as live
+  Excel formulas (`MATCH`/`INDEX` for curve interpolation, then the CIP forward,
+  chain-rule derivatives, and discounted PV), plus a cross-check block at the
+  bottom comparing the formula-derived PV against the results rows at the top.
+  `build_excel_review.py` computes the results rows by running the real
+  `qcfinancial` extension live (via `import qcfinancial`) each time it's
+  regenerated — not hand-copied numbers.
 
 Both were verified end-to-end before being committed (notebook via
 `marimo export`, workbook via a headless formula evaluator) — see

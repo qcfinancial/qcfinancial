@@ -5461,7 +5461,14 @@ namespace Catch {
 
 #ifdef CATCH_PLATFORM_MAC
 
-    #define CATCH_TRAP() __asm__("int $3\n" : : ) /* NOLINT */
+    // Vendored Catch2 v2 predates Apple Silicon: this branch originally hardcoded the
+    // x86 `int $3` breakpoint trap unconditionally, which fails to assemble on arm64.
+    // Use the portable compiler builtin on arm64, keep the original x86 asm on Intel.
+    #if defined(__arm64__) || defined(__aarch64__)
+        #define CATCH_TRAP() __builtin_debugtrap()
+    #else
+        #define CATCH_TRAP() __asm__("int $3\n" : : ) /* NOLINT */
+    #endif
 
 #elif defined(CATCH_PLATFORM_LINUX)
     // If we can use inline assembler, do it because this allows us to break

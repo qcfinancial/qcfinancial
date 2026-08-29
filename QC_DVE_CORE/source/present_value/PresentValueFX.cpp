@@ -2,6 +2,9 @@
 
 #include "cashflows/FixedRateMultiCurrencyCashflow.h"
 #include "cashflows/IborMultiCurrencyCashflow.h"
+#include "cashflows/OvernightIndexMultiCurrencyCashflow.h"
+#include "cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h"
+#include "cashflows/SimpleMultiCurrencyCashflow.h"
 
 namespace QCode::Financial {
 
@@ -24,6 +27,24 @@ namespace QCode::Financial {
             amountFxDelta = cf.getAmountFxDelta();
         } else if (typeOfCashflow == "IborMultiCurrencyCashflow") {
             auto &cf = dynamic_cast<IborMultiCurrencyCashflow &>(*cashflow);
+            settlementCurrencyAmount = cf.settlementCurrencyAmount();
+            amountNotionalCurveDerivatives = cf.getAmountNotionalCurveDerivatives();
+            amountSettlementCurveDerivatives = cf.getAmountSettlementCurveDerivatives();
+            amountFxDelta = cf.getAmountFxDelta();
+        } else if (typeOfCashflow == "OvernightIndexMultiCurrencyCashflow") {
+            auto &cf = dynamic_cast<OvernightIndexMultiCurrencyCashflow &>(*cashflow);
+            settlementCurrencyAmount = cf.settlementCurrencyAmount();
+            amountNotionalCurveDerivatives = cf.getAmountNotionalCurveDerivatives();
+            amountSettlementCurveDerivatives = cf.getAmountSettlementCurveDerivatives();
+            amountFxDelta = cf.getAmountFxDelta();
+        } else if (typeOfCashflow == "CompoundedOvernightRateMultiCurrencyCashflow2") {
+            auto &cf = dynamic_cast<CompoundedOvernightRateMultiCurrencyCashflow2 &>(*cashflow);
+            settlementCurrencyAmount = cf.settlementCurrencyAmount();
+            amountNotionalCurveDerivatives = cf.getAmountNotionalCurveDerivatives();
+            amountSettlementCurveDerivatives = cf.getAmountSettlementCurveDerivatives();
+            amountFxDelta = cf.getAmountFxDelta();
+        } else if (typeOfCashflow == "SimpleMultiCurrencyCashflow") {
+            auto &cf = dynamic_cast<SimpleMultiCurrencyCashflow &>(*cashflow);
             settlementCurrencyAmount = cf.settlementCurrencyAmount();
             amountNotionalCurveDerivatives = cf.getAmountNotionalCurveDerivatives();
             amountSettlementCurveDerivatives = cf.getAmountSettlementCurveDerivatives();

@@ -143,6 +143,56 @@ namespace QCode::Financial {
     }
 
     double CompoundedOvernightRateMultiCurrencyCashflow2::settlementCurrencyAmount() {
-        return toSettlementCurrency(CompoundedOvernightRateCashflow2::amount());
+        auto notionalAmount = CompoundedOvernightRateCashflow2::amount();
+        auto result = toSettlementCurrency(notionalAmount);
+
+        bool isStrong = _notionalCurrency->getIsoCode() == _fxRateIndex->strongCcyCode();
+        _amountNotionalCurveDerivatives.assign(_fxRateNotionalCurveDerivatives.size(), 0.0);
+        _amountSettlementCurveDerivatives.assign(_fxRateSettlementCurveDerivatives.size(), 0.0);
+
+        if (isStrong) {
+            for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                _amountNotionalCurveDerivatives.at(i) = notionalAmount * _fxRateNotionalCurveDerivatives.at(i);
+            }
+            for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                _amountSettlementCurveDerivatives.at(j) = notionalAmount * _fxRateSettlementCurveDerivatives.at(j);
+            }
+            _amountFxDelta = notionalAmount * _fxRateSpotDerivative;
+        } else {
+            auto fInvSq = 1.0 / (_fxRateIndexValue * _fxRateIndexValue);
+            for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                _amountNotionalCurveDerivatives.at(i) = -notionalAmount * fInvSq * _fxRateNotionalCurveDerivatives.at(i);
+            }
+            for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                _amountSettlementCurveDerivatives.at(j) = -notionalAmount * fInvSq * _fxRateSettlementCurveDerivatives.at(j);
+            }
+            _amountFxDelta = -notionalAmount * fInvSq * _fxRateSpotDerivative;
+        }
+
+        return result;
+    }
+
+    void CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateNotionalCurveDerivatives(const std::vector<double>& der) {
+        _fxRateNotionalCurveDerivatives = der;
+    }
+
+    void CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateSettlementCurveDerivatives(const std::vector<double>& der) {
+        _fxRateSettlementCurveDerivatives = der;
+    }
+
+    void CompoundedOvernightRateMultiCurrencyCashflow2::setFxRateSpotDerivative(double der) {
+        _fxRateSpotDerivative = der;
+    }
+
+    std::vector<double> CompoundedOvernightRateMultiCurrencyCashflow2::getAmountNotionalCurveDerivatives() const {
+        return _amountNotionalCurveDerivatives;
+    }
+
+    std::vector<double> CompoundedOvernightRateMultiCurrencyCashflow2::getAmountSettlementCurveDerivatives() const {
+        return _amountSettlementCurveDerivatives;
+    }
+
+    double CompoundedOvernightRateMultiCurrencyCashflow2::getAmountFxDelta() const {
+        return _amountFxDelta;
     }
 }

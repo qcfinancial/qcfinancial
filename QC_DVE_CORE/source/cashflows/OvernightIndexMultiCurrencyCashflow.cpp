@@ -147,10 +147,71 @@ namespace QCode::Financial {
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount() {
-        auto result = settlementCurrencyInterest();
-        if (_doesAmortize)
-            result += settlementCurrencyAmortization();
+        // Unrounded by design: settlementCurrencyInterest()/settlementCurrencyAmortization() each
+        // round twice (once in notional currency, once in settlement currency), which makes a
+        // curve-vertex/spot derivative of their sum mathematically undefined (a rounded value is a
+        // step function). This recomputes the notional-currency amount and converts it without any
+        // rounding, matching the pattern used by every other multi-currency cashflow type.
+        QCCurrencyConverter ccyConverter;
+        auto notionalAmount = _calculateInterest(_endDate, _endDateIndexValue);
+        if (_doesAmortize) {
+            notionalAmount += _amortization;
+        }
+
+        auto result = ccyConverter.convert(
+                notionalAmount,
+                _notionalCurrency,
+                _fxRateIndexValue,
+                *_fxRateIndex);
+
+        bool isStrong = _notionalCurrency->getIsoCode() == _fxRateIndex->strongCcyCode();
+        _amountNotionalCurveDerivatives.assign(_fxRateNotionalCurveDerivatives.size(), 0.0);
+        _amountSettlementCurveDerivatives.assign(_fxRateSettlementCurveDerivatives.size(), 0.0);
+
+        if (isStrong) {
+            for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                _amountNotionalCurveDerivatives.at(i) = notionalAmount * _fxRateNotionalCurveDerivatives.at(i);
+            }
+            for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                _amountSettlementCurveDerivatives.at(j) = notionalAmount * _fxRateSettlementCurveDerivatives.at(j);
+            }
+            _amountFxDelta = notionalAmount * _fxRateSpotDerivative;
+        } else {
+            auto fInvSq = 1.0 / (_fxRateIndexValue * _fxRateIndexValue);
+            for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                _amountNotionalCurveDerivatives.at(i) = -notionalAmount * fInvSq * _fxRateNotionalCurveDerivatives.at(i);
+            }
+            for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                _amountSettlementCurveDerivatives.at(j) = -notionalAmount * fInvSq * _fxRateSettlementCurveDerivatives.at(j);
+            }
+            _amountFxDelta = -notionalAmount * fInvSq * _fxRateSpotDerivative;
+        }
+
         return result;
+    }
+
+    void OvernightIndexMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives(const std::vector<double>& der) {
+        _fxRateNotionalCurveDerivatives = der;
+    }
+
+    void OvernightIndexMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives(const std::vector<double>& der) {
+        _fxRateSettlementCurveDerivatives = der;
+    }
+
+    void OvernightIndexMultiCurrencyCashflow::setFxRateSpotDerivative(double der) {
+        _fxRateSpotDerivative = der;
+    }
+
+    std::vector<double> OvernightIndexMultiCurrencyCashflow::getAmountNotionalCurveDerivatives() const {
+        return _amountNotionalCurveDerivatives;
+    }
+
+    std::vector<double> OvernightIndexMultiCurrencyCashflow::getAmountSettlementCurveDerivatives() const {
+        return _amountSettlementCurveDerivatives;
+    }
+
+    double OvernightIndexMultiCurrencyCashflow::getAmountFxDelta() const {
+        return _amountFxDelta;
     }
 
     double OvernightIndexMultiCurrencyCashflow::settlementCurrencyAmount(

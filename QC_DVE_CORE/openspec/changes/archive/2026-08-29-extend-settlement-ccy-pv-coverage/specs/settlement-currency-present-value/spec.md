@@ -1,10 +1,4 @@
-# settlement-currency-present-value Specification
-
-## Purpose
-
-Present-valuing a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` (or a `Leg` of them) in its settlement currency, via a covered-interest-parity (CIP) projected forward FX rate. Covers forward FX projection and its cached curve-vertex derivatives (`ForwardFXRates::setFXRateCIP`/`setFXRateForLegCIP`), the chain-ruled amount derivatives cached on `settlementCurrencyAmount()`, and `PresentValueFX`'s per-curve PV derivatives and FX delta.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: CIP forward FX projection onto multi-currency cashflows
 `ForwardFXRates::setFXRateCIP` SHALL project a forward FX rate for a `FixedRateMultiCurrencyCashflow`, `IborMultiCurrencyCashflow`, `OvernightIndexMultiCurrencyCashflow`, `CompoundedOvernightRateMultiCurrencyCashflow2`, or `SimpleMultiCurrencyCashflow` as `Forward(t) = Spot * DF_notional(t) / DF_settlement(t)`, where `t` is the valuation date's day difference to the cashflow's end date, `DF_notional`/`DF_settlement` are discount factors from the supplied notional-currency and settlement-currency curves, and SHALL cache the forward's derivative with respect to every vertex of both curves on the cashflow. `ForwardFXRates::setFXRateForLegCIP` SHALL apply this to every cashflow in a `Leg`. Cashflow types other than the five listed SHALL cause `std::invalid_argument`.
@@ -86,6 +80,8 @@ Present-valuing a `FixedRateMultiCurrencyCashflow`/`IborMultiCurrencyCashflow` (
 #### Scenario: Unsupported cashflow type is rejected
 - **WHEN** `pv()` is called with a cashflow type other than `FixedRateMultiCurrencyCashflow`, `IborMultiCurrencyCashflow`, `OvernightIndexMultiCurrencyCashflow`, `CompoundedOvernightRateMultiCurrencyCashflow2`, or `SimpleMultiCurrencyCashflow`
 - **THEN** the call throws `std::invalid_argument`
+
+## ADDED Requirements
 
 ### Requirement: Spot-fixing FX rate assignment covers SimpleMultiCurrencyCashflow
 `ForwardFXRates::setFXRate` and `setFXRateForLeg` SHALL accept a `SimpleMultiCurrencyCashflow` (or a `Leg` containing one), reading the historical fixing for the cashflow's FX rate index fixing date from the supplied `FXRateEstimator` and setting it as the cashflow's FX rate index value, consistent with existing support for `FixedRateMultiCurrencyCashflow`, `IborMultiCurrencyCashflow`, `OvernightIndexMultiCurrencyCashflow`, and `CompoundedOvernightRateMultiCurrencyCashflow2`.

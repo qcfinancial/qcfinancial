@@ -10,9 +10,10 @@
 
 namespace QCode::Financial {
 
-    // Present-values a FixedRateMultiCurrencyCashflow/IborMultiCurrencyCashflow (or a Leg of them)
-    // in its settlement currency, discounting the cashflow's cached, unrounded
-    // settlementCurrencyAmount() with the discount curve. Curve-vertex derivatives to the notional
+    // Present-values a FixedRateMultiCurrencyCashflow, IborMultiCurrencyCashflow,
+    // OvernightIndexMultiCurrencyCashflow, CompoundedOvernightRateMultiCurrencyCashflow2, or
+    // SimpleMultiCurrencyCashflow (or a Leg of them) in its settlement currency, discounting the
+    // cashflow's cached, unrounded settlementCurrencyAmount() with the discount curve. Curve-vertex derivatives to the notional
     // curve, the CIP-projection curve, and the discount curve, plus the FX delta, are read off the
     // cashflow (cached there by ForwardFXRates::setFXRateCIP/settlementCurrencyAmount) and combined
     // with the discount curve's own discount-factor derivative via the product rule.

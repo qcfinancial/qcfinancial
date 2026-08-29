@@ -67,6 +67,19 @@ namespace QCode::Financial {
         void setFxRateIndexValue(double fxRateIndexValue);
 
 
+        void setFxRateNotionalCurveDerivatives(const std::vector<double>& der);
+
+        void setFxRateSettlementCurveDerivatives(const std::vector<double>& der);
+
+        void setFxRateSpotDerivative(double der);
+
+        [[nodiscard]] std::vector<double> getAmountNotionalCurveDerivatives() const;
+
+        [[nodiscard]] std::vector<double> getAmountSettlementCurveDerivatives() const;
+
+        [[nodiscard]] double getAmountFxDelta() const;
+
+
         [[nodiscard]] std::string getFXRateIndexCode() const;
 
 
@@ -121,6 +134,29 @@ namespace QCode::Financial {
         std::shared_ptr<QCCurrency> _settlementCurrency;
         std::shared_ptr<FXRateIndex> _fxRateIndex;
         double _fxRateIndexValue;
+
+        /** @brief	Derivatives of the CIP-projected FX forward with respect to the notional
+         * curve's vertices. Set by ForwardFXRates::setFXRateCIP. */
+        std::vector<double> _fxRateNotionalCurveDerivatives;
+
+        /** @brief	Derivatives of the CIP-projected FX forward with respect to the settlement
+         * curve's vertices. Set by ForwardFXRates::setFXRateCIP. */
+        std::vector<double> _fxRateSettlementCurveDerivatives;
+
+        /** @brief	Derivative of the CIP-projected FX forward with respect to the spot FX value. */
+        double _fxRateSpotDerivative{0.0};
+
+        /** @brief	Derivatives of settlementCurrencyAmount() with respect to the notional
+         * curve's vertices. Cached by settlementCurrencyAmount(). */
+        std::vector<double> _amountNotionalCurveDerivatives;
+
+        /** @brief	Derivatives of settlementCurrencyAmount() with respect to the settlement
+         * curve's vertices. Cached by settlementCurrencyAmount(). */
+        std::vector<double> _amountSettlementCurveDerivatives;
+
+        /** @brief	Derivative of settlementCurrencyAmount() with respect to the spot FX value.
+         * Cached by settlementCurrencyAmount(). */
+        double _amountFxDelta{0.0};
 
         void _fixIndices(
                 const TimeSeries &overnightIndexValues,

@@ -25,14 +25,63 @@ namespace QCode {
         }
 
         double SimpleMultiCurrencyCashflow::settlementAmount() {
+            return settlementCurrencyAmount();
+        }
+
+        double SimpleMultiCurrencyCashflow::settlementCurrencyAmount() {
+            _amountNotionalCurveDerivatives.assign(_fxRateNotionalCurveDerivatives.size(), 0.0);
+            _amountSettlementCurveDerivatives.assign(_fxRateSettlementCurveDerivatives.size(), 0.0);
+            _amountFxDelta = 0.0;
+
             if (_currency->getIsoCode() == _settlementCurrency->getIsoCode()) {
                 return _nominal;
             }
-            if (_fxRateIndex->strongCcyCode() == _currency->getIsoCode()) {
+
+            bool isStrong = _fxRateIndex->strongCcyCode() == _currency->getIsoCode();
+            if (isStrong) {
+                for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                    _amountNotionalCurveDerivatives.at(i) = _nominal * _fxRateNotionalCurveDerivatives.at(i);
+                }
+                for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                    _amountSettlementCurveDerivatives.at(j) = _nominal * _fxRateSettlementCurveDerivatives.at(j);
+                }
+                _amountFxDelta = _nominal * _fxRateSpotDerivative;
                 return _nominal * _fxRateIndexValue;
             } else {
+                auto fInvSq = 1.0 / (_fxRateIndexValue * _fxRateIndexValue);
+                for (size_t i = 0; i < _fxRateNotionalCurveDerivatives.size(); ++i) {
+                    _amountNotionalCurveDerivatives.at(i) = -_nominal * fInvSq * _fxRateNotionalCurveDerivatives.at(i);
+                }
+                for (size_t j = 0; j < _fxRateSettlementCurveDerivatives.size(); ++j) {
+                    _amountSettlementCurveDerivatives.at(j) = -_nominal * fInvSq * _fxRateSettlementCurveDerivatives.at(j);
+                }
+                _amountFxDelta = -_nominal * fInvSq * _fxRateSpotDerivative;
                 return _nominal / _fxRateIndexValue;
             }
+        }
+
+        void SimpleMultiCurrencyCashflow::setFxRateNotionalCurveDerivatives(const std::vector<double>& der) {
+            _fxRateNotionalCurveDerivatives = der;
+        }
+
+        void SimpleMultiCurrencyCashflow::setFxRateSettlementCurveDerivatives(const std::vector<double>& der) {
+            _fxRateSettlementCurveDerivatives = der;
+        }
+
+        void SimpleMultiCurrencyCashflow::setFxRateSpotDerivative(double der) {
+            _fxRateSpotDerivative = der;
+        }
+
+        std::vector<double> SimpleMultiCurrencyCashflow::getAmountNotionalCurveDerivatives() const {
+            return _amountNotionalCurveDerivatives;
+        }
+
+        std::vector<double> SimpleMultiCurrencyCashflow::getAmountSettlementCurveDerivatives() const {
+            return _amountSettlementCurveDerivatives;
+        }
+
+        double SimpleMultiCurrencyCashflow::getAmountFxDelta() const {
+            return _amountFxDelta;
         }
 
         double SimpleMultiCurrencyCashflow::nominal() {

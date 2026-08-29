@@ -8,7 +8,12 @@
 #include "cashflows/Cashflow.h"
 #include "cashflows/IcpClpCashflow.h"
 #include "cashflows/OvernightIndexCashflow.h"
+#include "cashflows/OvernightIndexMultiCurrencyCashflow.h"
 #include "cashflows/IcpClfCashflow.h"
+#include "cashflows/IborCashflow.h"
+#include "cashflows/IborMultiCurrencyCashflow.h"
+#include "cashflows/CompoundedOvernightRateCashflow2.h"
+#include "cashflows/CompoundedOvernightRateMultiCurrencyCashflow2.h"
 #include "Leg.h"
 
 
