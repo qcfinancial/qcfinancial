@@ -20,3 +20,9 @@ docs/doxygen/
 __pycache__/
 *.pyc
 *.pyo
+
+# marimo session cache
+__marimo__/
+
+# Office lock files
+~$*

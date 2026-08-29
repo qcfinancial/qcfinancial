@@ -1,0 +1,13 @@
+[project]
+name = "qcfinancial-review"
+version = "0.1.0"
+description = "Python examples and review artifacts for qcfinancial: marimo notebooks, Excel-parity checks, and other usage examples against the qcfinancial C++ extension."
+requires-python = "==3.14.*"
+dependencies = [
+    "marimo>=0.9",
+    "openpyxl>=3.1",
+    "qcfinancial",
+]
+
+[tool.uv.sources]
+qcfinancial = { path = "../dist/qcfinancial-1.14.0a3-cp314-cp314-macosx_26_0_arm64.whl" }
