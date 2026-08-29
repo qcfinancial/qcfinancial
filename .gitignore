@@ -175,3 +175,4 @@ cmake-build-redhat85-py39/
 QC_DVE_CORE/build_20240412
 QC_DVE_CORE/cmake-build-*/
 QC_DVE_CORE/.junie/
+.mcp.json
