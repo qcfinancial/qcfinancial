@@ -74,7 +74,9 @@ target_sources(QC_DVE_CORE
         asset_classes/Tenor.cpp
         ZeroCouponCurve.cpp
         LegFactory.cpp
-        present_value/PresentValueFX.cpp)
+        present_value/PresentValueFX.cpp
+        present_value/ForwardFXRates.cpp
+        present_value/FXRateEstimator.cpp)
 
 # --- QC_Financial y QC_Financial_3 ---------------------------------------------------------------------
 

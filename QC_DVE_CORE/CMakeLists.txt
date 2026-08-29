@@ -13,9 +13,7 @@ endif()
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_library(QC_DVE_CORE STATIC ""
-        include/present_value/ForwardFXRates.cpp
         include/present_value/ForwardFXRates.h
-        include/present_value/FXRateEstimator.cpp
         include/present_value/FXRateEstimator.h)
 set_target_properties(QC_DVE_CORE PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
